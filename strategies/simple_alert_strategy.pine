@@ -15,13 +15,12 @@ below_ma = close[1] < ma[1]
 
 // Alert if the current close is above the moving average and the previous close was below the moving average
 if above_ma and below_ma
-    alert_message = '{ "strategyName": "' + "Simple Alert Strategy" + '", "pair": "' + syminfo.ticker + '", "chartTimeframe": "' + timeframe.period + '", "side": "LONG", "entry": ' + str.tostring(close) + ', "signalTradeType": "INDICATOR" }'
+    alert_message = '{ "strategyName": "Simple Alert Strategy", "pair": "ETH/USDT", "chartTimeframe": { "chronoAmount": "1", "chronoUnit": "MINUTE" }, "side": "buy", "entry": ' + str.tostring(close) + ', "signalTradeType": "INDICATOR" }'
     strategy.entry("Buy", strategy.long, alert_message=alert_message )
     alert(alert_message)
 
 // Alert if the current close is below the moving average and the previous close was above the moving average
 if not above_ma and not below_ma
-    alert_message = '{ "strategyName": "' + "Simple Alert Strategy" + '", "pair": "' + syminfo.ticker + '", "chartTimeframe": "' + timeframe.period + '", "side": "SHORT", "entry": ' + str.tostring(close) + ', "signalTradeType": "INDICATOR" }'
+    alert_message = '{ "strategyName": "Simple Alert Strategy", "pair": "ETH/USDT", "chartTimeframe": { "chronoAmount": "1", "chronoUnit": "MINUTE" }, "side": "sell", "entry": ' + str.tostring(close) + ', "signalTradeType": "INDICATOR" }'
     strategy.entry("Sell", strategy.short, alert_message=alert_message)
     alert(alert_message)
-
