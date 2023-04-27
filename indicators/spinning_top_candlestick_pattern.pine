@@ -5,21 +5,21 @@
 indicator("Spinning Top (Candlestick Pattern)", overlay=true)
 
 maxSpinningTopTooltip = "Calculates whether the current candle is a spinning top using the max threshold set. If the size of the real body is less than the max threshold set of the overall range of the candle, then the candle is considered a spinning top."
-maxSpinningTopThreshold = input.float(defval=0.34, title='Spinning top body size threshold in percentage. (0.34 = 34%)', step=0.01, tooltip=maxSpinningTopTooltip)
+maxSpinningTopThreshold = input.float(defval=0.55, title='Spinning top body size threshold in percentage. (0.55 = 55%)', step=0.01, tooltip=maxSpinningTopTooltip)
 
 minSpinningTopTooltip = "Calculates whether the current candle is a spinning top using the min threshold set. If the size of the real body is less than the min threshold set of the overall range of the candle, then the candle is considered a spinning top."
-minSpinningTopThreshold = input.float(defval=0.13, title='Spinning top body size threshold in percentage. (0.13 = 13%)', step=0.01, tooltip=minSpinningTopTooltip)
+minSpinningTopThreshold = input.float(defval=0.21, title='Spinning top body size threshold in percentage. (0.21 = 21%)', step=0.01, tooltip=minSpinningTopTooltip)
 
 showBullishSpinningTop = input.bool(defval=true, title='Show bullish spinning top.', tooltip='Show or hide the bullish spinning top.')
 showBearishSpinningTop = input.bool(defval=true, title='Show bearish spinning top.', tooltip='Show or hide the bearish spinning top.')
 
-isSpinningTop = ((math.abs(close - open) < (maxSpinningTopThreshold * (high - low))) and (math.abs(close - open) > (minSpinningTopThreshold * (high - low))))
-
 isBullishCandle = close > open
 isBearishCandle = close < open
 
-isSpinningTopBullish = isSpinningTop and isBullishCandle
-isSpinningTopBearish = isSpinningTop and isBearishCandle
+isSpinningTop = ( ( math.abs(close - open) < (maxSpinningTopThreshold * (high - low)) ) and ( math.abs(close - open) > (minSpinningTopThreshold * (high - low)) ) )
+
+isSpinningTopBullish = isSpinningTop and isBullishCandle and high > close and low < open
+isSpinningTopBearish = isSpinningTop and isBearishCandle and high > open and low < close
 
 barcolor(isSpinningTopBullish ? color.white : isSpinningTopBearish ? color.black : na)
 
