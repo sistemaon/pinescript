@@ -1,0 +1,23 @@
+// This source code is subject to the terms of the Mozilla Public License 2.0 at https://mozilla.org/MPL/2.0/
+// © AugustoErni
+
+//@version=5
+indicator("Doji (Candlestick Pattern)", overlay=true)
+
+dojiThreshold = input.float(defval=0.0007, title='Doji body size threshold (as a fraction of the price). (0.0007 = 0.07%).', step=0.0001)
+
+showBullishDoji = input.bool(defval=true, title='Show bullish doji.', tooltip='Show or hide the bullish doji.')
+showBearishDoji = input.bool(defval=true, title='Show bearish doji.', tooltip='Show or hide the bearish doji.')
+
+isBullishCandle = close > open
+isBearishCandle = close < open
+
+isDoji = math.abs(close - open) <= (dojiThreshold * close)
+
+isDojiBullish = isDoji and isBullishCandle
+isDojiBearish = isDoji and isBearishCandle
+
+barcolor(isDojiBullish ? color.white : isDojiBearish ? color.black : na)
+
+plotshape(isDojiBullish and showBullishDoji, title="Doji", style=shape.arrowup, location=location.belowbar, color=color.rgb(255, 255, 255), text="Doji", textcolor=color.green)
+plotshape(isDojiBearish and showBearishDoji, title="Doji", style=shape.arrowdown, location=location.abovebar, color=color.rgb(0, 0, 0), text="Doji", textcolor=color.red)
