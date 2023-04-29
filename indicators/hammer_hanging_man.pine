@@ -4,7 +4,7 @@
 //@version=5
 indicator("Hammer and Hanging Man (Candlestick Pattern)", overlay=true)
 
-hammerHangingManBodySizeThreshold = input.float(defval=0.25, title="Hammer/Hanging Man body size threshold in percentage (0.25 = 25%)", step=0.01)
+hammerHangingManBodySizeThreshold = input.float(defval=0.34, title="Hammer/Hanging Man body size threshold in percentage (0.34 = 34%)", step=0.01)
 hammerHangingManLowerShadowMultiplier = input.float(defval=1.8, title="Hammer/Hanging Man lower shadow multiplier", step=0.1)
 hammerHangingManUpperShadowThreshold = input.float(defval=0.05, title="Hammer/Hanging Man upper shadow threshold in percentage (0.05 = 5%)", step=0.01)
 
