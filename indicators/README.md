@@ -40,6 +40,24 @@ file script: [doji.pine](doji.pine)
 ___
 ___
 
+## Hammer and Hanging Man
+
+The Hammer is a bullish candlestick pattern that occurs during a downtrend. It signals a potential reversal or the end of the downtrend.
+The Hanging Man is a bearish candlestick pattern that occurs during an uptrend. It signals a potential reversal or the end of the uptrend.
+
+file script: [hammer_hanging_man.pine](hammer_hanging_man.pine)
+
+- The real body of the Hammer pattern should be small relative to the overall range of the candle. In the code, this is checked using the *isSmallRealBody* variable. The *hammerHangingManBodySizeThreshold* input parameter determines the maximum body size as a percentage of the overall range.
+- The lower shadow of the Hammer pattern should be longer than the real body. In the code, this is checked using the *isLongLowerShadow* variable. The *hammerHangingManLowerShadowMultiplier* input parameter determines the minimum lower shadow length as a multiple of the real body size.
+- The Hammer pattern should have no, or a very short, upper shadow. In the code, this is checked using the *isShortUpperShadow* variable. The *hammerHangingManUpperShadowThreshold* input parameter determines the maximum upper shadow length as a percentage of the overall range.
+- If these conditions are met and the current candle is bullish *isBullishCandle*, the script identifies the pattern as a Hammer and plots an arrow below the candle labeled "Hammer" in green color.
+Or If these conditions are met and the current candle is bearish *isBearishCandle*, the script identifies the pattern as a Hanging Man and plots an arrow above the candle labeled "Hanging Man" in red color.
+- The *showHammer* and *showHangingMan* input boolean variables allow you to toggle the display of Hammer and Hanging Man patterns on the chart, respectively. The *barcolor()* function is used to color the Hammer candles white and the Hanging Man candles black.
+
+___
+___
+
+
 ### references:
 
 - Japanese Candlestick Charting Techniques.
