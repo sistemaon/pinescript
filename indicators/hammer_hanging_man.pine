@@ -21,8 +21,8 @@ isSmallRealBody = realBody <= hammerHangingManBodySizeThreshold * (high - low)
 isLongLowerShadow = lowerShadow >= hammerHangingManLowerShadowMultiplier * realBody
 isShortUpperShadow = upperShadow <= hammerHangingManUpperShadowThreshold * (high - low)
 
-isHammer = isBullishCandle and isSmallRealBody and isLongLowerShadow and isShortUpperShadow
-isHangingMan = isBearishCandle and isSmallRealBody and isLongLowerShadow and isShortUpperShadow
+isHammer = isBullishCandle and isSmallRealBody and isLongLowerShadow and isShortUpperShadow and low < low[1] and low < low[2] and low < low[3]
+isHangingMan = isBearishCandle and isSmallRealBody and isLongLowerShadow and isShortUpperShadow and low > low[1] and low > low[2] and low > low[3]
 
 barcolor(isHammer ? color.white : isHangingMan ? color.black : na)
 
