@@ -52,7 +52,10 @@ file script: [hammer_hanging_man.pine](hammer_hanging_man.pine)
 - The Hammer pattern should have no, or a very short, upper shadow. In the code, this is checked using the *isShortUpperShadow* variable. The *hammerHangingManUpperShadowThreshold* input parameter determines the maximum upper shadow length as a percentage of the overall range.
 - If these conditions are met and the current candle is bullish *isBullishCandle*, the script identifies the pattern as a Hammer and plots an arrow below the candle labeled "Hammer" in green color. 
 Or If these conditions are met and the current candle is bearish *isBearishCandle*, the script identifies the pattern as a Hanging Man and plots an arrow above the candle labeled "Hanging Man" in red color.
-- The *showHammer* and *showHangingMan* input boolean variables allow you to toggle the display of Hammer and Hanging Man patterns on the chart, respectively. The *barcolor()* function is used to color the Hammer candles white and the Hanging Man candles black.
+- The *isHammer* and *isHangingMan* are boolean variables that store the conditions for identifying a Hammer or a Hanging Man pattern. They also include additional conditions to ensure the current candle's low is lower than the previous three candles for Hammer and higher for Hanging Man patterns.
+- The *showHammer* and *showHangingMan* input boolean variables allow you to toggle the display of Hammer and Hanging Man patterns on the chart, respectively.
+- The *barcolor()* function is used to color the Hammer candles white and the Hanging Man candles black.
+- The *plotshape()* function is used to display an arrow below or above the identified Hammer or Hanging Man pattern, with the text "Hammer" or "Hanging Man" and their respective colors (green for Hammer and red for Hanging Man).
 
 ___
 ___
