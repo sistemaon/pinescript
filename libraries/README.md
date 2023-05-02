@@ -2,6 +2,10 @@
 
 ## Uptrend Downtrend Loopback Candle Identification Lib
 
+file script: [uptrend_downtrend_loopback_candle_identification_lib.pine](uptrend_downtrend_loopback_candle_identification_lib.pine)
+
+link script: [uptrend_downtrend_loopback_candle_identification_lib](https://www.tradingview.com/v/7XVVW2CK/)
+
 ### uptrendLoopbackCandleIdentification:
 - The function starts by declaring a variable *isUptrend* and initializes it as *false*. This variable will be used to store the result of the loop analysis.
 - A *for loop* is used to iterate through the specified *lookbackPeriod* with the loop index variable *i*.
@@ -17,11 +21,6 @@
 - After the loop has finished, the function returns the final value of *isDowntrend*.
 
 _Each function will return true if the respective condition is met for any bar within the lookback period. The loops will not terminate early if the conditions are met._
-
-
-file script: [uptrend_downtrend_loopback_candle_identification_lib.pine](uptrend_downtrend_loopback_candle_identification_lib.pine)
-
-link script: [uptrend_downtrend_loopback_candle_identification_lib](https://www.tradingview.com/v/7XVVW2CK/)
 ___
 ___
 
