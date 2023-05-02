@@ -47,12 +47,14 @@ The Hanging Man is a bearish candlestick pattern that occurs during an uptrend. 
 
 file script: [hammer_hanging_man.pine](hammer_hanging_man.pine)
 
+- The script imports the *uptrend_downtrend_loopback_candle_identification_lib* library, which contains functions to identify uptrends and downtrends based on a specified lookback period.
 - The real body of the Hammer pattern should be small relative to the overall range of the candle. In the code, this is checked using the *isSmallRealBody* variable. The *hammerHangingManBodySizeThreshold* input parameter determines the maximum body size as a percentage of the overall range.
 - The lower shadow of the Hammer pattern should be longer than the real body. In the code, this is checked using the *isLongLowerShadow* variable. The *hammerHangingManLowerShadowMultiplier* input parameter determines the minimum lower shadow length as a multiple of the real body size.
 - The Hammer pattern should have no, or a very short, upper shadow. In the code, this is checked using the *isShortUpperShadow* variable. The *hammerHangingManUpperShadowThreshold* input parameter determines the maximum upper shadow length as a percentage of the overall range.
 - If these conditions are met and the current candle is bullish *isBullishCandle*, the script identifies the pattern as a Hammer and plots an arrow below the candle labeled "Hammer" in green color. 
 Or If these conditions are met and the current candle is bearish *isBearishCandle*, the script identifies the pattern as a Hanging Man and plots an arrow above the candle labeled "Hanging Man" in red color.
-- The *isHammer* and *isHangingMan* are boolean variables that store the conditions for identifying a Hammer or a Hanging Man pattern. They also include additional conditions to ensure the current candle's low is lower than the previous three candles for Hammer and higher for Hanging Man patterns.
+- The *isHammer* and *isHangingMan* are boolean variables that store the conditions for identifying a Hammer or a Hanging Man pattern.
+- They also include additional conditions to ensure the current candle's low is lower or higher than the previous candles for Hammer and for Hanging Man patterns thru the *lookbackPeriod* to identify uptrend/downtrend analysis from candles.
 - The *showHammer* and *showHangingMan* input boolean variables allow you to toggle the display of Hammer and Hanging Man patterns on the chart, respectively.
 - The *barcolor()* function is used to color the Hammer candles white and the Hanging Man candles black.
 - The *plotshape()* function is used to display an arrow below or above the identified Hammer or Hanging Man pattern, with the text "Hammer" or "Hanging Man" and their respective colors (green for Hammer and red for Hanging Man).
