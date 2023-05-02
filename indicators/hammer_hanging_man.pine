@@ -4,10 +4,12 @@
 //@version=5
 indicator("Hammer and Hanging Man (Candlestick Pattern)", overlay=true)
 
-hammerHangingManBodySizeThreshold = input.float(defval=0.34, title="Hammer/Hanging Man body size threshold in percentage (0.34 = 34%)", step=0.01)
-hammerHangingManLowerShadowMultiplier = input.float(defval=1.8, title="Hammer/Hanging Man lower shadow multiplier", step=0.1)
-hammerHangingManUpperShadowThreshold = input.float(defval=0.05, title="Hammer/Hanging Man upper shadow threshold in percentage (0.05 = 5%)", step=0.01)
+import AugustoErni/uptrend_downtrend_loopback_candle_identification_lib/2 as upAndDownTrendsCandleIdentification
 
+hammerHangingManBodySizeThreshold = input.float(defval=0.50, title="Hammer/Hanging Man body size threshold in percentage (0.50 = 50%)", step=0.01)
+hammerHangingManLowerShadowMultiplier = input.float(defval=1.8, title="Hammer/Hanging Man lower shadow multiplier", step=0.1)
+hammerHangingManUpperShadowThreshold = input.float(defval=0.10, title="Hammer/Hanging Man upper shadow threshold in percentage (0.10 = 10 %)", step=0.01)
+lookbackPeriod = input.int(defval=3, title="Lookback Period", minval=1, step=1, tooltip="Loopback period to identify uptrend/downtrend analysis from candles.")
 showHammer = input.bool(defval=true, title="Show Hammer", tooltip="Show or hide the Hammer pattern.")
 showHangingMan = input.bool(defval=true, title="Show Hanging Man", tooltip="Show or hide the Hanging Man pattern.")
 
@@ -21,8 +23,11 @@ isSmallRealBody = realBody <= hammerHangingManBodySizeThreshold * (high - low)
 isLongLowerShadow = lowerShadow >= hammerHangingManLowerShadowMultiplier * realBody
 isShortUpperShadow = upperShadow <= hammerHangingManUpperShadowThreshold * (high - low)
 
-isHammer = isBullishCandle and isSmallRealBody and isLongLowerShadow and isShortUpperShadow and low < low[1] and low < low[2] and low < low[3]
-isHangingMan = isBearishCandle and isSmallRealBody and isLongLowerShadow and isShortUpperShadow and low > low[1] and low > low[2] and low > low[3]
+isLookbackDowntrendCandle = upAndDownTrendsCandleIdentification.downtrendLoopbackCandleIdentification(lookbackPeriod)
+isLookbackUptrendCandle = upAndDownTrendsCandleIdentification.uptrendLoopbackCandleIdentification(lookbackPeriod)
+
+isHammer = isBullishCandle and isSmallRealBody and isLongLowerShadow and isShortUpperShadow and isLookbackDowntrendCandle
+isHangingMan = isBearishCandle and isSmallRealBody and isLongLowerShadow and isShortUpperShadow and isLookbackUptrendCandle
 
 barcolor(isHammer ? color.white : isHangingMan ? color.black : na)
 
