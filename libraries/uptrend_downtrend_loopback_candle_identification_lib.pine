@@ -1,0 +1,19 @@
+// This source code is subject to the terms of the Mozilla Public License 2.0 at https://mozilla.org/MPL/2.0/
+// © AugustoErni
+
+//@version=5
+library("uptrend_downtrend_loopback_candle_identification_lib", overlay=true)
+
+export uptrendLoopbackCandleIdentification(int lookbackPeriod) =>
+    var bool isUptrend = false
+    for i = 0 to lookbackPeriod
+        if low >= low[i]
+            isUptrend := true
+    isUptrend
+
+export downtrendLoopbackCandleIdentification(int lookbackPeriod) =>
+    var bool isDowntrend = false
+    for i = 0 to lookbackPeriod
+        if low <= low[i]
+            isDowntrend := true
+    isDowntrend
