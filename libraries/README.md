@@ -20,6 +20,7 @@ _Each function will return true if the respective condition is met for any bar w
 
 
 file script: [uptrend_downtrend_loopback_candle_identification_lib.pine](uptrend_downtrend_loopback_candle_identification_lib.pine)
+
 link script: [uptrend_downtrend_loopback_candle_identification_lib](https://www.tradingview.com/v/7XVVW2CK/)
 ___
 ___
