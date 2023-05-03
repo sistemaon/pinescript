@@ -1,0 +1,27 @@
+// This source code is subject to the terms of the Mozilla Public License 2.0 at https://mozilla.org/MPL/2.0/
+// © AugustoErni
+
+//@version=5
+indicator("Engulfing Bullish/Bearish (Candlestick Pattern)", overlay=true)
+
+showBullishEngulfing = input.bool(defval=true, title="Show Bullish Engulfing", tooltip="Show or hide the Bullish Engulfing pattern.")
+showBearishEngulfing = input.bool(defval=true, title="Show Bearish Engulfing", tooltip="Show or hide the Bearish Engulfing pattern.")
+
+isBullishCandle = close > open
+isBearishCandle = open > close
+
+isPreviousBullishCandle = close[1] > open[1]
+isPreviousBearishCandle = open[1] > close[1]
+
+isShadowEngulfing = low < low[1] and high > high[1]
+
+isBullishBodyEngulfing = math.floor(open) <= math.floor(close[1]) and math.floor(close) >= math.floor(open[1])
+isBearishBodyEngulfing = math.floor(open) >= math.floor(close[1]) and math.floor(close) <= math.floor(open[1])
+
+isBullishEngulfing = isBullishCandle and isPreviousBearishCandle and isShadowEngulfing and isBullishBodyEngulfing
+isBearishEngulfing = isBearishCandle and isPreviousBullishCandle and isShadowEngulfing and isBearishBodyEngulfing
+
+barcolor(isBullishEngulfing ? color.white : isBearishEngulfing ? color.black : na)
+
+plotshape(isBullishEngulfing and showBullishEngulfing, title="Bullish Engulfing", style=shape.arrowup, location=location.belowbar, color=color.rgb(255, 255, 255), text="Bullish Engulfing", textcolor=color.green)
+plotshape(isBearishEngulfing and showBearishEngulfing, title="Bearish Engulfing", style=shape.arrowdown, location=location.abovebar, color=color.rgb(0, 0, 0), text="Bearish Engulfing", textcolor=color.red)
