@@ -58,10 +58,31 @@ Or If these conditions are met and the current candle is bearish *isBearishCandl
 - The *showHammer* and *showHangingMan* input boolean variables allow you to toggle the display of Hammer and Hanging Man patterns on the chart, respectively.
 - The *barcolor()* function is used to color the Hammer candles white and the Hanging Man candles black.
 - The *plotshape()* function is used to display an arrow below or above the identified Hammer or Hanging Man pattern, with the text "Hammer" or "Hanging Man" and their respective colors (green for Hammer and red for Hanging Man).
-
 ___
 ___
 
+## Engulfing Bullish/Bearish
+
+Bullish Engulfing occurs in a downtrend when a small bearish (red) candle is followed by a larger bullish (green) candle that engulfs the body of the previous candle. This pattern indicates the possibility of a bullish trend reversal.
+
+Bearish Engulfing occurs in an uptrend when a small bullish (green) candle is followed by a larger bearish (red) candle that engulfs the body of the previous candle. This pattern indicates the possibility of a bearish trend reversal.
+
+file script: [engulfing.pine](engulfing.pine)
+
+- The *showBullishEngulfing* and *showBearishEngulfing* are boolean inputs to choose whether to display bullish engulfing patterns and/or bearish engulfing patterns.
+- The *isBullishCandle* and *isBearishCandle* are boolean variables to identify if the current candle is bullish (close > open) and if the current candle is bearish (open > close).
+- The *isPreviousBullishCandle* and *isPreviousBearishCandle* are boolean variables to identify if the previous candle is bullish (close[1] > open[1]) and if the previous candle is bearish (open[1] > close[1]).
+- *isShadowEngulfing* a boolean variable to check if the current candle's low is lower than the previous candle's low and the current candle's high is higher than the previous candle's high.
+- *isBullishBodyEngulfing* a boolean variable to check if the current candle engulfs the previous candle's body in a bullish manner (current open <= previous close, and current close >= previous open).
+- *isBearishBodyEngulfing* a boolean variable to check if the current candle engulfs the previous candle's body in a bearish manner (current open >= previous close, and current close <= previous open).
+- *isBullishEngulfing* a boolean variable to identify bullish engulfing patterns by combining the engulfing criteria with the previous and current candle types.
+- *isBearishEngulfing* a boolean variable to identify bearish engulfing patterns by combining the engulfing criteria with the previous and current candle types.
+- The *barcolor()* function is used to color the bars white if there's a bullish engulfing pattern or black if there's a bearish engulfing pattern.
+- The *plotshape()* function is used to display an arrow and text for bullish engulfing and for bearish engulfing patterns if *showBullishEngulfing* and/or *showBearishEngulfing* are true.
+
+_This indicator helps to visually and identify bullish and bearish engulfing patterns, which are often used as potential trend reversal signals in technical analysis._
+___
+___
 
 ### references:
 
