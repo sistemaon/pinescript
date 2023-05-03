@@ -84,11 +84,11 @@ _This indicator helps to visually and identify bullish and bearish engulfing pat
 ___
 ___
 
-## Engulfing Bullish/Bearish
+## Morning Star
 
-Bullish Engulfing occurs in a downtrend when a small bearish (red) candle is followed by a larger bullish (green) candle that engulfs the body of the previous candle. This pattern indicates the possibility of a bullish trend reversal.
+The Morning Star pattern is a bullish reversal candlestick pattern that indicates a potential turnaround from a downtrend to an uptrend.
 
-Bearish Engulfing occurs in an uptrend when a small bullish (green) candle is followed by a larger bearish (red) candle that engulfs the body of the previous candle. This pattern indicates the possibility of a bearish trend reversal.
+It consists of three candles, A long bearish candle, which represents a continuation of the downtrend. A small candle or doji, indicating indecision or weakening of the selling pressure. A long bullish candle, showing a shift in momentum from sellers to buyers, closing above the midpoint of the first candle.
 
 file script: [engulfing.pine](engulfing.pine)
 
@@ -103,7 +103,7 @@ file script: [engulfing.pine](engulfing.pine)
 - The **barcolor()** function is used to color the bars, the *third candle* is colored white, *second candle* is colored white if *bullish* or black if *bearish*, *first candle* is colored black, colors are applied only when the **isMorningStar** condition is *true*.
 - The **plotshape()** function is used to display an arrow and label below the *Morning Star* pattern if it is detected and if **showMorningStar** input is *true*, the label reads **Morning Star** with a green text color.
 
-_This indicator is for detecting the Morning Star pattern in candlestick charts. The Morning Star pattern is a bullish reversal pattern that occurs at the end of a downtrend. It consists of three candles: a bearish candle, a small candle or doji, and a bullish candle._
+_This indicator is for detecting the Morning Star pattern in candlestick charts. The Morning Star pattern is a bullish reversal pattern that occurs at the end of a downtrend. It consists of three candles: a bearish candle, a small candle or doji, and a bullish candle. The pattern suggests that after a downtrend, buyers have started to take control, potentially leading to a change in trend direction._
 ___
 ___
 
