@@ -10,13 +10,13 @@ It is the diminutive size of the real body that makes this a spinning top.
 
 file script: [spinning_top_candlestick_pattern.pine](spinning_top_candlestick_pattern.pine)
 
-- *maxSpinningTopThreshold* and *minSpinningTopThreshold* are input variables that allow you to set the maximum and minimum body size thresholds as a percentage of the overall range of the candle. The default values are 0.55 (55%) for the max threshold and 0.21 (21%) for the min threshold.
-- *showBullishSpinningTop* and *showBearishSpinningTop* are input boolean variables that allow you to toggle the display of bullish and bearish Spinning Top patterns on the chart.
-- *isBullishCandle* and *isBearishCandle* are variables that check if the current candle is bullish (close > open) or bearish (close < open).
-- *isSpinningTop* checks if the current candle is a Spinning Top by comparing the size of the real body to the min and max thresholds. If the size of the real body is less than the max threshold and greater than the min threshold, the candle is considered a Spinning Top.
-- *isSpinningTopBullish* and *isSpinningTopBearish* are variables that determine if the Spinning Top is bullish or bearish based on the direction of the candle and the positions of the high and low prices.
-- *barcolor()* function is used to color the Spinning Top candles white for bullish and black for bearish.
-- *plotshape()* functions are used to display an arrow below or above the Spinning Top candles, depending on whether they are bullish or bearish. The arrows are labeled "Spinning Top" and are colored green for bullish Spinning Tops and red for bearish Spinning Tops.
+- **maxSpinningTopThreshold** and **minSpinningTopThreshold** are input variables that allow you to set the maximum and minimum body size thresholds as a percentage of the overall range of the candle. The default values are 0.55 (55%) for the max threshold and 0.21 (21%) for the min threshold.
+- **showBullishSpinningTop** and **showBearishSpinningTop** are input boolean variables that allow you to toggle the display of bullish and bearish Spinning Top patterns on the chart.
+- **isBullishCandle** and **isBearishCandle** are variables that check if the current candle is bullish (close > open) or bearish (close < open).
+- **isSpinningTop** checks if the current candle is a Spinning Top by comparing the size of the real body to the min and max thresholds. If the size of the real body is less than the max threshold and greater than the min threshold, the candle is considered a Spinning Top.
+- **isSpinningTopBullish** and **isSpinningTopBearish** are variables that determine if the Spinning Top is bullish or bearish based on the direction of the candle and the positions of the high and low prices.
+- **barcolor()** function is used to color the Spinning Top candles white for bullish and black for bearish.
+- **plotshape()** functions are used to display an arrow below or above the Spinning Top candles, depending on whether they are bullish or bearish. The arrows are labeled "Spinning Top" and are colored green for bullish Spinning Tops and red for bearish Spinning Tops.
 ___
 ___
 
@@ -30,13 +30,13 @@ The lengths of the shadows can vary.
 
 file script: [doji.pine](doji.pine)
 
-- *dojiThreshold* is an input variable that allows you to set the maximum allowed difference between the open and close prices as a fraction of the price. The default value is 0.0005 or 0.05%.
-- *showBullishDoji* and *showBearishDoji* are input boolean variables that allow you to toggle the display of bullish and bearish Doji patterns on the chart.
-- *isBullishCandle* and isBearishCandle are variables that check if the current candle is bullish (close > open) or bearish (close < open).
-- *isDoji* checks if the absolute difference between the close and open prices is less than or equal to the dojiThreshold multiplied by the close price. If the condition is met, it means the current candle is a Doji.
-- *isDojiBullish* and isDojiBearish are variables that determine if the Doji is bullish or bearish based on the direction of the candle.
-- *barcolor()* function is used to color the Doji candles white for bullish and black for bearish.
-- *plotshape()* functions are used to display an arrow below or above the Doji candles, depending on whether they are bullish or bearish. The arrows are labeled "Doji" and are colored green for bullish Dojis and red for bearish Dojis.
+- **dojiThreshold** is an input variable that allows you to set the maximum allowed difference between the open and close prices as a fraction of the price. The default value is 0.0005 or 0.05%.
+- **showBullishDoji** and **showBearishDoji** are input boolean variables that allow you to toggle the display of bullish and bearish Doji patterns on the chart.
+- **isBullishCandle** and isBearishCandle are variables that check if the current candle is bullish (close > open) or bearish (close < open).
+- **isDoji** checks if the absolute difference between the close and open prices is less than or equal to the dojiThreshold multiplied by the close price. If the condition is met, it means the current candle is a Doji.
+- **isDojiBullish** and isDojiBearish are variables that determine if the Doji is bullish or bearish based on the direction of the candle.
+- **barcolor()** function is used to color the Doji candles white for bullish and black for bearish.
+- **plotshape()** functions are used to display an arrow below or above the Doji candles, depending on whether they are bullish or bearish. The arrows are labeled "Doji" and are colored green for bullish Dojis and red for bearish Dojis.
 ___
 ___
 
@@ -47,17 +47,17 @@ The Hanging Man is a bearish candlestick pattern that occurs during an uptrend. 
 
 file script: [hammer_hanging_man.pine](hammer_hanging_man.pine)
 
-- The script imports the *uptrend_downtrend_loopback_candle_identification_lib* library, which contains functions to identify uptrends and downtrends based on a specified lookback period.
-- The real body of the Hammer pattern should be small relative to the overall range of the candle. In the code, this is checked using the *isSmallRealBody* variable. The *hammerHangingManBodySizeThreshold* input parameter determines the maximum body size as a percentage of the overall range.
-- The lower shadow of the Hammer pattern should be longer than the real body. In the code, this is checked using the *isLongLowerShadow* variable. The *hammerHangingManLowerShadowMultiplier* input parameter determines the minimum lower shadow length as a multiple of the real body size.
-- The Hammer pattern should have no, or a very short, upper shadow. In the code, this is checked using the *isShortUpperShadow* variable. The *hammerHangingManUpperShadowThreshold* input parameter determines the maximum upper shadow length as a percentage of the overall range.
-- If these conditions are met and the current candle is bullish *isBullishCandle*, the script identifies the pattern as a Hammer and plots an arrow below the candle labeled "Hammer" in green color. 
-Or If these conditions are met and the current candle is bearish *isBearishCandle*, the script identifies the pattern as a Hanging Man and plots an arrow above the candle labeled "Hanging Man" in red color.
-- The *isHammer* and *isHangingMan* are boolean variables that store the conditions for identifying a Hammer or a Hanging Man pattern.
-- They also include additional conditions to ensure the current candle's low is lower or higher than the previous candles for Hammer and for Hanging Man patterns thru the *lookbackPeriod* to identify uptrend/downtrend analysis from candles.
-- The *showHammer* and *showHangingMan* input boolean variables allow you to toggle the display of Hammer and Hanging Man patterns on the chart, respectively.
-- The *barcolor()* function is used to color the Hammer candles white and the Hanging Man candles black.
-- The *plotshape()* function is used to display an arrow below or above the identified Hammer or Hanging Man pattern, with the text "Hammer" or "Hanging Man" and their respective colors (green for Hammer and red for Hanging Man).
+- The script imports the **uptrend_downtrend_loopback_candle_identification_lib** library, which contains functions to identify uptrends and downtrends based on a specified lookback period.
+- The real body of the Hammer pattern should be small relative to the overall range of the candle. In the code, this is checked using the **isSmallRealBody** variable. The **hammerHangingManBodySizeThreshold** input parameter determines the maximum body size as a percentage of the overall range.
+- The lower shadow of the Hammer pattern should be longer than the real body. In the code, this is checked using the **isLongLowerShadow** variable. The **hammerHangingManLowerShadowMultiplier** input parameter determines the minimum lower shadow length as a multiple of the real body size.
+- The Hammer pattern should have no, or a very short, upper shadow. In the code, this is checked using the **isShortUpperShadow** variable. The **hammerHangingManUpperShadowThreshold** input parameter determines the maximum upper shadow length as a percentage of the overall range.
+- If these conditions are met and the current candle is bullish **isBullishCandle**, the script identifies the pattern as a Hammer and plots an arrow below the candle labeled "Hammer" in green color. 
+Or If these conditions are met and the current candle is bearish **isBearishCandle**, the script identifies the pattern as a Hanging Man and plots an arrow above the candle labeled "Hanging Man" in red color.
+- The **isHammer** and **isHangingMan** are boolean variables that store the conditions for identifying a Hammer or a Hanging Man pattern.
+- They also include additional conditions to ensure the current candle's low is lower or higher than the previous candles for Hammer and for Hanging Man patterns thru the **lookbackPeriod** to identify uptrend/downtrend analysis from candles.
+- The **showHammer** and **showHangingMan** input boolean variables allow you to toggle the display of Hammer and Hanging Man patterns on the chart, respectively.
+- The **barcolor()** function is used to color the Hammer candles white and the Hanging Man candles black.
+- The **plotshape()** function is used to display an arrow below or above the identified Hammer or Hanging Man pattern, with the text "Hammer" or "Hanging Man" and their respective colors (green for Hammer and red for Hanging Man).
 ___
 ___
 
@@ -69,20 +69,44 @@ Bearish Engulfing occurs in an uptrend when a small bullish (green) candle is fo
 
 file script: [engulfing.pine](engulfing.pine)
 
-- The *showBullishEngulfing* and *showBearishEngulfing* are boolean inputs to choose whether to display bullish engulfing patterns and/or bearish engulfing patterns.
-- The *isBullishCandle* and *isBearishCandle* are boolean variables to identify if the current candle is bullish (close > open) and if the current candle is bearish (open > close).
-- The *isPreviousBullishCandle* and *isPreviousBearishCandle* are boolean variables to identify if the previous candle is bullish (close[1] > open[1]) and if the previous candle is bearish (open[1] > close[1]).
-- *isShadowEngulfing* a boolean variable to check if the current candle's low is lower than the previous candle's low and the current candle's high is higher than the previous candle's high.
-- *isBullishBodyEngulfing* a boolean variable to check if the current candle engulfs the previous candle's body in a bullish manner (current open <= previous close, and current close >= previous open).
-- *isBearishBodyEngulfing* a boolean variable to check if the current candle engulfs the previous candle's body in a bearish manner (current open >= previous close, and current close <= previous open).
-- *isBullishEngulfing* a boolean variable to identify bullish engulfing patterns by combining the engulfing criteria with the previous and current candle types.
-- *isBearishEngulfing* a boolean variable to identify bearish engulfing patterns by combining the engulfing criteria with the previous and current candle types.
-- The *barcolor()* function is used to color the bars white if there's a bullish engulfing pattern or black if there's a bearish engulfing pattern.
-- The *plotshape()* function is used to display an arrow and text for bullish engulfing and for bearish engulfing patterns if *showBullishEngulfing* and/or *showBearishEngulfing* are true.
+- The **showBullishEngulfing** and **showBearishEngulfing** are boolean inputs to choose whether to display bullish engulfing patterns and/or bearish engulfing patterns.
+- The **isBullishCandle** and **isBearishCandle** are boolean variables to identify if the current candle is bullish (close > open) and if the current candle is bearish (open > close).
+- The **isPreviousBullishCandle** and **isPreviousBearishCandle** are boolean variables to identify if the previous candle is bullish (close[1] > open[1]) and if the previous candle is bearish (open[1] > close[1]).
+- **isShadowEngulfing** a boolean variable to check if the current candle's low is lower than the previous candle's low and the current candle's high is higher than the previous candle's high.
+- **isBullishBodyEngulfing** a boolean variable to check if the current candle engulfs the previous candle's body in a bullish manner (current open <= previous close, and current close >= previous open).
+- **isBearishBodyEngulfing** a boolean variable to check if the current candle engulfs the previous candle's body in a bearish manner (current open >= previous close, and current close <= previous open).
+- **isBullishEngulfing** a boolean variable to identify bullish engulfing patterns by combining the engulfing criteria with the previous and current candle types.
+- **isBearishEngulfing** a boolean variable to identify bearish engulfing patterns by combining the engulfing criteria with the previous and current candle types.
+- The **barcolor()** function is used to color the bars white if there's a bullish engulfing pattern or black if there's a bearish engulfing pattern.
+- The **plotshape()** function is used to display an arrow and text for bullish engulfing and for bearish engulfing patterns if **showBullishEngulfing** and/or **showBearishEngulfing** are true.
 
 _This indicator helps to visually and identify bullish and bearish engulfing patterns, which are often used as potential trend reversal signals in technical analysis._
 ___
 ___
+
+## Engulfing Bullish/Bearish
+
+Bullish Engulfing occurs in a downtrend when a small bearish (red) candle is followed by a larger bullish (green) candle that engulfs the body of the previous candle. This pattern indicates the possibility of a bullish trend reversal.
+
+Bearish Engulfing occurs in an uptrend when a small bullish (green) candle is followed by a larger bearish (red) candle that engulfs the body of the previous candle. This pattern indicates the possibility of a bearish trend reversal.
+
+file script: [engulfing.pine](engulfing.pine)
+
+- The **showMorningStar** is a boolean, flag to show or hide the Morning Star pattern.
+- The **dojiThreshold** and **weakCandleThreshold** are float, the threshold for identifying a doji candle (0.1 = 10%) and the threshold for identifying a weak candle (0.3 = 30%).
+- The **isDoji** identifies if a candle is a doji based on the doji threshold, and **isWeakCandle** identifies if a candle is weak based on the weak candle threshold.
+- **isBullishCandle** identifies if a candle is bullish (close > open) and **isBearishCandle** identifies if a candle is bearish (open > close).
+- **isConditionFirstCandle** the *first candle* should be a *bearish candle*, and its open should be greater than the high of the *second candle*.
+- **isConditionSecondCandle** the *second candle* should be a *doji* or *weak candle*.
+- **isConditionThirdCandle** the *third candle* should have a close price higher than the high of the *second candle*.
+- **isMorningStar** *true* if all *three conditions* are met, *false* otherwise.
+- The **barcolor()** function is used to color the bars, the *third candle* is colored white, *second candle* is colored white if *bullish* or black if *bearish*, *first candle* is colored black, colors are applied only when the **isMorningStar** condition is *true*.
+- The **plotshape()** function is used to display an arrow and label below the *Morning Star* pattern if it is detected and if **showMorningStar** input is *true*, the label reads **Morning Star** with a green text color.
+
+_This indicator is for detecting the Morning Star pattern in candlestick charts. The Morning Star pattern is a bullish reversal pattern that occurs at the end of a downtrend. It consists of three candles: a bearish candle, a small candle or doji, and a bullish candle._
+___
+___
+
 
 ### references:
 
