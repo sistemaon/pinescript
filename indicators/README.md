@@ -90,7 +90,7 @@ The Morning Star pattern is a bullish reversal candlestick pattern that indicate
 
 It consists of three candles, A long bearish candle, which represents a continuation of the downtrend. A small candle or doji, indicating indecision or weakening of the selling pressure. A long bullish candle, showing a shift in momentum from sellers to buyers, closing above the midpoint of the first candle.
 
-file script: [engulfing.pine](engulfing.pine)
+file script: [morning_star.pine](morning_star.pine)
 
 - The **showMorningStar** is a boolean, flag to show or hide the Morning Star pattern.
 - The **dojiThreshold** and **weakCandleThreshold** are float, the threshold for identifying a doji candle (0.1 = 10%) and the threshold for identifying a weak candle (0.3 = 30%).
