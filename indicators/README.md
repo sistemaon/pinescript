@@ -96,9 +96,9 @@ file script: [morning_star.pine](morning_star.pine)
 - The **dojiThreshold** and **weakCandleThreshold** are float, the threshold for identifying a doji candle (0.1 = 10%) and the threshold for identifying a weak candle (0.3 = 30%).
 - The **isDoji** identifies if a candle is a doji based on the doji threshold, and **isWeakCandle** identifies if a candle is weak based on the weak candle threshold.
 - **isBullishCandle** identifies if a candle is bullish (close > open) and **isBearishCandle** identifies if a candle is bearish (open > close).
-- **isConditionFirstCandle** the *first candle* should be a *bearish candle*, and its open should be greater than the high of the *second candle*.
-- **isConditionSecondCandle** the *second candle* should be a *doji* or *weak candle*.
-- **isConditionThirdCandle** the *third candle* should have a close price higher than the high of the *second candle*.
+- **isConditionFirstCandle** the *first candle* should be a *bearish candle*, and its open should be greater than the high of the *second candle* and should not be *isDoji* and should not be *isWeakCandle*.
+- **isConditionSecondCandle** the *second candle* should be a *isDoji* or *isWeakCandle*.
+- **isConditionThirdCandle** the *third candle* should have a close price higher than the high of the *second candle* and should not be *isDoji* and should not be *isWeakCandle*.
 - **isMorningStar** *true* if all *three conditions* are met, *false* otherwise.
 - The **barcolor()** function is used to color the bars, the *third candle* is colored white, *second candle* is colored white if *bullish* or black if *bearish*, *first candle* is colored black, colors are applied only when the **isMorningStar** condition is *true*.
 - The **plotshape()** function is used to display an arrow and label below the *Morning Star* pattern if it is detected and if **showMorningStar** input is *true*, the label reads **Morning Star** with a green text color.

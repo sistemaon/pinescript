@@ -14,9 +14,9 @@ isWeakCandle = math.abs(close - open) <= (high - low) * weakCandleThreshold
 isBullishCandle = close > open
 isBearishCandle = open > close
 
-isConditionFirstCandle = isBearishCandle[2] and open[2] > high[1]
+isConditionFirstCandle = isBearishCandle[2] and open[2] > high[1] and not isDoji and not isWeakCandle
 isConditionSecondCandle = isDoji[1] or isWeakCandle[1]
-isConditionThirdCandle = close > high[1]
+isConditionThirdCandle = close > high[1] and not isDoji and not isWeakCandle
 
 isMorningStar = isConditionFirstCandle and isConditionSecondCandle and isConditionThirdCandle
 
