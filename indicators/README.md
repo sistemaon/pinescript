@@ -130,6 +130,27 @@ _This indicator is for detecting the Evening Star pattern in candlestick charts.
 ___
 ___
 
+## Shooting Star
+
+The Shooting Star pattern is a bearish reversal pattern that signals a potential change in trend. This pattern is identified by a small real body near the bottom of the price range and a long upper shadow that is at least twice the size of the real body. Additionally, there should be little or no lower shadow.
+
+File Script: [Shooting Start Candlestick Pattern](shooting_star.pine)
+
+- The **showShootingStar** is a boolean, option allows the user to show or hide the Shooting Star pattern on the chart.
+- The **weakCandleThreshold** is a float, defines the threshold for what is considered a *weak candle*. The default value is 0.45, which means a candle with a body that is less than 45% of the total price range is considered weak.
+- The **upperShadowThreshold** is a float, defines the threshold for the size of the upper shadow. The default value is 1, which means the upper shadow must be at least as *long as the body of the candle*.
+- **noLowerShadowThreshold** is a float, defines the threshold for the size of the lower shadow. The default value is 0.05, which means there should be *little or no lower shadow*.
+- **isBullishCandle** identifies if a candle is bullish (close > open) and **isBearishCandle** identifies if a candle is bearish (open > close).
+- **isWeakCandle** checks whether the candle is considered weak based on the customizable weak candle threshold.
+- **isLongUpperShadow** checks whether the upper shadow is at least as long as the body of the candle multiplied by the customizable upper shadow threshold.
+- **isNoLowerShadow** checks whether there is little or no lower shadow based on the customizable no/lower shadow threshold.
+- **isShootingStar** *true* if all *three conditions* are met, *false* otherwise.
+- The **barcolor()** function is used to color the bars, the *candle* is colored black if *isShootingStar* and *isBearishCandle* met criteria, or the *candle* is colored white if *isShootingStar* and *isBullishCandle* criteria meet.
+- The **plotshape()** function is used to display an arrow and label above the *Shooting Star* pattern if it is detected and if **showShootingStar** input is *true*, the label reads **Shooting Star** with a red text color.
+
+_The script identifies the Shooting Star pattern based on the customizable parameters and highlight the pattern on the chart with an arrow and text. The pattern indicates that the buyers attempted to push the price up but failed, and the sellers took control to push the price down, resulting in a bearish reversal._
+___
+___
 
 
 ### references:
