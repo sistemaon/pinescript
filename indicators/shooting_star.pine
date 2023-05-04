@@ -1,0 +1,23 @@
+// This source code is subject to the terms of the Mozilla Public License 2.0 at https://mozilla.org/MPL/2.0/
+// © AugustoErni
+
+//@version=5
+indicator("Shooting Star Pattern (Candlestick Pattern)", overlay=true)
+
+showShootingStar = input.bool(defval=true, title="Show Shooting Star", tooltip="Show or hide the Shooting Star pattern.")
+weakCandleThreshold = input.float(0.45, title="Weak Candle Threshold (0.45 = 45%)", step=0.01)
+upperShadowThreshold = input.float(1, title="Upper Shadow Threshold (1 = 1 times the body length)")
+noLowerShadowThreshold = input.float(0.05, title="No/Lower Shadow Threshold (0.05 = 5%)", step=0.01)
+
+isBullishCandle = close > open
+isBearishCandle = open > close
+
+isWeakCandle = math.abs(close - open) <= (high - low) * weakCandleThreshold
+isLongUpperShadow = (high - math.max(open, close)) >= upperShadowThreshold * math.abs(open - close)
+isNoLowerShadow = (math.min(open, close) - low) <= (high - low) * noLowerShadowThreshold
+
+isShootingStar = isWeakCandle and isLongUpperShadow and isNoLowerShadow
+
+barcolor(isShootingStar and isBullishCandle ? color.white : isShootingStar and isBearishCandle ? color.black : na)
+
+plotshape(isShootingStar and showShootingStar, title="Shooting Star", style=shape.arrowdown, location=location.abovebar, color=color.red, text="Shooting Star", textcolor=color.red)

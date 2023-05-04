@@ -111,7 +111,7 @@ ___
 
 The Evening Star pattern is a bearish reversal candlestick pattern that indicates a potential turnaround from a uptrend to an downtrend.
 
-It consists of three candles. A large bullish candle, indicating an uptrend. A small candle, either bullish or bearish, with a gap above the first candle's close, indicating indecision. A large bearish candle, closing below the midpoint of the first candle, indicating a potential trend reversal.
+It consists of three candles. A large bullish candle, indicating an uptrend. A small or doji candle, either bullish or bearish, above the first candle's close, indicating indecision. A large bearish candle, closing below the midpoint of the first candle, indicating a potential trend reversal.
 
 File Script: [Evening Start Candlestick Pattern](evening_star.pine)
 
