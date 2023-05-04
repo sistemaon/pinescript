@@ -134,7 +134,7 @@ ___
 
 ### Shooting Star
 
-The Shooting Star pattern is a bearish reversal pattern that signals a potential change in trend. This pattern is identified by a small real body near the bottom of the price range and a long upper shadow that is at least twice the size of the real body. Additionally, there should be little or no lower shadow.
+The Shooting Star pattern is a bearish reversal pattern that signals a potential change in trend. This pattern is identified by a small real body near the top of the price range and a long upper shadow that is at least twice the size of the real body. Additionally, there should be little or no lower shadow.
 
 File Script: [Shooting Start Candlestick Pattern](shooting_star_inverted_hammer.pine)
 
@@ -154,7 +154,7 @@ _The script identifies the Shooting Star pattern based on the customizable param
 
 ### Inverted Hammer
 
-The Inverted Hammer pattern is a bullish reversal pattern that signals a potential change in trend. This pattern is identified by a small real body near the top of the price range and a long lower shadow that is at least twice the size of the real body. Additionally, there should be little or no upper shadow.
+The Inverted Hammer pattern is a bullish reversal pattern that signals a potential change in trend. This pattern is identified by a small real body near the bottom of the price range and a long lower shadow that is at least twice the size of the real body. Additionally, there should be little or no upper shadow.
 
 File Script: [Inverted Hammer Candlestick Pattern](shooting_star_inverted_hammer.pine)
 
