@@ -107,6 +107,30 @@ _This indicator is for detecting the Morning Star pattern in candlestick charts.
 ___
 ___
 
+## Evening Star
+
+The Evening Star pattern is a bearish reversal candlestick pattern that indicates a potential turnaround from a uptrend to an downtrend.
+
+It consists of three candles. A large bullish candle, indicating an uptrend. A small candle, either bullish or bearish, with a gap above the first candle's close, indicating indecision. A large bearish candle, closing below the midpoint of the first candle, indicating a potential trend reversal.
+
+File Script: [Evening Start Candlestick Pattern](evening_star.pine)
+
+- The **showEveningStar** is a boolean, flag to show or hide the Evening Star pattern.
+- The **dojiThreshold** and **weakCandleThreshold** are float, the threshold for identifying a doji candle (0.1 = 10%) and the threshold for identifying a weak candle (0.3 = 30%).
+- The **isDoji** identifies if a candle is a doji based on the doji threshold, and **isWeakCandle** identifies if a candle is weak based on the weak candle threshold.
+- **isBullishCandle** identifies if a candle is bullish (close > open) and **isBearishCandle** identifies if a candle is bearish (open > close).
+- **isConditionFirstCandle** the *first candle* should be a *bullish candle*, and its low should be greater than the open of the *second candle* and should not be *isDoji* and should not be *isWeakCandle*.
+- **isConditionSecondCandle** the *second candle* should be a *isDoji* or *isWeakCandle*.
+- **isConditionThirdCandle** the *third candle* should have a close price lower than the low of the *second candle* and should not be *isDoji* and should not be *isWeakCandle*.
+- **isEveningStar** *true* if all *three conditions* are met, *false* otherwise.
+- The **barcolor()** function is used to color the bars, the *third candle* is colored black, *second candle* is colored white if *bullish* or black if *bearish*, *first candle* is colored white, colors are applied only when the **isEveningStar** condition is *true*.
+- The **plotshape()** function is used to display an arrow and label above the *Evening Star* pattern if it is detected and if **showEveningStar** input is *true*, the label reads **Evening Star** with a red text color.
+
+_This indicator is for detecting the Evening Star pattern in candlestick charts. The Evening Star pattern is a bearish reversal pattern that occurs at the end of a uptrend. It consists of three candles: a bullish candle, a small candle or doji, and a bearish candle. The pattern suggests that after uptrend, sellers have started to take control, potentially leading to a change in trend direction._
+___
+___
+
+
 
 ### references:
 
