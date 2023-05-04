@@ -8,7 +8,7 @@ The Spinning Top pattern can be either bullish or bearish, depending on the dire
 They have small upper and lower shadows, but the size of the shadows are not important.
 It is the diminutive size of the real body that makes this a spinning top.
 
-file script: [Spinning Top Candlestick Pattern](spinning_top_candlestick_pattern.pine)
+File Script: [Spinning Top Candlestick Pattern](spinning_top_candlestick_pattern.pine)
 
 - **maxSpinningTopThreshold** and **minSpinningTopThreshold** are input variables that allow you to set the maximum and minimum body size thresholds as a percentage of the overall range of the candle. The default values are 0.55 (55%) for the max threshold and 0.21 (21%) for the min threshold.
 - **showBullishSpinningTop** and **showBearishSpinningTop** are input boolean variables that allow you to toggle the display of bullish and bearish Spinning Top patterns on the chart.
@@ -28,7 +28,7 @@ They have horizontal lines.
 A doji occurs when the open and close for that session are the same or very close to being the same.
 The lengths of the shadows can vary.
 
-file script: [Doji Candlestick Pattern](doji.pine)
+File Script: [Doji Candlestick Pattern](doji.pine)
 
 - **dojiThreshold** is an input variable that allows you to set the maximum allowed difference between the open and close prices as a fraction of the price. The default value is 0.0005 or 0.05%.
 - **showBullishDoji** and **showBearishDoji** are input boolean variables that allow you to toggle the display of bullish and bearish Doji patterns on the chart.
@@ -45,7 +45,7 @@ ___
 The Hammer is a bullish candlestick pattern that occurs during a downtrend. It signals a potential reversal or the end of the downtrend. 
 The Hanging Man is a bearish candlestick pattern that occurs during an uptrend. It signals a potential reversal or the end of the uptrend.
 
-file script: [Hammer and Hanging Man Candlestick Pattern](hammer_hanging_man.pine)
+File Script: [Hammer and Hanging Man Candlestick Pattern](hammer_hanging_man.pine)
 
 - The script imports the **uptrend_downtrend_loopback_candle_identification_lib** library, which contains functions to identify uptrends and downtrends based on a specified lookback period.
 - The real body of the Hammer pattern should be small relative to the overall range of the candle. In the code, this is checked using the **isSmallRealBody** variable. The **hammerHangingManBodySizeThreshold** input parameter determines the maximum body size as a percentage of the overall range.
@@ -67,7 +67,7 @@ Bullish Engulfing occurs in a downtrend when a small bearish (red) candle is fol
 
 Bearish Engulfing occurs in an uptrend when a small bullish (green) candle is followed by a larger bearish (red) candle that engulfs the body of the previous candle. This pattern indicates the possibility of a bearish trend reversal.
 
-file script: [Engulfing Bullish/Bearish Candlestick Pattern](engulfing.pine)
+File Script: [Engulfing Bullish/Bearish Candlestick Pattern](engulfing.pine)
 
 - The **showBullishEngulfing** and **showBearishEngulfing** are boolean inputs to choose whether to display bullish engulfing patterns and/or bearish engulfing patterns.
 - The **isBullishCandle** and **isBearishCandle** are boolean variables to identify if the current candle is bullish (close > open) and if the current candle is bearish (open > close).
@@ -90,7 +90,7 @@ The Morning Star pattern is a bullish reversal candlestick pattern that indicate
 
 It consists of three candles. A long bearish candle, which represents a continuation of the downtrend. A small candle or doji, indicating indecision or weakening of the selling pressure. A long bullish candle, showing a shift in momentum from sellers to buyers, closing above the midpoint of the first candle.
 
-file script: [Morning Start Candlestick Pattern](morning_star.pine)
+File Script: [Morning Start Candlestick Pattern](morning_star.pine)
 
 - The **showMorningStar** is a boolean, flag to show or hide the Morning Star pattern.
 - The **dojiThreshold** and **weakCandleThreshold** are float, the threshold for identifying a doji candle (0.1 = 10%) and the threshold for identifying a weak candle (0.3 = 30%).
