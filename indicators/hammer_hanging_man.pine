@@ -4,7 +4,7 @@
 //@version=5
 indicator("Hammer and Hanging Man (Candlestick Pattern)", overlay=true)
 
-import AugustoErni/uptrend_downtrend_loopback_candle_identification_lib/2 as upAndDownTrendsCandleIdentification
+import AugustoErni/uptrend_downtrend_loopback_candle_identification_lib/3 as upAndDownTrendsCandleIdentification
 
 hammerHangingManBodySizeThreshold = input.float(defval=0.50, title="Hammer/Hanging Man body size threshold in percentage (0.50 = 50%)", step=0.01)
 hammerHangingManLowerShadowMultiplier = input.float(defval=1.8, title="Hammer/Hanging Man lower shadow multiplier", step=0.1)

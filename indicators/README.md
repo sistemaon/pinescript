@@ -130,11 +130,13 @@ _This indicator is for detecting the Evening Star pattern in candlestick charts.
 ___
 ___
 
-## Shooting Star
+## Shooting Star and Inverted Hammer
+
+### Shooting Star
 
 The Shooting Star pattern is a bearish reversal pattern that signals a potential change in trend. This pattern is identified by a small real body near the bottom of the price range and a long upper shadow that is at least twice the size of the real body. Additionally, there should be little or no lower shadow.
 
-File Script: [Shooting Start Candlestick Pattern](shooting_star.pine)
+File Script: [Shooting Start Candlestick Pattern](shooting_star_inverted_hammer.pine)
 
 - The **showShootingStar** is a boolean, option allows the user to show or hide the Shooting Star pattern on the chart.
 - The **weakCandleThreshold** is a float, defines the threshold for what is considered a *weak candle*. The default value is 0.45, which means a candle with a body that is less than 45% of the total price range is considered weak.
@@ -149,6 +151,24 @@ File Script: [Shooting Start Candlestick Pattern](shooting_star.pine)
 - The **plotshape()** function is used to display an arrow and label above the *Shooting Star* pattern if it is detected and if **showShootingStar** input is *true*, the label reads **Shooting Star** with a red text color.
 
 _The script identifies the Shooting Star pattern based on the customizable parameters and highlight the pattern on the chart with an arrow and text. The pattern indicates that the buyers attempted to push the price up but failed, and the sellers took control to push the price down, resulting in a bearish reversal._
+
+### Inverted Hammer
+
+The Inverted Hammer pattern is a bullish reversal pattern that signals a potential change in trend. This pattern is identified by a small real body near the top of the price range and a long lower shadow that is at least twice the size of the real body. Additionally, there should be little or no upper shadow.
+
+- The **showInvertedHammer** is a boolean, option allows the user to show or hide the Inverted Hammer pattern on the chart.
+- The **weakCandleThreshold** is a float, defines the threshold for what is considered a *weak candle*. The default value is 0.45, which means a candle with a body that is less than 45% of the total price range is considered weak.
+- The **upperShadowThreshold** is a float, defines the threshold for the size of the upper shadow. The default value is 1, which means there should be *little or no upper shadow*.
+- **noLowerShadowThreshold** is a float, defines the threshold for the size of the lower shadow. The default value is 0.05, which means the lower shadow must be at least as long as the body of the candle multiplied by the customizable no/lower shadow threshold.
+- **isBullishCandle** identifies if a candle is *bullish* (close > open) and **isBearishCandle** identifies if a candle is *bearish* (open > close).
+- **isWeakCandle** checks whether the candle is considered weak based on the customizable weak candle threshold.
+- **isLongLowerShadow** checks whether the lower shadow is at least as long as the body of the candle multiplied by the customizable lower shadow threshold.
+- **isNoUpperShadow** checks whether there is *little or no upper shadow* based on the customizable upper shadow threshold.
+- **isInvertedHammer** *true* if all *three conditions* are met, *false* otherwise.
+- The **barcolor()** function is used to color the *bars*, the *candle* is colored black if *isInvertedHammer* and *isBearishCandle* criteria are met, or the candle is colored white if *isInvertedHammer* and *isBullishCandle* criteria are met.
+- The **plotshape()** function is used to display an arrow and label below the *Inverted Hammer* pattern if it is detected and if **showInvertedHammer** input is *true*, the label reads *Inverted Hammer* with a green text color.
+
+_The script identifies the Inverted Hammer pattern based on the customizable parameters and highlights the pattern on the chart with an arrow and text. The pattern indicates that the sellers attempted to push the price down but failed, and the buyers took control to push the price up, resulting in a bullish reversal._
 ___
 ___
 
