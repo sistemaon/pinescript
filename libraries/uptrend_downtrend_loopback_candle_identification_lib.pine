@@ -6,14 +6,20 @@ library("uptrend_downtrend_loopback_candle_identification_lib", overlay=true)
 
 export uptrendLoopbackCandleIdentification(int lookbackPeriod) =>
     var bool isUptrend = false
-    for i = 0 to lookbackPeriod
-        if low >= low[i]
+    for i = 1 to lookbackPeriod
+        if low > low[i]
             isUptrend := true
+        else
+            isUptrend := false
+            break
     isUptrend
 
 export downtrendLoopbackCandleIdentification(int lookbackPeriod) =>
     var bool isDowntrend = false
-    for i = 0 to lookbackPeriod
-        if low <= low[i]
+    for i = 1 to lookbackPeriod
+        if low < low[i]
             isDowntrend := true
+        else
+            isDowntrend := false
+            break
     isDowntrend
