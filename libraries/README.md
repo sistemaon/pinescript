@@ -11,6 +11,7 @@ Link Script: [Uptrend Downtrend Loopback Candle Identification Lib](https://www.
 - A *for loop* is used to iterate through the specified *lookbackPeriod* with the loop index variable *i*.
 - Inside the loop, the code checks if the *low* of the current bar (low) is greater than or equal to the *low* of the bar *i* bars ago (low).
 - If the condition is met, the variable *isUptrend* is set to *true*.
+- If the *current low* is *lower* than the *previous lows*, the *isUptrend* boolean variable is set to *false* and the loop is broken using the *break* statement.
 - After the loop has finished, the function returns the final value of *isUptrend*.
 
 ### downtrendLoopbackCandleIdentification:
@@ -18,6 +19,7 @@ Link Script: [Uptrend Downtrend Loopback Candle Identification Lib](https://www.
 - A *for loop* is used to iterate through the specified *lookbackPeriod* with the loop index variable *i*.
 - Inside the loop, the code checks if the *low* of the current bar (low) is less than or equal to the *low* of the bar *i* bars ago (low).
 - If the condition is met, the variable *isDowntrend* is set to *true*.
+- If the *current low* is *higher* than the *previous lows*, the *isDowntrend* boolean variable is set to *false* and the loop is broken using the *break* statement.
 - After the loop has finished, the function returns the final value of *isDowntrend*.
 
 _Each function will return true if the respective condition is met for any bar within the lookback period. The loops will not terminate early if the conditions are met._
