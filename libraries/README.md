@@ -2,9 +2,9 @@
 
 ## Uptrend Downtrend Loopback Candle Identification Lib
 
-file script: [uptrend_downtrend_loopback_candle_identification_lib.pine](uptrend_downtrend_loopback_candle_identification_lib.pine)
+file script: [Uptrend Downtrend Loopback Candle Identification Lib](uptrend_downtrend_loopback_candle_identification_lib.pine)
 
-link script: [uptrend_downtrend_loopback_candle_identification_lib](https://www.tradingview.com/v/7XVVW2CK/)
+link script: [Uptrend Downtrend Loopback Candle Identification Lib](https://www.tradingview.com/v/7XVVW2CK/)
 
 ### uptrendLoopbackCandleIdentification:
 - The function starts by declaring a variable *isUptrend* and initializes it as *false*. This variable will be used to store the result of the loop analysis.
