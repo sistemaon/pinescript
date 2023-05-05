@@ -174,6 +174,30 @@ _The script identifies the Inverted Hammer pattern based on the customizable par
 ___
 ___
 
+## Harami
+
+The Harami is a two-candle pattern that signals a potential trend reversal. It is a Japanese term that means "pregnant", which describes the shape of the pattern.
+
+The pattern consists of a large candle followed by a smaller candle that is completely contained within the range of the previous candle.
+
+File Script: [Harami](harami.pine)
+
+- The **showBullishHarami** and **showBearishHarami** are boolean, which allow the user to choose whether to display or hide the bullish or bearish Harami pattern.
+- **lookbackPeriod** input is an integer (int), which represents the number of periods to look back for the purpose of identifying the current *trend* from candles.
+- The **dojiThreshold**, **weakCandleThreshold** and **bodyThreshold** are float, the threshold for identifying a *doji* candle (0.1 = 10%), the threshold for identifying a *weak* candle (0.3 = 30%) and the threshold for identifying a long *body* candle (0.4 = 40%).
+- The **isDoji** identifies if a candle is a doji based on the *doji threshold*, **isWeakCandle** identifies if a candle is weak based on the *weak candle threshold*, and **isLongCandle** identifies if a candle body is long based on the *body threshold*.
+- **isBullishCandle** identifies if a candle is bullish (close > open) and **isBearishCandle** identifies if a candle is bearish (open > close).
+- The **isLookbackUptrendCandle** and **isLookbackDowntrendCandle** variables identify the current candle's trend based on the *lookback period* from *candles*.
+- The **isFirstCandleCondition** variable identifies whether the first candle meets the condition of a *long* body candle.
+- The **isCurrentCandleCondition** variable identifies whether the current candle meets the condition of a *doji* or a *weak* candle.
+- The **isBullishHarami** and **isBearishHarami** variables are used to check whether the *Harami* pattern has formed based on the *two conditions* met for *bullish* or *bearish* patterns.
+- The **barcolor()** function is used to color the bars depending on the *bullish* or *bearish* pattern identified.
+- The **plotshape()** function is used to display an arrow and label above or below the *Harami* pattern if it is detected, depending on whether it is a *bullish* or *bearish* pattern, and if the user has *enabled* display of the pattern.
+
+_This indicator is for detecting the Harami pattern in candlestick charts. A bullish Harami pattern forms when a large bearish candle is followed by a smaller bullish candle that is completely contained within the range of the previous candle. This pattern suggests that the selling pressure is weakening, and a reversal to the upside may occur. A bearish Harami pattern forms when a large bullish candle is followed by a smaller bearish candle that is completely contained within the range of the previous candle. This pattern suggests that the buying pressure is weakening, and a reversal to the downside may occur._
+___
+___
+
 
 ### references:
 
