@@ -198,6 +198,30 @@ _This indicator is for detecting the Harami pattern in candlestick charts. A bul
 ___
 ___
 
+## Tweezer Top Bottom
+
+The Tweezers are candlestick patterns that consist of two or more candlesticks with the same high or low price level, which are seen as a potential reversal signal.
+
+The Tweezer Top is formed when two or more candlesticks have the same high price. Tweezer Bottom is formed when two or more candlesticks have the same low price.
+
+File Script: [Tweezer Top/Bottom](tweezer_top_bottom.pine)
+
+- The **showTweezerTop** and **showTweezerBottom** are boolean, which allow the user to choose whether to display or hide the bullish or bearish Tweezers pattern.
+- **lookbackPeriod** input is an integer (int), which represents the number of periods to look back for the purpose of identifying the current *trend* from candles.
+- The **dojiThreshold** and **weakCandleThreshold** are float, the threshold for identifying a *doji* candle (0.1 = 10%), the threshold for identifying a *weak* candle (0.3 = 30%).
+- The **isDoji** identifies if a candle is a doji based on the *doji threshold* and **isWeakCandle** identifies if a candle is weak based on the *weak candle threshold*.
+- **isBullishCandle** identifies if a candle is bullish (close > open) and **isBearishCandle** identifies if a candle is bearish (open > close).
+- The **isLookbackUptrendCandle** and **isLookbackDowntrendCandle** variables identify the current candle's trend based on the *lookback period* from *candles*.
+- **tweezerTopConditionCandle** and **twezzerBottomConditionCandle** check whether the *previous candle's high or low* matches the *current candle's high or low* respectively.
+- **firstConditionCandle** checks that the *current* and *previous* candles are not *doji* or *weak* candles.
+- **isTwezzerTop** and **isTwezzerBottom** variables combine the conditions to determine whether the *current* candle is a *Tweezer Top* or *Bottom* pattern.
+- The **barcolor()** function is used to color the bars depending on the *bullish* or *bearish* pattern identified.
+- The **plotshape()** function is used to display an arrow and label above or below the *Tweezers* pattern if it is detected, depending on whether it is a *bullish* or *bearish* pattern, and if the user has *enabled* display of the pattern.
+
+_This indicator is for detecting the Tweezers pattern in candlestick charts. A Tweezer Top is a bearish reversal pattern that typically forms during an uptrend. The Tweezer Bottom is a bullish reversal pattern that usually appears during a downtrend. It can indicate that the trend may be reversing._
+___
+___
+
 
 ### references:
 

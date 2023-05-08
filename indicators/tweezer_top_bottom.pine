@@ -15,11 +15,11 @@ weakCandleThreshold = input.float(0.30, title="Weak Candle Threshold (0.30 = 30%
 isDoji = math.abs(close - open) <= (high - low) * dojiThreshold
 isWeakCandle = math.abs(close - open) <= (high - low) * weakCandleThreshold
 
-isLookbackUptrendCandle = upAndDownTrendsCandleIdentification.uptrendLoopbackCandleIdentification(lookbackPeriod)
-isLookbackDowntrendCandle = upAndDownTrendsCandleIdentification.downtrendLoopbackCandleIdentification(lookbackPeriod)
-
 isBullishCandle = close > open
 isBearishCandle = open > close
+
+isLookbackUptrendCandle = upAndDownTrendsCandleIdentification.uptrendLoopbackCandleIdentification(lookbackPeriod)
+isLookbackDowntrendCandle = upAndDownTrendsCandleIdentification.downtrendLoopbackCandleIdentification(lookbackPeriod)
 
 tweezerTopConditionCandle = math.floor(high[1]) == math.floor(high)
 twezzerBottomConditionCandle = math.floor(low[1]) == math.floor(low)
