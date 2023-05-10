@@ -1,0 +1,59 @@
+// This source code is subject to the terms of the Mozilla Public License 2.0 at https://mozilla.org/MPL/2.0/
+// © AugustoErni
+
+//@version=5
+indicator(title="Parabolic Stop and Reverse (trend following)", shorttitle="PSAR (trend following)", overlay=true)
+
+startTooltip = "It defines how sensitive the PSAR is at the beginning of a new trend."
+startAccelerationFactor = input.float(defval=0.02, title="start Acceleration Factor (AF)", step=0.01, tooltip=startTooltip)
+
+incrementTooltip = "This is the value by which the AF increases each time a new extreme point (EP) is recorded. An EP is the highest high of the current uptrend or the lowest low of the current downtrend. Each time a new EP is recorded, the AF increases by the increment value."
+incrementAccelerationFactor = input.float(defval=0.02, title="Increment (AF) for Extreme Point (EP)", step=0.01, tooltip=incrementTooltip)
+
+maximumTooltip = "Even if new EPs continue to be recorded, the AF will not increase beyond this maximum value. It acts as a control on the AF to prevent it from becoming too large, which would cause the PSAR to become too sensitive to minor price changes and flip too often."
+maximumAccelerationFactor = input.float(defval=0.2, title="Maximum Value (AF) Reaches", step=0.1, tooltip=incrementTooltip)
+
+isBullishCandle = close > open
+isBearishCandle = open > close
+
+var bool isLong = na
+var float accelerationFactor = na
+var float extremePoint = na
+var float stopAndReverse = na
+
+if (na(stopAndReverse[1]))
+    stopAndReverse := close
+    extremePoint := high
+    accelerationFactor := startAccelerationFactor
+    isLong := true
+else
+    if (isLong[1])
+        if (low < stopAndReverse[1])
+            isLong := false
+            stopAndReverse := extremePoint[1]
+            extremePoint := low
+            accelerationFactor := startAccelerationFactor
+        else
+            isLong := true
+            stopAndReverse := stopAndReverse[1] + accelerationFactor[1] * (extremePoint[1] - stopAndReverse[1])
+            if (high > extremePoint[1])
+                extremePoint := high
+                accelerationFactor := math.min(maximumAccelerationFactor, accelerationFactor[1] + incrementAccelerationFactor)
+    else
+        if (high > stopAndReverse[1])
+            isLong := true
+            stopAndReverse := extremePoint[1]
+            extremePoint := high
+            accelerationFactor := startAccelerationFactor
+        else
+            isLong := false
+            stopAndReverse := stopAndReverse[1] + accelerationFactor[1] * (extremePoint[1] - stopAndReverse[1])
+            if (low < extremePoint[1])
+                extremePoint := low
+                accelerationFactor := math.min(maximumAccelerationFactor, accelerationFactor[1] + incrementAccelerationFactor)
+
+out = ta.sar(startAccelerationFactor, incrementAccelerationFactor, maximumAccelerationFactor)
+
+plot(stopAndReverse, "ParabolicSAR", style=plot.style_cross, linewidth=2, color=color.blue)
+plot(isBullishCandle and stopAndReverse > open or isBearishCandle and stopAndReverse > close ? stopAndReverse : na, "ParabolicSAR", style=plot.style_cross, linewidth=2, color=color.maroon)
+plot(isBearishCandle and stopAndReverse < close or isBullishCandle and stopAndReverse < open ? stopAndReverse : na, "ParabolicSAR", style=plot.style_cross, linewidth=2, color=color.teal)
