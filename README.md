@@ -1,3 +1,3 @@
 # pinescript
 
-### Pinescript indicators, strategies and libraries for tradingview.
+### Pinescript indicators, strategies, libraries and candlesticks for tradingview.

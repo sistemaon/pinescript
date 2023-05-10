@@ -1,0 +1,26 @@
+// This source code is subject to the terms of the Mozilla Public License 2.0 at https://mozilla.org/MPL/2.0/
+// © AugustoErni
+
+//@version=5
+indicator("Relative Strength Index (momentum oscillator)", shorttitle="RSI (momentum oscillator)", overlay=false)
+
+lengthPeriod = input.int(defval=14, title="Length period.", step=1, tooltip="Calculate the average gain and average loss over the specified period.")
+
+source = close
+differenceSource = ta.change(source)
+
+gain = na(differenceSource) ? na : math.max(differenceSource, 0)
+loss = na(differenceSource) ? na : -math.min(differenceSource, 0)
+
+averageGain = ta.rma(gain, lengthPeriod)
+averageLoss = ta.rma(loss, lengthPeriod)
+
+relativeStrength = (averageGain / averageLoss)
+
+relativeStrengthIndex = (100 - (100 / (1 + relativeStrength)))
+
+plot(relativeStrengthIndex, title="RSI", color=color.blue)
+
+hline(70, title="Overbought", color=color.red)
+hline(50, title="Middle", color=color.yellow)
+hline(30, title="Oversold", color=color.green)
