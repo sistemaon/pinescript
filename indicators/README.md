@@ -33,6 +33,8 @@ File Script: [Exponential Moving Average](ema.pine)
 - **sma** calculates the *SMA* for the *first length bars*.
 - **ema** it calculates the *EMA*. If the *previous* EMA is not available, it uses the *manually* calculated *SMA* for the *first* EMA value. For *subsequent* periods, it uses the EMA *formula*.
 - **plot()** function plots (*represents*) the *EMA* on the chart.
+
+_Observation: The common practice is to use the Simple Moving Average (SMA) for the first value. The reason is that the SMA is a straightforward average calculation that equally weights all data points in its calculation period and by using the SMA as the initial value, it ensures that the EMA is not overly influenced by the initial seed value but instead reflects the average market behavior over the lookback period._
 ___
 ___
 
