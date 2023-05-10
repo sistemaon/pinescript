@@ -4,7 +4,7 @@
 //@version=5
 indicator(title="Exponential Moving Average (trend following)", shorttitle="EMA (trend following)", overlay=true)
 
-lengthPeriod = input.int(defval=21, title="Length period.", step=1, tooltip="Calculate the exponential moving average (EMA) over the specified period.")
+lengthPeriod = input.int(defval=21, title="Length Period", step=1, tooltip="Calculate the exponential moving average (EMA) over the specified period.")
 
 source = close
 

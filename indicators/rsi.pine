@@ -4,7 +4,7 @@
 //@version=5
 indicator("Relative Strength Index (momentum oscillator)", shorttitle="RSI (momentum oscillator)", overlay=false)
 
-lengthPeriod = input.int(defval=14, title="Length period.", step=1, tooltip="Calculate the average gain and average loss over the specified period.")
+lengthPeriod = input.int(defval=14, title="Length Period", step=1, tooltip="Calculate the average gain and average loss over the specified period.")
 
 source = close
 differenceSource = ta.change(source)
