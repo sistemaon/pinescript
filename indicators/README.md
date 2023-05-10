@@ -15,6 +15,9 @@ File Script: [Relative Strength Index](rsi.pine)
 - **relativeStrengthIndex** it calculates the *RSI*, which is _(100 - (100 / (1 + **relativeStrength**)))_.
 - **plot()** function plots (*represents*) the *RSI* on the chart.
 - **hline()** function plots (*represents*) a horizontal line at the level *specified*.
+
+_Observation: The reason to use the minus symbol (-) at the line where is setting the loss variable (-math.min(differenceSource, 0)) is to flip the negative price change to a positive value, so will give the magnitude of the price drop as a positive number, or 0 if the price did not drop, this value is then used to calculate the average loss for the RSI calculation._
+_It may be used the minus symbol (-) for setting the loss variable or the gain variable (-math.min(differenceSource, 0)) or (-math.max(differenceSource, 0)), but one of them has to have the minus symbol for negative price flip change to positive to calculate the average for the RSI calculation._
 ___
 ___
 
