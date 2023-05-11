@@ -1,4 +1,5 @@
 # Library
+&nbsp;
 
 ## Uptrend Downtrend Loopback Candle Identification Lib
 
@@ -6,7 +7,9 @@ File Script: [Uptrend Downtrend Loopback Candle Identification Lib](uptrend_down
 
 Link Script: [Uptrend Downtrend Loopback Candle Identification Lib](https://www.tradingview.com/v/7XVVW2CK/)
 
-### uptrendLoopbackCandleIdentification:
+&nbsp;
+
+> ### uptrendLoopbackCandleIdentification:
 - The function starts by declaring a variable *isUptrend* and initializes it as *false*. This variable will be used to store the result of the loop analysis.
 - A *for loop* is used to iterate through the specified *lookbackPeriod* with the loop index variable *i*.
 - Inside the loop, the code checks if the *low* of the current bar (low) is greater than or equal to the *low* of the bar *i* bars ago (low).
@@ -14,7 +17,9 @@ Link Script: [Uptrend Downtrend Loopback Candle Identification Lib](https://www.
 - If the *current low* is *lower* than the *previous lows*, the *isUptrend* boolean variable is set to *false* and the loop is broken using the *break* statement.
 - After the loop has finished, the function returns the final value of *isUptrend*.
 
-### downtrendLoopbackCandleIdentification:
+&nbsp;
+
+> ### downtrendLoopbackCandleIdentification:
 - The function starts by declaring a variable *isDowntrend* and initializes it as *false*. This variable will be used to store the result of the loop analysis.
 - A *for loop* is used to iterate through the specified *lookbackPeriod* with the loop index variable *i*.
 - Inside the loop, the code checks if the *low* of the current bar (low) is less than or equal to the *low* of the bar *i* bars ago (low).

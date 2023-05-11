@@ -1,4 +1,5 @@
 # Candlestick Patterns
+&nbsp;
 
 ## Spinning Top
 
@@ -19,6 +20,7 @@ File Script: [Spinning Top Candlestick Pattern](spinning_top_candlestick_pattern
 - **plotshape()** functions are used to display an arrow below or above the Spinning Top candles, depending on whether they are bullish or bearish. The arrows are labeled "Spinning Top" and are colored green for bullish Spinning Tops and red for bearish Spinning Tops.
 ___
 ___
+&nbsp;
 
 ## Doji
 
@@ -39,6 +41,7 @@ File Script: [Doji Candlestick Pattern](doji.pine)
 - **plotshape()** functions are used to display an arrow below or above the Doji candles, depending on whether they are bullish or bearish. The arrows are labeled "Doji" and are colored green for bullish Dojis and red for bearish Dojis.
 ___
 ___
+&nbsp;
 
 ## Hammer and Hanging Man
 
@@ -60,6 +63,7 @@ Or If these conditions are met and the current candle is bearish **isBearishCand
 - The **plotshape()** function is used to display an arrow below or above the identified Hammer or Hanging Man pattern, with the text "Hammer" or "Hanging Man" and their respective colors (green for Hammer and red for Hanging Man).
 ___
 ___
+&nbsp;
 
 ## Engulfing Bullish/Bearish
 
@@ -83,6 +87,7 @@ File Script: [Engulfing Bullish/Bearish Candlestick Pattern](engulfing.pine)
 _This indicator helps to visually and identify bullish and bearish engulfing patterns, which are often used as potential trend reversal signals in technical analysis._
 ___
 ___
+&nbsp;
 
 ## Morning Star
 
@@ -106,6 +111,7 @@ File Script: [Morning Start Candlestick Pattern](morning_star.pine)
 _This indicator is for detecting the Morning Star pattern in candlestick charts. The Morning Star pattern is a bullish reversal pattern that occurs at the end of a downtrend. It consists of three candles: a bearish candle, a small candle or doji, and a bullish candle. The pattern suggests that after a downtrend, buyers have started to take control, potentially leading to a change in trend direction._
 ___
 ___
+&nbsp;
 
 ## Evening Star
 
@@ -129,10 +135,11 @@ File Script: [Evening Start Candlestick Pattern](evening_star.pine)
 _This indicator is for detecting the Evening Star pattern in candlestick charts. The Evening Star pattern is a bearish reversal pattern that occurs at the end of a uptrend. It consists of three candles: a bullish candle, a small candle or doji, and a bearish candle. The pattern suggests that after uptrend, sellers have started to take control, potentially leading to a change in trend direction._
 ___
 ___
+&nbsp;
 
 ## Shooting Star and Inverted Hammer
 
-### Shooting Star
+> ### Shooting Star
 
 The Shooting Star pattern is a bearish reversal pattern that signals a potential change in trend. This pattern is identified by a small real body near the top of the price range and a long upper shadow that is at least twice the size of the real body. Additionally, there should be little or no lower shadow.
 
@@ -150,9 +157,11 @@ File Script: [Shooting Start Candlestick Pattern](shooting_star_inverted_hammer.
 - The **barcolor()** function is used to color the bars, the *candle* is colored black if *isShootingStar* and *isBearishCandle* met criteria, or the *candle* is colored white if *isShootingStar* and *isBullishCandle* criteria meet.
 - The **plotshape()** function is used to display an arrow and label above the *Shooting Star* pattern if it is detected and if **showShootingStar** input is *true*, the label reads **Shooting Star** with a red text color.
 
-_The script identifies the Shooting Star pattern based on the customizable parameters and highlight the pattern on the chart with an arrow and text. The pattern indicates that the buyers attempted to push the price up but failed, and the sellers took control to push the price down, resulting in a bearish reversal._
+_The script identifies the Shooting Star pattern based on the customizable parameters and highlight the pattern on the chart with an arrow and text. The pattern indicates that the buyers attempted to push the price up but failed, and the sellers took control to push the price down, resulting in a bearish reversal_.
 
-### Inverted Hammer
+&nbsp;
+
+> ### Inverted Hammer
 
 The Inverted Hammer pattern is a bullish reversal pattern that signals a potential change in trend. This pattern is identified by a small real body near the bottom of the price range and a long lower shadow that is at least twice the size of the real body. Additionally, there should be little or no upper shadow.
 
@@ -173,6 +182,7 @@ File Script: [Inverted Hammer Candlestick Pattern](shooting_star_inverted_hammer
 _The script identifies the Inverted Hammer pattern based on the customizable parameters and highlights the pattern on the chart with an arrow and text. The pattern indicates that the sellers attempted to push the price down but failed, and the buyers took control to push the price up, resulting in a bullish reversal._
 ___
 ___
+&nbsp;
 
 ## Harami
 
@@ -197,6 +207,7 @@ File Script: [Harami](harami.pine)
 _This indicator is for detecting the Harami pattern in candlestick charts. A bullish Harami pattern forms when a large bearish candle is followed by a smaller bullish candle that is completely contained within the range of the previous candle. This pattern suggests that the selling pressure is weakening, and a reversal to the upside may occur. A bearish Harami pattern forms when a large bullish candle is followed by a smaller bearish candle that is completely contained within the range of the previous candle. This pattern suggests that the buying pressure is weakening, and a reversal to the downside may occur._
 ___
 ___
+&nbsp;
 
 ## Tweezer Top Bottom
 
@@ -221,7 +232,7 @@ File Script: [Tweezer Top/Bottom](tweezer_top_bottom.pine)
 _This indicator is for detecting the Tweezers pattern in candlestick charts. A Tweezer Top is a bearish reversal pattern that typically forms during an uptrend. The Tweezer Bottom is a bullish reversal pattern that usually appears during a downtrend. It can indicate that the trend may be reversing._
 ___
 ___
-
+&nbsp;
 
 ### references:
 
