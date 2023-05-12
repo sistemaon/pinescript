@@ -2,7 +2,7 @@
 // © AugustoErni
 
 //@version=5
-indicator(title="Parabolic Stop and Reverse (trend following)", shorttitle="PSAR (trend following)", overlay=true)
+indicator(title="Parabolic Stop and Reverse (Trend Following)", shorttitle="PSAR (trend following)", overlay=true)
 
 startTooltip = "It defines how sensitive the PSAR is at the beginning of a new trend."
 startAccelerationFactor = input.float(defval=0.02, title="start Acceleration Factor (AF)", step=0.01, tooltip=startTooltip)
