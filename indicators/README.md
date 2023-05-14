@@ -150,6 +150,25 @@ ___
 ___
 &nbsp;
 
+## Stochastic Slow (Stoch Slow)
+
+The **Stochastic Slow** (Stoch Slow) is a *momentum oscillator*, it compares a *particular* closing price of a security to a *range* of its prices over a *certain period* of time. The *sensitivity* of the indicator is reducible by adjusting *time period* or by taking a *moving average* of the *result*.
+
+File Script: [Stochastic Slow](stochastic_slow.pine)
+
+- **smaCalculation** is a *function* for *simple moving average* (**SMA**). It *sums* up the last *length* bars of *source* and then *divides* by *length* to *calculate* the *average*. In the *context* of the *stochastic*, the *source* would be the *%K* values and the len*gth would be the *smoothing* period.
+- **lengthPeriod**, **smoothK**, and **smoothD** are *input* (int) *parameters*, which represents the *calculation period* for the *stochastic* and the *smoothing periods* for the **%K** and **%D** lines.
+- **lowestLow** and **highestHigh** representS the *lowest low* and *highest high* over the **lengthPeriod**. Using the **ta.lowest()** function to return _lowest value for a given number of bars back_, and **ta.highest()** function to return _highest value in the series_, both from pinescript.
+- **K** uses the SMA function **smaCalculation** to calculate the *%K* line by taking the *close* of the *current* bar, *subtracting* the *lowest low*, and *dividing* by the *range* (*highest high - lowest low*), the result is *multiplied* by 100 and then *smoothed* using the *SMA function* with **smoothK** as the *smoothing period*.
+- **D** is a SMA of the *K* line *over* the **smoothD** *period*.
+- **plot()** function plots (*represents*) the *PSAR* on the chart.
+- **hline()** function _renders a horizontal line at a given fixed price level_, in this case the *levels* used in this indicator is to identify *overbought* and *oversold* conditions.
+- **fill()** function _fills background between two horizontal lines, two plots or hlines with a given color_, in this case fills the area *between* the *upper* and *lower* horizontal lines.
+___
+___
+&nbsp;
+
+
 ### references:
 
 - Pinescript Documentation.
