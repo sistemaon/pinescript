@@ -164,6 +164,14 @@ File Script: [Stochastic Slow](stochastic_slow.pine)
 - **plot()** function plots (*represents*) the *PSAR* on the chart.
 - **hline()** function _renders a horizontal line at a given fixed price level_, in this case the *levels* used in this indicator is to identify *overbought* and *oversold* conditions.
 - **fill()** function _fills background between two horizontal lines, two plots or hlines with a given color_, in this case fills the area *between* the *upper* and *lower* horizontal lines.
+
+&nbsp;
+
+_Observation: This Stochastic indicator smoothes **%K** and **%D** calculating %K as a moving average and %D as a moving average of %K_.
+
+_%K is the **main** or **fast line** based on the current price level relative to the highest high and the lowest low over a specified period_.
+
+_%D is the **slow line** or **signal line**, it is a **SMA** of the %K values over a certain period_.
 ___
 ___
 &nbsp;
