@@ -2,7 +2,7 @@
 // © AugustoErni
 
 //@version=5
-indicator("Relative Strength Index (Momentum Oscillator)", shorttitle="RSI (momentum oscillator)", overlay=false)
+indicator("Relative Strength Index (Momentum Oscillator)", shorttitle="RSI (Momentum Oscillator)", overlay=false)
 
 lengthPeriod = input.int(defval=14, title="Length Period", step=1, tooltip="Calculate the average gain and average loss over the specified period.")
 

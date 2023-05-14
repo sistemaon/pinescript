@@ -1,0 +1,30 @@
+// This source code is subject to the terms of the Mozilla Public License 2.0 at https://mozilla.org/MPL/2.0/
+// © AugustoErni
+
+//@version=5
+indicator("Stochastic Slow (Momentum Oscillator)", shorttitle="Stochastic", overlay = false)
+
+smaCalculation(source, length) =>
+    sma = 0.0
+    for i = 0 to length - 1
+        sma := sma + source[i]
+    sma := sma / length
+
+lengthPeriod = input.int(defval=13, title="Length Period Stochastic %K", step=1, tooltip="Calculate the stochastic length for %K over the specified period.")
+smoothK = input.int(defval=2, minval=1, title="%K Smoothing", step=1, tooltip="Calculate the stochastic %K smoothing over the specified period.")
+smoothD = input.int(defval=3, minval=1, title="%D Smoothing", step=1, tooltip="Calculate the stochastic %D smoothing over the specified period.")
+
+lowestLow = ta.lowest(low, lengthPeriod)
+highestHigh = ta.highest(high, lengthPeriod)
+
+K = smaCalculation(100 * (close - lowestLow) / (highestHigh - lowestLow), smoothK)
+D = smaCalculation(K, smoothD)
+
+plot(K, color=color.rgb(0, 48, 246), title="%K")
+plot(D, color=color.rgb(252, 108, 0), title="%D")
+
+hLineUpperLevel = hline(80, "Upper Level", color=color.gray)
+hLineMiddleLevel = hline(50, "Middle Level", color=color.rgb(99, 99, 99, 60))
+hLineLowerLevel = hline(20, "Lower Level", color=color.gray)
+
+fill(hLineUpperLevel, hLineLowerLevel, color=color.rgb(33, 99, 135, 75), title="Background")
