@@ -1,0 +1,41 @@
+// This source code is subject to the terms of the Mozilla Public License 2.0 at https://mozilla.org/MPL/2.0/
+// © AugustoErni
+
+//@version=5
+
+library("psar_lib", overlay=true)
+
+psarFunction(startAccelerationFactor, incrementAccelerationFactor, maximumAccelerationFactor) =>
+    var bool isLong = na
+    var float accelerationFactor = na
+    var float extremePoint = na
+    var float stopAndReverse = na
+    if (na(stopAndReverse[1]))
+        isLong := true
+        accelerationFactor := startAccelerationFactor
+        extremePoint := high
+        stopAndReverse := close
+    else if (isLong[1])
+        if (low < stopAndReverse[1])
+            isLong := false
+            accelerationFactor := startAccelerationFactor
+            extremePoint := low
+            stopAndReverse := extremePoint[1]
+        else
+            isLong := true
+            stopAndReverse := stopAndReverse[1] + accelerationFactor[1] * (extremePoint[1] - stopAndReverse[1])
+            if (high > extremePoint[1])
+                accelerationFactor := math.min(maximumAccelerationFactor, accelerationFactor[1] + incrementAccelerationFactor)
+                extremePoint := high
+    else if (high > stopAndReverse[1])
+        isLong := true
+        accelerationFactor := startAccelerationFactor
+        extremePoint := high
+        stopAndReverse := extremePoint[1]
+    else
+        isLong := false
+        stopAndReverse := stopAndReverse[1] + accelerationFactor[1] * (extremePoint[1] - stopAndReverse[1])
+        if (low < extremePoint[1])
+            accelerationFactor := math.min(maximumAccelerationFactor, accelerationFactor[1] + incrementAccelerationFactor)
+            extremePoint := low
+    [stopAndReverse, isLong]
