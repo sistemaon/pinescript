@@ -1,0 +1,15 @@
+// This source code is subject to the terms of the Mozilla Public License 2.0 at https://mozilla.org/MPL/2.0/
+// © AugustoErni
+
+//@version=5
+
+library("ema_lib", overlay=true)
+
+emaFunction(emaLengthPeriod) =>
+    source = close
+    alpha = 2 / (emaLengthPeriod + 1)
+    sma = 0.0
+    ema = 0.0
+    for i = 0 to emaLengthPeriod - 1
+        sma := sma + source[i] / emaLengthPeriod
+    ema := na(ema[1]) ? sma : ((alpha * source) + ((1 - alpha) * nz(ema[1])))
