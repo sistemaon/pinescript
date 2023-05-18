@@ -50,7 +50,7 @@ File Script: [Exponential Moving Average Lib](ema_lib.pine)
 
 &nbsp;
 
-_Observation: This code is a basic implementation of an EMA, but it's worth noting that built-in functions for calculating moving averages are available in Pine Script, which are optimized and easier to use_.
+_Observation: This code is a basic implementation of an EMA, but it's worth noting that built-in function for calculating EMA is available in Pine Script, which is optimized and easier to use_.
 
 _For EMA, you can use ta.ema(source, length)_.
 ___
