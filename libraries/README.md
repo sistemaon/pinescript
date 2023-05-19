@@ -56,3 +56,30 @@ _For EMA, can be used ta.ema(source, length)_.
 ___
 ___
 &nbsp;
+
+## RSI Lib
+
+The **Relative Strength Index** (RSI) is a *momentum oscillator* that measures the speed and change of price movements. Can be used to identify **overbought** and/or **oversold** conditions in a market.
+
+File Script: [Relative Strength Index Lib](rsi_lib.pine)
+
+- **rsiFunction(rsiLengthPeriod)** it defines the function *rsiFunction* which takes an argument *rsiLengthPeriod* is the length of the **RSI**, the *number of periods* to consider in the RSI calculation.
+- **lengthPeriod = rsiLengthPeriod** it represents the *length period* used in the *RSI* calculation.
+- **source = close** assigns the *closing price* to *source*.
+- **differenceSource = ta.change(source)** calculates the *difference* between the *current* source value and the *previous* one, then is stored in the variable **differenceSource**.
+- **gain = na(differenceSource) ? na : math.max(differenceSource, 0)** calculates the *gain* for each bar, if the **differenceSource** value is *not available* (**na**), then *gain* is also set to *na*. Otherwise, *gain* is calculated as the *maximum* between **differenceSource** and *0*, it ensures that only *positive* values are considered for the *gain*.
+- **loss = na(differenceSource) ? na : -math.min(differenceSource, 0)** it calculates the *loss* for each bar, if the **differenceSource** value is *not available* (*na*), then *loss* is also set to *na*. Otherwise, *loss* is calculated as the *negative* of the *minimum* between **differenceSource** and *0*, it ensures that only *negative* values (or 0) are considered for the *loss*.
+- **averageGain = ta.rma(gain, lengthPeriod)** it calculates the *relative moving average* (**RMA**) of the *gain* values over the specified **lengthPeriod**.
+- **averageLoss = ta.rma(loss, lengthPeriod)** it calculates the *relative moving average* (**RMA**) of the *loss* values over the specified **lengthPeriod**.
+- **relativeStrength = (averageGain / averageLoss)** it calculates the *relative strength* by *dividing* the **averageGain** by the **averageLoss**.
+- **relativeStrengthIndex = (100 - (100 / (1 + relativeStrength)))** it calculates the **RSI** by *dividing* 100 by the *sum* of 1 and **relativeStrength**, then the result is *subtracted* from 100.
+- **relativeStrengthIndex** *returns* the calculated **RSI** value.
+
+&nbsp;
+
+_Observation: This code is a basic implementation of an RSI, but it's worth noting that built-in function for calculating RSI is available in Pine Script, which is optimized and easier to use_.
+
+_For RSI, can be used ta.rsi(source, length)_.
+___
+___
+&nbsp;
