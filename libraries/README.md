@@ -191,6 +191,10 @@ _Observation: The use of **math.min()** it's used to ensure that the **accelerat
 _If the calculated new **accelerationFactor** is greater than the **maximumAccelerationFactor**, then the **accelerationFactor** is set to the **maximumAccelerationFactor**. If it's less, then the **accelerationFactor** is set to **accelerationFactor[1] + incrementAccelerationFactor**_.
 
 _This prevents the AF from becoming too large, which would make the **Parabolic SAR** overly sensitive to price changes, causing it to flip direction too frequently. The **math.min()** function is used to implement this upper limit or control on the AF_.
+
+_This code is a basic implementation of an PSAR, but it's worth noting that built-in function for calculating PSAR is available in Pine Script, which is optimized and easier to use_.
+
+_For PSAR, can be used ta.sar(start, inc, max)_.
 ___
 ___
 &nbsp;
