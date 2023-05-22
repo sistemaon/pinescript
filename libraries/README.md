@@ -83,3 +83,114 @@ _For RSI, can be used ta.rsi(source, length)_.
 ___
 ___
 &nbsp;
+
+## PSAR Lib
+
+The **Parabolic Stop and Reverse** (PSAR) is a *trend following*, it aims to *identify* the *direction* of a *trend* and potentially providing *entry* and *exit* points. *PSAR* move with *price changes* and are used to *identify* and *follow* the *direction* of a *trend*.
+
+File Script: [Parabolic Stop and Reverse Lib](psar_lib.pine)
+
+- **psarFunction(startAccelerationFactor, incrementAccelerationFactor, maximumAccelerationFactor)** it defines the function *psarFunction* which takes an argument *startAccelerationFactor* which is the initial *acceleration factor (AF)*, it defines how *sensitive* the *PSAR* is at the beginning of a new *trend*. The *incrementAccelerationFactor* is the *increment* for the *AF* each time a new *extreme point (EP)* is recorded, an *EP* is the *highest high* of the *current uptrend* or the *lowest low* of the *current downtrend*. And *maximumAccelerationFactor* is the *maximum* value that the *AF* can reach.
+
+> **CORE CONCEPTS**:
+
+- **isLong** a *boolean* variable, indicates if the market is in an *uptrend* set the variable to *true*, or *downtrend* set the variable to *false*.
+- **accelerationFactor (AF)** a *float* variable, is used to *accelerate* the *PSAR* towards the price. It starts at *specified input* value from **startAccelerationFactor** and *increases* every time a new *extreme point* (**EP**) is recorded by a *specified input* increment from **incrementAccelerationFactor**, up to a *specified input* maximum from **maximumAccelerationFactor**.
+- **extremePoint (EP)** a *float* variable, it is the *highest* high in an *uptrend* or the *lowest* low in a *downtrend*.
+- **stopAndReverse (SAR)** a *float* variable, is the *actual value* of the **Parabolic SAR**, which is plotted on the chart.
+&nbsp;
+```pinescript
+var bool isLong = na
+var float accelerationFactor = na
+var float extremePoint = na
+var float stopAndReverse = na
+```
+&nbsp;
+
+> **CODE LOGIC**:
+
+- At the beginning (**na(stopAndReverse[1])**), **stopAndReverse** is initialized to **close**, **extremePoint** to **high**, **accelerationFactor** to **startAccelerationFactor**, and **isLong** to *true*, assuming an *initial uptrend*.
+&nbsp;
+```pinescript
+if (na(stopAndReverse[1]))
+    isLong := true
+    accelerationFactor := startAccelerationFactor
+    extremePoint := high
+    stopAndReverse := close
+```
+&nbsp;
+
+- If the market was in an uptrend (**isLong[1]**), but the *low price of the current bar is below the previous SAR* (**low < stopAndReverse[1]**), it means the *trend has reversed*. So **isLong** is set to *false*, **accelerationFactor** is *reset* to **startAccelerationFactor**, **extremePoint** is *updated* to the *current low*, and **stopAndReverse** is *updated* to the last **extremePoint**.
+&nbsp;
+```pinescript
+else if (isLong[1])
+    if (low < stopAndReverse[1])
+        isLong := false
+        accelerationFactor := startAccelerationFactor
+        extremePoint := low
+        stopAndReverse := extremePoint[1]
+```
+&nbsp;
+
+- If the market was in an *uptrend* and continues to be so, **isLong** remains *true* (**isLong := true**), **stopAndReverse** is *updated* by *adding* the product of the *previous* **accelerationFactor** and the *difference* between the *previous* **extremePoint** and **stopAndReverse** to the *previous* **stopAndReverse** (**stopAndReverse := stopAndReverse[1] + accelerationFactor[1] * (extremePoint[1] - stopAndReverse[1])**).
+&nbsp;
+```pinescript
+else
+    isLong := true
+    stopAndReverse := stopAndReverse[1] + accelerationFactor[1] * (extremePoint[1] - stopAndReverse[1])
+```
+&nbsp;
+
+- If a *new high* is *recorded* (**high > extremePoint[1]**), **accelerationFactor** is *increased* by **incrementAccelerationFactor**, up to the **maximumAccelerationFactor** (using **math.min()** function which _returns the smallest of multiple values._) and **extremePoint** is *updated* to the *current high*.
+&nbsp;
+```pinescript
+if (high > extremePoint[1])
+    accelerationFactor := math.min(maximumAccelerationFactor, accelerationFactor[1] + incrementAccelerationFactor)
+    extremePoint := high
+```
+&nbsp;
+
+- If *high price* of the *current bar* is *above* the *previous SAR* (**high > stopAndReverse[1]**), it means the trend has *reversed* to an *uptrend*. The **isLong** is set to *true* to *indicate* an *uptrend* (**isLong := true**). The **accelerationFactor** is *reset* to **startAccelerationFactor**, when *trend reversal occurs*, the acceleration factor is *reset* to its starting value (**accelerationFactor := startAccelerationFactor**). The **extremePoint** is *updated* to the *current high*, since it is a uptrend now, it is *tracking* the *highest price* (**extremePoint := high**). And the **stopAndReverse** is *updated* to the *last* **extremePoint**, the *highest price* reached in the *previous downtrend* and it is the *starting point* of the *SAR* in the *new uptrend* (**stopAndReverse := extremePoint[1]**).
+&nbsp;
+```pinescript
+else if (high > stopAndReverse[1])
+    isLong := true
+    accelerationFactor := startAccelerationFactor
+    extremePoint := high
+    stopAndReverse := extremePoint[1]
+```
+&nbsp;
+
+- If the market was in a *downtrend* and *continues* to be, **isLong** remains *false* to *indicate* that the market is still in a *downtrend* (**isLong := false**). The **stopAndReverse** is *updated* by *adding* the product of the *previous* **accelerationFactor** and the *difference* between the *previous* **extremePoint** and **stopAndReverse** to the *previous* **stopAndReverse**, to which moves the *SAR* closer to the price (**stopAndReverse := stopAndReverse[1] + accelerationFactor[1] * (extremePoint[1] - stopAndReverse[1])**).
+&nbsp;
+```pinescript
+else
+    isLong := false
+    stopAndReverse := stopAndReverse[1] + accelerationFactor[1] * (extremePoint[1] - stopAndReverse[1])
+```
+&nbsp;
+
+- If a new *low* is *recorded* (**low < extremePoint[1]**), it indicates the *downtrend* is *continuing* strongly. The **accelerationFactor** is *increased* by **incrementAccelerationFactor** (considering the *maximum* of **maximumAccelerationFactor**) (**accelerationFactor := math.min(maximumAccelerationFactor, accelerationFactor[1] + incrementAccelerationFactor)** (using **math.min()** function which _returns the smallest of multiple values._)), and **extremePoint** is updated to the *current low* (**extremePoint := low**). As result it does make the *SAR* more *sensitive* and causes it to *move closer to the price* faster.
+&nbsp;
+```pinescript
+if (low < extremePoint[1])
+    accelerationFactor := math.min(maximumAccelerationFactor, accelerationFactor[1] + incrementAccelerationFactor)
+    extremePoint := low
+```
+&nbsp;
+
+- **startAccelerationFactor** is the initial *acceleration factor (AF)*, it defines how *sensitive* the *PSAR* is at the beginning of a new *trend*.
+- **incrementAccelerationFactor** is the *increment* for the *AF* each time a new *extreme point (EP)* is recorded, an *EP* is the *highest high* of the *current uptrend* or the *lowest low* of the *current downtrend*. Each time a new *EP* is recorded, the *AF* increases by the *increment* value.
+- **maximumAccelerationFactor** is the *maximum* value that the *AF* can reach. Even if new *EPs* continue to be recorded, the *AF* will not increase beyond this maximum value. It acts as a *control* on the *AF* to *prevent* it from becoming too *large*, which would cause the *PSAR* to become too *sensitive* to minor price changes and flip too often.
+- **plot()** function plots (*represents*) the *PSAR* on the chart.
+
+&nbsp;
+
+_Observation: The use of **math.min()** it's used to ensure that the **accelerationFactor** does not exceed the **maximumAccelerationFactor**. The acceleration factor (AF) is increased each time a new extreme point is made, but there is usually an upper limit to prevent the AF from becoming too large. So the line **accelerationFactor := math.min(maximumAccelerationFactor, accelerationFactor[1] + incrementAccelerationFactor)** sets **accelerationFactor** to the smaller of either **maximumAccelerationFactor** or **accelerationFactor[1] + incrementAccelerationFactor**_.
+
+_If the calculated new **accelerationFactor** is greater than the **maximumAccelerationFactor**, then the **accelerationFactor** is set to the **maximumAccelerationFactor**. If it's less, then the **accelerationFactor** is set to **accelerationFactor[1] + incrementAccelerationFactor**_.
+
+_This prevents the AF from becoming too large, which would make the **Parabolic SAR** overly sensitive to price changes, causing it to flip direction too frequently. The **math.min()** function is used to implement this upper limit or control on the AF_.
+___
+___
+&nbsp;
