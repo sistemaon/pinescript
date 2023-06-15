@@ -1,0 +1,38 @@
+// This source code is subject to the terms of the Mozilla Public License 2.0 at https://mozilla.org/MPL/2.0/
+// © AugustoErni
+
+//@version=5
+strategy("Bollinger Bands Modified (Stormer)", overlay=true, process_orders_on_close=true, calc_on_every_tick=false, initial_capital=1200, currency=currency.USD, default_qty_type=strategy.percent_of_equity, default_qty_value=20, pyramiding=0, commission_type=strategy.commission.percent, commission_value=0.12)
+
+length = 20
+mult = 0.38
+stop_loss_factor = 1.6
+target_factor = 1.6
+
+source = close
+basis = ta.sma(source, length)
+dev = mult * ta.stdev(source, length)
+upper = basis + dev
+lower = basis - dev
+
+longCondition = ta.crossover(close, upper)
+shortCondition = ta.crossunder(close, lower)
+
+highestHigh = ta.highest(high, length)
+lowestLow = ta.lowest(low, length)
+
+if (longCondition)
+    stopLossLong = lowestLow
+    targetLong = close + math.abs(close - stopLossLong) * target_factor
+    strategy.entry("Long", strategy.long)
+    strategy.exit("Exit Long", "Long", stop=stopLossLong, limit=targetLong)
+    
+if (shortCondition)
+    stopLossShort = highestHigh
+    targetShort = close - math.abs(close - stopLossShort) * target_factor
+    strategy.entry("Short", strategy.short)
+    strategy.exit("Exit Short", "Short", stop=stopLossShort, limit=targetShort)
+
+plot(upper, color=color.red)
+plot(basis, color=color.blue)
+plot(lower, color=color.red)
