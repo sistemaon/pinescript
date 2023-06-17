@@ -6,7 +6,6 @@ strategy("Bollinger Bands Modified (Stormer)", overlay=true, process_orders_on_c
 
 length = 20
 mult = 0.38
-stop_loss_factor = 1.6
 target_factor = 1.6
 
 source = close
@@ -18,8 +17,8 @@ lower = basis - dev
 longCondition = ta.crossover(close, upper)
 shortCondition = ta.crossunder(close, lower)
 
-highestHigh = ta.highest(high, length)
-lowestLow = ta.lowest(low, length)
+highestHigh = ta.highest(high, 8)
+lowestLow = ta.lowest(low, 8)
 
 if (longCondition)
     stopLossLong = lowestLow
@@ -33,6 +32,6 @@ if (shortCondition)
     strategy.entry("Short", strategy.short)
     strategy.exit("Exit Short", "Short", stop=stopLossShort, limit=targetShort)
 
-plot(upper, color=color.red)
-plot(basis, color=color.blue)
-plot(lower, color=color.red)
+plot(upper, color=color.blue)
+plot(basis, color=color.gray)
+plot(lower, color=color.blue)
