@@ -31,6 +31,24 @@ var float targetShort = 0.0
 var bool isLongEntry = false
 var bool isShortEntry = false
 
+if (isPositionNone)
+    isLongEntry := false
+    isShortEntry := false
+    stopLossLong := 0.0
+    targetLong := 0.0
+    stopLossShort := 0.0
+    targetShort := 0.0
+if (isPositionLong and isLongEntry)
+    isLongEntry := true
+    isShortEntry := false
+    stopLossShort := 0.0
+    targetShort := 0.0
+if (isPositionShort and isShortEntry)
+    isShortEntry := true
+    isLongEntry := false
+    stopLossLong := 0.0
+    targetLong := 0.0
+
 if (isLongCondition and not isLongEntry)
     isLongEntry := true
     stopLossLong := lowestLow
@@ -44,16 +62,6 @@ if (isShortCondition and not isShortEntry)
     targetShort := close - math.abs(close - stopLossShort) * target_factor
     strategy.entry("Short", strategy.short)
     strategy.exit("Exit Short", "Short", stop=stopLossShort, limit=targetShort)
-
-if (isPositionLong)
-    isLongEntry := true
-    isShortEntry := false
-if (isPositionShort)
-    isShortEntry := true
-    isLongEntry := false
-if (isPositionNone)
-    isLongEntry := false
-    isShortEntry := false
 
 plot(upper, color=color.blue)
 plot(basis, color=color.gray)
