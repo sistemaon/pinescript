@@ -9,6 +9,8 @@ mult = input.float(0.38, title='BB Standard Deviation', step=0.01, tooltip='Calc
 target_factor = input.float(1.6, title='Target Take Profit', step=0.1, tooltip='Calculate the take profit factor when entry position.')
 emaL = input.int(80, title='EMA Length', step=1, tooltip='Calculate the length of EMA.')
 emaTrend = input.bool(true, title='Check Trend EMA', tooltip='Use EMA as trend verify for opening position.')
+highestHighL = input.int(7, title='Highest High Length', step=1, tooltip='Fetches the highest high candle from length input. Use to set stop loss for short position.')
+lowestLowL = input.int(7, title='Lowest Low Length', step=1, tooltip='Fetches the lowest low candle from length input. Use to set stop loss for long position.')
 
 source = close
 ema = ta.ema(source, emaL)
@@ -26,11 +28,8 @@ isCandleBelowEma = source < ema
 isLongCondition = emaTrend ? isLongCross and isCandleAboveEma : isLongCross
 isShortCondition = emaTrend ? isShortCross and isCandleBelowEma : isShortCross
 
-highestHigh = ta.highest(high, 7)
-lowestLow = ta.lowest(low, 7)
-
-// highestHigh = ((high + high[1] + high[2] + high[3] + high[4] + high[5] + high[6] + high[7]) / 8)
-// lowestLow = ((low + low[1] + low[2] + low[3] + low[4] + low[5] + low[6] + low[7]) / 8)
+highestHigh = ta.highest(high, highestHighL)
+lowestLow = ta.lowest(low, lowestLowL)
 
 isPositionNone = strategy.position_size == 0 ? 1 : 0
 isPositionLong = strategy.position_size > 0 ? 1 : 0
