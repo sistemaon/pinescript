@@ -1,87 +1,76 @@
-// This source code is subject to the terms of the Mozilla Public License 2.0 at https://mozilla.org/MPL/2.0/
+// This close code is subject to the terms of the Mozilla Public License 2.0 at https://mozilla.org/MPL/2.0/
 // © AugustoErni
 
 //@version=5
 strategy('Bollinger Bands Modified (Stormer)', overlay=true, process_orders_on_close=true, calc_on_every_tick=false, initial_capital=12000, currency=currency.USD, default_qty_type=strategy.percent_of_equity, default_qty_value=20, pyramiding=0, commission_type=strategy.commission.percent, commission_value=0.12)
 
-bbL = input.int(20, title='BB Length', minval=1, step=1, tooltip='Calculate the length of bollinger bands.')
-mult = input.float(0.38, title='BB Standard Deviation', minval=0.01, step=0.01, tooltip='Calculate the standard deviation of bollinger bands.')
-target_factor = input.float(1.6, title='Target Take Profit', minval=0.1, step=0.1, tooltip='Calculate the take profit factor when entry position.')
-emaL = input.int(80, title='EMA Length', minval=1, step=1, tooltip='Calculate the length of EMA.')
-emaTrend = input.bool(true, title='Check Trend EMA', tooltip='Use EMA as trend verify for opening position.')
+bbL          = input.int(20, title='BB Length', minval=1, step=1, tooltip='Calculate the length of bollinger bands.')
+mult         = input.float(0.38, title='BB Standard Deviation', minval=0.01, step=0.01, tooltip='Calculate the standard deviation of bollinger bands.')
+targetFactor = input.float(1.6, title='Target Take Profit', minval=0.1, step=0.1, tooltip='Calculate the take profit factor when entry position.')
+emaL         = input.int(80, title='EMA Length', minval=1, step=1, tooltip='Calculate the length of EMA.')
+emaTrend     = input.bool(true, title='Check Trend EMA', tooltip='Use EMA as trend verify for opening position.')
 highestHighL = input.int(7, title='Highest High Length', minval=1, step=1, tooltip='Fetches the highest high candle from length input. Use to set stop loss for short position.')
-lowestLowL = input.int(7, title='Lowest Low Length', minval=1, step=1, tooltip='Fetches the lowest low candle from length input. Use to set stop loss for long position.')
+lowestLowL   = input.int(7, title='Lowest Low Length', minval=1, step=1, tooltip='Fetches the lowest low candle from length input. Use to set stop loss for long position.')
 
-source = close
-ema = ta.ema(source, emaL)
-basis = ta.sma(source, bbL)
-dev = mult * ta.stdev(source, bbL)
-upper = basis + dev
-lower = basis - dev
+ema                    = ta.ema(close, emaL)
+[middle, upper, lower] = ta.bb(close, bbL, mult)
 
-isLongCross = ta.crossover(source, upper) ? 1 : 0
-isShortCross = ta.crossunder(source, lower) ? 1 : 0
+isLongCross  = ta.crossover(close, upper) ? 1 : 0
+isShortCross = ta.crossunder(close, lower) ? 1 : 0
 
-isCandleAboveEma = source > ema
-isCandleBelowEma = source < ema
+isCandleAboveEma = close > ema
+isCandleBelowEma = close < ema
 
-isLongCondition = emaTrend ? isLongCross and isCandleAboveEma : isLongCross
+isLongCondition  = emaTrend ? isLongCross and isCandleAboveEma : isLongCross
 isShortCondition = emaTrend ? isShortCross and isCandleBelowEma : isShortCross
 
 highestHigh = ta.highest(high, highestHighL)
-lowestLow = ta.lowest(low, lowestLowL)
+lowestLow   = ta.lowest(low, lowestLowL)
 
-isPositionNone = strategy.position_size == 0 ? 1 : 0
-isPositionLong = strategy.position_size > 0 ? 1 : 0
+isPositionNone  = strategy.position_size == 0 ? 1 : 0
+isPositionLong  = strategy.position_size > 0 ? 1 : 0
 isPositionShort = strategy.position_size < 0 ? 1 : 0
 
-var float stopLossLong = 0.0
-var float targetLong = 0.0
+var float stopLossLong  = 0.0
+var float targetLong    = 0.0
 var float stopLossShort = 0.0
-var float targetShort = 0.0
-var bool isLongEntry = false
-var bool isShortEntry = false
+var float targetShort   = 0.0
+var bool isLongEntry    = false
+var bool isShortEntry   = false
 
 if (isPositionNone)
-    isLongEntry := false
-    isShortEntry := false
-    stopLossLong := 0.0
-    targetLong := 0.0
+    isLongEntry   := false
+    isShortEntry  := false
+    stopLossLong  := 0.0
+    targetLong    := 0.0
     stopLossShort := 0.0
-    targetShort := 0.0
+    targetShort   := 0.0
 if (isPositionLong and isLongEntry)
-    isLongEntry := true
-    isShortEntry := false
+    isLongEntry   := true
+    isShortEntry  := false
     stopLossShort := 0.0
-    targetShort := 0.0
+    targetShort   := 0.0
 if (isPositionShort and isShortEntry)
     isShortEntry := true
-    isLongEntry := false
+    isLongEntry  := false
     stopLossLong := 0.0
-    targetLong := 0.0
+    targetLong   := 0.0
 
 if (isLongCondition and not isLongEntry)
-    isLongEntry := true
+    isLongEntry  := true
     stopLossLong := lowestLow
-    targetLong := source + math.abs(source - stopLossLong) * target_factor
+    targetLong   := close + math.abs(close - stopLossLong) * targetFactor
     strategy.entry('Long', strategy.long)
     strategy.exit('Exit Long', 'Long', stop=stopLossLong, limit=targetLong)
 
 if (isShortCondition and not isShortEntry)
-    isShortEntry := true
+    isShortEntry  := true
     stopLossShort := highestHigh
-    targetShort := source - math.abs(source - stopLossShort) * target_factor
+    targetShort   := close - math.abs(close - stopLossShort) * targetFactor
     strategy.entry('Short', strategy.short)
     strategy.exit('Exit Short', 'Short', stop=stopLossShort, limit=targetShort)
 
 plot(upper, color=color.blue)
-plot(basis, color=color.gray)
+plot(middle, color=color.gray)
 plot(lower, color=color.blue)
 plot(ema, color=color.white)
-// plot(stopLossLong, 'stopLossLong')
-// plot(targetLong, 'targetLong')
-// plot(stopLossShort, 'stopLossShort')
-// plot(targetShort, 'targetShort')
-// plot(isLongEntry ? 1 : 0, 'isLongEntry')
-// plot(isShortEntry ? 1 : 0, 'isShortEntry')
-// plot(strategy.position_size, 'strategy.position_size')
