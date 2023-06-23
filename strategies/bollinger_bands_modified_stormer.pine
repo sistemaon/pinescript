@@ -2,30 +2,35 @@
 // © AugustoErni
 
 //@version=5
-strategy('Bollinger Bands Modified (Stormer)', overlay=true, process_orders_on_close=true, calc_on_every_tick=false, initial_capital=12000, currency=currency.USD, default_qty_type=strategy.percent_of_equity, default_qty_value=20, pyramiding=0, commission_type=strategy.commission.percent, commission_value=0.12)
+strategy('Bollinger Bands Modified (Stormer)', overlay=true, process_orders_on_close=true, calc_on_every_tick=false, calc_on_order_fills=false, initial_capital=12000, currency=currency.USD, default_qty_type=strategy.percent_of_equity, default_qty_value=20, pyramiding=0, commission_type=strategy.commission.percent, commission_value=0.12)
 
 bbL          = input.int(20, title='BB Length', minval=1, step=1, tooltip='Calculate the length of bollinger bands.')
-mult         = input.float(0.38, title='BB Standard Deviation', minval=0.01, step=0.01, tooltip='Calculate the standard deviation of bollinger bands.')
-targetFactor = input.float(1.6, title='Target Take Profit', minval=0.1, step=0.1, tooltip='Calculate the take profit factor when entry position.')
 emaL         = input.int(80, title='EMA Length', minval=1, step=1, tooltip='Calculate the length of EMA.')
-emaTrend     = input.bool(true, title='Check Trend EMA', tooltip='Use EMA as trend verify for opening position.')
 highestHighL = input.int(7, title='Highest High Length', minval=1, step=1, tooltip='Fetches the highest high candle from length input. Use to set stop loss for short position.')
 lowestLowL   = input.int(7, title='Lowest Low Length', minval=1, step=1, tooltip='Fetches the lowest low candle from length input. Use to set stop loss for long position.')
+mult         = input.float(0.38, title='BB Standard Deviation', minval=0.01, step=0.01, tooltip='Calculate the standard deviation of bollinger bands.')
+targetFactor = input.float(1.6, title='Target Take Profit', minval=0.1, step=0.1, tooltip='Calculate the take profit factor when entry position.')
+emaTrend     = input.bool(true, title='Check Trend EMA', tooltip='Use EMA as trend verify for opening position.')
 
-ema                    = ta.ema(close, emaL)
 [middle, upper, lower] = ta.bb(close, bbL, mult)
+ema                    = ta.ema(close, emaL)
+isCrossover            = ta.crossover(close, upper) ? 1 : 0
+isCrossunder           = ta.crossunder(close, lower) ? 1 : 0
+highestHigh            = ta.highest(high, highestHighL)
+lowestLow              = ta.lowest(low, lowestLowL)
 
-isLongCross  = ta.crossover(close, upper) ? 1 : 0
-isShortCross = ta.crossunder(close, lower) ? 1 : 0
+isBarLong    = ((close - open) > 0) ? 1 : 0
+isBarShort   = ((close - open) < 0) ? 1 : 0
+
+isLongCross  = isCrossover ? 1 : isBarLong ? (open < upper and close > upper) ? 1 : 0 : 0
+isShortCross = isCrossunder ? 1 : isBarShort ? (close < lower and open > lower) ? 1 : 0 : 0
+
 
 isCandleAboveEma = close > ema
 isCandleBelowEma = close < ema
 
 isLongCondition  = emaTrend ? isLongCross and isCandleAboveEma : isLongCross
 isShortCondition = emaTrend ? isShortCross and isCandleBelowEma : isShortCross
-
-highestHigh = ta.highest(high, highestHighL)
-lowestLow   = ta.lowest(low, lowestLowL)
 
 isPositionNone  = strategy.position_size == 0 ? 1 : 0
 isPositionLong  = strategy.position_size > 0 ? 1 : 0
