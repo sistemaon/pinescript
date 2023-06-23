@@ -16,17 +16,16 @@ crossunderCheck = input.bool(true, title='Add Another Crossunder Check', tooltip
 
 [middle, upper, lower] = ta.bb(close, bbL, mult)
 ema                    = ta.ema(close, emaL)
-isCrossover            = ta.crossover(close, upper) ? 1 : 0
-isCrossunder           = ta.crossunder(close, lower) ? 1 : 0
 highestHigh            = ta.highest(high, highestHighL)
 lowestLow              = ta.lowest(low, lowestLowL)
+isCrossover            = ta.crossover(close, upper) ? 1 : 0
+isCrossunder           = ta.crossunder(close, lower) ? 1 : 0
 
 isBarLong    = ((close - open) > 0) ? 1 : 0
 isBarShort   = ((close - open) < 0) ? 1 : 0
 
-isLongCross  = isCrossover ? 1 : isBarLong ? (open < upper and close > upper) ? 1 : 0 : 0
-isShortCross = isCrossunder ? 1 : isBarShort ? (close < lower and open > lower) ? 1 : 0 : 0
-
+isLongCross  = crossoverCheck ? ((isBarLong and not isBarShort) and (open < upper and close > upper)) ? 1 : 0 : isCrossover ? 1 : 0
+isShortCross = crossunderCheck ? ((isBarShort and not isBarLong) and (close < lower and open > lower)) ? 1 : 0 : isCrossunder ? 1 : 0
 
 isCandleAboveEma = close > ema
 isCandleBelowEma = close < ema
