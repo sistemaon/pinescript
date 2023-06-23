@@ -51,6 +51,14 @@ if (isPositionNone)
     targetLong    := 0.0
     stopLossShort := 0.0
     targetShort   := 0.0
+if (isPositionShort or isPositionNone)
+    isLongEntry   := false
+    stopLossLong  := 0.0
+    targetLong    := 0.0
+if (isPositionLong or isPositionNone)
+    isShortEntry   := false
+    stopLossShort  := 0.0
+    targetShort    := 0.0
 if (isPositionLong and isLongEntry)
     isLongEntry   := true
     isShortEntry  := false
