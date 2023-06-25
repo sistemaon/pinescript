@@ -42,8 +42,10 @@ isPositionNone  = strategy.position_size == 0 ? 1 : 0
 isPositionLong  = strategy.position_size > 0 ? 1 : 0
 isPositionShort = strategy.position_size < 0 ? 1 : 0
 
+var float enterLong     = 0.0
 var float stopLossLong  = 0.0
 var float targetLong    = 0.0
+var float enterShort    = 0.0
 var float stopLossShort = 0.0
 var float targetShort   = 0.0
 var bool isLongEntry    = false
@@ -52,40 +54,48 @@ var bool isShortEntry   = false
 if (isPositionNone)
     isLongEntry   := false
     isShortEntry  := false
+    enterLong     := 0.0
     stopLossLong  := 0.0
     targetLong    := 0.0
+    enterShort    := 0.0
     stopLossShort := 0.0
     targetShort   := 0.0
 if (isPositionShort or isPositionNone)
     isLongEntry   := false
+    enterLong     := 0.0
     stopLossLong  := 0.0
     targetLong    := 0.0
 if (isPositionLong or isPositionNone)
     isShortEntry   := false
+    enterShort     := 0.0
     stopLossShort  := 0.0
     targetShort    := 0.0
 if (isPositionLong and isLongEntry)
     isLongEntry   := true
     isShortEntry  := false
+    enterShort    := 0.0
     stopLossShort := 0.0
     targetShort   := 0.0
 if (isPositionShort and isShortEntry)
     isShortEntry := true
     isLongEntry  := false
+    enterLong    := 0.0
     stopLossLong := 0.0
     targetLong   := 0.0
 
 if (isLongCondition and not isLongEntry)
     isLongEntry  := true
+    enterLong    := close
     stopLossLong := lowestLow
-    targetLong   := close + math.abs(close - stopLossLong) * targetFactor
+    targetLong   := enterLong + math.abs(enterLong - stopLossLong) * targetFactor
     strategy.entry('Long', strategy.long)
     strategy.exit('Exit Long', 'Long', stop=stopLossLong, limit=targetLong)
 
 if (isShortCondition and not isShortEntry)
     isShortEntry  := true
+    enterShort    := close
     stopLossShort := highestHigh
-    targetShort   := close - math.abs(close - stopLossShort) * targetFactor
+    targetShort   := enterShort - math.abs(enterShort - stopLossShort) * targetFactor
     strategy.entry('Short', strategy.short)
     strategy.exit('Exit Short', 'Short', stop=stopLossShort, limit=targetShort)
 
@@ -97,30 +107,23 @@ plot(ema, title='EMA', color=color.white)
 barcolor(insideBarPatternCheck and isInsideBar and isLongEntry and isBarLong ? color.lime : insideBarPatternCheck and isInsideBar and isShortEntry and isBarShort ? color.maroon : na, title='Inside Bar Color in Long Bar Long and in Short Bar Short')
 barcolor(insideBarPatternCheck and isInsideBar and isLongEntry and isBarShort ? color.maroon : insideBarPatternCheck and isInsideBar and isShortEntry and isBarLong ? color.lime : na, title='Inside Bar Color in Long Bar Short and in Short Bar Long')
 
-entryPrice = 100.50
-targetPrice = 105.75
-stopLossPrice = 98.25
-
-tableTitle = "Trade Details"
-tableCaption = "Entry, Target, and Stop Loss Prices"
-
-tablePosition = position.top_right
-tableColumns = 4
-tableRows = 4
-tableBgColor = color.white
-tableFrameColor = color.gray
-tableFrameWidth = 2
+tablePosition    = position.top_right
+tableBgColor     = color.white
+tableFrameColor  = color.gray
 tableBorderColor = color.gray
+tableColumns     = 4
+tableRows        = 2
+tableFrameWidth  = 2
 tableBorderWidth = 2
 
-tableId = table.new(tablePosition, tableColumns, tableRows, tableBgColor, tableFrameColor, tableFrameWidth, tableBorderColor, tableBorderWidth)
+tableInfoTrade = table.new(tablePosition, tableColumns, tableRows, tableBgColor, tableFrameColor, tableFrameWidth, tableBorderColor, tableBorderWidth)
 
-table.cell(table_id = tableId, column = 0, row = 0, text = "Entry Side", text_color = color.black)
-table.cell(table_id = tableId, column = 1, row = 0, text = "Entry Price", text_color = color.black)
-table.cell(table_id = tableId, column = 2, row = 0, text = "Target Price", text_color = color.black)
-table.cell(table_id = tableId, column = 3, row = 0, text = "Stop Loss Price", text_color = color.black)
+table.cell(table_id = tableInfoTrade, column = 0, row = 0, text = "Entry Side", text_color = color.black)
+table.cell(table_id = tableInfoTrade, column = 1, row = 0, text = "Entry Price", text_color = color.black)
+table.cell(table_id = tableInfoTrade, column = 2, row = 0, text = "Target Price", text_color = color.black)
+table.cell(table_id = tableInfoTrade, column = 3, row = 0, text = "Stop Loss Price", text_color = color.black)
 
-table.cell(table_id = tableId, column = 0, row = 1, text = 'SIDE TO CHOOSE', text_color = color.black, bgcolor = color.green)
-table.cell(table_id = tableId, column = 1, row = 1, text = str.tostring(entryPrice), text_color = color.black, bgcolor = color.green)
-table.cell(table_id = tableId, column = 2, row = 1, text = str.tostring(targetPrice), text_color = color.black, bgcolor = color.blue)
-table.cell(table_id = tableId, column = 3, row = 1, text = str.tostring(stopLossPrice), text_color = color.black, bgcolor = color.red)
+table.cell(table_id = tableInfoTrade, column = 0, row = 1, text = isLongEntry ? 'LONG' : isShortEntry ? 'SHORT' : 'NONE', text_color = color.black, bgcolor = color.yellow)
+table.cell(table_id = tableInfoTrade, column = 1, row = 1, text = isLongEntry ? str.tostring(enterLong) : isShortEntry ? str.tostring(enterShort) : 'NONE', text_color = color.black, bgcolor = color.blue)
+table.cell(table_id = tableInfoTrade, column = 2, row = 1, text = isLongEntry ? str.tostring(targetLong) : isShortEntry ? str.tostring(targetShort) : 'NONE', text_color = color.black, bgcolor = color.green)
+table.cell(table_id = tableInfoTrade, column = 3, row = 1, text = isLongEntry ? str.tostring(stopLossLong) : isShortEntry ? str.tostring(stopLossShort) : 'NONE', text_color = color.black, bgcolor = color.red)
