@@ -22,7 +22,9 @@ lowestLow              = ta.lowest(low, lowestLowL)
 isCrossover            = ta.crossover(close, upper) ? 1 : 0
 isCrossunder           = ta.crossunder(close, lower) ? 1 : 0
 
-isInsideBar = high[1] > high and low[1] < low
+isPrevBarHighGreaterCurBarHigh = high[1] > high
+isPrevBarLowLesserCurBarLow    = low[1] < low
+isInsideBar                    = isPrevBarHighGreaterCurBarHigh and isPrevBarLowLesserCurBarLow
 
 isBarLong    = ((close - open) > 0) ? 1 : 0
 isBarShort   = ((close - open) < 0) ? 1 : 0
@@ -91,5 +93,6 @@ plot(upper, title='Upper Band', color=color.blue)
 plot(middle, title='Middle Band', color=color.gray)
 plot(lower, title='Lower Band', color=color.blue)
 plot(ema, title='EMA', color=color.white)
+
 barcolor(insideBarPatternCheck and isInsideBar and isLongEntry and isBarLong ? color.lime : insideBarPatternCheck and isInsideBar and isShortEntry and isBarShort ? color.maroon : na, title='Inside Bar Color in Long Bar Long and in Short Bar Short')
 barcolor(insideBarPatternCheck and isInsideBar and isLongEntry and isBarShort ? color.maroon : insideBarPatternCheck and isInsideBar and isShortEntry and isBarLong ? color.lime : na, title='Inside Bar Color in Long Bar Short and in Short Bar Long')
