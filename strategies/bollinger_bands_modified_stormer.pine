@@ -4,15 +4,16 @@
 //@version=5
 strategy('Bollinger Bands Modified (Stormer)', overlay=true, process_orders_on_close=true, calc_on_every_tick=false, calc_on_order_fills=false, initial_capital=12000, currency=currency.USD, default_qty_type=strategy.percent_of_equity, default_qty_value=20, pyramiding=0, commission_type=strategy.commission.percent, commission_value=0.12)
 
-bbL             = input.int(20, title='BB Length', minval=1, step=1, tooltip='Calculate the length of bollinger bands.')
-emaL            = input.int(80, title='EMA Length', minval=1, step=1, tooltip='Calculate the length of EMA.')
-highestHighL    = input.int(7, title='Highest High Length', minval=1, step=1, tooltip='Fetches the highest high candle from length input. Use to set stop loss for short position.')
-lowestLowL      = input.int(7, title='Lowest Low Length', minval=1, step=1, tooltip='Fetches the lowest low candle from length input. Use to set stop loss for long position.')
-mult            = input.float(0.38, title='BB Standard Deviation', minval=0.01, step=0.01, tooltip='Calculate the standard deviation of bollinger bands.')
-targetFactor    = input.float(1.6, title='Target Take Profit', minval=0.1, step=0.1, tooltip='Calculate the take profit factor when entry position.')
-emaTrend        = input.bool(true, title='Check Trend EMA', tooltip='Use EMA as trend verify for opening position.')
-crossoverCheck  = input.bool(true, title='Add Another Crossover Check', tooltip='This option is to add one more veryfication attempt to check if price is crossover upper bollinger band.')
-crossunderCheck = input.bool(true, title='Add Another Crossunder Check', tooltip='This option is to add one more veryfication attempt to check if price is crossunder lower bollinger band.')
+bbL                   = input.int(20, title='BB Length', minval=1, step=1, tooltip='Calculate the length of bollinger bands.')
+emaL                  = input.int(80, title='EMA Length', minval=1, step=1, tooltip='Calculate the length of EMA.')
+highestHighL          = input.int(7, title='Highest High Length', minval=1, step=1, tooltip='Fetches the highest high candle from length input. Use to set stop loss for short position.')
+lowestLowL            = input.int(7, title='Lowest Low Length', minval=1, step=1, tooltip='Fetches the lowest low candle from length input. Use to set stop loss for long position.')
+mult                  = input.float(0.38, title='BB Standard Deviation', minval=0.01, step=0.01, tooltip='Calculate the standard deviation of bollinger bands.')
+targetFactor          = input.float(1.6, title='Target Take Profit', minval=0.1, step=0.1, tooltip='Calculate the take profit factor when entry position.')
+emaTrend              = input.bool(true, title='Check Trend EMA', tooltip='Use EMA as trend verify for opening position.')
+crossoverCheck        = input.bool(true, title='Add Another Crossover Check', tooltip='This option is to add one more veryfication attempt to check if price is crossover upper bollinger band.')
+crossunderCheck       = input.bool(true, title='Add Another Crossunder Check', tooltip='This option is to add one more veryfication attempt to check if price is crossunder lower bollinger band.')
+insideBarPatternCheck = input.bool(true, title='Check Inside Bar Pattern', tooltip='This option is to check inside bar pattern while the position is still open.')
 
 [middle, upper, lower] = ta.bb(close, bbL, mult)
 ema                    = ta.ema(close, emaL)
@@ -20,6 +21,8 @@ highestHigh            = ta.highest(high, highestHighL)
 lowestLow              = ta.lowest(low, lowestLowL)
 isCrossover            = ta.crossover(close, upper) ? 1 : 0
 isCrossunder           = ta.crossunder(close, lower) ? 1 : 0
+
+isInsideBar = high[1] > high and low[1] < low
 
 isBarLong    = ((close - open) > 0) ? 1 : 0
 isBarShort   = ((close - open) < 0) ? 1 : 0
@@ -84,7 +87,10 @@ if (isShortCondition and not isShortEntry)
     strategy.entry('Short', strategy.short)
     strategy.exit('Exit Short', 'Short', stop=stopLossShort, limit=targetShort)
 
-plot(upper, color=color.blue)
-plot(middle, color=color.gray)
-plot(lower, color=color.blue)
-plot(ema, color=color.white)
+plot(upper, title='Upper Band', color=color.blue)
+plot(middle, title='Middle Band', color=color.gray)
+plot(lower, title='Lower Band', color=color.blue)
+plot(ema, title='EMA', color=color.white)
+
+barcolor(insideBarPatternCheck and isInsideBar and isLongEntry and isBarLong ? color.lime : insideBarPatternCheck and isInsideBar and isShortEntry and isBarShort ? color.maroon : na, title='Inside Bar Color in Long Bar Long and in Short Bar Short')
+barcolor(insideBarPatternCheck and isInsideBar and isLongEntry and isBarShort ? color.maroon : insideBarPatternCheck and isInsideBar and isShortEntry and isBarLong ? color.lime : na, title='Inside Bar Color in Long Bar Short and in Short Bar Long')
