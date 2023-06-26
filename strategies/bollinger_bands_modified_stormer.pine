@@ -88,6 +88,8 @@ if (isLongCondition and not isLongEntry)
     enterLong    := close
     stopLossLong := lowestLow
     targetLong   := enterLong + math.abs(enterLong - stopLossLong) * targetFactor
+    alertMessage = '{ "side/lado": "buy", "entry/entrada": ' + str.tostring(enterLong) + ', "stop": ' + str.tostring(stopLossLong) + ', "target/alvo": ' + str.tostring(targetLong) + ' }'
+    alert(alertMessage)
     strategy.entry('Long', strategy.long)
     strategy.exit('Exit Long', 'Long', stop=stopLossLong, limit=targetLong)
 
@@ -96,6 +98,8 @@ if (isShortCondition and not isShortEntry)
     enterShort    := close
     stopLossShort := highestHigh
     targetShort   := enterShort - math.abs(enterShort - stopLossShort) * targetFactor
+    alertMessage = '{ "side/lado": "sell", "entry/entrada": ' + str.tostring(enterShort) + ', "stop": ' + str.tostring(stopLossShort) + ', "target/alvo": ' + str.tostring(targetShort) + ' }'
+    alert(alertMessage)
     strategy.entry('Short', strategy.short)
     strategy.exit('Exit Short', 'Short', stop=stopLossShort, limit=targetShort)
 
@@ -118,13 +122,13 @@ table.cell(table_id=tableInfoTrade, column=0, row=0)
 table.cell(table_id=tableInfoTrade, column=1, row=0)
 
 table.cell(table_id=tableInfoTrade, column=0, row=1, text='Entry Side/Lado da Entrada', text_color=color.white)
-table.cell(table_id=tableInfoTrade, column=0, row=2, text=isLongEntry ? 'LONG' : isShortEntry ? 'SHORT' : 'NONE/NADA', text_color=color.yellow)
+table.cell(table_id=tableInfoTrade, column=0, row=2, text=isLongEntry ? 'LONG' : isShortEntry ? 'SHORT' : 'NONE/NENHUM', text_color=color.yellow)
 
 table.cell(table_id=tableInfoTrade, column=1, row=1, text='Entry Price/Preço da Entrada', text_color=color.white)
-table.cell(table_id=tableInfoTrade, column=1, row=2, text=isLongEntry ? str.tostring(enterLong) : isShortEntry ? str.tostring(enterShort) : 'NONE/NADA', text_color=color.blue)
+table.cell(table_id=tableInfoTrade, column=1, row=2, text=isLongEntry ? str.tostring(enterLong) : isShortEntry ? str.tostring(enterShort) : 'NONE/NENHUM', text_color=color.blue)
 
 table.cell(table_id=tableInfoTrade, column=0, row=3, text='Take Profit Price/Preço Alvo Lucro', text_color=color.white)
-table.cell(table_id=tableInfoTrade, column=0, row=4, text=isLongEntry ? str.tostring(targetLong) : isShortEntry ? str.tostring(targetShort) : 'NONE/NADA', text_color=color.green)
+table.cell(table_id=tableInfoTrade, column=0, row=4, text=isLongEntry ? str.tostring(targetLong) : isShortEntry ? str.tostring(targetShort) : 'NONE/NENHUM', text_color=color.green)
 
 table.cell(table_id=tableInfoTrade, column=1, row=3, text='Stop Loss Price/Preço Stop Loss', text_color=color.white)
-table.cell(table_id=tableInfoTrade, column=1, row=4, text=isLongEntry ? str.tostring(stopLossLong) : isShortEntry ? str.tostring(stopLossShort) : 'NONE/NADA', text_color=color.red)
+table.cell(table_id=tableInfoTrade, column=1, row=4, text=isLongEntry ? str.tostring(stopLossLong) : isShortEntry ? str.tostring(stopLossShort) : 'NONE/NENHUM', text_color=color.red)
