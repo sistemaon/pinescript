@@ -13,7 +13,7 @@ targetFactor          = input.float(1.6, title='Target Take Profit/Objetivo de L
 emaTrend              = input.bool(true, title='Check Trend EMA/Verificar Tendência da Média Móvel Exponencial', tooltip='Use EMA as trend verify for opening position./Usar a EMA como verificação de tendência para abrir uma posição.')
 crossoverCheck        = input.bool(true, title='Add Another Crossover Check/Adicionar Mais uma Verificação de Cruzamento Superior', tooltip='This option is to add one more veryfication attempt to check if price is crossover upper bollinger band./Esta opção é para adicionar uma verificação adicional para verificar se o preço cruza a banda superior das bandas de bollinger.')
 crossunderCheck       = input.bool(true, title='Add Another Crossunder Check/Adicionar Mais uma Verificação de Cruzamento Inferior', tooltip='This option is to add one more veryfication attempt to check if price is crossunder lower bollinger band./Esta opção é para adicionar uma verificação adicional para verificar se o preço cruza a banda inferior das bandas de bollinger.')
-insideBarPatternCheck = input.bool(true, title='Show Inside Bar Pattern/Mostrar Padrão de Inside Bar', tooltip='This option is to show possible inside bar pattern while the position is still open./Esta opção é para mostrar possivelmente o padrão de inside bar enquanto a posição está em aberto.')
+insideBarPatternCheck = input.bool(true, title='Show Inside Bar Pattern/Mostrar Padrão de Inside Bar', tooltip='This option is to show possible inside bar pattern./Esta opção é para mostrar possivelmente o padrão de inside bar.')
 
 [middle, upper, lower] = ta.bb(close, bbL, mult)
 ema                    = ta.ema(close, emaL)
@@ -104,8 +104,7 @@ plot(middle, title='Middle Band', color=color.gray)
 plot(lower, title='Lower Band', color=color.blue)
 plot(ema, title='EMA', color=color.white)
 
-barcolor(insideBarPatternCheck and isInsideBar and isLongEntry and isBarLong ? color.lime : insideBarPatternCheck and isInsideBar and isShortEntry and isBarShort ? color.maroon : na, title='Inside Bar Color in Long Bar Long and in Short Bar Short/Cor do Inside Bar em Barra Longa Longa e em Barra Curta Curta')
-barcolor(insideBarPatternCheck and isInsideBar and isLongEntry and isBarShort ? color.maroon : insideBarPatternCheck and isInsideBar and isShortEntry and isBarLong ? color.lime : na, title='Inside Bar Color in Long Bar Short and in Short Bar Long/Cor do Inside Bar em Barra Longa Curta e em Barra Curta Longa')
+barcolor(insideBarPatternCheck and isInsideBar and isBarLong ? color.lime : insideBarPatternCheck and isInsideBar and isBarShort ? color.maroon : na, title='Inside Bar Color in Long Bar Long and in Short Bar Short/Cor do Inside Bar em Barra Longa Longa e em Barra Curta Curta')
 
 tablePosition    = position.top_right
 tableBgColor     = color.white
