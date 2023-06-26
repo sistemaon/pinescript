@@ -6,7 +6,20 @@
 
 File Script: [Simple Alert Strategy](simple_alert_strategy.pine)
 
+---
+---
+
 ## Bollinger Bands Modified (Stormer) Strategy
+
+> This **Strategy** is **based** on the **Setup** given by **Alexandre Wolwacz**, AKA **Stormer**.\
+> **Stormer** is a professional trader and investor from Brazil.\
+> More about **Stormer**'s work: [Stormer YT](https://www.youtube.com/@StormerOficial).\
+> More about the **Setup**: [How to use bollinger bands to operate cryptocurrencies .P1](https://www.youtube.com/watch?v=iP9Iu6AVCNk) and [How to use bollinger bands to operate cryptocurrencies .P2](https://www.youtube.com/watch?v=1P9-NZu1wVI).
+
+> Observations: This _strategy_ executes both long and short positions using _Bollinger Bands and Exponential Moving Average (EMA)_, or using _Bollinger Bands_ alone.\
+The **detection** and **display** of the _inside bar pattern_ on the chart is optional, it **does not** impact the trades themselves.\
+Please **read** the explanation carefully to better understand what this strategy **does**.
+
 
 #### Strategy Settings
 * Length of Bollinger Bands (**bbL**): Determines the **length** of the **Bollinger Bands**. _Default value is 20_.
@@ -49,5 +62,7 @@ File Script: [Simple Alert Strategy](simple_alert_strategy.pine)
 * The strategy **displays** a _trade information_ **table** in the bottom right corner of the chart.
 * The table **shows** the **current** position's _information_ (**Entry Side**, **Entry Price**, **Stop Loss** and **Take Profit**).
 
+File Script: [Bollinger Bands Modified (Stormer)](bollinger_bands_modified_stormer.pine)
 
-File Script: [Bollinger Bands Modified Stormer](bollinger_bands_modified_stormer.pine)
+---
+---
