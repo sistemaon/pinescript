@@ -26,8 +26,8 @@ isPrevBarHighGreaterCurBarHigh = high[1] > high ? 1 : 0
 isPrevBarLowLesserCurBarLow    = low[1] < low ? 1 : 0
 isInsideBar                    = isPrevBarHighGreaterCurBarHigh and isPrevBarLowLesserCurBarLow ? 1 : 0
 
-isBarLong    = ((close - open) > 0) ? 1 : 0
-isBarShort   = ((close - open) < 0) ? 1 : 0
+isBarLong  = ((close - open) > 0) ? 1 : 0
+isBarShort = ((close - open) < 0) ? 1 : 0
 
 isLongCross  = crossoverCheck ? ((isBarLong and not isBarShort) and (open < upper and close > upper)) ? 1 : 0 : isCrossover ? 1 : 0
 isShortCross = crossunderCheck ? ((isBarShort and not isBarLong) and (close < lower and open > lower)) ? 1 : 0 : isCrossunder ? 1 : 0
@@ -61,15 +61,15 @@ if (isPositionNone)
     stopLossShort := 0.0
     targetShort   := 0.0
 if (isPositionShort or isPositionNone)
-    isLongEntry   := false
-    enterLong     := 0.0
-    stopLossLong  := 0.0
-    targetLong    := 0.0
+    isLongEntry  := false
+    enterLong    := 0.0
+    stopLossLong := 0.0
+    targetLong   := 0.0
 if (isPositionLong or isPositionNone)
-    isShortEntry   := false
-    enterShort     := 0.0
-    stopLossShort  := 0.0
-    targetShort    := 0.0
+    isShortEntry  := false
+    enterShort    := 0.0
+    stopLossShort := 0.0
+    targetShort   := 0.0
 if (isPositionLong and isLongEntry)
     isLongEntry   := true
     isShortEntry  := false
