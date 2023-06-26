@@ -106,27 +106,25 @@ plot(ema, title='EMA', color=color.white)
 
 barcolor(insideBarPatternCheck and isInsideBar and isBarLong ? color.lime : insideBarPatternCheck and isInsideBar and isBarShort ? color.maroon : na, title='Inside Bar Color in Long Bar Long and in Short Bar Short/Cor do Inside Bar em Barra Longa Longa e em Barra Curta Curta')
 
-tablePosition    = position.top_right
-tableBgColor     = color.white
-tableFrameColor  = color.gray
+tablePosition    = position.bottom_right
 tableBorderColor = color.gray
-tableColumns     = 4
-tableRows        = 3
-tableFrameWidth  = 2
-tableBorderWidth = 2
-tableInfoTrade   = table.new(tablePosition, tableColumns, tableRows, tableBgColor, tableFrameColor, tableFrameWidth, tableBorderColor, tableBorderWidth)
+tableColumns     = 2
+tableRows        = 5
+tableFrameWidth  = 1
+tableBorderWidth = 1
+tableInfoTrade   = table.new(position=tablePosition, columns=tableColumns, rows=tableRows, frame_width=tableFrameWidth, border_color=tableBorderColor, border_width=tableBorderWidth)
 
-table.cell(table_id=tableInfoTrade, column=0, row=0, bgcolor=color.black)
-table.cell(table_id=tableInfoTrade, column=1, row=0, bgcolor=color.black)
-table.cell(table_id=tableInfoTrade, column=2, row=0, bgcolor=color.black)
-table.cell(table_id=tableInfoTrade, column=3, row=0, bgcolor=color.black)
+table.cell(table_id=tableInfoTrade, column=0, row=0)
+table.cell(table_id=tableInfoTrade, column=1, row=0)
 
-table.cell(table_id=tableInfoTrade, column=0, row=1, text='Entry Side/Lado da Entrada', text_color=color.black)
-table.cell(table_id=tableInfoTrade, column=1, row=1, text='Entry Price/Preço da Entrada', text_color=color.black)
-table.cell(table_id=tableInfoTrade, column=2, row=1, text='Take Profit Price/Preço Alvo Lucro', text_color=color.black)
-table.cell(table_id=tableInfoTrade, column=3, row=1, text='Stop Loss Price/Preço Stop Loss', text_color=color.black)
+table.cell(table_id=tableInfoTrade, column=0, row=1, text='Entry Side/Lado da Entrada', text_color=color.white)
+table.cell(table_id=tableInfoTrade, column=0, row=2, text=isLongEntry ? 'LONG' : isShortEntry ? 'SHORT' : 'NONE/NADA', text_color=color.yellow)
 
-table.cell(table_id=tableInfoTrade, column=0, row=2, text=isLongEntry ? 'LONG' : isShortEntry ? 'SHORT' : 'NONE/NADA', text_color=color.black, bgcolor=color.yellow)
-table.cell(table_id=tableInfoTrade, column=1, row=2, text=isLongEntry ? str.tostring(enterLong) : isShortEntry ? str.tostring(enterShort) : 'NONE/NADA', text_color=color.black, bgcolor=color.blue)
-table.cell(table_id=tableInfoTrade, column=2, row=2, text=isLongEntry ? str.tostring(targetLong) : isShortEntry ? str.tostring(targetShort) : 'NONE/NADA', text_color=color.black, bgcolor=color.green)
-table.cell(table_id=tableInfoTrade, column=3, row=2, text=isLongEntry ? str.tostring(stopLossLong) : isShortEntry ? str.tostring(stopLossShort) : 'NONE/NADA', text_color=color.black, bgcolor=color.red)
+table.cell(table_id=tableInfoTrade, column=1, row=1, text='Entry Price/Preço da Entrada', text_color=color.white)
+table.cell(table_id=tableInfoTrade, column=1, row=2, text=isLongEntry ? str.tostring(enterLong) : isShortEntry ? str.tostring(enterShort) : 'NONE/NADA', text_color=color.blue)
+
+table.cell(table_id=tableInfoTrade, column=0, row=3, text='Take Profit Price/Preço Alvo Lucro', text_color=color.white)
+table.cell(table_id=tableInfoTrade, column=0, row=4, text=isLongEntry ? str.tostring(targetLong) : isShortEntry ? str.tostring(targetShort) : 'NONE/NADA', text_color=color.green)
+
+table.cell(table_id=tableInfoTrade, column=1, row=3, text='Stop Loss Price/Preço Stop Loss', text_color=color.white)
+table.cell(table_id=tableInfoTrade, column=1, row=4, text=isLongEntry ? str.tostring(stopLossLong) : isShortEntry ? str.tostring(stopLossShort) : 'NONE/NADA', text_color=color.red)
