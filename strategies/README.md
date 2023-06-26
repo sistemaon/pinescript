@@ -61,6 +61,7 @@ Please **read** the explanation carefully to better understand what this strateg
 #### Trade Information Table
 * The strategy **displays** a _trade information_ **table** in the bottom right corner of the chart.
 * The table **shows** the **current** position's _information_ (**Entry Side**, **Entry Price**, **Stop Loss** and **Take Profit**).
+* When _position is opened_, the **Entry Side** it is **Long** or **Short**, the **Entry Price**, **Stop Loss** and **Take Profit** are **Prices** shown. When there is no position, all are **None**.
 
 File Script: [Bollinger Bands Modified (Stormer)](bollinger_bands_modified_stormer.pine)
 
