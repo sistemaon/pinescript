@@ -6,14 +6,48 @@
 
 File Script: [Simple Alert Strategy](simple_alert_strategy.pine)
 
-## Bollinger Bands Modified (Stormer)
-* Bollinger Bands using 20 in Length and 0.38 in StdDev. Its purpose to enter the operation and indicate valid tendency.
-* Prices above superior bands is an possible long tendency.
-* Prices below inferior bands is an possible short tendency.
-* Long position is taken when price closes above the bands and enters the operation right in the next opening candle.
-* Short position is taken when price closes below the bands and enters the operation right in the next opening candle.
-* Stop short is at the last top.
-* Stop long is at the last bottom.
-* Take profit is at 1.6x its risk.
+## Bollinger Bands Modified (Stormer) Strategy
+
+#### Strategy Settings
+* Length of Bollinger Bands (**bbL**): Determines the **length** of the **Bollinger Bands**. _Default value is 20_.
+* Standard Deviation of Bollinger Bands (**mult**): Sets the **standard deviation** of the **Bollinger Bands**. _Default value is 0.38_.
+* Length of Exponential Moving Average (**emaL**): Specifies the **length** of the **Exponential Moving Average**. _Default value is 80_.
+* Length of Highest High (**highestHighL**): Defines the **length** used to fetch the **highest high** candle. _Default value is 7_.
+* Length of Lowest Low (**lowestLowL**): Defines the **length** used to fetch the **lowest low** candle. _Default value is 7_.
+* Target Take Profit Factor (**targetFactor**): Determines the **factor** to _calculate_ the **take profit** level. _Default value is 1.6_.
+* Check Trend EMA (**emaTrend**): If enabled, uses **EMA** as a **trend** _verification_ for opening positions. _Default value is true_.
+* Add Another Crossover Check (**crossoverCheck**): If enabled, adds an **additional** _verification_ for price **crossing above** the **upper** Bollinger Band. _Default value is true_.
+* Add Another Crossunder Check (**crossunderCheck**): If enabled, adds an **additional** _verification_ for price **crossing below** the **lower** Bollinger Band. _Default value is true_.
+* Show Inside Bar Pattern (**insideBarPatternCheck**): If enabled, **displays** the **inside bar** pattern. _Default value is true_.
+
+#### Calculation and Condition Variables
+* middle, upper, lower: Calculates the Bollinger Bands based on the input parameters and returns **middle band**, **upper band** and **lower band**.
+* ema: Calculates the **Exponential Moving Average** based on the input length.
+* highestHigh: Fetches the **highest high candle** based on the specified length.
+* lowestLow: Fetches the **lowest low candle** based on the specified length.
+* isCrossover, isCrossunder: Checks if the price **crosses above** the _upper Bollinger Band_ or **below** the _lower Bollinger Band_.
+* isPrevBarHighGreaterCurBarHigh, isPrevBarLowLesserCurBarLow: Compares the **previous** _bar's high_ with the **current** _bar's high_ and the **previous** _bar's low_ with the **current** _bar's low_, respectively.
+* isInsideBar: Checks if the **current** bar forms an **inside bar** pattern.
+* isBarLong, isBarShort: Identifies if the **current** bar is a **long** or **short** bar based on the **close** and **open** prices.
+* isLongCross, isShortCross: Determines if the **conditions** for **entering** a **long** or **short** _position_ are met.
+* isCandleAboveEma, isCandleBelowEma: Checks if the **current candle** is **above** or **below** the _Exponential Moving Average_.
+* isLongCondition, isShortCondition: **Combines the condition** _variables_ to determine if it's suitable to **enter** a _long_ or _short_ position.
+
+#### Position Entry and Exit
+* If there is **no current** position and the conditions for a **long position** are met, the strategy **enters** a _long position_.
+* If there is **no current** position and the conditions for a **short position** are met, the strategy **enters** a _short position_.
+* The strategy sets the **stop loss** and **take profit** levels for the _entered positions_.
+* The strategy also _sends an alert_ with the **entry**, **stop loss**, and **target** levels.
+* The **Bollinger Bands**, **Exponential Moving Average**, and **inside bar** pattern are _plotted_ on the chart.
+
+#### Position Management
+* isPositionNone, isPositionLong, isPositionShort: Checks the **current** position **status**.
+* enterLong, stopLossLong, targetLong, enterShort, stopLossShort, targetShort: **Stores** the _entry_ price, _stop loss_ level, and _target take_ profit level for **long** and **short** positions.
+* isLongEntry, isShortEntry: **Flags** indicating whether a **long** or **short** position has been **entered**.
+
+#### Trade Information Table
+* The strategy **displays** a _trade information_ **table** in the bottom right corner of the chart.
+* The table **shows** the **current** position's _information_ (**Entry Side**, **Entry Price**, **Stop Loss** and **Take Profit**).
+
 
 File Script: [Bollinger Bands Modified Stormer](bollinger_bands_modified_stormer.pine)
