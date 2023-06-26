@@ -4,16 +4,16 @@
 //@version=5
 strategy('Bollinger Bands Modified (Stormer)', overlay=true, process_orders_on_close=true, calc_on_every_tick=false, calc_on_order_fills=false, initial_capital=12000, currency=currency.USD, default_qty_type=strategy.percent_of_equity, default_qty_value=20, pyramiding=0, commission_type=strategy.commission.percent, commission_value=0.12)
 
-bbL                   = input.int(20, title='BB Length', minval=1, step=1, tooltip='Calculate the length of bollinger bands.')
-emaL                  = input.int(80, title='EMA Length', minval=1, step=1, tooltip='Calculate the length of EMA.')
-highestHighL          = input.int(7, title='Highest High Length', minval=1, step=1, tooltip='Fetches the highest high candle from length input. Use to set stop loss for short position.')
-lowestLowL            = input.int(7, title='Lowest Low Length', minval=1, step=1, tooltip='Fetches the lowest low candle from length input. Use to set stop loss for long position.')
-mult                  = input.float(0.38, title='BB Standard Deviation', minval=0.01, step=0.01, tooltip='Calculate the standard deviation of bollinger bands.')
-targetFactor          = input.float(1.6, title='Target Take Profit', minval=0.1, step=0.1, tooltip='Calculate the take profit factor when entry position.')
-emaTrend              = input.bool(true, title='Check Trend EMA', tooltip='Use EMA as trend verify for opening position.')
-crossoverCheck        = input.bool(true, title='Add Another Crossover Check', tooltip='This option is to add one more veryfication attempt to check if price is crossover upper bollinger band.')
-crossunderCheck       = input.bool(true, title='Add Another Crossunder Check', tooltip='This option is to add one more veryfication attempt to check if price is crossunder lower bollinger band.')
-insideBarPatternCheck = input.bool(true, title='Check Inside Bar Pattern', tooltip='This option is to check inside bar pattern while the position is still open.')
+bbL                   = input.int(20, title='BB Length/Comprimento da Banda de Bollinger', minval=1, step=1, tooltip='Calculate the length of bollinger bands./Calcular o comprimento das bandas de bollinger.')
+emaL                  = input.int(80, title='EMA Length/Comprimento da Média Móvel Exponencial', minval=1, step=1, tooltip='Calculate the length of EMA./Calcular o comprimento da EMA.')
+highestHighL          = input.int(7, title='Highest High Length/Comprimento da Alta Maior', minval=1, step=1, tooltip='Fetches the highest high candle from length input. Use to set stop loss for short position./Obter a vela de maior alta com base no comprimento fornecido. Usar para definir o stop loss para uma posição curta.')
+lowestLowL            = input.int(7, title='Lowest Low Length/Comprimento da Baixa Menor', minval=1, step=1, tooltip='Fetches the lowest low candle from length input. Use to set stop loss for long position./Obter a vela de menor baixa com base no comprimento fornecido. Usar para definir o stop loss para uma posição longa.')
+mult                  = input.float(0.38, title='BB Standard Deviation/Desvio Padrão da Banda de Bollinger', minval=0.01, step=0.01, tooltip='Calculate the standard deviation of bollinger bands./Calcular o desvio padrão das bandas de bollinger.')
+targetFactor          = input.float(1.6, title='Target Take Profit/Objetivo de Lucro Alvo', minval=0.1, step=0.1, tooltip='Calculate the take profit factor when entry position./Calcular o fator de alvo lucro ao entrar na posição.')
+emaTrend              = input.bool(true, title='Check Trend EMA/Verificar Tendência da Média Móvel Exponencial', tooltip='Use EMA as trend verify for opening position./Usar a EMA como verificação de tendência para abrir uma posição.')
+crossoverCheck        = input.bool(true, title='Add Another Crossover Check/Adicionar Mais uma Verificação de Cruzamento Superior', tooltip='This option is to add one more veryfication attempt to check if price is crossover upper bollinger band./Esta opção é para adicionar uma verificação adicional para verificar se o preço cruza a banda superior das bandas de bollinger.')
+crossunderCheck       = input.bool(true, title='Add Another Crossunder Check/Adicionar Mais uma Verificação de Cruzamento Inferior', tooltip='This option is to add one more veryfication attempt to check if price is crossunder lower bollinger band./Esta opção é para adicionar uma verificação adicional para verificar se o preço cruza a banda inferior das bandas de bollinger.')
+insideBarPatternCheck = input.bool(true, title='Show Inside Bar Pattern/Mostrar Padrão de Inside Bar', tooltip='This option is to show possible inside bar pattern while the position is still open./Esta opção é para mostrar possivelmente o padrão de inside bar enquanto a posição está em aberto.')
 
 [middle, upper, lower] = ta.bb(close, bbL, mult)
 ema                    = ta.ema(close, emaL)
@@ -22,9 +22,9 @@ lowestLow              = ta.lowest(low, lowestLowL)
 isCrossover            = ta.crossover(close, upper) ? 1 : 0
 isCrossunder           = ta.crossunder(close, lower) ? 1 : 0
 
-isPrevBarHighGreaterCurBarHigh = high[1] > high
-isPrevBarLowLesserCurBarLow    = low[1] < low
-isInsideBar                    = isPrevBarHighGreaterCurBarHigh and isPrevBarLowLesserCurBarLow
+isPrevBarHighGreaterCurBarHigh = high[1] > high ? 1 : 0
+isPrevBarLowLesserCurBarLow    = low[1] < low ? 1 : 0
+isInsideBar                    = isPrevBarHighGreaterCurBarHigh and isPrevBarLowLesserCurBarLow ? 1 : 0
 
 isBarLong    = ((close - open) > 0) ? 1 : 0
 isBarShort   = ((close - open) < 0) ? 1 : 0
@@ -32,11 +32,11 @@ isBarShort   = ((close - open) < 0) ? 1 : 0
 isLongCross  = crossoverCheck ? ((isBarLong and not isBarShort) and (open < upper and close > upper)) ? 1 : 0 : isCrossover ? 1 : 0
 isShortCross = crossunderCheck ? ((isBarShort and not isBarLong) and (close < lower and open > lower)) ? 1 : 0 : isCrossunder ? 1 : 0
 
-isCandleAboveEma = close > ema
-isCandleBelowEma = close < ema
+isCandleAboveEma = close > ema ? 1 : 0
+isCandleBelowEma = close < ema ? 1 : 0
 
-isLongCondition  = emaTrend ? isLongCross and isCandleAboveEma : isLongCross
-isShortCondition = emaTrend ? isShortCross and isCandleBelowEma : isShortCross
+isLongCondition  = emaTrend ? isLongCross and isCandleAboveEma ? 1 : 0 : isLongCross
+isShortCondition = emaTrend ? isShortCross and isCandleBelowEma ? 1 : 0 : isShortCross
 
 isPositionNone  = strategy.position_size == 0 ? 1 : 0
 isPositionLong  = strategy.position_size > 0 ? 1 : 0
@@ -104,26 +104,30 @@ plot(middle, title='Middle Band', color=color.gray)
 plot(lower, title='Lower Band', color=color.blue)
 plot(ema, title='EMA', color=color.white)
 
-barcolor(insideBarPatternCheck and isInsideBar and isLongEntry and isBarLong ? color.lime : insideBarPatternCheck and isInsideBar and isShortEntry and isBarShort ? color.maroon : na, title='Inside Bar Color in Long Bar Long and in Short Bar Short')
-barcolor(insideBarPatternCheck and isInsideBar and isLongEntry and isBarShort ? color.maroon : insideBarPatternCheck and isInsideBar and isShortEntry and isBarLong ? color.lime : na, title='Inside Bar Color in Long Bar Short and in Short Bar Long')
+barcolor(insideBarPatternCheck and isInsideBar and isLongEntry and isBarLong ? color.lime : insideBarPatternCheck and isInsideBar and isShortEntry and isBarShort ? color.maroon : na, title='Inside Bar Color in Long Bar Long and in Short Bar Short/Cor do Inside Bar em Barra Longa Longa e em Barra Curta Curta')
+barcolor(insideBarPatternCheck and isInsideBar and isLongEntry and isBarShort ? color.maroon : insideBarPatternCheck and isInsideBar and isShortEntry and isBarLong ? color.lime : na, title='Inside Bar Color in Long Bar Short and in Short Bar Long/Cor do Inside Bar em Barra Longa Curta e em Barra Curta Longa')
 
 tablePosition    = position.top_right
 tableBgColor     = color.white
 tableFrameColor  = color.gray
 tableBorderColor = color.gray
 tableColumns     = 4
-tableRows        = 2
+tableRows        = 3
 tableFrameWidth  = 2
 tableBorderWidth = 2
+tableInfoTrade   = table.new(tablePosition, tableColumns, tableRows, tableBgColor, tableFrameColor, tableFrameWidth, tableBorderColor, tableBorderWidth)
 
-tableInfoTrade = table.new(tablePosition, tableColumns, tableRows, tableBgColor, tableFrameColor, tableFrameWidth, tableBorderColor, tableBorderWidth)
+table.cell(table_id=tableInfoTrade, column=0, row=0, bgcolor=color.black)
+table.cell(table_id=tableInfoTrade, column=1, row=0, bgcolor=color.black)
+table.cell(table_id=tableInfoTrade, column=2, row=0, bgcolor=color.black)
+table.cell(table_id=tableInfoTrade, column=3, row=0, bgcolor=color.black)
 
-table.cell(table_id = tableInfoTrade, column = 0, row = 0, text = "Entry Side", text_color = color.black)
-table.cell(table_id = tableInfoTrade, column = 1, row = 0, text = "Entry Price", text_color = color.black)
-table.cell(table_id = tableInfoTrade, column = 2, row = 0, text = "Target Price", text_color = color.black)
-table.cell(table_id = tableInfoTrade, column = 3, row = 0, text = "Stop Loss Price", text_color = color.black)
+table.cell(table_id=tableInfoTrade, column=0, row=1, text='Entry Side/Lado da Entrada', text_color=color.black)
+table.cell(table_id=tableInfoTrade, column=1, row=1, text='Entry Price/Preço da Entrada', text_color=color.black)
+table.cell(table_id=tableInfoTrade, column=2, row=1, text='Take Profit Price/Preço Alvo Lucro', text_color=color.black)
+table.cell(table_id=tableInfoTrade, column=3, row=1, text='Stop Loss Price/Preço Stop Loss', text_color=color.black)
 
-table.cell(table_id = tableInfoTrade, column = 0, row = 1, text = isLongEntry ? 'LONG' : isShortEntry ? 'SHORT' : 'NONE', text_color = color.black, bgcolor = color.yellow)
-table.cell(table_id = tableInfoTrade, column = 1, row = 1, text = isLongEntry ? str.tostring(enterLong) : isShortEntry ? str.tostring(enterShort) : 'NONE', text_color = color.black, bgcolor = color.blue)
-table.cell(table_id = tableInfoTrade, column = 2, row = 1, text = isLongEntry ? str.tostring(targetLong) : isShortEntry ? str.tostring(targetShort) : 'NONE', text_color = color.black, bgcolor = color.green)
-table.cell(table_id = tableInfoTrade, column = 3, row = 1, text = isLongEntry ? str.tostring(stopLossLong) : isShortEntry ? str.tostring(stopLossShort) : 'NONE', text_color = color.black, bgcolor = color.red)
+table.cell(table_id=tableInfoTrade, column=0, row=2, text=isLongEntry ? 'LONG' : isShortEntry ? 'SHORT' : 'NONE/NADA', text_color=color.black, bgcolor=color.yellow)
+table.cell(table_id=tableInfoTrade, column=1, row=2, text=isLongEntry ? str.tostring(enterLong) : isShortEntry ? str.tostring(enterShort) : 'NONE/NADA', text_color=color.black, bgcolor=color.blue)
+table.cell(table_id=tableInfoTrade, column=2, row=2, text=isLongEntry ? str.tostring(targetLong) : isShortEntry ? str.tostring(targetShort) : 'NONE/NADA', text_color=color.black, bgcolor=color.green)
+table.cell(table_id=tableInfoTrade, column=3, row=2, text=isLongEntry ? str.tostring(stopLossLong) : isShortEntry ? str.tostring(stopLossShort) : 'NONE/NADA', text_color=color.black, bgcolor=color.red)
