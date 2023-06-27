@@ -10,9 +10,9 @@ emaL                  = input.int(80, title='EMA Length/Comprimento da Média M�
 highestHighL          = input.int(7, title='Highest High Length/Comprimento da Alta Maior', minval=1, step=1, tooltip='Fetches the highest high candle from length input. Use to set stop loss for short position./Obtém a vela de maior alta com base na medida fornecida. Usa para definir o stop loss para uma posição curta.')
 lowestLowL            = input.int(7, title='Lowest Low Length/Comprimento da Baixa Menor', minval=1, step=1, tooltip='Fetches the lowest low candle from length input. Use to set stop loss for long position./Obter a vela de menor baixa com base na medida fornecida. Usa para definir o stop loss para uma posição longa.')
 targetFactor          = input.float(1.6, title='Target Take Profit/Objetivo de Lucro Alvo', minval=0.1, step=0.1, tooltip='Calculate the take profit factor when entry position./Calcula o fator do alvo lucro ao entrar na posição.')
-emaTrend              = input.bool(true, title='Check Trend EMA/Verificar Tendência da Média Móvel Exponencial', tooltip='Use EMA as trend verify for opening position./Usa a EMA como verificação de tendência para abrir uma posição.')
-crossoverCheck        = input.bool(true, title='Add Another Crossover Check/Adicionar Mais uma Verificação de Cruzamento Superior', tooltip='This option is to add one more veryfication attempt to check if price is crossover upper bollinger band./Esta opção é para adicionar uma verificação adicional para avaliar se o preço cruza a banda superior da banda de bollinger.')
-crossunderCheck       = input.bool(true, title='Add Another Crossunder Check/Adicionar Mais uma Verificação de Cruzamento Inferior', tooltip='This option is to add one more veryfication attempt to check if price is crossunder lower bollinger band./Esta opção é para adicionar uma verificação adicional para avaliar se o preço cruza a banda inferior da banda de bollinger.')
+emaTrend              = input.bool(true, title='Check Trend EMA/Verificar Tendência da Média Móvel Exponencial', tooltip='Use EMA as trend verify for opening position./Usa a EMA como verificação de tendência para abrir posição.')
+crossoverCheck        = input.bool(false, title='Add Another Crossover Check/Adicionar Mais uma Verificação de Cruzamento Superior', tooltip='This option is to add one more veryfication attempt to check if price is crossover upper bollinger band./Esta opção é para adicionar uma verificação adicional para avaliar se o preço cruza a banda superior da banda de bollinger.')
+crossunderCheck       = input.bool(false, title='Add Another Crossunder Check/Adicionar Mais uma Verificação de Cruzamento Inferior', tooltip='This option is to add one more veryfication attempt to check if price is crossunder lower bollinger band./Esta opção é para adicionar uma verificação adicional para avaliar se o preço cruza a banda inferior da banda de bollinger.')
 insideBarPatternCheck = input.bool(true, title='Show Inside Bar Pattern/Mostrar Padrão de Inside Bar', tooltip='This option is to show possible inside bar pattern./Esta opção é para mostrar um possível padrão de inside bar.')
 
 [middle, upper, lower] = ta.bb(close, bbL, mult)
@@ -87,7 +87,7 @@ if (isLongCondition and not isLongEntry)
     isLongEntry  := true
     enterLong    := close
     stopLossLong := lowestLow
-    targetLong   := enterLong + math.abs(enterLong - stopLossLong) * targetFactor
+    targetLong   := (enterLong + (math.abs(enterLong - stopLossLong) * targetFactor))
     alertMessage = '{ "side/lado": "buy", "entry/entrada": ' + str.tostring(enterLong) + ', "stop": ' + str.tostring(stopLossLong) + ', "target/alvo": ' + str.tostring(targetLong) + ' }'
     alert(alertMessage)
     strategy.entry('Long', strategy.long)
@@ -97,7 +97,7 @@ if (isShortCondition and not isShortEntry)
     isShortEntry  := true
     enterShort    := close
     stopLossShort := highestHigh
-    targetShort   := enterShort - math.abs(enterShort - stopLossShort) * targetFactor
+    targetShort   := (enterShort - (math.abs(enterShort - stopLossShort) * targetFactor))
     alertMessage = '{ "side/lado": "sell", "entry/entrada": ' + str.tostring(enterShort) + ', "stop": ' + str.tostring(stopLossShort) + ', "target/alvo": ' + str.tostring(targetShort) + ' }'
     alert(alertMessage)
     strategy.entry('Short', strategy.short)
@@ -111,12 +111,13 @@ plot(ema, title='EMA', color=color.white)
 barcolor(insideBarPatternCheck and isInsideBar and isBarLong ? color.lime : insideBarPatternCheck and isInsideBar and isBarShort ? color.maroon : na, title='Inside Bar Color in Long Bar Long and in Short Bar Short/Cor do Inside Bar em Barra Longa Longa e em Barra Curta Curta')
 
 tablePosition    = position.bottom_right
-tableBorderColor = color.gray
 tableColumns     = 2
 tableRows        = 5
 tableFrameWidth  = 1
+tableBorderColor = color.gray
 tableBorderWidth = 1
-tableInfoTrade   = table.new(position=tablePosition, columns=tableColumns, rows=tableRows, frame_width=tableFrameWidth, border_color=tableBorderColor, border_width=tableBorderWidth)
+
+tableInfoTrade = table.new(position=tablePosition, columns=tableColumns, rows=tableRows, frame_width=tableFrameWidth, border_color=tableBorderColor, border_width=tableBorderWidth)
 
 table.cell(table_id=tableInfoTrade, column=0, row=0)
 table.cell(table_id=tableInfoTrade, column=1, row=0)
