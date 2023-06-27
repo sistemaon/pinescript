@@ -29,8 +29,8 @@ Please **read** the explanation carefully to better understand what this strateg
 * Length of Lowest Low (**lowestLowL**): Defines the **length** used to fetch the **lowest low** candle. _Default value is 7_.
 * Target Take Profit Factor (**targetFactor**): Determines the **factor** to _calculate_ the **take profit** level. _Default value is 1.6_.
 * Check Trend EMA (**emaTrend**): If enabled, uses **EMA** as a **trend** _verification_ for opening positions. _Default value is true_.
-* Add Another Crossover Check (**crossoverCheck**): If enabled, adds an **additional** _verification_ for price **crossing above** the **upper** Bollinger Band. _Default value is true_.
-* Add Another Crossunder Check (**crossunderCheck**): If enabled, adds an **additional** _verification_ for price **crossing below** the **lower** Bollinger Band. _Default value is true_.
+* Add Another Crossover Check (**crossoverCheck**): If enabled, adds an **additional** _verification_ for price **crossing above** the **upper** Bollinger Band. _Default value is false_.
+* Add Another Crossunder Check (**crossunderCheck**): If enabled, adds an **additional** _verification_ for price **crossing below** the **lower** Bollinger Band. _Default value is false_.
 * Show Inside Bar Pattern (**insideBarPatternCheck**): If enabled, **displays** the **inside bar** pattern. _Default value is true_.
 
 #### Calculation and Condition Variables
