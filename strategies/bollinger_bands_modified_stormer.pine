@@ -2,7 +2,7 @@
 // © AugustoErni
 
 //@version=5
-strategy('Bollinger Bands Modified (Stormer)', overlay=true, process_orders_on_close=true, calc_on_every_tick=false, calc_on_order_fills=false, initial_capital=12000, currency=currency.USD, default_qty_type=strategy.percent_of_equity, default_qty_value=20, pyramiding=0, commission_type=strategy.commission.percent, commission_value=0.12)
+strategy('Bollinger Bands Modified (Stormer)', overlay=true, process_orders_on_close=true, calc_on_every_tick=false, calc_on_order_fills=false, initial_capital=10000, currency=currency.USD, default_qty_type=strategy.percent_of_equity, default_qty_value=10, pyramiding=0, commission_type=strategy.commission.percent, commission_value=0.12)
 
 bbL                   = input.int(20, title='BB Length/Comprimento da Banda de Bollinger', minval=1, step=1, tooltip='Calculate the length of bollinger bands./Calcula o comprimento das bandas de bollinger.')
 mult                  = input.float(0.38, title='BB Standard Deviation/Desvio Padrão da Banda de Bollinger', minval=0.01, step=0.01, tooltip='Calculate the standard deviation of bollinger bands./Calcula o desvio padrão das bandas de bollinger.')
