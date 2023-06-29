@@ -1,0 +1,30 @@
+// This source code is subject to the terms of the Mozilla Public License 2.0 at https://mozilla.org/MPL/2.0/
+// © AugustoErni
+
+//@version=5
+strategy('Moving Average Rainbow (Stormer)', overlay=true, process_orders_on_close=true, calc_on_every_tick=true, calc_on_order_fills=false, initial_capital=10000, currency=currency.USD, default_qty_type=strategy.percent_of_equity, default_qty_value=10, pyramiding=0, commission_type=strategy.commission.percent, commission_value=0.12)
+
+maType                    = input.string('EMA', title='Moving Average Type/Tipo de Média Móvel', options=['EMA', 'SMA', 'RMA', 'WMA'], tooltip='This option is to select the type of Moving Average that the Rainbow will use./Esta opção é para selecionar o tipo de Média Móvel que o Rainbow utilizará.')
+isCalculateEmaDynamically = input.bool(false, title='Calculate MA Dynamically/Calcular MA Dinamicamente', tooltip='This option is to calculate the MA Rainbow dynamically; if not it will use the classic pattern./Esta opção é para calcular o MA Rainbow dinamicamente; caso contrário, será utilizado o padrão clássico.')
+
+calculateMa(maType, isCalculateEmaDynamically) =>
+    if (not isCalculateEmaDynamically or isCalculateEmaDynamically)
+        if (maType == 'SMA')
+            [ta.sma(close, 20), ta.sma(close, 25), ta.sma(close, 30), ta.sma(close, 35), ta.sma(close, 40), ta.sma(close, 45), ta.sma(close, 50), ta.sma(close, 55)]
+        else if (maType == 'RMA')
+            [ta.rma(close, 20), ta.rma(close, 25), ta.rma(close, 30), ta.rma(close, 35), ta.rma(close, 40), ta.rma(close, 45), ta.rma(close, 50), ta.rma(close, 55)]
+        else if (maType == 'WMA')
+            [ta.wma(close, 20), ta.wma(close, 25), ta.wma(close, 30), ta.wma(close, 35), ta.wma(close, 40), ta.wma(close, 45), ta.wma(close, 50), ta.wma(close, 55)]
+        else
+            [ta.ema(close, 20), ta.ema(close, 25), ta.ema(close, 30), ta.ema(close, 35), ta.ema(close, 40), ta.ema(close, 45), ta.ema(close, 50), ta.ema(close, 55)]
+
+[ma1, ma2, ma3, ma4, ma5, ma6, ma7, ma8] = calculateMa(maType, isCalculateEmaDynamically)
+
+plot(ma1, title='1st Moving Average', color=color.rgb(250, 250, 250))
+plot(ma2, title='2nd Moving Average', color=color.rgb(230, 230, 230))
+plot(ma3, title='3rd Moving Average', color=color.rgb(210, 210, 210))
+plot(ma4, title='4th Moving Average', color=color.rgb(190, 190, 190))
+plot(ma5, title='5th Moving Average', color=color.rgb(170, 170, 170))
+plot(ma6, title='6th Moving Average', color=color.rgb(150, 150, 150))
+plot(ma7, title='7th Moving Average', color=color.rgb(120, 120, 120))
+plot(ma8, title='8th Moving Average', color=color.rgb(100, 100, 100))
