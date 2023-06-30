@@ -52,8 +52,17 @@ maTouchPrice(ma1, ma2, ma3, ma4, ma5, ma6, ma7, ma8, isMaUptrend, isMaDowntrend)
             touchPrice := ma7
         else if (low <= ma7 and low >= ma8)
             touchPrice := ma8
+        else if (low <= ma8 and low >= ma9)
+            touchPrice := ma9
+        else if (low <= ma9 and low >= ma10)
+            touchPrice := ma10
+        else if (low <= ma10 and low >= ma11)
+            touchPrice := ma11
+        else if (low <= ma11 and low >= ma12)
+            touchPrice := ma12
         else
             touchPrice := 0.0
+    
 
 maMean = ((ma1 + ma2 + ma3 + ma4 + ma5 + ma6 + ma7 + ma8 + ma9 + ma10 + ma11 + ma12) / 12)
 isMaUptrend   = close > maMean ? 1 : 0 // ma1 > ma2 and ma2 > ma3 and ma3 > ma4 and ma4 > ma5 and ma5 > ma6 and ma6 > ma7 and ma7 > ma8 ? 1 : 0
@@ -81,8 +90,8 @@ if (isLongCondition and isPositionNone)
 // plot(isMaUptrend, title='isMaUptrend')
 // plot(isMaDowntrend, title='isMaDowntrend')
 // plot(strategy.position_size, title='strategy.position_size')
-// plot(strategy.position_avg_price, title='strategy.position_avg_price')
 plot(maMean, title='MA Mean')
+// plot(strategy.position_avg_price, title='strategy.position_avg_price')
 plot(ma1, title='1st Moving Average', color=color.rgb(240, 240, 240))
 plot(ma2, title='2nd Moving Average', color=color.rgb(220, 220, 220))
 plot(ma3, title='3rd Moving Average', color=color.rgb(200, 200, 200))
@@ -118,3 +127,6 @@ table.cell(table_id=tableInfoTrade, column=1, row=0)
 
 table.cell(table_id=tableInfoTrade, column=0, row=0, text='MA Mean', text_color=color.white)
 table.cell(table_id=tableInfoTrade, column=0, row=1, text=str.tostring(maMean), text_color=color.yellow)
+
+table.cell(table_id=tableInfoTrade, column=1, row=0, text='Position Average Price', text_color=color.white)
+table.cell(table_id=tableInfoTrade, column=1, row=1, text=str.tostring(strategy.position_avg_price), text_color=color.yellow)
