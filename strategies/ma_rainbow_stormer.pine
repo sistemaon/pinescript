@@ -7,8 +7,8 @@ strategy('Moving Average Rainbow (Stormer)', overlay=true, process_orders_on_clo
 maType       = input.string('EMA', title='Moving Average Type/Tipo de Média Móvel', options=['EMA', 'SMA', 'RMA', 'WMA'], tooltip='This option is to select the type of Moving Average that the Rainbow will use./Esta opção é para selecionar o tipo de Média Móvel que o Rainbow utilizará.')
 targetFactor = input.float(1.6, title='Target Take Profit/Objetivo de Lucro Alvo', minval=0.1, step=0.1, tooltip='Calculate the take profit factor when entry position./Calcula o fator do alvo lucro ao entrar na posição.')
 
-isOneTwoThreeTop    = high[2] > high[3] and high[2] > high[1] ? 1 : 0
-isOneTwoThreeBottom = low[2] < low[3] and low[2] < low[1] ? 1 : 0
+isOneTwoThreeTop    = high[1] > high[2] and high[1] > high ? 1 : 0
+isOneTwoThreeBottom = low[1] < low[2] and low[1] < low ? 1 : 0
 
 var curTopPrice     = 0.0
 var prevTopPrice    = 0.0
@@ -25,15 +25,15 @@ if (isOneTwoThreeBottom)
 
 mas(maType) =>
     if (maType == 'SMA')
-        [ta.sma(close, 20), ta.sma(close, 25), ta.sma(close, 30), ta.sma(close, 35), ta.sma(close, 40), ta.sma(close, 45), ta.sma(close, 50), ta.sma(close, 55)]
+        [ta.sma(close, 3), ta.sma(close, 5), ta.sma(close, 8), ta.sma(close, 13), ta.sma(close, 20), ta.sma(close, 25), ta.sma(close, 30), ta.sma(close, 35), ta.sma(close, 40), ta.sma(close, 45), ta.sma(close, 50), ta.sma(close, 55)]
     else if (maType == 'RMA')
-        [ta.rma(close, 20), ta.rma(close, 25), ta.rma(close, 30), ta.rma(close, 35), ta.rma(close, 40), ta.rma(close, 45), ta.rma(close, 50), ta.rma(close, 55)]
+        [ta.rma(close, 3), ta.rma(close, 5), ta.rma(close, 8), ta.rma(close, 13), ta.rma(close, 20), ta.rma(close, 25), ta.rma(close, 30), ta.rma(close, 35), ta.rma(close, 40), ta.rma(close, 45), ta.rma(close, 50), ta.rma(close, 55)]
     else if (maType == 'WMA')
-        [ta.wma(close, 20), ta.wma(close, 25), ta.wma(close, 30), ta.wma(close, 35), ta.wma(close, 40), ta.wma(close, 45), ta.wma(close, 50), ta.wma(close, 55)]
+        [ta.wma(close, 3), ta.wma(close, 5), ta.wma(close, 8), ta.wma(close, 13), ta.wma(close, 20), ta.wma(close, 25), ta.wma(close, 30), ta.wma(close, 35), ta.wma(close, 40), ta.wma(close, 45), ta.wma(close, 50), ta.wma(close, 55)]
     else
-        [ta.ema(close, 20), ta.ema(close, 25), ta.ema(close, 30), ta.ema(close, 35), ta.ema(close, 40), ta.ema(close, 45), ta.ema(close, 50), ta.ema(close, 55)]
+        [ta.ema(close, 3), ta.ema(close, 5), ta.ema(close, 8), ta.ema(close, 13), ta.ema(close, 20), ta.ema(close, 25), ta.ema(close, 30), ta.ema(close, 35), ta.ema(close, 40), ta.ema(close, 45), ta.ema(close, 50), ta.ema(close, 55)]
 
-[ma1, ma2, ma3, ma4, ma5, ma6, ma7, ma8] = mas(maType)
+[ma1, ma2, ma3, ma4, ma5, ma6, ma7, ma8, ma9, ma10, ma11, ma12] = mas(maType)
 
 maTouchPrice(ma1, ma2, ma3, ma4, ma5, ma6, ma7, ma8, isMaUptrend, isMaDowntrend) =>
     var touchPrice = 0.0
@@ -55,12 +55,13 @@ maTouchPrice(ma1, ma2, ma3, ma4, ma5, ma6, ma7, ma8, isMaUptrend, isMaDowntrend)
         else
             touchPrice := 0.0
 
-isMaUptrend   = ma1 > ma2 and ma2 > ma3 and ma3 > ma4 and ma4 > ma5 and ma5 > ma6 and ma6 > ma7 and ma7 > ma8 ? 1 : 0
-isMaDowntrend = ma1 < ma2 and ma2 < ma3 and ma3 < ma4 and ma4 < ma5 and ma5 < ma6 and ma6 < ma7 and ma7 < ma8 ? 1 : 0
+maMean = ((ma1 + ma2 + ma3 + ma4 + ma5 + ma6 + ma7 + ma8 + ma9 + ma10 + ma11 + ma12) / 12)
+isMaUptrend   = close > maMean ? 1 : 0 // ma1 > ma2 and ma2 > ma3 and ma3 > ma4 and ma4 > ma5 and ma5 > ma6 and ma6 > ma7 and ma7 > ma8 ? 1 : 0
+isMaDowntrend = close < maMean ? 1 : 0 // ma1 < ma2 and ma2 < ma3 and ma3 < ma4 and ma4 < ma5 and ma5 < ma6 and ma6 < ma7 and ma7 < ma8 ? 1 : 0
 
-prevTouchPriceUptrend          = maTouchPrice(ma1, ma2, ma3, ma4, ma5, ma6, ma7, ma8, isMaUptrend, isMaDowntrend)[1]
+touchPriceUptrend              = maTouchPrice(ma1, ma2, ma3, ma4, ma5, ma6, ma7, ma8, isMaUptrend, isMaDowntrend)[1]
 isCurCloseGreaterPrevHigh      = close > high[1] ? 1 : 0
-isPrevTouchPriceUptrendTouched = prevTouchPriceUptrend > 0.0 ? 1 : 0
+isPrevTouchPriceUptrendTouched = touchPriceUptrend > 0.0 ? 1 : 0
 
 isPositionNone  = na(strategy.position_avg_price) ? 1 : 0
 isPositionLong  = strategy.position_avg_price > 0 ? 1 : 0
@@ -68,7 +69,7 @@ isPositionShort = strategy.position_avg_price < 0 ? 1 : 0
 
 isLongCondition = isMaUptrend and isCurCloseGreaterPrevHigh and isPrevTouchPriceUptrendTouched ? 1 : 0
 if (isLongCondition and isPositionNone)
-    stopLossLong = prevTouchPriceUptrend
+    stopLossLong = touchPriceUptrend
     targetLong   = (close + (math.abs(close - stopLossLong) * targetFactor))
     alertMessage = '{ "side/lado": "buy", "entry/entrada": ' + str.tostring(close) + ', "stop": ' + str.tostring(stopLossLong) + ', "target/alvo": ' + str.tostring(targetLong) + ' }'
     alert(alertMessage)
@@ -76,11 +77,12 @@ if (isLongCondition and isPositionNone)
     strategy.exit('Exit Long', 'Long', stop=stopLossLong, limit=targetLong)
 
 // plot(isLongCondition, title='isLongCondition')
-// plot(prevTouchPriceUptrend, title='prevTouchPriceUptrend')
+// plot(touchPriceUptrend, title='touchPriceUptrend')
 // plot(isMaUptrend, title='isMaUptrend')
 // plot(isMaDowntrend, title='isMaDowntrend')
-plot(strategy.position_size, title='strategy.position_size')
-plot(strategy.position_avg_price, title='strategy.position_avg_price')
+// plot(strategy.position_size, title='strategy.position_size')
+// plot(strategy.position_avg_price, title='strategy.position_avg_price')
+plot(maMean, title='MA Mean')
 plot(ma1, title='1st Moving Average', color=color.rgb(240, 240, 240))
 plot(ma2, title='2nd Moving Average', color=color.rgb(220, 220, 220))
 plot(ma3, title='3rd Moving Average', color=color.rgb(200, 200, 200))
@@ -89,11 +91,30 @@ plot(ma5, title='5th Moving Average', color=color.rgb(160, 160, 160))
 plot(ma6, title='6th Moving Average', color=color.rgb(140, 140, 140))
 plot(ma7, title='7th Moving Average', color=color.rgb(120, 120, 120))
 plot(ma8, title='8th Moving Average', color=color.rgb(100, 100, 100))
+plot(ma9, title='9th Moving Average', color=color.rgb(80, 100, 100))
+plot(ma10, title='10th Moving Average', color=color.rgb(60, 100, 100))
+plot(ma11, title='11th Moving Average', color=color.rgb(40, 100, 100))
+plot(ma12, title='12th Moving Average', color=color.rgb(20, 100, 100))
 
 // plot(isOneTwoThreeTop, title='isOneTwoThreeTop')
-plot(curTopPrice, title='curTopPrice')
+// plot(curTopPrice, title='curTopPrice')
 // plot(prevTopPrice, title='prevTopPrice')
 
 // plot(isOneTwoThreeBottom, title='isOneTwoThreeBottom')
-plot(curBottomPrice, title='curBottomPrice')
+// plot(curBottomPrice, title='curBottomPrice')
 // plot(prevBottomPrice, title='prevBottomPrice')
+
+tablePosition    = position.bottom_right
+tableColumns     = 2
+tableRows        = 2
+tableFrameWidth  = 1
+tableBorderColor = color.gray
+tableBorderWidth = 1
+
+tableInfoTrade = table.new(position=tablePosition, columns=tableColumns, rows=tableRows, frame_width=tableFrameWidth, border_color=tableBorderColor, border_width=tableBorderWidth)
+
+table.cell(table_id=tableInfoTrade, column=0, row=0)
+table.cell(table_id=tableInfoTrade, column=1, row=0)
+
+table.cell(table_id=tableInfoTrade, column=0, row=0, text='MA Mean', text_color=color.white)
+table.cell(table_id=tableInfoTrade, column=0, row=1, text=str.tostring(maMean), text_color=color.yellow)
