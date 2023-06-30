@@ -62,6 +62,31 @@ maTouchPrice(ma1, ma2, ma3, ma4, ma5, ma6, ma7, ma8, isMaUptrend, isMaDowntrend)
             touchPrice := ma12
         else
             touchPrice := 0.0
+    if (isMaDowntrend)
+        if (high >= ma1 and high <= ma2)
+            touchPrice := ma2
+        else if (high >= ma2 and high <= ma3)
+            touchPrice := ma3
+        else if (high >= ma3 and high <= ma4)
+            touchPrice := ma4
+        else if (high >= ma4 and high <= ma5)
+            touchPrice := ma5
+        else if (high >= ma5 and high <= ma6)
+            touchPrice := ma6
+        else if (high >= ma6 and high <= ma7)
+            touchPrice := ma7
+        else if (high >= ma7 and high <= ma8)
+            touchPrice := ma8
+        else if (high >= ma8 and high <= ma9)
+            touchPrice := ma9
+        else if (high >= ma9 and high <= ma10)
+            touchPrice := ma10
+        else if (high >= ma10 and high <= ma11)
+            touchPrice := ma11
+        else if (high >= ma11 and high <= ma12)
+            touchPrice := ma12
+        else
+            touchPrice := 0.0
     
 
 maMean = ((ma1 + ma2 + ma3 + ma4 + ma5 + ma6 + ma7 + ma8 + ma9 + ma10 + ma11 + ma12) / 12)
