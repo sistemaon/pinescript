@@ -90,17 +90,16 @@ maTouchPriceDowntrend(ma1, ma2, ma3, ma4, ma5, ma6, ma7, ma8, isMaDowntrend) =>
             touchPrice := ma12
         else
             touchPrice := 0.0
-    
 
 maMean = ((ma1 + ma2 + ma3 + ma4 + ma5 + ma6 + ma7 + ma8 + ma9 + ma10 + ma11 + ma12) / 12)
-isMaUptrend   = close > maMean ? 1 : 0 // ma1 > ma2 and ma2 > ma3 and ma3 > ma4 and ma4 > ma5 and ma5 > ma6 and ma6 > ma7 and ma7 > ma8 ? 1 : 0
-isMaDowntrend = close < maMean ? 1 : 0 // ma1 < ma2 and ma2 < ma3 and ma3 < ma4 and ma4 < ma5 and ma5 < ma6 and ma6 < ma7 and ma7 < ma8 ? 1 : 0
+isMaUptrend   = close > maMean // and ma1 > ma2 and ma2 > ma3 and ma3 > ma4 and ma4 > ma5 and ma5 > ma6 and ma6 > ma7 and ma7 > ma8 and ma8 > ma9 and ma9 > ma10 and ma10 > ma11 and ma11 > ma12 ? 1 : 0 // ma1 > ma2 and ma2 > ma3 and ma3 > ma4 and ma4 > ma5 and ma5 > ma6 and ma6 > ma7 and ma7 > ma8 ? 1 : 0
+isMaDowntrend = close < maMean // and ma1 < ma2 and ma2 < ma3 and ma3 < ma4 and ma4 < ma5 and ma5 < ma6 and ma6 < ma7 and ma7 < ma8 and ma8 < ma9 and ma9 < ma10 and ma10 < ma11 and ma11 < ma12 ? 1 : 0 // ma1 < ma2 and ma2 < ma3 and ma3 < ma4 and ma4 < ma5 and ma5 < ma6 and ma6 < ma7 and ma7 < ma8 ? 1 : 0
 
 touchPriceUptrend                = maTouchPriceUptrend(ma1, ma2, ma3, ma4, ma5, ma6, ma7, ma8, isMaUptrend)[1]
 touchPriceDowntrend              = maTouchPriceDowntrend(ma1, ma2, ma3, ma4, ma5, ma6, ma7, ma8, isMaDowntrend)[1]
 
-isCurCloseGreaterPrevHigh        = close > high[1] ? 1 : 0
-isCurCloseLesserPrevHigh         = close < high[1] ? 1 : 0
+isCurHighGreaterPrevHigh = high > high[1] ? 1 : 0
+isCurLowLesserPrevLow    = low < low[1] ? 1 : 0
 
 isPrevTouchPriceUptrendTouched   = touchPriceUptrend > 0.0 ? 1 : 0
 isPrevTouchPriceDowntrendTouched = touchPriceDowntrend > 0.0 ? 1 : 0
@@ -112,8 +111,9 @@ isPositionNone  = na(strategy.position_avg_price) ? 1 : 0
 isPositionLong  = strategy.position_avg_price > 0 ? 1 : 0
 isPositionShort = strategy.position_avg_price < 0 ? 1 : 0
 
-isLongCondition  = isMaUptrend and isCurCloseGreaterPrevHigh and isPrevTouchedPriceUptrend ? 1 : 0
-isShortCondition = isMaDowntrend and isCurCloseLesserPrevHigh and isPrevTouchedPriceDowntrend ? 1 : 0
+isLongCondition  = isMaUptrend and isCurHighGreaterPrevHigh and isPrevTouchedPriceUptrend ? 1 : 0
+isShortCondition = isMaDowntrend and isCurLowLesserPrevLow and isPrevTouchedPriceDowntrend ? 1 : 0
+
 if (isLongCondition and isPositionNone)
     stopLossLong = touchPriceUptrend
     targetLong   = (close + (math.abs(close - stopLossLong) * targetFactor))
