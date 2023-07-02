@@ -119,6 +119,8 @@ if (isLongCondition and isPositionNone)
     stopLossLong = prevTouchPriceUptrend
     if (isCurLowLesserPrevLow)
         curLowToucedPrice = curTouchPriceUptrend
+        if (curLowToucedPrice == 0.0)
+            curLowToucedPrice := low
         stopLossLong := ((stopLossLong + curLowToucedPrice) / 2)
     targetLong   = (close + (math.abs(close - stopLossLong) * targetFactor))
     alertMessage = '{ "side/lado": "buy", "entry/entrada": ' + str.tostring(close) + ', "stop": ' + str.tostring(stopLossLong) + ', "target/alvo": ' + str.tostring(targetLong) + ' }'
@@ -127,6 +129,11 @@ if (isLongCondition and isPositionNone)
     strategy.exit('Exit Long', 'Long', stop=stopLossLong, limit=targetLong)
 if (isShortCondition and isPositionNone)
     stopLossShort = prevTouchPriceDowntrend
+    if (isCurHighGreaterPrevHigh)
+        curHighToucedPrice = curTouchPriceDowntrend
+        if (curHighToucedPrice == 0.0)
+            curHighToucedPrice := high
+        stopLossShort := ((stopLossShort + curHighToucedPrice) / 2)
     targetShort   = (close - (math.abs(close - stopLossShort) * targetFactor))
     alertMessage  = '{ "side/lado": "sell", "entry/entrada": ' + str.tostring(close) + ', "stop": ' + str.tostring(stopLossShort) + ', "target/alvo": ' + str.tostring(targetShort) + ' }'
     alert(alertMessage)
