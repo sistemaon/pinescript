@@ -95,14 +95,16 @@ maMean        = ((ma1 + ma2 + ma3 + ma4 + ma5 + ma6 + ma7 + ma8 + ma9 + ma10 + m
 isMaUptrend   = close > maMean and ma5 > ma6 and ma6 > ma7 and ma7 > ma8
 isMaDowntrend = close < maMean and ma5 < ma6 and ma6 < ma7 and ma7 < ma8
 
-touchPriceUptrend   = maTouchPriceUptrend(ma1, ma2, ma3, ma4, ma5, ma6, ma7, ma8, isMaUptrend)[1]
-touchPriceDowntrend = maTouchPriceDowntrend(ma1, ma2, ma3, ma4, ma5, ma6, ma7, ma8, isMaDowntrend)[1]
+curTouchPriceUptrend    = maTouchPriceUptrend(ma1, ma2, ma3, ma4, ma5, ma6, ma7, ma8, isMaUptrend)
+prevTouchPriceUptrend   = maTouchPriceUptrend(ma1, ma2, ma3, ma4, ma5, ma6, ma7, ma8, isMaUptrend)[1]
+curTouchPriceDowntrend  = maTouchPriceDowntrend(ma1, ma2, ma3, ma4, ma5, ma6, ma7, ma8, isMaDowntrend)
+prevTouchPriceDowntrend = maTouchPriceDowntrend(ma1, ma2, ma3, ma4, ma5, ma6, ma7, ma8, isMaDowntrend)[1]
 
 isCurHighGreaterPrevHigh = high > high[1] ? 1 : 0
 isCurLowLesserPrevLow    = low < low[1] ? 1 : 0
 
-isPrevTouchPriceUptrendTouched   = touchPriceUptrend > 0.0 ? 1 : 0
-isPrevTouchPriceDowntrendTouched = touchPriceDowntrend > 0.0 ? 1 : 0
+isPrevTouchPriceUptrendTouched   = prevTouchPriceUptrend > 0.0 ? 1 : 0
+isPrevTouchPriceDowntrendTouched = prevTouchPriceDowntrend > 0.0 ? 1 : 0
 
 isPrevTouchedPriceUptrend   = isPrevTouchPriceUptrendTouched and isMaUptrend ? 1 : 0
 isPrevTouchedPriceDowntrend = isPrevTouchPriceDowntrendTouched and isMaDowntrend ? 1 : 0
@@ -114,14 +116,17 @@ isPositionShort = strategy.position_avg_price < 0 ? 1 : 0
 isLongCondition  = isMaUptrend and isCurHighGreaterPrevHigh and isPrevTouchedPriceUptrend ? 1 : 0
 isShortCondition = isMaDowntrend and isCurLowLesserPrevLow and isPrevTouchedPriceDowntrend ? 1 : 0
 if (isLongCondition and isPositionNone)
-    stopLossLong = touchPriceUptrend
+    stopLossLong = prevTouchPriceUptrend
+    if (isCurLowLesserPrevLow)
+        curLowToucedPrice = curTouchPriceUptrend
+        stopLossLong := ((stopLossLong + curLowToucedPrice) / 2)
     targetLong   = (close + (math.abs(close - stopLossLong) * targetFactor))
     alertMessage = '{ "side/lado": "buy", "entry/entrada": ' + str.tostring(close) + ', "stop": ' + str.tostring(stopLossLong) + ', "target/alvo": ' + str.tostring(targetLong) + ' }'
     alert(alertMessage)
     strategy.entry('Long', strategy.long)
     strategy.exit('Exit Long', 'Long', stop=stopLossLong, limit=targetLong)
 if (isShortCondition and isPositionNone)
-    stopLossShort = touchPriceDowntrend
+    stopLossShort = prevTouchPriceDowntrend
     targetShort   = (close - (math.abs(close - stopLossShort) * targetFactor))
     alertMessage  = '{ "side/lado": "sell", "entry/entrada": ' + str.tostring(close) + ', "stop": ' + str.tostring(stopLossShort) + ', "target/alvo": ' + str.tostring(targetShort) + ' }'
     alert(alertMessage)
@@ -129,12 +134,12 @@ if (isShortCondition and isPositionNone)
     strategy.exit('Exit Short', 'Short', stop=stopLossShort, limit=targetShort)
 
 // plot(isLongCondition, title='isLongCondition')
-// plot(touchPriceUptrend, title='touchPriceUptrend')
+// plot(prevTouchPriceUptrend, title='prevTouchPriceUptrend')
 // plot(isMaUptrend, title='isMaUptrend')
 // plot(isMaDowntrend, title='isMaDowntrend')
 // plot(strategy.position_size, title='strategy.position_size')
 // plot(maMean, title='MA Mean')
-// plot(touchPriceDowntrend, title='touchPriceDowntrend')
+// plot(prevTouchPriceDowntrend, title='prevTouchPriceDowntrend')
 // plot(strategy.position_avg_price, title='strategy.position_avg_price')
 plot(ma1, title='1st Moving Average', color=color.rgb(240, 240, 240))
 plot(ma2, title='2nd Moving Average', color=color.rgb(220, 220, 220))
