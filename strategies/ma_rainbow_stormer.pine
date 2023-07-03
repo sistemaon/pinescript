@@ -110,12 +110,16 @@ isPrevTouchedPriceUptrend   = isPrevTouchPriceUptrendTouched and isMaUptrend ? 1
 isPrevTouchedPriceDowntrend = isPrevTouchPriceDowntrendTouched and isMaDowntrend ? 1 : 0
 
 isPositionNone  = na(strategy.position_avg_price) ? 1 : 0
-isPositionLong  = strategy.position_avg_price > 0 ? 1 : 0
-isPositionShort = strategy.position_avg_price < 0 ? 1 : 0
+isPositionLong  = strategy.position_size > 0 ? 1 : 0
+isPositionShort = strategy.position_size < 0 ? 1 : 0
 
 isLongCondition  = isMaUptrend and isCurHighGreaterPrevHigh and isPrevTouchedPriceUptrend ? 1 : 0
 isShortCondition = isMaDowntrend and isCurLowLesserPrevLow and isPrevTouchedPriceDowntrend ? 1 : 0
+
+var float shortPositionLowestLow = na
+
 if (isLongCondition and isPositionNone)
+    shortPositionLowestLow := na
     stopLossLong = prevTouchPriceUptrend
     if (isCurLowLesserPrevLow)
         curLowToucedPrice = curTouchPriceUptrend
@@ -128,6 +132,7 @@ if (isLongCondition and isPositionNone)
     strategy.entry('Long', strategy.long)
     strategy.exit('Exit Long', 'Long', stop=stopLossLong, limit=targetLong)
 if (isShortCondition and isPositionNone)
+    shortPositionLowestLow := na
     stopLossShort = prevTouchPriceDowntrend
     if (isCurHighGreaterPrevHigh)
         curHighToucedPrice = curTouchPriceDowntrend
@@ -140,6 +145,12 @@ if (isShortCondition and isPositionNone)
     strategy.entry('Short', strategy.short)
     strategy.exit('Exit Short', 'Short', stop=stopLossShort, limit=targetShort)
 
+if (isPositionShort) 
+    curLowestLow = low
+    if (curLowestLow < shortPositionLowestLow or na(shortPositionLowestLow))
+        shortPositionLowestLow := curLowestLow
+
+
 // plot(isLongCondition, title='isLongCondition')
 // plot(prevTouchPriceUptrend, title='prevTouchPriceUptrend')
 // plot(isMaUptrend, title='isMaUptrend')
@@ -147,7 +158,9 @@ if (isShortCondition and isPositionNone)
 // plot(strategy.position_size, title='strategy.position_size')
 // plot(maMean, title='MA Mean')
 // plot(prevTouchPriceDowntrend, title='prevTouchPriceDowntrend')
-// plot(strategy.position_avg_price, title='strategy.position_avg_price')
+plot(strategy.position_avg_price, title='strategy.position_avg_price')
+plot(isPositionShort, title='isPositionShort')
+plot(shortPositionLowestLow, title='shortPositionLowestLow')
 plot(ma1, title='1st Moving Average', color=color.rgb(240, 240, 240))
 plot(ma2, title='2nd Moving Average', color=color.rgb(220, 220, 220))
 plot(ma3, title='3rd Moving Average', color=color.rgb(200, 200, 200))
@@ -155,11 +168,11 @@ plot(ma4, title='4th Moving Average', color=color.rgb(180, 180, 180))
 plot(ma5, title='5th Moving Average', color=color.rgb(160, 160, 160))
 plot(ma6, title='6th Moving Average', color=color.rgb(140, 140, 140))
 plot(ma7, title='7th Moving Average', color=color.rgb(120, 120, 120))
-plot(ma8, title='8th Moving Average', color=color.rgb(100, 100, 100))
-plot(ma9, title='9th Moving Average', color=color.rgb(80, 100, 100))
-plot(ma10, title='10th Moving Average', color=color.rgb(60, 100, 100))
-plot(ma11, title='11th Moving Average', color=color.rgb(40, 100, 100))
-plot(ma12, title='12th Moving Average', color=color.rgb(20, 100, 100))
+plot(ma8, title='8th Moving Average', color=color.rgb(100, 120, 120))
+plot(ma9, title='9th Moving Average', color=color.rgb(80, 120, 120))
+plot(ma10, title='10th Moving Average', color=color.rgb(60, 120, 120))
+plot(ma11, title='11th Moving Average', color=color.rgb(40, 120, 120))
+plot(ma12, title='12th Moving Average', color=color.rgb(20, 120, 120))
 
 // plot(isOneTwoThreeTop, title='isOneTwoThreeTop')
 // plot(curTopPrice, title='curTopPrice')
