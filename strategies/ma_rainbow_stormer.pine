@@ -117,11 +117,14 @@ isLongCondition  = isMaUptrend and isCurHighGreaterPrevHigh and isPrevTouchedPri
 isShortCondition = isMaDowntrend and isCurLowLesserPrevLow and isPrevTouchedPriceDowntrend ? 1 : 0
 
 var float shortPositionLowestLow = na
+var float longPositionHighestHigh = na
 var float stopLossShort = na
+var float stopLossLong = na
 
 if (isLongCondition and isPositionNone)
     shortPositionLowestLow := na
-    stopLossLong = prevTouchPriceUptrend
+    longPositionHighestHigh := na
+    stopLossLong := prevTouchPriceUptrend
     if (isCurLowLesserPrevLow)
         curLowToucedPrice = curTouchPriceUptrend
         if (curLowToucedPrice == 0.0)
@@ -134,6 +137,7 @@ if (isLongCondition and isPositionNone)
     strategy.exit('Exit Long', 'Long', stop=stopLossLong, limit=targetLong)
 if (isShortCondition and isPositionNone)
     shortPositionLowestLow := na
+    longPositionHighestHigh := na
     stopLossShort := prevTouchPriceDowntrend
     if (isCurHighGreaterPrevHigh)
         curHighToucedPrice = curTouchPriceDowntrend
@@ -150,8 +154,15 @@ if (isPositionShort)
     curLowestLow = low
     if (curLowestLow < shortPositionLowestLow or na(shortPositionLowestLow))
         shortPositionLowestLow := curLowestLow
-    if (ma1 > ma2 and ma2 > ma3 and ma3 > ma4 and shortPositionLowestLow < strategy.position_avg_price)
+    if (isMaUptrend and shortPositionLowestLow < strategy.position_avg_price) // ma1 > ma2 and ma2 > ma3 and ma3 > ma4 and 
         strategy.exit('Exit Short', 'Short', stop=stopLossShort, limit=shortPositionLowestLow)
+
+if (isPositionLong) 
+    curHighestHigh = high
+    if (curHighestHigh > longPositionHighestHigh or na(longPositionHighestHigh))
+        longPositionHighestHigh := curHighestHigh
+    if (isMaDowntrend and longPositionHighestHigh > strategy.position_avg_price) // ma1 < ma2 and ma2 < ma3 and ma3 < ma4 and
+        strategy.exit('Exit Long', 'Long', stop=stopLossLong, limit=longPositionHighestHigh)
 
 
 // plot(isLongCondition, title='isLongCondition')
