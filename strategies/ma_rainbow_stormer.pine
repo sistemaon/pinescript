@@ -84,7 +84,8 @@ isCloseGreaterMaMean = close > maMean ? 1 : 0
 isCloseLesserMaMean  = close < maMean ? 1 : 0
 isMaUptrend          = isCloseGreaterMaMean and isMa5To8Above ? 1 : 0
 isMaDowntrend        = isCloseLesserMaMean and isMa5To8Below ? 1 : 0
-
+isUptrend            = isMaUptrend ? 'UPTREND' : na
+isDowntrend          = isMaDowntrend ? 'DOWNTREND' : na
 
 curTouchPriceUptrend    = maTouchPriceTrend(ma1, ma2, ma3, ma4, ma5, ma6, ma7, ma8, isUptrend)
 prevTouchPriceUptrend   = curTouchPriceUptrend[1]
