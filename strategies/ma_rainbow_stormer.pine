@@ -126,6 +126,54 @@ var float targetShort                = na
 var bool isTurnoverTrendLongTrigger  = na
 var bool isTurnoverTrendShortTrigger = na
 
+if (isLongCondition and isPositionClose or isLongCondition and isPositionShort)
+    isTurnoverTrendLongTrigger  := na
+    isTurnoverTrendShortTrigger := na
+    shortPositionLowestLow      := na
+    longPositionHighestHigh     := na
+    stopLossLong                := prevTouchPriceUptrend
+    if (isCurLowLesserPrevLow)
+        curLowToucedPrice = na(curTouchPriceUptrend) ? low : curTouchPriceUptrend
+        stopLossLong      := na(curTouchPriceUptrend) ? ((stopLossLong + curLowToucedPrice) / 2) : curLowToucedPrice
+    targetLong   := (close + (math.abs(close - stopLossLong) * targetFactor))
+    if (targetLong > 0 and stopLossLong > 0)
+        alertMessage = '{ "side/lado": "buy", "entry/entrada": ' + str.tostring(close) + ', "stop": ' + str.tostring(stopLossLong) + ', "target/alvo": ' + str.tostring(targetLong) + ' }'
+        alert(alertMessage)
+        strategy.entry('Long', strategy.long)
+        strategy.exit('Exit Long', 'Long', stop=stopLossLong, limit=targetLong)
+
+if (isShortCondition and isPositionClose or isShortCondition and isPositionLong)
+    isTurnoverTrendLongTrigger  := na
+    isTurnoverTrendShortTrigger := na
+    shortPositionLowestLow      := na
+    longPositionHighestHigh     := na
+    stopLossShort               := prevTouchPriceDowntrend
+    if (isCurHighGreaterPrevHigh)
+        curHighToucedPrice = na(curTouchPriceDowntrend) ? high : curTouchPriceDowntrend
+        stopLossShort      := na(curTouchPriceDowntrend) ? ((stopLossShort + curHighToucedPrice) / 2) : curHighToucedPrice
+    targetShort  := (close - (math.abs(close - stopLossShort) * targetFactor))
+    if (targetShort > 0 and stopLossShort > 0)
+        alertMessage = '{ "side/lado": "sell", "entry/entrada": ' + str.tostring(close) + ', "stop": ' + str.tostring(stopLossShort) + ', "target/alvo": ' + str.tostring(targetShort) + ' }'
+        alert(alertMessage)
+        strategy.entry('Short', strategy.short)
+        strategy.exit('Exit Short', 'Short', stop=stopLossShort, limit=targetShort)
+
+if (verifyTurnoverTrend and isPositionLong)
+    curHighestHigh = high
+    if (curHighestHigh > longPositionHighestHigh or na(longPositionHighestHigh))
+        longPositionHighestHigh := curHighestHigh
+    if (isMa1To4Below and isCloseLesserMaMean and longPositionHighestHigh > strategy.position_avg_price)
+        isTurnoverTrendLongTrigger := true
+        strategy.exit('Exit Long', 'Long', stop=stopLossLong, limit=longPositionHighestHigh)
+
+if (verifyTurnoverTrend and isPositionShort)
+    curLowestLow = low
+    if (curLowestLow < shortPositionLowestLow or na(shortPositionLowestLow))
+        shortPositionLowestLow := curLowestLow
+    if (isMa1To4Above and isCloseGreaterMaMean and shortPositionLowestLow < strategy.position_avg_price)
+        isTurnoverTrendShortTrigger := true
+        strategy.exit('Exit Short', 'Short', stop=stopLossShort, limit=shortPositionLowestLow)
+
 plot(ma1, title='1st Moving Average', color=color.rgb(240, 240, 240))
 plot(ma2, title='2nd Moving Average', color=color.rgb(220, 220, 220))
 plot(ma3, title='3rd Moving Average', color=color.rgb(200, 200, 200))
