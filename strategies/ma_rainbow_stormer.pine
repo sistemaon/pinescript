@@ -7,7 +7,7 @@ strategy('Moving Average Rainbow (Stormer)', overlay=true, process_orders_on_clo
 maType               = input.string('EMA', title='Moving Average Type/Tipo de Média Móvel', options=['EMA', 'SMA', 'RMA', 'WMA'], tooltip='This option is to select the type of Moving Average that the Rainbow will use./Esta opção é para selecionar o tipo de Média Móvel que o Rainbow utilizará.')
 targetFactor         = input.float(1.6, title='Target Take Profit/Objetivo de Lucro Alvo', minval=0.1, step=0.1, tooltip='Calculate the take profit factor when entry position./Calcula o fator do alvo lucro ao entrar na posição.')
 verifyTurnoverTrend  = input.bool(true, title='Verify Turnover Trend/Verificar Tendência de Rotatividade', tooltip='This option checks for a supposedly turnover trend and setup new target (for long is the highest high and for short is the lowest low identified)./Esta opção verifica uma suposta tendência de rotatividade e estabelece um novo objetivo (para long é a máxima mais alta, para short é a mínima mais baixa identificados).')
-verifyTurnoverSignal = input.bool(true, title='Verify Turnover Signal/Verificar Sinal de Rotatividade', tooltip='This option checks for a supposedly turnover signal, closing the current position and opening a new one (for long it will close and open a new for short, for short it will close and open a new for long)./Essa opção verifica um sinal de possível reversão, fechando a posição atual e abrindo uma nova (para long fechará e abrirá uma nova para short, para short fechará e abrirá uma nova para long).')
+verifyTurnoverSignal = input.bool(false, title='Verify Turnover Signal/Verificar Sinal de Rotatividade', tooltip='This option checks for a supposedly turnover signal, closing the current position and opening a new one (for long it will close and open a new for short, for short it will close and open a new for long)./Essa opção verifica um sinal de possível reversão, fechando a posição atual e abrindo uma nova (para long fechará e abrirá uma nova para short, para short fechará e abrirá uma nova para long).')
 
 isOneTwoThreeTop    = high[1] > high[2] and high[1] > high ? 1 : 0
 isOneTwoThreeBottom = low[1] < low[2] and low[1] < low ? 1 : 0
@@ -126,7 +126,7 @@ var float targetShort                = na
 var bool isTurnoverTrendLongTrigger  = na
 var bool isTurnoverTrendShortTrigger = na
 
-if (isLongCondition and isPositionClose or isLongCondition and isPositionShort)
+if ((isLongCondition and isPositionClose) or (verifyTurnoverSignal and isLongCondition and isPositionShort))
     isTurnoverTrendLongTrigger  := na
     isTurnoverTrendShortTrigger := na
     shortPositionLowestLow      := na
@@ -142,7 +142,7 @@ if (isLongCondition and isPositionClose or isLongCondition and isPositionShort)
         strategy.entry('Long', strategy.long)
         strategy.exit('Exit Long', 'Long', stop=stopLossLong, limit=targetLong)
 
-if (isShortCondition and isPositionClose or isShortCondition and isPositionLong)
+if ((isShortCondition and isPositionClose) or (verifyTurnoverSignal and isShortCondition and isPositionLong))
     isTurnoverTrendLongTrigger  := na
     isTurnoverTrendShortTrigger := na
     shortPositionLowestLow      := na
