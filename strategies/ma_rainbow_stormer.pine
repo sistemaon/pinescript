@@ -21,9 +21,9 @@ mas(maType) =>
 
 [ma1, ma2, ma3, ma4, ma5, ma6, ma7, ma8, ma9, ma10, ma11, ma12] = mas(maType)
 
-maTouchPriceUptrend(ma1, ma2, ma3, ma4, ma5, ma6, ma7, ma8, isMaUptrend) =>
+maTouchPriceTrend(ma1, ma2, ma3, ma4, ma5, ma6, ma7, ma8, trend) =>
     var float touchPrice = na
-    if (isMaUptrend)
+    if (trend == 'UPTREND')
         if (low <= ma1 and low >= ma2)
             touchPrice := ma2
         else if (low <= ma2 and low >= ma3)
@@ -48,10 +48,7 @@ maTouchPriceUptrend(ma1, ma2, ma3, ma4, ma5, ma6, ma7, ma8, isMaUptrend) =>
             touchPrice := ma12
         else
             touchPrice := na
-
-maTouchPriceDowntrend(ma1, ma2, ma3, ma4, ma5, ma6, ma7, ma8, isMaDowntrend) =>
-    var float touchPrice = na
-    if (isMaDowntrend)
+    else if (trend == 'DOWNTREND')
         if (high >= ma1 and high <= ma2)
             touchPrice := ma2
         else if (high >= ma2 and high <= ma3)
@@ -88,9 +85,10 @@ isCloseLesserMaMean  = close < maMean ? 1 : 0
 isMaUptrend          = isCloseGreaterMaMean and isMa5To8Above ? 1 : 0
 isMaDowntrend        = isCloseLesserMaMean and isMa5To8Below ? 1 : 0
 
-curTouchPriceUptrend    = maTouchPriceUptrend(ma1, ma2, ma3, ma4, ma5, ma6, ma7, ma8, isMaUptrend)
+
+curTouchPriceUptrend    = maTouchPriceTrend(ma1, ma2, ma3, ma4, ma5, ma6, ma7, ma8, isUptrend)
 prevTouchPriceUptrend   = curTouchPriceUptrend[1]
-curTouchPriceDowntrend  = maTouchPriceDowntrend(ma1, ma2, ma3, ma4, ma5, ma6, ma7, ma8, isMaDowntrend)
+curTouchPriceDowntrend  = maTouchPriceTrend(ma1, ma2, ma3, ma4, ma5, ma6, ma7, ma8, isDowntrend)
 prevTouchPriceDowntrend = curTouchPriceDowntrend[1]
 
 isCurHighGreaterPrevHigh = high > high[1] ? 1 : 0
