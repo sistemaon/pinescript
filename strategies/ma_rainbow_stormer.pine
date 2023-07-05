@@ -9,14 +9,6 @@ targetFactor         = input.float(1.6, title='Target Take Profit/Objetivo de Lu
 verifyTurnoverTrend  = input.bool(true, title='Verify Turnover Trend/Verificar Tendência de Rotatividade', tooltip='This option checks for a supposedly turnover trend and setup new target (for long is the highest high and for short is the lowest low identified)./Esta opção verifica uma suposta tendência de rotatividade e estabelece um novo objetivo (para long é a máxima mais alta, para short é a mínima mais baixa identificados).')
 verifyTurnoverSignal = input.bool(false, title='Verify Turnover Signal/Verificar Sinal de Rotatividade', tooltip='This option checks for a supposedly turnover signal, closing the current position and opening a new one (for long it will close and open a new for short, for short it will close and open a new for long)./Essa opção verifica um sinal de possível reversão, fechando a posição atual e abrindo uma nova (para long fechará e abrirá uma nova para short, para short fechará e abrirá uma nova para long).')
 
-isOneTwoThreeTop    = high[1] > high[2] and high[1] > high ? 1 : 0
-isOneTwoThreeBottom = low[1] < low[2] and low[1] < low ? 1 : 0
-
-var float curTopPrice     = na
-var float prevTopPrice    = na
-var float curBottomPrice  = na
-var float prevBottomPrice = na
-
 mas(maType) =>
     if (maType == 'SMA')
         [ta.sma(close, 3), ta.sma(close, 5), ta.sma(close, 8), ta.sma(close, 13), ta.sma(close, 20), ta.sma(close, 25), ta.sma(close, 30), ta.sma(close, 35), ta.sma(close, 40), ta.sma(close, 45), ta.sma(close, 50), ta.sma(close, 55)]
@@ -127,10 +119,10 @@ var bool isTurnoverTrendLongTrigger  = na
 var bool isTurnoverTrendShortTrigger = na
 
 if ((isLongCondition and isPositionClose) or (verifyTurnoverSignal and isLongCondition and isPositionShort))
+    longPositionHighestHigh     := na
+    shortPositionLowestLow      := na
     isTurnoverTrendLongTrigger  := na
     isTurnoverTrendShortTrigger := na
-    shortPositionLowestLow      := na
-    longPositionHighestHigh     := na
     stopLossLong                := prevTouchPriceUptrend
     if (isCurLowLesserPrevLow)
         curLowToucedPrice = na(curTouchPriceUptrend) ? low : curTouchPriceUptrend
@@ -143,10 +135,10 @@ if ((isLongCondition and isPositionClose) or (verifyTurnoverSignal and isLongCon
         strategy.exit('Exit Long', 'Long', stop=stopLossLong, limit=targetLong)
 
 if ((isShortCondition and isPositionClose) or (verifyTurnoverSignal and isShortCondition and isPositionLong))
+    longPositionHighestHigh     := na
+    shortPositionLowestLow      := na
     isTurnoverTrendLongTrigger  := na
     isTurnoverTrendShortTrigger := na
-    shortPositionLowestLow      := na
-    longPositionHighestHigh     := na
     stopLossShort               := prevTouchPriceDowntrend
     if (isCurHighGreaterPrevHigh)
         curHighToucedPrice = na(curTouchPriceDowntrend) ? high : curTouchPriceDowntrend
