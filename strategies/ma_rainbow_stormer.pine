@@ -169,6 +169,8 @@ if (verifyTurnoverTrend and isPositionLong)
         longPositionHighestHigh := curHighestHigh
     if (isMa1To4Below and isCloseLesserMaMean and longPositionHighestHigh > strategy.position_avg_price)
         isTurnoverTrendLongTrigger := true
+        alertMessage = '{ "side/lado": "buy", "stop": ' + str.tostring(stopLossLong) + ', "target/alvo": ' + str.tostring(longPositionHighestHigh) + ', "new setup/nova definição": ' + str.tostring(isTurnoverTrendLongTrigger) + ' }'
+        alert(alertMessage)
         strategy.exit('Exit Long', 'Long', stop=stopLossLong, limit=longPositionHighestHigh)
 
 if (verifyTurnoverTrend and isPositionShort)
@@ -177,6 +179,8 @@ if (verifyTurnoverTrend and isPositionShort)
         shortPositionLowestLow := curLowestLow
     if (isMa1To4Above and isCloseGreaterMaMean and shortPositionLowestLow < strategy.position_avg_price)
         isTurnoverTrendShortTrigger := true
+        alertMessage = '{ "side/lado": "sell", "stop": ' + str.tostring(stopLossShort) + ', "target/alvo": ' + str.tostring(shortPositionLowestLow) + ', "new setup/nova definição": ' + str.tostring(isTurnoverTrendShortTrigger) + ' }'
+        alert(alertMessage)
         strategy.exit('Exit Short', 'Short', stop=stopLossShort, limit=shortPositionLowestLow)
 
 plot(ma1, title='1st Moving Average', color=color.rgb(240, 240, 240))
@@ -198,6 +202,7 @@ tableRows        = 7
 tableFrameWidth  = 1
 tableBorderColor = color.gray
 tableBorderWidth = 1
+
 tableInfoTrade   = table.new(position=tablePosition, columns=tableColumns, rows=tableRows, frame_width=tableFrameWidth, border_color=tableBorderColor, border_width=tableBorderWidth)
 
 table.cell(table_id=tableInfoTrade, column=0, row=0)
