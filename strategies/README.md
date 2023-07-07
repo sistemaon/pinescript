@@ -126,9 +126,10 @@ Please **read** the explanation carefully to better understand what this strateg
 
 ##### Long Conditions
 ###### Stop Loss
-* Stop loss **stopLossLong** is defined by fetching the **prevTouchPriceUptrend** _previous touched moving average low price_ touched one of the twelve _moving averages_.
+* Stop loss **stopLossLong** is defined by fetching the **prevTouchPriceUptrend** _previous touched moving average low price_ touched one of the twelve _moving averages_.\
 If **isCurLowLesserPrevLow** _current low price_ is lesser than the _previous low price_, then it will check **curTouchPriceUptrend** _current touched moving average low price_ is not available (**na**) variable, to return the _current low price_ or the _low price_ from **curTouchPriceUptrend**, redefining then the stop loss **stopLossLong** checking if the _low price_ from **curTouchPriceUptrend** is not available (**na**), to recalculate the new value of the stop loss by summing _previous_ **stopLossLong** value with **curLowToucedPrice** _current touched moving average low price_ divided by 2 or returning the only the **curLowToucedPrice** _current touched moving average low price_.
 
 #### Trade Information Table
+
 ---
 ---
