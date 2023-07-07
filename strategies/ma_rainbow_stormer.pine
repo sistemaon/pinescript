@@ -4,22 +4,22 @@
 //@version=5
 strategy('Moving Average Rainbow (Stormer)', overlay=true, process_orders_on_close=true, calc_on_every_tick=false, calc_on_order_fills=false, initial_capital=10000, currency=currency.USD, default_qty_type=strategy.percent_of_equity, default_qty_value=10, pyramiding=0, commission_type=strategy.commission.percent, commission_value=0.12)
 
-maType                  = input.string('EMA', title='Moving Average Type/Tipo de Média Móvel', options=['EMA', 'SMA', 'RMA', 'WMA', 'HMA', 'VWMA'], tooltip='This option is to select the type of Moving Average that the Rainbow will use./Esta opção é para selecionar o tipo de Média Móvel que o Rainbow utilizará.', group='Moving Averages/Médias Móveis')
-customMasLengthFirst    = input.int(3, title='MA #1', minval=1, step=1, tooltip='First MA length./Comprimento da primeira MA.', group='Moving Averages/Médias Móveis')
-customMasLengthSecond   = input.int(5, title='MA #2', minval=1, step=1, tooltip='Second MA length./Comprimento da segunda MA.', group='Moving Averages/Médias Móveis')
-customMasLengthThird    = input.int(8, title='MA #3', minval=1, step=1, tooltip='Third MA length./Comprimento da terceira MA.', group='Moving Averages/Médias Móveis')
-customMasLengthFourth   = input.int(13, title='MA #4', minval=1, step=1, tooltip='Fourth MA length./Comprimento da quarta MA.', group='Moving Averages/Médias Móveis')
-customMasLengthFifth    = input.int(20, title='MA #5', minval=1, step=1, tooltip='Fifth MA length./Comprimento da quinta MA.', group='Moving Averages/Médias Móveis')
-customMasLengthSixth    = input.int(25, title='MA #6', minval=1, step=1, tooltip='Sixth MA length./Comprimento da sexta MA.', group='Moving Averages/Médias Móveis')
-customMasLengthSeventh  = input.int(30, title='MA #7', minval=1, step=1, tooltip='Seventh MA length./Comprimento da sétima MA.', group='Moving Averages/Médias Móveis')
-customMasLengthEighth   = input.int(35, title='MA #8', minval=1, step=1, tooltip='Eighth MA length./Comprimento da oitava MA.', group='Moving Averages/Médias Móveis')
-customMasLengthNineth   = input.int(40, title='MA #9', minval=1, step=1, tooltip='Nineth MA length./Comprimento da nona MA.', group='Moving Averages/Médias Móveis')
-customMasLengthTenth    = input.int(45, title='MA #10', minval=1, step=1, tooltip='Tenth MA length./Comprimento da décima MA.', group='Moving Averages/Médias Móveis')
-customMasLengthEleventh = input.int(50, title='MA #11', minval=1, step=1, tooltip='Eleventh MA length./Comprimento da décima primeira MA.', group='Moving Averages/Médias Móveis')
-customMasLengthTwelveth = input.int(55, title='MA #12', minval=1, step=1, tooltip='Twelveth MA length./Comprimento da décima segunda MA.', group='Moving Averages/Médias Móveis')
-targetFactor            = input.float(1.6, title='Target Take Profit/Objetivo de Lucro Alvo', minval=0.1, step=0.1, tooltip='Calculate the take profit factor when entry position./Calcula o fator do alvo lucro ao entrar na posição.', group='Risk Management/Gerenciamento de Risco')
-verifyTurnoverTrend     = input.bool(true, title='Verify Turnover Trend/Verificar Tendência de Rotatividade', tooltip='This option checks for a supposedly turnover trend and setup new target (for long is the highest high and for short is the lowest low identified)./Esta opção verifica uma suposta tendência de rotatividade e estabelece um novo objetivo (para long é a máxima mais alta, para short é a mínima mais baixa identificados).', group='Turnover/Rotatividade')
-verifyTurnoverSignal    = input.bool(false, title='Verify Turnover Signal/Verificar Sinal de Rotatividade', tooltip='This option checks for a supposedly turnover signal, closing the current position and opening a new one (for long it will close and open a new for short, for short it will close and open a new for long)./Essa opção verifica um sinal de possível reversão, fechando a posição atual e abrindo uma nova (para long fechará e abrirá uma nova para short, para short fechará e abrirá uma nova para long).', group='Turnover/Rotatividade')
+maType               = input.string('EMA', title='Moving Average Type/Tipo de Média Móvel', options=['EMA', 'SMA', 'RMA', 'WMA', 'HMA', 'VWMA'], tooltip='This option is to select the type of Moving Average that the Rainbow will use./Esta opção é para selecionar o tipo de Média Móvel que o Rainbow utilizará.', group='Moving Averages/Médias Móveis')
+maLengthFirst        = input.int(3, title='MA #1', minval=1, step=1, tooltip='First MA length./Comprimento da primeira MA.', group='Moving Averages/Médias Móveis')
+maLengthSecond       = input.int(5, title='MA #2', minval=1, step=1, tooltip='Second MA length./Comprimento da segunda MA.', group='Moving Averages/Médias Móveis')
+maLengthThird        = input.int(8, title='MA #3', minval=1, step=1, tooltip='Third MA length./Comprimento da terceira MA.', group='Moving Averages/Médias Móveis')
+maLengthFourth       = input.int(13, title='MA #4', minval=1, step=1, tooltip='Fourth MA length./Comprimento da quarta MA.', group='Moving Averages/Médias Móveis')
+maLengthFifth        = input.int(20, title='MA #5', minval=1, step=1, tooltip='Fifth MA length./Comprimento da quinta MA.', group='Moving Averages/Médias Móveis')
+maLengthSixth        = input.int(25, title='MA #6', minval=1, step=1, tooltip='Sixth MA length./Comprimento da sexta MA.', group='Moving Averages/Médias Móveis')
+maLengthSeventh      = input.int(30, title='MA #7', minval=1, step=1, tooltip='Seventh MA length./Comprimento da sétima MA.', group='Moving Averages/Médias Móveis')
+maLengthEighth       = input.int(35, title='MA #8', minval=1, step=1, tooltip='Eighth MA length./Comprimento da oitava MA.', group='Moving Averages/Médias Móveis')
+maLengthNineth       = input.int(40, title='MA #9', minval=1, step=1, tooltip='Nineth MA length./Comprimento da nona MA.', group='Moving Averages/Médias Móveis')
+maLengthTenth        = input.int(45, title='MA #10', minval=1, step=1, tooltip='Tenth MA length./Comprimento da décima MA.', group='Moving Averages/Médias Móveis')
+maLengthEleventh     = input.int(50, title='MA #11', minval=1, step=1, tooltip='Eleventh MA length./Comprimento da décima primeira MA.', group='Moving Averages/Médias Móveis')
+maLengthTwelveth     = input.int(55, title='MA #12', minval=1, step=1, tooltip='Twelveth MA length./Comprimento da décima segunda MA.', group='Moving Averages/Médias Móveis')
+targetFactor         = input.float(1.6, title='Target Take Profit/Objetivo de Lucro Alvo', minval=0.1, step=0.1, tooltip='Calculate the take profit factor when entry position./Calcula o fator do alvo lucro ao entrar na posição.', group='Risk Management/Gerenciamento de Risco')
+verifyTurnoverTrend  = input.bool(true, title='Verify Turnover Trend/Verificar Tendência de Rotatividade', tooltip='This option checks for a supposedly turnover trend and setup new target (for long is the highest high and for short is the lowest low identified)./Esta opção verifica uma suposta tendência de rotatividade e estabelece um novo objetivo (para long é a máxima mais alta, para short é a mínima mais baixa identificados).', group='Turnover/Rotatividade')
+verifyTurnoverSignal = input.bool(false, title='Verify Turnover Signal/Verificar Sinal de Rotatividade', tooltip='This option checks for a supposedly turnover signal, closing the current position and opening a new one (for long it will close and open a new for short, for short it will close and open a new for long)./Essa opção verifica um sinal de possível reversão, fechando a posição atual e abrindo uma nova (para long fechará e abrirá uma nova para short, para short fechará e abrirá uma nova para long).', group='Turnover/Rotatividade')
 
 mas(maType, maLengthFirst, maLengthSecond, maLengthThird, maLengthFourth, maLengthFifth, maLengthSixth, maLengthSeventh, maLengthEighth, maLengthNineth, maLengthTenth, maLengthEleventh, maLengthTwelveth) =>
     if (maType == 'SMA')
@@ -35,9 +35,9 @@ mas(maType, maLengthFirst, maLengthSecond, maLengthThird, maLengthFourth, maLeng
     else
         [ta.ema(close, maLengthFirst), ta.ema(close, maLengthSecond), ta.ema(close, maLengthThird), ta.ema(close, maLengthFourth), ta.ema(close, maLengthFifth), ta.ema(close, maLengthSixth), ta.ema(close, maLengthSeventh), ta.ema(close, maLengthEighth), ta.ema(close, maLengthNineth), ta.ema(close, maLengthTenth), ta.ema(close, maLengthEleventh), ta.ema(close, maLengthTwelveth)]
 
-[ma1, ma2, ma3, ma4, ma5, ma6, ma7, ma8, ma9, ma10, ma11, ma12] = mas(maType, customMasLengthFirst, customMasLengthSecond, customMasLengthThird, customMasLengthFourth, customMasLengthFifth, customMasLengthSixth, customMasLengthSeventh, customMasLengthEighth, customMasLengthNineth, customMasLengthTenth, customMasLengthEleventh, customMasLengthTwelveth)
+[ma1, ma2, ma3, ma4, ma5, ma6, ma7, ma8, ma9, ma10, ma11, ma12] = mas(maType, maLengthFirst, maLengthSecond, maLengthThird, maLengthFourth, maLengthFifth, maLengthSixth, maLengthSeventh, maLengthEighth, maLengthNineth, maLengthTenth, maLengthEleventh, maLengthTwelveth)
 
-maTouchPriceTrend(ma1, ma2, ma3, ma4, ma5, ma6, ma7, ma8, trend) =>
+maTouchPriceTrend(ma1, ma2, ma3, ma4, ma5, ma6, ma7, ma8, ma9, ma10, ma11, ma12, trend) =>
     var float touchPrice = na
     if (trend == 'UPTREND')
         if (low <= ma1 and low >= ma2)
@@ -105,9 +105,9 @@ isMaDowntrend            = isCloseLesserMaMean and isMa5To8Below ? 1 : 0
 isUptrend                = isMaUptrend ? 'UPTREND' : na
 isDowntrend              = isMaDowntrend ? 'DOWNTREND' : na
 
-curTouchPriceUptrend    = maTouchPriceTrend(ma1, ma2, ma3, ma4, ma5, ma6, ma7, ma8, isUptrend)
+curTouchPriceUptrend    = maTouchPriceTrend(ma1, ma2, ma3, ma4, ma5, ma6, ma7, ma8, ma9, ma10, ma11, ma12, isUptrend)
 prevTouchPriceUptrend   = curTouchPriceUptrend[1]
-curTouchPriceDowntrend  = maTouchPriceTrend(ma1, ma2, ma3, ma4, ma5, ma6, ma7, ma8, isDowntrend)
+curTouchPriceDowntrend  = maTouchPriceTrend(ma1, ma2, ma3, ma4, ma5, ma6, ma7, ma8, ma9, ma10, ma11, ma12, isDowntrend)
 prevTouchPriceDowntrend = curTouchPriceDowntrend[1]
 
 isPrevTouchPriceUptrendTouched   = prevTouchPriceUptrend > 0.0 or not na(prevTouchPriceUptrend) ? 1 : 0
