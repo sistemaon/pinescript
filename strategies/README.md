@@ -115,14 +115,20 @@ Please **read** the explanation carefully to better understand what this strateg
 * isShortCondition: If has _condition_ to go **short**, checking **isMaDowntrend** if is _moving average_ is **downtrend** and **isCurLowLesserPrevLow** the _current_ low price is **lesser** than the _previous_ low price and **isPrevTouchedPriceDowntrend** is _previous_ high price has touched one of _moving average_ lines.
 
 #### Position Entry and Exit
+
+###### Long Conditions
 * If conditions **isLongCondition** for a _long position_ are met and **isPositionClose** have no _current position_ open or if **verifyTurnoverSignal** checking for a supposedly _turnover signal_ setting is _true_ and conditions **isLongCondition** for a _long position_ are met and **isPositionShort** _current position_ is on _short_, the strategy **enters** a _long position_ or **exits** the current _short position_ to **enter** _long position_.
+
+###### Short Conditions
 * If conditions **isShortCondition** for a _short position_ are met and **isPositionClose** have no _current position_ open or if **verifyTurnoverSignal** checking for a supposedly _turnover signal_ setting is _true_ and conditions **isShortCondition** for a _short position_ are met and **isPositionLong** _current position_ is on _long_, the strategy **enters** a _short position_ or **exits** the current _long position_ to **enter** _short position_.
 
 #### Position Management
 
+##### Long Conditions
+###### Stop Loss
+* Stop loss **stopLossLong** is defined by fetching the **prevTouchPriceUptrend** _previous touched moving average low price_ touched one of the twelve _moving averages_.
+If **isCurLowLesserPrevLow** _current low price_ is lesser than the _previous low price_, then it will check **curTouchPriceUptrend** _current touched moving average low price_ is not available (**na**) variable, to return the _current low price_ or the _low price_ from **curTouchPriceUptrend**, redefining then the stop loss **stopLossLong** checking if the _low price_ from **curTouchPriceUptrend** is not available (**na**), to recalculate the new value of the stop loss by summing _previous_ **stopLossLong** value with **curLowToucedPrice** _current touched moving average low price_ divided by 2 or returning the only the **curLowToucedPrice** _current touched moving average low price_.
 
 #### Trade Information Table
-
-
 ---
 ---
