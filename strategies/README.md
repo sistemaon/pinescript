@@ -115,10 +115,14 @@ Please **read** the explanation carefully to better understand what this strateg
 * isShortCondition: If has _condition_ to go **short**, checking **isMaDowntrend** if is _moving average_ is **downtrend** and **isCurLowLesserPrevLow** the _current_ low price is **lesser** than the _previous_ low price and **isPrevTouchedPriceDowntrend** is _previous_ high price has touched one of _moving average_ lines.
 
 #### Position Entry and Exit
+* If conditions **isLongCondition** for a _long position_ are met and **isPositionClose** have no _current position_ open or if **verifyTurnoverSignal** checking for a supposedly _turnover signal_ setting is _true_ and conditions **isLongCondition** for a _long position_ are met and **isPositionShort** _current position_ is on _short_, the strategy **enters** a _long position_ or **exits** the current _short position_ to **enter** _long position_.
+* If conditions **isShortCondition** for a _short position_ are met and **isPositionClose** have no _current position_ open or if **verifyTurnoverSignal** checking for a supposedly _turnover signal_ setting is _true_ and conditions **isShortCondition** for a _short position_ are met and **isPositionLong** _current position_ is on _long_, the strategy **enters** a _short position_ or **exits** the current _long position_ to **enter** _short position_.
 
 #### Position Management
 
+
 #### Trade Information Table
+
 
 ---
 ---
