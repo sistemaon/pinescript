@@ -177,6 +177,15 @@ stopLossShort := prevTouchPriceDowntrend
         stopLossShort      := na(curTouchPriceDowntrend) ? ((stopLossShort + curHighToucedPrice) / 2) : curHighToucedPrice
 ```
 
+###### Take Profit
+* The take profit **targetShort** is simply calculated by having the **close** price _subtract_ with **close** price _minus_ the stop loss **stopLossShort** _multiplied_ by the target factor **targetFactor** defined.
+
+```pinescript
+targetShort := (close - (math.abs(close - stopLossShort) * targetFactor))
+```
+
+> Observations: Both **stopLossShort** and **targetShort** has to be greater than 0 to enter position.
+
 
 #### Trade Information Table
 <!-- * The strategy **displays** a _trade information_ **table** in the bottom right corner of the chart.
