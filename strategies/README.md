@@ -90,16 +90,16 @@ Please **read** the explanation carefully to better understand what this strateg
 #### Calculation and Condition Variables
 * ma1, ma2, ma3, ma4, ma5, ma6, ma7, ma8, ma9, ma10, ma11, ma12: Calculates the **Moving Averages** from **mas** _function_ based on the _input parameters_ _maType_ (type of moving average) and the _maLengths_ (first untill twelveth) and returns _12_ **moving averages** with its supposedly **moving average** type.
 * maMean: Calculates the _average_ of the _twelves_ **Moving Averages** by _summing_ the _MAs_ up and _dividing_ it by the quantity (in this case 12), returning the result of the calculation.
-* isMa1To4Above: Calculates the **ma1** _untill_ **ma4** if it _one line_ is **greater** than the _other line_, if _one line_ is **above** the _other line_. Determining whether the _moving averages_ **ma1**, **ma2**, **ma3**, and **ma4** are in a strictly _decreasing order_.
-* isMa1To4Below: Calculates the **ma1** _untill_ **ma4** if it _one line_ is **lesser** than the _other line_, if _one line_ is **below** the _other line_. Determining whether the _moving averages_ **ma1**, **ma2**, **ma3**, and **ma4** are in a strictly _increasing order_.
-* isMa5To8Above: Calculates the **ma5** _untill_ **ma8** if it _one line_ is **greater** than the _other line_, if _one line_ is **above** the _other line_. Determining whether the _moving averages_ **ma5**, **ma6**, **ma7**, and **ma8** are in a strictly _decreasing order_.
-* isMa5To8Below: Calculates the **ma5** _untill_ **ma8** if it _one line_ is **lesser** than the _other line_, if _one line_ is **below** the _other line_. Determining whether the _moving averages_ **ma5**, **ma6**, **ma7**, and **ma8** are in a strictly _increasing order_.
+* isMa1To4Above: Calculates the **ma1** _untill_ **ma4** if it _one line_ is **greater** than the _other line_, if _one line_ is **above** the _other line_. Determining whether the _moving averages_ **ma1**, **ma2**, **ma3**, and **ma4** are in a strictly _increasing order_.
+* isMa1To4Below: Calculates the **ma1** _untill_ **ma4** if it _one line_ is **lesser** than the _other line_, if _one line_ is **below** the _other line_. Determining whether the _moving averages_ **ma1**, **ma2**, **ma3**, and **ma4** are in a strictly _decreasing order_.
+* isMa5To8Above: Calculates the **ma5** _untill_ **ma8** if it _one line_ is **greater** than the _other line_, if _one line_ is **above** the _other line_. Determining whether the _moving averages_ **ma5**, **ma6**, **ma7**, and **ma8** are in a strictly _increasing order_.
+* isMa5To8Below: Calculates the **ma5** _untill_ **ma8** if it _one line_ is **lesser** than the _other line_, if _one line_ is **below** the _other line_. Determining whether the _moving averages_ **ma5**, **ma6**, **ma7**, and **ma8** are in a strictly _decreasing order_.
 * isCloseGreaterMaMean: If **close** _price_ is **greater** than the _moving average mean_.
 * isCloseLesserMaMean: If **close** _price_ is **lesser** than the _moving average mean_.
 * isCurHighGreaterPrevHigh: If _current_ **high** _price_ is **greater** than the _previous_ **high** _price_.
 * isCurLowLesserPrevLow: If _current_ **Low** _price_ is **lesser** than the _previous_ **Low** _price_.
-* isMaUptrend: This defines _moving average_ **uptrend** when _close price_ is **greater** than the _moving average mean_ and the moving averages lines _5 to 8_ is in _decreasing order_.
-* isMaDowntrend: This defines _moving average_ **downtrend** when _close price_ is **lesser** than the _moving average mean_ and the moving averages lines _5 to 8_ is in _increasing order_.
+* isMaUptrend: This defines _moving average_ **uptrend** when _close price_ is **greater** than the _moving average mean_ and the moving averages lines _5 to 8_ is in _increasing order_.
+* isMaDowntrend: This defines _moving average_ **downtrend** when _close price_ is **lesser** than the _moving average mean_ and the moving averages lines _5 to 8_ is in _decreasing order_.
 * isUptrend: Simply checks if is _moving average_ **uptrend**.
 * isDowntrend: Simply checks if is _moving average_ **downtrend**.
 * curTouchPriceUptrend and curTouchPriceDowntrend: Both of them _fetches_ the _price_ where the **low price** supposedly _touched_ the _ma line_ (for **uptrend**) and the **high price** supposedly _touched_ the _ma line_ (for **downtrend**). It is calculated from **maTouchPriceTrend** _function_ based on the _parameters_ which are the _12 moving averages lines_ from **mas** _function_ and the _trending_ if it is **uptrend** or **downtrend**.
@@ -155,7 +155,7 @@ curHighestHigh = high
         longPositionHighestHigh := curHighestHigh
 ```
 
-Then it veryfies a supposedly _turn over trend_ by checking the _first four lines_ of the **moving averages** **isMa1To4Below** if it is _increasing order_ and is **isCloseLesserMaMean** the _current close_ price is **lesser** than the _moving averages_ average and is **longPositionHighestHigh** the highest high is **greater** than the **strategy.position_avg_price** price opened position.
+Then it veryfies a supposedly _turn over trend_ by checking the _first four lines_ of the **moving averages** **isMa1To4Below** if it is _decreasing order_ and is **isCloseLesserMaMean** the _current close_ price is **lesser** than the _moving averages_ average and is **longPositionHighestHigh** the highest high is **greater** than the **strategy.position_avg_price** price opened position.
 
 ```pinescript
 if (isMa1To4Below and isCloseLesserMaMean and longPositionHighestHigh > strategy.position_avg_price)
@@ -196,7 +196,7 @@ curLowestLow = low
         shortPositionLowestLow := curLowestLow
 ```
 
-Then it veryfies a supposedly _turn over trend_ by checking the _first four lines_ of the **moving averages** **isMa1To4Above** if it is _decreasing order_ and is **isCloseGreaterMaMean** the _current close_ price is **greater** than the _moving averages_ average and is **shortPositionLowestLow** the lowest low is **lower** than the **strategy.position_avg_price** price opened position.
+Then it veryfies a supposedly _turn over trend_ by checking the _first four lines_ of the **moving averages** **isMa1To4Above** if it is _increasing order_ and is **isCloseGreaterMaMean** the _current close_ price is **greater** than the _moving averages_ average and is **shortPositionLowestLow** the lowest low is **lower** than the **strategy.position_avg_price** price opened position.
 
 ```pinescript
 if (isMa1To4Above and isCloseGreaterMaMean and shortPositionLowestLow < strategy.position_avg_price)
