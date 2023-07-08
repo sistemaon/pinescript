@@ -212,7 +212,7 @@ if (isMa1To4Above and isCloseGreaterMaMean and shortPositionLowestLow < strategy
 * The table **shows** the **current** position's _information_ (**Entry Side**, **Entry Price**, **Stop Loss** and **Take Profit**).
 * When _position is opened_, the **Entry Side** it is **Long** or **Short**, the **Entry Price**, **Stop Loss** and **Take Profit** are **Prices** shown. When there is no position, all are **None**. -->
 
-File Script: [Bollinger Bands Modified (Stormer)](bollinger_bands_modified_stormer.pine)
+File Script: [Moving Average Rainbow (Stormer)](ma_rainbow_stormer.pine)
 
 ---
 ---
