@@ -127,9 +127,46 @@ Please **read** the explanation carefully to better understand what this strateg
 ##### Long Conditions
 ###### Stop Loss
 * Stop loss **stopLossLong** is defined by fetching the **prevTouchPriceUptrend** _previous touched moving average low price_ touched one of the twelve _moving averages_.\
-If **isCurLowLesserPrevLow** _current low price_ is lesser than the _previous low price_, then it will check **curTouchPriceUptrend** _current touched moving average low price_ is not available (**na**) variable, to return the _current low price_ or the _low price_ from **curTouchPriceUptrend**, redefining then the stop loss **stopLossLong** checking if the _low price_ from **curTouchPriceUptrend** is not available (**na**), to recalculate the new value of the stop loss by summing _previous_ **stopLossLong** value with **curLowToucedPrice** _current touched moving average low price_ divided by 2 or returning the only the **curLowToucedPrice** _current touched moving average low price_.
+If **isCurLowLesserPrevLow** _current low price_ is lesser than the _previous low price_, then it will check **curTouchPriceUptrend** _current touched moving average low price_ is not available (**na**) variable, to return the _current low price_ or the _low price_ from **curTouchPriceUptrend**, redefining then the stop loss **stopLossLong** checking if the _low price_ from **curTouchPriceUptrend** is not available (**na**), to recalculate the new value of the stop loss by summing _previous_ **stopLossLong** value with **curLowToucedPrice** _current touched moving average low price_ divided by 2 or returning only the **curLowToucedPrice** _current touched moving average low price_.
+
+```pinescript
+stopLossLong := prevTouchPriceUptrend
+    if (isCurLowLesserPrevLow)
+        curLowToucedPrice = na(curTouchPriceUptrend) ? low : curTouchPriceUptrend
+        stopLossLong      := na(curTouchPriceUptrend) ? ((stopLossLong + curLowToucedPrice) / 2) : curLowToucedPrice
+```
+
+###### Take Profit
+* The take profit **targetLong** is simply calculated by having the **close** price _summed_ with **close** price _minus_ the stop loss **stopLossLong** _multiplied_ by the target factor **targetFactor** defined.
+
+```pinescript
+targetLong := (close + (math.abs(close - stopLossLong) * targetFactor))
+```
+
+> Observations: Both **stopLossLong** and **targetLong** has to be greater than 0 to enter position.
+
+###### Recalculate Take Profit
+* When the **verifyTurnoverTrend** setting is set to **true** and **isPositionLong** position is **long**, it recalculates the new take profit target **longPositionHighestHigh**.\
+First it gets the highest high during the long position opened.
+
+```pinescript
+curHighestHigh = high
+    if (curHighestHigh > longPositionHighestHigh or na(longPositionHighestHigh))
+        longPositionHighestHigh := curHighestHigh
+```
+
+Then it veryfies a supposedly _turn over trend_ by checking the _first four lines_ of the **moving averages** **isMa1To4Below** if it is _increasing order_ and is **isCloseLesserMaMean** the _current close_ price is **lesser** than the _moving averages_ average and is **longPositionHighestHigh** the highest high is **greater** than the **strategy.position_avg_price** price opened position.
+
+```pinescript
+if (isMa1To4Below and isCloseLesserMaMean and longPositionHighestHigh > strategy.position_avg_price)
+        isTurnoverTrendLongTrigger := true
+        strategy.exit('Exit Long', 'Long', stop=stopLossLong, limit=longPositionHighestHigh)
+```
+
+> Observations: It keeps **stopLossLong** the same stop loss defined when opened position.
 
 #### Trade Information Table
+
 
 ---
 ---
