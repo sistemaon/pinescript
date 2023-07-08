@@ -165,8 +165,25 @@ if (isMa1To4Below and isCloseLesserMaMean and longPositionHighestHigh > strategy
 
 > Observations: It keeps **stopLossLong** the same stop loss defined when opened position.
 
-#### Trade Information Table
+##### Short Conditions
+###### Stop Loss
+* Stop loss **stopLossShort** is defined by fetching the **prevTouchPriceDowntrend** _previous touched moving average high price_ touched one of the twelve _moving averages_.\
+If **isCurHighGreaterPrevHigh** _current high price_ is greater than the _previous high price_, then it will check **curTouchPriceDowntrend** _current touched moving average high price_ is not available (**na**) variable, to return the _current high price_ or the _high price_ from **curTouchPriceDowntrend**, redefining then the stop loss **stopLossShort** checking if the _high price_ from **curTouchPriceDowntrend** is not available (**na**), to recalculate the new value of the stop loss by summing _previous_ **stopLossShort** value with **curHighToucedPrice** _current touched moving average high price_ divided by 2 or returning only the **curHighToucedPrice** _current touched moving average high price_.
 
+```pinescript
+stopLossShort := prevTouchPriceDowntrend
+    if (isCurHighGreaterPrevHigh)
+        curHighToucedPrice = na(curTouchPriceDowntrend) ? high : curTouchPriceDowntrend
+        stopLossShort      := na(curTouchPriceDowntrend) ? ((stopLossShort + curHighToucedPrice) / 2) : curHighToucedPrice
+```
+
+
+#### Trade Information Table
+<!-- * The strategy **displays** a _trade information_ **table** in the bottom right corner of the chart.
+* The table **shows** the **current** position's _information_ (**Entry Side**, **Entry Price**, **Stop Loss** and **Take Profit**).
+* When _position is opened_, the **Entry Side** it is **Long** or **Short**, the **Entry Price**, **Stop Loss** and **Take Profit** are **Prices** shown. When there is no position, all are **None**. -->
+
+File Script: [Bollinger Bands Modified (Stormer)](bollinger_bands_modified_stormer.pine)
 
 ---
 ---
