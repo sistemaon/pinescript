@@ -186,6 +186,26 @@ targetShort := (close - (math.abs(close - stopLossShort) * targetFactor))
 
 > Observations: Both **stopLossShort** and **targetShort** has to be greater than 0 to enter position.
 
+###### Recalculate Take Profit
+* When the **verifyTurnoverTrend** setting is set to **true** and **isPositionShort** position is **short**, it recalculates the new take profit target **shortPositionLowestLow**.\
+First it gets the lowest low during the short position opened.
+
+```pinescript
+curLowestLow = low
+    if (curLowestLow < shortPositionLowestLow or na(shortPositionLowestLow))
+        shortPositionLowestLow := curLowestLow
+```
+
+Then it veryfies a supposedly _turn over trend_ by checking the _first four lines_ of the **moving averages** **isMa1To4Above** if it is _decreasing order_ and is **isCloseGreaterMaMean** the _current close_ price is **greater** than the _moving averages_ average and is **shortPositionLowestLow** the lowest low is **lower** than the **strategy.position_avg_price** price opened position.
+
+```pinescript
+if (isMa1To4Above and isCloseGreaterMaMean and shortPositionLowestLow < strategy.position_avg_price)
+        isTurnoverTrendShortTrigger := true
+        strategy.exit('Exit Short', 'Short', stop=stopLossShort, limit=shortPositionLowestLow)
+```
+
+> Observations: It keeps **stopLossShort** the same stop loss defined when opened position.
+
 
 #### Trade Information Table
 <!-- * The strategy **displays** a _trade information_ **table** in the bottom right corner of the chart.
