@@ -4,6 +4,8 @@
 //@version=5
 strategy('Moving Average Rainbow (Stormer)', overlay=true, process_orders_on_close=true, calc_on_every_tick=false, calc_on_order_fills=false, initial_capital=10000, currency=currency.USD, default_qty_type=strategy.percent_of_equity, default_qty_value=10, pyramiding=0, commission_type=strategy.commission.percent, commission_value=0.12)
 
+// use flags variables
+
 maType               = input.string('EMA', title='Moving Average Type/Tipo de Média Móvel', options=['EMA', 'SMA', 'RMA', 'WMA', 'HMA', 'VWMA'], tooltip='This option is to select the type of Moving Average that the Rainbow will use./Esta opção é para selecionar o tipo de Média Móvel que o Rainbow utilizará.', group='Moving Averages/Médias Móveis')
 maLengthFirst        = input.int(3, title='MA #1', minval=1, step=1, tooltip='First MA length./Comprimento da primeira MA.', group='Moving Averages/Médias Móveis')
 maLengthSecond       = input.int(5, title='MA #2', minval=1, step=1, tooltip='Second MA length./Comprimento da segunda MA.', group='Moving Averages/Médias Móveis')
