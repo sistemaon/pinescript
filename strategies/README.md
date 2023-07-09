@@ -65,7 +65,7 @@ Please **read** the explanation carefully to better understand what this strateg
 
 File Script: [Bollinger Bands Modified (Stormer)](bollinger_bands_modified_stormer.pine)
 
-Trading View: [Bollinger Bands Modified (Stormer)](https://www.tradingview.com/script/nNjoDutR-Bollinger-Bands-Modified-Stormer/)
+Trading View: [Bollinger Bands Modified (Stormer)](https://www.tradingview.com/script/aksPa3e7-Bollinger-Bands-Modified-Stormer/)
 
 ---
 ---
