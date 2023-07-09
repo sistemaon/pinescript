@@ -214,7 +214,7 @@ if (isMa1To4Above and isCloseGreaterMaMean and shortPositionLowestLow < strategy
 
 File Script: [Moving Average Rainbow (Stormer)](ma_rainbow_stormer.pine)
 
-Trading View: [Moving Average Rainbow (Stormer)](https://www.tradingview.com/script/nNjoDutR-Bollinger-Bands-Modified-Stormer/)
+Trading View: [Moving Average Rainbow (Stormer)](https://www.tradingview.com/script/y3jOCBh1-Moving-Average-Rainbow-Stormer/)
 
 ---
 ---
