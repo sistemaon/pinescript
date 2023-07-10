@@ -4,22 +4,23 @@
 //@version=5
 strategy('Moving Average Rainbow (Stormer)', overlay=true, process_orders_on_close=true, calc_on_every_tick=false, calc_on_order_fills=false, initial_capital=10000, currency=currency.USD, default_qty_type=strategy.percent_of_equity, default_qty_value=10, pyramiding=0, commission_type=strategy.commission.percent, commission_value=0.12)
 
-maType               = input.string('EMA', title='Moving Average Type/Tipo de Média Móvel', options=['EMA', 'SMA', 'RMA', 'WMA', 'HMA', 'VWMA'], tooltip='This option is to select the type of Moving Average that the Rainbow will use./Esta opção é para selecionar o tipo de Média Móvel que o Rainbow utilizará.', group='Moving Averages/Médias Móveis')
-maLengthFirst        = input.int(3, title='MA #1', minval=1, step=1, tooltip='First MA length./Comprimento da primeira MA.', group='Moving Averages/Médias Móveis')
-maLengthSecond       = input.int(5, title='MA #2', minval=1, step=1, tooltip='Second MA length./Comprimento da segunda MA.', group='Moving Averages/Médias Móveis')
-maLengthThird        = input.int(8, title='MA #3', minval=1, step=1, tooltip='Third MA length./Comprimento da terceira MA.', group='Moving Averages/Médias Móveis')
-maLengthFourth       = input.int(13, title='MA #4', minval=1, step=1, tooltip='Fourth MA length./Comprimento da quarta MA.', group='Moving Averages/Médias Móveis')
-maLengthFifth        = input.int(20, title='MA #5', minval=1, step=1, tooltip='Fifth MA length./Comprimento da quinta MA.', group='Moving Averages/Médias Móveis')
-maLengthSixth        = input.int(25, title='MA #6', minval=1, step=1, tooltip='Sixth MA length./Comprimento da sexta MA.', group='Moving Averages/Médias Móveis')
-maLengthSeventh      = input.int(30, title='MA #7', minval=1, step=1, tooltip='Seventh MA length./Comprimento da sétima MA.', group='Moving Averages/Médias Móveis')
-maLengthEighth       = input.int(35, title='MA #8', minval=1, step=1, tooltip='Eighth MA length./Comprimento da oitava MA.', group='Moving Averages/Médias Móveis')
-maLengthNineth       = input.int(40, title='MA #9', minval=1, step=1, tooltip='Nineth MA length./Comprimento da nona MA.', group='Moving Averages/Médias Móveis')
-maLengthTenth        = input.int(45, title='MA #10', minval=1, step=1, tooltip='Tenth MA length./Comprimento da décima MA.', group='Moving Averages/Médias Móveis')
-maLengthEleventh     = input.int(50, title='MA #11', minval=1, step=1, tooltip='Eleventh MA length./Comprimento da décima primeira MA.', group='Moving Averages/Médias Móveis')
-maLengthTwelveth     = input.int(55, title='MA #12', minval=1, step=1, tooltip='Twelveth MA length./Comprimento da décima segunda MA.', group='Moving Averages/Médias Móveis')
-targetFactor         = input.float(1.6, title='Target Take Profit/Objetivo de Lucro Alvo', minval=0.1, step=0.1, tooltip='Calculate the take profit factor when entry position./Calcula o fator do alvo lucro ao entrar na posição.', group='Risk Management/Gerenciamento de Risco')
-verifyTurnoverTrend  = input.bool(true, title='Verify Turnover Trend/Verificar Tendência de Rotatividade', tooltip='This option checks for a supposedly turnover trend and setup new target (for long is the highest high and for short is the lowest low identified)./Esta opção verifica uma suposta tendência de rotatividade e estabelece um novo objetivo (para long é a máxima mais alta, para short é a mínima mais baixa identificados).', group='Turnover/Rotatividade')
-verifyTurnoverSignal = input.bool(false, title='Verify Turnover Signal/Verificar Sinal de Rotatividade', tooltip='This option checks for a supposedly turnover signal, closing the current position and opening a new one (for long it will close and open a new for short, for short it will close and open a new for long)./Essa opção verifica um sinal de possível reversão, fechando a posição atual e abrindo uma nova (para long fechará e abrirá uma nova para short, para short fechará e abrirá uma nova para long).', group='Turnover/Rotatividade')
+maType                        = input.string('EMA', title='Moving Average Type/Tipo de Média Móvel', options=['EMA', 'SMA', 'RMA', 'WMA', 'HMA', 'VWMA'], tooltip='This option is to select the type of Moving Average that the Rainbow will use./Esta opção é para selecionar o tipo de Média Móvel que o Rainbow utilizará.', group='Moving Averages/Médias Móveis')
+maLengthFirst                 = input.int(3, title='MA #1', minval=1, step=1, tooltip='First MA length./Comprimento da primeira MA.', group='Moving Averages/Médias Móveis')
+maLengthSecond                = input.int(5, title='MA #2', minval=1, step=1, tooltip='Second MA length./Comprimento da segunda MA.', group='Moving Averages/Médias Móveis')
+maLengthThird                 = input.int(8, title='MA #3', minval=1, step=1, tooltip='Third MA length./Comprimento da terceira MA.', group='Moving Averages/Médias Móveis')
+maLengthFourth                = input.int(13, title='MA #4', minval=1, step=1, tooltip='Fourth MA length./Comprimento da quarta MA.', group='Moving Averages/Médias Móveis')
+maLengthFifth                 = input.int(20, title='MA #5', minval=1, step=1, tooltip='Fifth MA length./Comprimento da quinta MA.', group='Moving Averages/Médias Móveis')
+maLengthSixth                 = input.int(25, title='MA #6', minval=1, step=1, tooltip='Sixth MA length./Comprimento da sexta MA.', group='Moving Averages/Médias Móveis')
+maLengthSeventh               = input.int(30, title='MA #7', minval=1, step=1, tooltip='Seventh MA length./Comprimento da sétima MA.', group='Moving Averages/Médias Móveis')
+maLengthEighth                = input.int(35, title='MA #8', minval=1, step=1, tooltip='Eighth MA length./Comprimento da oitava MA.', group='Moving Averages/Médias Móveis')
+maLengthNineth                = input.int(40, title='MA #9', minval=1, step=1, tooltip='Nineth MA length./Comprimento da nona MA.', group='Moving Averages/Médias Móveis')
+maLengthTenth                 = input.int(45, title='MA #10', minval=1, step=1, tooltip='Tenth MA length./Comprimento da décima MA.', group='Moving Averages/Médias Móveis')
+maLengthEleventh              = input.int(50, title='MA #11', minval=1, step=1, tooltip='Eleventh MA length./Comprimento da décima primeira MA.', group='Moving Averages/Médias Móveis')
+maLengthTwelveth              = input.int(55, title='MA #12', minval=1, step=1, tooltip='Twelveth MA length./Comprimento da décima segunda MA.', group='Moving Averages/Médias Móveis')
+targetFactor                  = input.float(1.6, title='Target Take Profit/Objetivo de Lucro Alvo', minval=0.1, step=0.1, tooltip='Calculate the take profit factor when entry position./Calcula o fator do alvo lucro ao entrar na posição.', group='Risk Management/Gerenciamento de Risco')
+verifyTurnoverTrend           = input.bool(true, title='Verify Turnover Trend/Verificar Tendência de Rotatividade', tooltip='This option checks for a supposedly turnover trend and setup new target (for long is the highest high and for short is the lowest low identified)./Esta opção verifica uma suposta tendência de rotatividade e estabelece um novo objetivo (para long é a máxima mais alta, para short é a mínima mais baixa identificados).', group='Turnover Trend/Rotatividade Tendência')
+verifyTurnoverSignal          = input.bool(false, title='Verify Turnover Signal/Verificar Sinal de Rotatividade', tooltip='This option checks for a supposedly turnover signal, closing the current position and opening a new one (for long it will close and open a new for short, for short it will close and open a new for long)./Essa opção verifica um sinal de possível reversão, fechando a posição atual e abrindo uma nova (para long fechará e abrirá uma nova para short, para short fechará e abrirá uma nova para long).', group='Turnover Signal/Rotatividade Sinal')
+verifyTurnoverSignalPriceExit = input.bool(false, title='Verify Price Exit Turnover Signal/Verificar Saída de Preço Sinal de Rotatividade', tooltip='This option complements "turnover signal" by veryfing the price if profitable before exiting the current position./Esta opção complementa o "sinal de rotatividade" verificando o preço do lucro antes de sair da posição atual.', group='Turnover Signal/Rotatividade Sinal')
 
 mas(maType, maLengthFirst, maLengthSecond, maLengthThird, maLengthFourth, maLengthFifth, maLengthSixth, maLengthSeventh, maLengthEighth, maLengthNineth, maLengthTenth, maLengthEleventh, maLengthTwelveth) =>
     if (maType == 'SMA')
@@ -115,20 +116,11 @@ isPrevTouchPriceDowntrendTouched = prevTouchPriceDowntrend > 0.0 or not na(prevT
 isPrevTouchedPriceUptrend        = isPrevTouchPriceUptrendTouched and isMaUptrend ? 1 : 0
 isPrevTouchedPriceDowntrend      = isPrevTouchPriceDowntrendTouched and isMaDowntrend ? 1 : 0
 
-isPositionClose = na(strategy.position_avg_price) ? 1 : 0
-isPositionLong  = strategy.position_size > 0 ? 1 : 0
-isPositionShort = strategy.position_size < 0 ? 1 : 0
-isPositionNone  = strategy.position_size == 0 ? 1 : 0
+isPositionFlat  = strategy.position_size == 0 ? 1 : 0
 
-var float positionEntryPrice   = 0.0
-var bool positionIsEntryLong   = false
-var bool positionIsEntryShort  = false
-isPositionLongClose            = positionEntryPrice == 0.0 and not positionIsEntryLong ? 1 : 0
-isPositionShortClose           = positionEntryPrice == 0.0 and not positionIsEntryShort ? 1 : 0
-
-isLongCondition  = isMaUptrend and isCurHighGreaterPrevHigh and isPrevTouchedPriceUptrend ? 1 : 0
-isShortCondition = isMaDowntrend and isCurLowLesserPrevLow and isPrevTouchedPriceDowntrend ? 1 : 0
-
+var float positionEntryPrice         = na
+var bool positionIsEntryLong         = false
+var bool positionIsEntryShort        = false
 var float longPositionHighestHigh    = na
 var float shortPositionLowestLow     = na
 var float stopLossLong               = na
@@ -138,16 +130,25 @@ var float targetShort                = na
 var bool isTurnoverTrendLongTrigger  = na
 var bool isTurnoverTrendShortTrigger = na
 
-if (isPositionNone)
-    positionEntryPrice   := 0.0
-    positionIsEntryLong  := false
-    positionIsEntryShort := false
-    stopLossLong         := 0.0
-    targetLong           := 0.0
-    stopLossShort        := 0.0
-    targetShort          := 0.0
+isPositionLongClose  = na(positionEntryPrice) and not positionIsEntryLong ? 1 : 0
+isPositionShortClose = na(positionEntryPrice) and not positionIsEntryShort ? 1 : 0
+isLongCondition      = isMaUptrend and isCurHighGreaterPrevHigh and isPrevTouchedPriceUptrend ? 1 : 0
+isShortCondition     = isMaDowntrend and isCurLowLesserPrevLow and isPrevTouchedPriceDowntrend ? 1 : 0
+longTurnoverExit     = verifyTurnoverSignal and verifyTurnoverSignalPriceExit ? (verifyTurnoverSignal and isLongCondition and positionIsEntryShort and close < positionEntryPrice) : verifyTurnoverSignal ? (verifyTurnoverSignal and isLongCondition and positionIsEntryShort) : na
+shortTurnoverExit    = verifyTurnoverSignal and verifyTurnoverSignalPriceExit ? (verifyTurnoverSignal and isShortCondition and positionIsEntryLong and close > positionEntryPrice) : verifyTurnoverSignal ? (verifyTurnoverSignal and isShortCondition and positionIsEntryLong) : na
 
-if ((isLongCondition and isPositionLongClose) or (verifyTurnoverSignal and isLongCondition and isPositionShort))
+if (isPositionFlat)
+    positionEntryPrice          := na
+    positionIsEntryLong         := false
+    positionIsEntryShort        := false
+    stopLossLong                := na
+    targetLong                  := na
+    stopLossShort               := na
+    targetShort                 := na
+    isTurnoverTrendLongTrigger  := na
+    isTurnoverTrendShortTrigger := na
+
+if ((isLongCondition and isPositionLongClose) or longTurnoverExit)
     positionEntryPrice          := close
     positionIsEntryLong         := true
     positionIsEntryShort        := false
@@ -166,10 +167,10 @@ if ((isLongCondition and isPositionLongClose) or (verifyTurnoverSignal and isLon
         strategy.entry('Long', strategy.long)
         strategy.exit('Exit Long', 'Long', stop=stopLossLong, limit=targetLong)
 
-if ((isShortCondition and isPositionShortClose) or (verifyTurnoverSignal and isShortCondition and isPositionLong))
+if ((isShortCondition and isPositionShortClose) or shortTurnoverExit)
     positionEntryPrice          := close
-    positionIsEntryShort        := true
     positionIsEntryLong         := false
+    positionIsEntryShort        := true
     longPositionHighestHigh     := na
     shortPositionLowestLow      := na
     isTurnoverTrendLongTrigger  := na
@@ -185,21 +186,21 @@ if ((isShortCondition and isPositionShortClose) or (verifyTurnoverSignal and isS
         strategy.entry('Short', strategy.short)
         strategy.exit('Exit Short', 'Short', stop=stopLossShort, limit=targetShort)
 
-if (verifyTurnoverTrend and isPositionLong)
+if (verifyTurnoverTrend and positionIsEntryLong)
     curHighestHigh = high
     if (curHighestHigh > longPositionHighestHigh or na(longPositionHighestHigh))
         longPositionHighestHigh := curHighestHigh
-    if (isMa1To4Below and isCloseLesserMaMean and longPositionHighestHigh > strategy.position_avg_price)
+    if (isMa1To4Below and isCloseLesserMaMean and longPositionHighestHigh > positionEntryPrice)
         isTurnoverTrendLongTrigger := true
         alertMessage = '{ "side/lado": "buy", "stop": ' + str.tostring(stopLossLong) + ', "target/alvo": ' + str.tostring(longPositionHighestHigh) + ', "new setup/nova definição": ' + str.tostring(isTurnoverTrendLongTrigger) + ' }'
         alert(alertMessage)
         strategy.exit('Exit Long', 'Long', stop=stopLossLong, limit=longPositionHighestHigh)
 
-if (verifyTurnoverTrend and isPositionShort)
+if (verifyTurnoverTrend and positionIsEntryShort)
     curLowestLow = low
     if (curLowestLow < shortPositionLowestLow or na(shortPositionLowestLow))
         shortPositionLowestLow := curLowestLow
-    if (isMa1To4Above and isCloseGreaterMaMean and shortPositionLowestLow < strategy.position_avg_price)
+    if (isMa1To4Above and isCloseGreaterMaMean and shortPositionLowestLow < positionEntryPrice)
         isTurnoverTrendShortTrigger := true
         alertMessage = '{ "side/lado": "sell", "stop": ' + str.tostring(stopLossShort) + ', "target/alvo": ' + str.tostring(shortPositionLowestLow) + ', "new setup/nova definição": ' + str.tostring(isTurnoverTrendShortTrigger) + ' }'
         alert(alertMessage)
@@ -230,19 +231,19 @@ table.cell(table_id=tableInfoTrade, column=0, row=0)
 table.cell(table_id=tableInfoTrade, column=1, row=0)
 
 table.cell(table_id=tableInfoTrade, column=0, row=1, text='Entry Side/Lado da Entrada', text_color=color.white)
-table.cell(table_id=tableInfoTrade, column=0, row=2, text=isPositionLong ? 'LONG' : isPositionShort ? 'SHORT' : 'NONE/NENHUM', text_color=color.yellow)
+table.cell(table_id=tableInfoTrade, column=0, row=2, text=positionIsEntryLong ? 'LONG' : positionIsEntryShort ? 'SHORT' : 'NONE/NENHUM', text_color=color.yellow)
 
 table.cell(table_id=tableInfoTrade, column=1, row=1, text='Entry Price/Preço da Entrada', text_color=color.white)
-table.cell(table_id=tableInfoTrade, column=1, row=2, text=not isPositionClose ? str.tostring(strategy.position_avg_price) : 'NONE/NENHUM', text_color=color.blue)
+table.cell(table_id=tableInfoTrade, column=1, row=2, text=not na(positionEntryPrice) ? str.tostring(positionEntryPrice) : 'NONE/NENHUM', text_color=color.blue)
 
 table.cell(table_id=tableInfoTrade, column=0, row=3, text='Take Profit Price/Preço Alvo Lucro', text_color=color.white)
-table.cell(table_id=tableInfoTrade, column=0, row=4, text=isPositionLong ? str.tostring(targetLong) : isPositionShort ? str.tostring(targetShort) : 'NONE/NENHUM', text_color=color.green)
+table.cell(table_id=tableInfoTrade, column=0, row=4, text=positionIsEntryLong ? str.tostring(targetLong) : positionIsEntryShort ? str.tostring(targetShort) : 'NONE/NENHUM', text_color=color.green)
 
 table.cell(table_id=tableInfoTrade, column=1, row=3, text='Stop Loss Price/Preço Stop Loss', text_color=color.white)
-table.cell(table_id=tableInfoTrade, column=1, row=4, text=isPositionLong ? str.tostring(stopLossLong) : isPositionShort ? str.tostring(stopLossShort) : 'NONE/NENHUM', text_color=color.red)
+table.cell(table_id=tableInfoTrade, column=1, row=4, text=positionIsEntryLong ? str.tostring(stopLossLong) : positionIsEntryShort ? str.tostring(stopLossShort) : 'NONE/NENHUM', text_color=color.red)
 
 table.cell(table_id=tableInfoTrade, column=0, row=5, text='New Target/Novo Alvo', text_color=color.white)
-table.cell(table_id=tableInfoTrade, column=0, row=6, text=verifyTurnoverTrend and isPositionLong and isTurnoverTrendLongTrigger ? str.tostring(longPositionHighestHigh) : verifyTurnoverTrend and isPositionShort and isTurnoverTrendShortTrigger ? str.tostring(shortPositionLowestLow) : 'NONE/NENHUM', text_color=color.green)
+table.cell(table_id=tableInfoTrade, column=0, row=6, text=verifyTurnoverTrend and positionIsEntryLong and isTurnoverTrendLongTrigger ? str.tostring(longPositionHighestHigh) : verifyTurnoverTrend and positionIsEntryShort and isTurnoverTrendShortTrigger ? str.tostring(shortPositionLowestLow) : 'NONE/NENHUM', text_color=color.green)
 
 table.cell(table_id=tableInfoTrade, column=1, row=5, text='Possible Market Turnover/Possível Virada do Mercado', text_color=color.white)
-table.cell(table_id=tableInfoTrade, column=1, row=6, text=verifyTurnoverTrend and isPositionLong and isTurnoverTrendLongTrigger ? 'YES/SIM (Possible long going short/Possível long indo short)' : verifyTurnoverTrend and isPositionShort and isTurnoverTrendShortTrigger ? 'YES/SIM (Possible short going long/Possível short indo long)' : 'NONE/NENHUM', text_color=color.red)
+table.cell(table_id=tableInfoTrade, column=1, row=6, text=verifyTurnoverTrend and positionIsEntryLong and isTurnoverTrendLongTrigger ? 'YES/SIM (Possible long going short/Possível long indo short)' : verifyTurnoverTrend and positionIsEntryShort and isTurnoverTrendShortTrigger ? 'YES/SIM (Possible short going long/Possível short indo long)' : 'NONE/NENHUM', text_color=color.red)
