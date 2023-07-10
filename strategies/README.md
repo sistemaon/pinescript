@@ -86,6 +86,7 @@ Please **read** the explanation carefully to better understand what this strateg
 * Target Take Profit Factor (**targetFactor**): Determines the **factor** to _calculate_ the **take profit** level. _Default value is 1.6_.
 * Check Turnover Trend (**verifyTurnoverTrend**): If enabled, checks for a _supposedly turnover trend_ and setup new target (for **long** is the _highest high_ and for **short** is the _lowest low_ identified). _Default value is true_.
 * Check Turnover Signal (**verifyTurnoverSignal**): If enabled, checks for a _supposedly turnover signal_, closing the _current position_ and _opening_ a new one (for **long** it will _close_ and _open_ a _new_ for _short_, for **short** it will _close_ and _open_ a _new_ for _long_)._Default value is false_.
+* Check Price Exit Turnover Signal (**verifyTurnoverSignalPriceExit**): It is a _complement_ option for **verifyTurnoverSignal**, if enabled, veryfies the _price_ if _profitable_ before _exiting_ the _current position_._Default value is false_.
 
 #### Calculation and Condition Variables
 * ma1, ma2, ma3, ma4, ma5, ma6, ma7, ma8, ma9, ma10, ma11, ma12: Calculates the **Moving Averages** from **mas** _function_ based on the _input parameters_ _maType_ (type of moving average) and the _maLengths_ (first untill twelveth) and returns _12_ **moving averages** with its supposedly **moving average** type.
@@ -108,11 +109,13 @@ Please **read** the explanation carefully to better understand what this strateg
 * isPrevTouchPriceDowntrendTouched: This checks if **prevTouchPriceDowntrend** really _touched_ the price, meaning it has to be _greater than 0 and not a not available_ (**na**) variable.
 * isPrevTouchedPriceUptrend: Checks for **isPrevTouchPriceUptrendTouched** _touched_ the price and **isMaUptrend** is **uptrend**.
 * isPrevTouchedPriceDowntrend: Checks for **isPrevTouchPriceDowntrendTouched** _touched_ the price and **isMaDowntrend** is **downtrend**.
-* isPositionClose: This tests if the **strategy.position_avg_price** is a _not available_ (**na**), meaning if it is then the position is **close**, if is not **na** then position is **open**.
-* isPositionLong: Checks if **strategy.position_size** is **greater** than 0, if it is, then the _market_ position is **long**.
-* isPositionShort: Checks if **strategy.position_size** is **lesser** than 0, if it is, then the _market_ position is **short**.
+* isPositionFlat: This tests if the **strategy.position_size** is _0_, meaning that there is no open position.
+* isPositionLongClose: Checks **positionEntryPrice** if there is _no_ entry price and _position_ **positionIsEntryLong** have not gone _long_.
+* isPositionShortClose: Checks **positionEntryPrice** if there is _no_ entry price and _position_ **positionIsEntryShort** have not gone _short_.
 * isLongCondition: If has _condition_ to go **long**, checking **isMaUptrend** if is _moving average_ is **uptrend** and **isCurHighGreaterPrevHigh** the _current_ high price is **greater** than the _previous_ high price and **isPrevTouchedPriceUptrend** is _previous_ low price has touched one of _moving average_ lines.
 * isShortCondition: If has _condition_ to go **short**, checking **isMaDowntrend** if is _moving average_ is **downtrend** and **isCurLowLesserPrevLow** the _current_ low price is **lesser** than the _previous_ low price and **isPrevTouchedPriceDowntrend** is _previous_ high price has touched one of _moving average_ lines.
+* longTurnoverExit: This condition checks if **verifyTurnoverSignal** is enabled with **verifyTurnoverSignalPriceExit** so to speak it may _exit_ the _current position_ **profitable** if there is a _potential_ turn over market _long going short_.
+* shortTurnoverExit: This condition checks if **verifyTurnoverSignal** is enabled with **verifyTurnoverSignalPriceExit** so to speak it may _exit_ the _current position_ **profitable** if there is a _potential_ turn over market _short going long_.
 
 #### Position Entry and Exit
 
