@@ -42,3 +42,6 @@
 * Stoch Slow broke the 50 line, then pulled back still 50 or above and crossed, it may be an enter position.
 * If bullish pivot is seen in Stoch Slow, may use 1-2-3 pattern to go long.
 * If bearish pivot is seen in Stoch Slow, may use 1-2-3 pattern to go short.
+* May use Stoch Slow in a higher timeframe (120/240 minutes) and in a smaller timeframe (6/12/30 minutes) may look for entries.
+* Stoch Slow direction up is long, and down is short.
+* May use 15 Renko to look for entries.
