@@ -32,7 +32,7 @@
 * May use moving average of 80 and 8 to help to define trend to enter position.
 * MA80 will work as market direction and MA8 will work as recoil/indent and point to same direction as MA80.
 
---
+---
 
 ## Moving average Slow Stoch Offset
 * MA of 80 above MA of 80 offset (ma80 > ma80[1]). Long.
@@ -45,3 +45,9 @@
 * May use Stoch Slow in a higher timeframe (120/240 minutes) and in a smaller timeframe (6/12/30 minutes) may look for entries.
 * Stoch Slow direction up is long, and down is short.
 * May use 15 Renko to look for entries.
+
+---
+
+#### Randoms
+> To define a longer stop loss, if price break uptrend moving average, fetch the last 1-2-3 price pattern buy.\
+> If break downtrend moving average, fetch the last 1-2-3 price pattern sell.
