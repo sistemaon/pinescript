@@ -39,3 +39,6 @@
 * Slow Stoch of 8 less or iqual as 20, crossing 20. Long.
 * MA of 80 below MA of 80 offset (ma80 > ma80[1]). Short.
 * Slow Stoch of 8 greater or iqual as 80, crossing 80. Long.
+* Stoch Slow broke the 50 line, then pulled back still 50 or above and crossed, it may be an enter position.
+* If bullish pivot is seen in Stoch Slow, may use 1-2-3 pattern to go long.
+* If bearish pivot is seen in Stoch Slow, may use 1-2-3 pattern to go short.
