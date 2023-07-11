@@ -23,11 +23,19 @@
 
 ## Week High Movimentation
 * Check the asset if has volume of at least 1 million.
-* Check the asset has change (%) greater than 10% in the last 7 days (week).
-* Check the asset in daily graph change (%) for correction.
+* Check the asset has change (%) greater than 10% in the last 7 days (week). Ex; Asset with 13.21%
+* Check the asset in daily graph change (%) for correction. Ex; Asset with 2.16%
 * Enter position in a smaller timeframe (240 minutes).
 * Check for 1-2-3 pattern to enter long or short.
 * Enter postion when pierces the low or high at the identified pattern.
 * May use an increse of 27% for stop loss regarding the price entered position.
 * May use moving average of 80 and 8 to help to define trend to enter position.
-* MA80 will work as market direction and MA8 will work as recoil/indent and point to same direction as MA80. 
+* MA80 will work as market direction and MA8 will work as recoil/indent and point to same direction as MA80.
+
+--
+
+## Moving average Slow Stoch Offset
+* MA of 80 above MA of 80 offset (ma80 > ma80[1]). Long.
+* Slow Stoch of 8 less or iqual as 20, crossing 20. Long.
+* MA of 80 below MA of 80 offset (ma80 > ma80[1]). Short.
+* Slow Stoch of 8 greater or iqual as 80, crossing 80. Long.
