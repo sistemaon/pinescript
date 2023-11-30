@@ -1,6 +1,6 @@
 # Ideas
 
-**Sketch ideas, thoughts, insights.**
+**Sketch ideas, thoughts, insights, random...**
 
 ---
 
@@ -46,6 +46,13 @@
 * Stoch Slow direction up is long, and down is short.
 * May use 15 Renko to look for entries.
 
+---
+
+## Candle Wick Open Price
+* 3D+ chart.
+* Candle wick pattern (previous candle), distance between open price and close price less than candle total range.
+* Candle open price (current candle) go long when price cross previous open/close/high, go short when price cross previous close/open/low.
+* Exit/Stop close candle price.
 ---
 
 #### Randoms
