@@ -50,11 +50,16 @@
 
 ## Candle Wick Open Price
 * 3D+ chart.
+* Intraday chart.
+* Moving Averages to define trends.
 * Candle wick pattern (previous candle), distance between open price and close price less than candle total range.
 * Candle open price (current candle) go long when price cross previous open/close/high, go short when price cross previous close/open/low.
 * Exit/Stop close candle price.
 ---
 
 #### Randoms
-> To define a longer stop loss, if price break uptrend moving average, fetch the last 1-2-3 price pattern buy.\
+> To define a longer stop loss, if price break uptrend moving average, fetch the last 1-2-3 price pattern buy.
+
 > If break downtrend moving average, fetch the last 1-2-3 price pattern sell.
+
+> Inside bar pattern formed with stochastic (in region overbought/oversold).
