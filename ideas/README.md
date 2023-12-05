@@ -63,3 +63,13 @@
 > If break downtrend moving average, fetch the last 1-2-3 price pattern sell.
 
 > Inside bar pattern formed with stochastic (in region overbought/oversold).
+
+> The last 7 days having a strong movement and the last 24 hours having a correction, volume +1kk.
+
+> Slow stochastic use to define trend (long or short) higher timeframe chart (120 mins),
+> slow stochastic use to enter and exit positions (long or short) lower timeframe chart (6 mins),
+> may use lower timeframe Renko chart to enter and exit positions.
+
+> Traps from the previous day candle maximum and minimum,
+> traps from the previous support and resistance,
+> traps from the long MAs. 
