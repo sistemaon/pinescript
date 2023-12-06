@@ -58,6 +58,8 @@
 ---
 
 #### Randoms
+> Limit burner 14% stocks, 27% cryptos.
+
 > To define a longer stop loss, if price break uptrend moving average, fetch the last 1-2-3 price pattern buy.
 
 > If break downtrend moving average, fetch the last 1-2-3 price pattern sell.
@@ -72,4 +74,12 @@
 
 > Traps from the previous day candle maximum and minimum,
 > traps from the previous support and resistance,
-> traps from the long MAs. 
+> traps from the long MAs.
+
+> Bear trap is onto MA 80.
+> Fox trap is onto MA 8.
+
+> Max & Min, 60 minute timeframe chart, exit is target or closed 3rd candle.
+> Max & Min, daily timeframe chart, exit is target or the first closed candle giving any profit.
+> Stop closed candle can be the 1st.
+
