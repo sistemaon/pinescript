@@ -71,10 +71,12 @@
 > Slow stochastic use to define trend (long or short) higher timeframe chart (120 mins),
 > slow stochastic use to enter and exit positions (long or short) lower timeframe chart (6 mins),
 > may use lower timeframe Renko chart to enter and exit positions.
+> Stoch when hit its overbought/oversold area, start to follow and check their higher/lower price wick for possible break up, when it breaks the wick price (ex; higher), enter position, stop is the reverse wick price (ex: lower).
 
 > Traps from the previous day candle maximum and minimum,
 > traps from the previous support and resistance,
 > traps from the long MAs.
+> In traps, may compared the current lower/higher wick with previous candles.
 
 > Bear trap is onto MA 80.
 > Fox trap is onto MA 8.
@@ -83,3 +85,4 @@
 > Max & Min, daily timeframe chart, exit is target or the first closed candle giving any profit.
 > Stop closed candle can be the 1st.
 
+> Define a long campaing, when price crosses above the 50 MA and then the price pulls back and sits above onto MA making a bottom. Short campaing is reverse.
