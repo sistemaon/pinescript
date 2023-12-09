@@ -71,7 +71,8 @@
 > Slow stochastic use to define trend (long or short) higher timeframe chart (120 mins),
 > slow stochastic use to enter and exit positions (long or short) lower timeframe chart (6 mins),
 > may use lower timeframe Renko chart to enter and exit positions.
-> Stoch when hit its overbought/oversold area, start to follow and check their higher/lower price wick for possible break up, when it breaks the wick price (ex; higher), enter position, stop is the reverse wick price (ex: lower).
+> Stoch when hit its overbought/oversold area, start to follow and check their higher/lower price wick for possible break up, when it breaks the wick price (ex; higher), enter position, stop is the reverse wick price (ex; lower).
+> Stoch when hit its overbought/oversold area like mentioned, before entering position, check candle if its long/short favoring the stoch area and use the price wick to enter (ex; sotch is overbought region, if candle is long use the price higher wick candle to enter position, if its short candle do nothing).
 
 > Traps from the previous day candle maximum and minimum,
 > traps from the previous support and resistance,
