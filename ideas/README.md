@@ -58,6 +58,8 @@
 ---
 
 #### Randoms
+> Have strategy for trend following and another for volatility.
+
 > Limit burner 14% stocks, 27% cryptos.
 
 > To define a longer stop loss, if price break uptrend moving average, fetch the last 1-2-3 price pattern buy.
@@ -69,6 +71,7 @@
 > The last 7 days having a strong movement and the last 24 hours having a correction, volume +1kk.
 
 > Slow stochastic use to define trend (long or short) higher timeframe chart (120 mins),
+> slow stochastic to use with moving averages to help identify support and resistance and trends,
 > slow stochastic use to enter and exit positions (long or short) lower timeframe chart (6 mins),
 > may use lower timeframe Renko chart to enter and exit positions.
 > Stoch when hit its overbought/oversold area, start to follow and check their higher/lower price wick for possible break up, when it breaks the wick price (ex; higher), enter position, stop is the reverse wick price (ex; lower).
