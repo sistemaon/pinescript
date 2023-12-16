@@ -90,3 +90,8 @@
 > Stop closed candle can be the 1st.
 
 > Define a long campaing, when price crosses above the 50 MA and then the price pulls back and sits above onto MA making a bottom. Short campaing is reverse.
+
+
+#### Q&D
+
+> Since ADX helps to identify directional or fragile market movements, can it operate maxs and mins?
