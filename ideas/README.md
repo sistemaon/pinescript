@@ -91,6 +91,9 @@
 
 > Define a long campaing, when price crosses above the 50 MA and then the price pulls back and sits above onto MA making a bottom. Short campaing is reverse.
 
+> SLS (short long short) is a trend pattern, when having 2 MAs pointing up, 3 candles short long short, entry point the highest price from candles higher wick, stop point the lowest price from candles lower wick.
+
+> LSL (long short long) is a trend pattern, when having 2 MAs pointing down, 3 candles long short long, entry point the lowest price from candles lower wick, stop point the highest price from candles higher wick.
 
 #### Q&D
 
