@@ -95,6 +95,12 @@
 > LSL (long short long) is a trend pattern, when having 2 MAs pointing down, 3 candles long short long, entry point the lowest price from candles lower wick, stop point the highest price from candles higher wick.
 > May use renko chart for this system.
 
+> When appearing an elephant bar, can wait pull make and mark support and resistance regions.
+
+> May use 1-2-3 higher/lower wick price to mark region as support and/or resistance.
+
+> Mark hammer higher/lower price in a trend to help identify the stop prices.
+
 #### Q&D
 
 > Since ADX helps to identify directional or fragile market movements, can it operate maxs and mins?
