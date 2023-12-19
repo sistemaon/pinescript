@@ -100,6 +100,9 @@
 > May use 1-2-3 higher/lower wick price to mark region as support and/or resistance.
 
 > Mark hammer higher/lower price in a trend to help identify the stop prices.
+> May use 2 MAs (ex; 8, 80) to identify trend.
+
+> Use inside bar extension/amplitute to help define target and/or stop.
 
 #### Q&D
 
