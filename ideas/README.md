@@ -104,6 +104,9 @@
 
 > Use inside bar extension/amplitute to help define target and/or stop.
 
+> RSI (2) dropped to 25 buy, exit is the max of the last 2 candles or 7 days later.
+> Daily day timeframe chart.
+
 #### Q&D
 
 > Since ADX helps to identify directional or fragile market movements, can it operate maxs and mins?
