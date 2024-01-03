@@ -98,6 +98,9 @@
 > When appearing an elephant bar, can wait pull make and mark support and resistance regions.
 
 > May use 1-2-3 higher/lower wick price to mark region as support and/or resistance.
+> 1-2-3, check last candle (3rd candle) if closed above the 2nd candle high.
+
+> Make script read the prices daily in a range of month, make medium to check price close/similar to dates (day) graph.
 
 > Mark hammer higher/lower price in a trend to help identify the stop prices.
 > May use 2 MAs (ex; 8, 80) to identify trend.
