@@ -111,6 +111,7 @@
 > Daily day timeframe chart.
 
 > Volume bar side count, long, short, neutral.
+> SMAs source based on volumes (long, short, both add).
 
 #### Q&D
 
