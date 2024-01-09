@@ -113,6 +113,10 @@
 > Volume bar side count, long, short, neutral.
 > SMAs source based on volumes (long, short, both add).
 
+> Check candle price verify, estimate how much in price changing per candle.
+> Candle long price change up, candle short price change down.
+> Calculate both to estimate.
+
 #### Q&D
 
 > Since ADX helps to identify directional or fragile market movements, can it operate maxs and mins?
