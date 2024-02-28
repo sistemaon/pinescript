@@ -14,4 +14,23 @@ Se você já está familiarizado com o uso de Pine scripts no TradingView e est�
 
 Se você é novo em nossa plataforma, por favor, continue lendo!
 
+# Utilizando Scripts
+
+Se você está interessado em utilizar indicadores técnicos ou estratégias no TradingView, você pode começar explorando os milhares de indicadores já disponíveis em nossa plataforma.
+Você pode acessar os indicadores existentes na plataforma de duas maneiras diferentes:
+
+[*] Ao usar o botão "Indicadores e Estratégias" do gráfico, ou
+[*] Ao navegar pelos Scripts da Comunidade do TradingView, o maior repositório de scripts de negociação do mundo, com mais de 100.000 scripts, a maioria sendo gratuitos e código aberto (_open source_), o que significa que pode ser visto o código Pine Script deles.
+
+Encontrando as ferramentas que precisa, pode ser uma boa maneira de começar e gradualmente se tornar proficiente como usuário de script, até estar preparado para começar sua jornada de programação em Pine Script.
+
+
+
+
+
+
+
+
+
+
 # Desenvolver Scripts
