@@ -42,12 +42,23 @@ A caixa de diálogo apresenta scripts de diferentes categorias no painel esquerd
 Aqui, nesta imagem contém os recursos integrados do TradingView:
 
 ![Funcionalidades incorporadas](./imgs/FirstSteps-LoadingScriptsFromTheChart-02.png)
+
 Ao clicar em um dos indicadores ou estratégias (aqueles com as setas verdes e vermelhas seguido de seus nomes), é carregado no seu gráfico.
 
+# Navegando pelos Scripts da Comunidade
 
+A partir da página inicial do [TradingView](https://www.tradingview.com), pode ter acesso aos Scripts da Comunidade através do menu "Comunidade" (_Community_).
+Aqui, estamos destacando a seção "Escolhas dos Editores" (_Editors’ Picks_), porém existem outras categorias que você pode escolher:
 
+![Navegando pelos scripts da comunidade](./imgs/FirstSteps-BrowsingCommunityScripts-01.png)
 
+Os scripts pode ser pesquisado usando o campo "Pesquisa" (_Search_) da página inicial e filtrar os scripts usando diferentes critérios.
+O Centro de Ajuda tem uma página explicando os [diferentes tipos de scripts](https://www.tradingview.com/support/solutions/43000558522) disponíveis.
 
+O stream de scripts mostra os widgets, ou seja, espaços reservados que exibem uma visualização em miniatura do gráfico de cada publicação, sua descrição e seu autor.
+Ao clicar, abrirá a página do script, onde poderá ver o script em um gráfico, ler a descrição do autor, curtir o script, deixar comentários ou ler o código-fonte do script se ele for publicado como código aberto.
+Assim que encontrar um script de seu interesse nos Scripts da Comunidade, siga as instruções no Centro de Ajuda para [carregá-lo em seu gráfico](https://www.tradingview.com/support/solutions/43000555216).
+_"Stream" é lista contínua de informações ou widgets de script que são exibidos na interface_.
 
 
 
