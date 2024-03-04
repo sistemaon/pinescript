@@ -14,6 +14,7 @@ Se você já está familiarizado com o uso de Pine scripts no TradingView e est�
 
 Se você é novo em nossa plataforma, por favor, continue lendo!
 
+
 # Utilizando Scripts
 
 Se você está interessado em utilizar indicadores técnicos ou estratégias no TradingView, você pode começar explorando os milhares de indicadores já disponíveis em nossa plataforma.
@@ -23,6 +24,7 @@ Você pode acessar os indicadores existentes na plataforma de duas maneiras dife
 * Ao navegar pelos Scripts da Comunidade do TradingView, o maior repositório de scripts de negociação do mundo, com mais de 100.000 scripts, a maioria sendo gratuitos e código aberto (_open source_), o que significa que pode ser visto o código Pine Script deles.
 
 Encontrando as ferramentas que precisa, pode ser uma boa maneira de começar e gradualmente se tornar proficiente como usuário de script, até estar preparado para começar sua jornada de programação em Pine Script.
+
 
 # Carregando Scripts do Gráfico
 
@@ -45,6 +47,7 @@ Aqui, nesta imagem contém os recursos integrados do TradingView:
 
 Ao clicar em um dos indicadores ou estratégias (aqueles com as setas verdes e vermelhas seguido de seus nomes), é carregado no seu gráfico.
 
+
 # Navegando pelos Scripts da Comunidade
 
 A partir da página inicial do [TradingView](https://www.tradingview.com), pode ter acesso aos Scripts da Comunidade através do menu "Comunidade" (_Community_).
@@ -61,5 +64,23 @@ Assim que encontrar um script de seu interesse nos Scripts da Comunidade, siga a
 _"Stream" é lista contínua de informações ou widgets de script que são exibidos na interface_.
 
 
+# Modificando Configurações do Script
+
+Assim que o script é carregado no gráfico, clique duas vezes no mesmo (#1) para abrir a aba "Configurações/Entradas" (#2) (_Settings/Inputs_):
+
+![Modificando configurações do script 01](./imgs/FirstSteps-ChangingScriptSettings-01.png)
+
+A aba "Entradas" (_Inputs_) permite a alteração das configurações em que o autor do script tornou-os editáveis.
+Consegue-se configurar algumas das visualizações do script usando a aba "Estilo" (_Style_) da mesma caixa de diálogo e quais períodos de tempo o script deve aparecer usando a aba "Visibilidade" (_Visibility_).
+
+Outras configurações encontra-se disponíveis em todos os scripts nos botões que aparecem à direita de seu nome quando o mouse passa sobre ele, e no menu "Mais" (ícone dos três "_pontinhos_"):
+
+![Modificando configurações do script 02](./imgs/FirstSteps-ChangingScriptSettings-02.png)
+
+
+
 
 # Desenvolver Scripts
+
+
+
