@@ -73,9 +73,29 @@ Assim que o script é carregado no gráfico, clique duas vezes no mesmo (#1) par
 A aba "Entradas" (_Inputs_) permite a alteração das configurações em que o autor do script tornou-os editáveis.
 Consegue-se configurar algumas das visualizações do script usando a aba "Estilo" (_Style_) da mesma caixa de diálogo e quais períodos de tempo o script deve aparecer usando a aba "Visibilidade" (_Visibility_).
 
-Outras configurações encontra-se disponíveis em todos os scripts nos botões que aparecem à direita de seu nome quando o mouse passa sobre ele, e no menu "Mais" (ícone dos três "_pontinhos_"):
+Outras configurações encontra-se disponíveis em todos os scripts nos botões que aparecem à direita de seu nome quando o mouse passa sobre ele, e no menu "Mais" (_More_) (ícone dos três "_pontinhos_"):
 
 ![Modificando configurações do script 02](./imgs/FirstSteps-ChangingScriptSettings-02.png)
+
+
+# Lendo Scripts
+
+Consumir códigos escritos por bons programadores é uma maneira eficiente de desenvolver sua compreensão da linguagem.
+E Isso é tão real para o Pine Script quanto para outras linguagens de programação.
+Encontrar um bom código aberto em Pine Script é relativamente fácil, aqui encontra-se fontes confiáveis de códigos escritos por estes programadores no TradingView:
+
+* Indicadores integrados do TradingView (_Built-ins_).
+* Scripts selecionados como ["Escolhas dos Editores"](https://www.tradingview.com/scripts/editors-picks) (_Editors’ Picks_).
+* Scripts pelos [autores seguidos pela conta PineCoders](https://www.tradingview.com/u/PineCoders/#following-people).
+* Scripts de autores com alta reputação e publicações de código aberto.
+
+Ler código dos [Scripts da Comunidade](https://www.tradingview.com/scripts) é fácil; caso não veja um ícone de "cadeado" de cor cinza ou vermelha no canto superior direito do widget do script, isso indica que o script é código aberto. Ao abrir a página do script, você poderá ver seu código-fonte.
+
+Para ver o código dos recursos integrados do TradingView, carregue o indicador no gráfico, em seguida, passe o mouse sobre o nome do indicador e selecione o ícone de chaves de "Código-fonte" (_Source code_) (se não o ver, é porque o código-fonte do indicador encontra-se indisponível).
+Ao clicar no ícone, o Editor do Pine (_Pine Editor_) será aberto e apartir daí, poderá ver o código do script. Caso queira mexê-lo, precisará usar o botão "Mais" (_More_) do menu do Editor, localizado no canto superior direito do painel do Editor, e então selecionar em "Fazer uma cópia..." (_Make a copy…_).
+Poderá alterá-lo e salvar o código, e como terá criado uma versão diferente do script, precisará usar o botão "Adicionar ao Gráfico" (_Add to Chart_) no Editor para adicionar essa nova cópia ao gráfico.
+
+
 
 
 
