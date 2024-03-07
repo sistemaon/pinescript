@@ -110,10 +110,10 @@ Projetamos de forma que seja relativamente fácil de aprender para programadores
 
 O Pine Script permite que crie três tipos de scripts:
 
-* __Indicadores__ como Index de Força Relativa (IFR, (_RSI_)), Convergência e Divergência de Médias Móveis (MACD), Bandas de Bollinger, Médias Móveis (MAs), etc...
+* __Indicadores__ como Index de Força Relativa (IFR, (_RSI_)), Convergência e Divergência de Médias Móveis (_MACD_), Bandas de Bollinger, Médias Móveis (_MAs_), etc...
 * __Estratégias__ na qual incluem lógica para emitir ordens de negociação e podem ser testadas historicamente e testadas para frente (_backtest & forwardtest_).
 * __Bibliotecas__ na qual são usadas por programadores mais avançados para agrupar funções frequentemente utilizadas que podem ser reutilizadas em outros scripts.
 
-O próximo passo recomendado é criar o seu [primeiro indicador](https://www.tradingview.com/pine-script-docs/en/v5/primer/First_indicator.html#pagefirstindicator).
+O próximo passo recomendado é criar o seu [primeiro indicador](02_primeiro_indicador.md).
 
 
