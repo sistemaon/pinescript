@@ -95,12 +95,14 @@ Para ver o código dos recursos integrados do TradingView, carregue o indicador 
 Ao clicar no ícone, o Editor do Pine (_Pine Editor_) será aberto e apartir daí, poderá ver o código do script. Caso queira mexê-lo, precisará usar o botão "Mais" (_More_) do menu do Editor, localizado no canto superior direito do painel do Editor, e então selecionar em "Fazer uma cópia..." (_Make a copy…_).
 Poderá alterá-lo e salvar o código, e como terá criado uma versão diferente do script, precisará usar o botão "Adicionar ao Gráfico" (_Add to Chart_) no Editor para adicionar essa nova cópia ao gráfico.
 
+Isto mostra o Editor do Pine sendo aberto após ter selecionado o botão "Ver código-fonte" (_View source_) do indicador no gráfico.
+Estamos prestes em fazer uma cópia de sua origem pois atualmente está como leitura (_read-only_) (indicado pelo ícone de "cadeado" próximo ao nome do arquivo no Editor):
+
+![Lendo scripts](./imgs/FirstSteps-ReadingScripts-01.png)
+
+Pode-se também abrir os indicadores integrados do TradingView a partir do Editor do Pine (acessível na aba "Editor do Pine" (_Pine Editor_) na parte inferior do gráfico) usando "Abrir/Novo script integrado padrão..." (_Open/New default built-in script…_) da seleção do menu.
 
 
 
-
-
-# Desenvolver Scripts
-
-
+# Desenvolvendo Scripts
 
