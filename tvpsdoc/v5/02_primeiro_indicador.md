@@ -12,3 +12,21 @@ Embora possa usar qualquer editor de texto que desejar para escrever seus script
 * Embora não seja tão repleto de recursos quanto os principais editores disponíveis, o Editor Pine oferece funcionalidades-chave, como busca e substituição, múltiplos cursores (edição simultânea) e versionamento.
 
 Para abrir o Editor, clique na aba "Editor Pine" (_Pine Editor_) na parte inferior do gráfico no TradingView. E isso abrirá o painel do Editor.
+
+
+# Primeira Versão
+
+Criando o primeiro script funcional em Pine, uma implementação do indicador (_MACD_)[https://www.tradingview.com/support/solutions/43000502344-macd-moving-average-convergence-divergence] em Pine Script:
+
+```pinescript
+//@version=5
+indicator("MACD #1")
+fast = 12
+slow = 26
+fastMA = ta.ema(close, fast)
+slowMA = ta.ema(close, slow)
+macd = fastMA - slowMA
+signal = ta.ema(macd, 9)
+plot(macd, color = color.blue)
+plot(signal, color = color.orange)
+```
