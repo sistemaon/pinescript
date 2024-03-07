@@ -103,6 +103,17 @@ Estamos prestes em fazer uma cópia de sua origem pois atualmente está como lei
 Pode-se também abrir os indicadores integrados do TradingView a partir do Editor do Pine (acessível na aba "Editor do Pine" (_Pine Editor_) na parte inferior do gráfico) usando "Abrir/Novo script integrado padrão..." (_Open/New default built-in script…_) da seleção do menu.
 
 
-
 # Desenvolvendo Scripts
+
+Desenvolvemos o Pine Script para capacitar tanto traders iniciantes quanto experientes para criar suas próprias ferramentas de negociação.
+Projetamos de forma que seja relativamente fácil de aprender para programadores iniciantes — embora aprender a primeira linguagem de programação, assim como o trading, possa ser um grande desafio para qualquer pessoa — mesmo assim, é muito eficaz para que programadores experientes possam construir ferramentas de complexidade moderada.
+
+O Pine Script permite que crie três tipos de scripts:
+
+* __Indicadores__ como Index de Força Relativa (IFR, (_RSI_)), Convergência e Divergência de Médias Móveis (MACD), Bandas de Bollinger, Médias Móveis (MAs), etc...
+* __Estratégias__ na qual incluem lógica para emitir ordens de negociação e podem ser testadas historicamente e testadas para frente (_backtest & forwardtest_).
+* __Bibliotecas__ na qual são usadas por programadores mais avançados para agrupar funções frequentemente utilizadas que podem ser reutilizadas em outros scripts.
+
+O próximo passo recomendado é criar o seu [primeiro indicador](https://www.tradingview.com/pine-script-docs/en/v5/primer/First_indicator.html#pagefirstindicator).
+
 
