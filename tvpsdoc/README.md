@@ -1,3 +1,4 @@
-# tradingview pinescript doc
+
+# TradingView PineScript Documentação
 
 
