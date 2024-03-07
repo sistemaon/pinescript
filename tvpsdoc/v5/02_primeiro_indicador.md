@@ -16,9 +16,9 @@ Para abrir o Editor, clique na aba "Editor Pine" (_Pine Editor_) na parte inferi
 
 # Primeira Versão
 
-Criando o primeiro script funcional em Pine, uma implementação do indicador (_MACD_)[https://www.tradingview.com/support/solutions/43000502344-macd-moving-average-convergence-divergence] em Pine Script:
+Criando o primeiro script funcional em Pine, uma implementação do indicador [(_MACD_)](https://www.tradingview.com/support/solutions/43000502344-macd-moving-average-convergence-divergence) em Pine Script:
 
-```pinescript
+```c
 //@version=5
 indicator("MACD #1")
 fast = 12
