@@ -108,3 +108,25 @@ O seu segundo script Pine é executado no seu gráfico. Ao clicar duas vezes no 
 
 ![Segunda versão](./imgs/FirstIndicator-Version2.png)
 
+Vamos analisar as modificações da segunda versão do script:
+
+__Linha 2: `indicator("MACD #2")`__
+- Foi alterado _#1_ para _#2_ para que a segunda versão do indicador exiba um nome diferente no gráfico.
+
+__Linha 3: `fastInput = input(12, "Fast length")`__
+- Em vez de declarar um valor constante a uma variável, está sendo usado a função [input()](https://www.tradingview.com/pine-script-reference/v5/#fun_input) para que possa alterar o valor na aba "Configurações/Entradas" (_Settings/Inputs_) do script.
+`12` será o valor padrão e o nome do campo será "Comprimento rápido" (_`Fast length`_). Se o valor for mudado na aba de "Entradas" (_Inputs_), o conteúdo da variável `fastInput` conterá um novo valor e o script será re-executado no gráfico com esse novo valor. Note que, conforme recomendado no [Guia de Estilo](000_style_guide.md) do Pine Script, foi adicionado o `Input` para ter em mente, mais adiante no script, de que seu valor provém de uma entrada do usuário.
+
+__Linha 4: `slowInput = input(26, "Slow length")`__
+- Feito o mesmo para o "Comprimento lento" (_`Slow length`_), usando um nome de variável, valor padrão e texto diferentes para o nome do campo.
+
+__Linha 5: `[macdLine, signalLine, histLine] = ta.macd(close, fastInput, slowInput, 9)`__
+- Aqui é onde é chamado a função integrada [ta.macd()](https://www.tradingview.com/pine-script-reference/v5/#fun_ta{dot}macd) para efetuar todos os cálculos da primeira versão em apenas numa única linha. A função exige quatro parâmetros (os valores após o nome da função, entre parênteses).
+Retornando três valores para as três variáveis em vez de apenas um, como as funções que usamos até agora.
+É preciso colocar a lista de três variáveis que recebem o resultado da função entre colchetes, à esquerda do sinal de `=`. Observe que dois dos valores que foi proporcionado para a função são as variáveis "input" que contêm os comprimentos rápido e lento: `fastInput` e `slowInput`.
+
+__Linha 6 e 7:__
+- Mudaram os nomes das variáveis que está sendo plotado, mas as linhas estão fazendo a mesma coisa que na primeira versão.
+
+A segunda versão realiza os mesmos cálculos que a primeira, podendo alterar os dois comprimentos usados para calculá-lo através dos "inputs".
+O código também é mais simples, com menos linhas. Resumindo, o script foi refinado.
