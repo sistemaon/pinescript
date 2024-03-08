@@ -130,3 +130,8 @@ __Linha 6 e 7:__
 
 A segunda versão realiza os mesmos cálculos que a primeira, podendo alterar os dois comprimentos usados para calculá-lo através dos "inputs".
 O código também é mais simples, com menos linhas. Resumindo, o script foi refinado.
+
+
+# Seguinte
+
+É recomendado seguir para [Próximos Passos](./03_proximos_passos.md)
