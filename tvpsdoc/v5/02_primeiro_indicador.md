@@ -2,7 +2,7 @@
 # O Editor Pine
 
 O Editor Pine é a área de trabalho dos seus scripts.
-Embora possa usar qualquer editor de texto que desejar para escrever seus scripts em Pine, usar nosso Editor possui muitas vantagens:
+Embora possa usar qualquer editor de texto que desejar para escrever seus scripts em Pine, usar o nosso Editor possui muitas vantagens:
 
 * Destaca seu código seguindo a sintaxe do Pine Script.
 * Exibe lembretes de sintaxe para funções integradas e de bibliotecas ao passar o mouse sobre elas.
@@ -41,7 +41,7 @@ Seu primeiro script Pine está sendo executado no gráfico, que deve se assemelh
 
 ![Primeira versão](./imgs/FirstIndicator-Version1.png)
 
-Vamos analisar o código do nosso script, linha por linha:
+Vamos analisar o código do script, linha por linha:
 
 __Linha 1: `//@version=5`__
 - Esta é uma [anotação do compilador](000_compiler_annotation.md) informando ao compilador que o script usará a versão 5 do Pine Script.
@@ -50,10 +50,10 @@ __Linha 2: `indicator("MACD #1")`__
 - Define o nome do script que aparecerá no gráfico como "_MACD_".
 
 __Linha 3: `fast = 12`__
-- Define a variável do tipo _integer_ com nome de `fast` que será o comprimento da _EMA rápida_.
+- Define a variável do tipo _integer_ com nome de `fast` que será o comprimento da _EMA (Média Móvel Exponencial)_ rápida.
 
 __Linha 4: `slow = 26`__
-- Define a variável do tipo _integer_ com nome de `slow` que será o comprimento da _EMA lenta_.
+- Define a variável do tipo _integer_ com nome de `slow` que será o comprimento da _EMA (Média Móvel Exponencial)_ lenta.
 
 __Linha 5: `fastMA = ta.ema(close, fast)`__
 - Define a variável `fastMA`, contendo o resultado do cálculo da _EMA (Média Móvel Exponencial)_ com um comprimento igual a _fast (12)_, na série de fechamento, ou seja, o preço de fechamento da barra (_candlestick_).
@@ -72,3 +72,39 @@ __Linha 9: `plot(macd, color = color.blue)`__
 
 __Linha 10: `plot(signal, color = color.orange)`__
 - Função `plot` é chamada para exibir a variável `signal` usando uma linha de cor laranja.
+
+
+# Segunda Versão
+
+A primeira versão do script calculou o MACD de forma "manual", e como o Pine Script é formulado para desenvolver indicadores e estratégias, existem funções nativas da própria linguagem para vários indicadores comuns, incluindo um para...
+__MACD__: [ta.macd()](https://www.tradingview.com/pine-script-reference/v5/#fun_ta{dot}macd).
+
+Esta é a segunda versão do script:
+
+```c
+//@version=5
+indicator("MACD #2")
+fastInput = input(12, "Fast length")
+slowInput = input(26, "Slow length")
+[macdLine, signalLine, histLine] = ta.macd(close, fastInput, slowInput, 9)
+plot(macdLine, color = color.blue)
+plot(signalLine, color = color.orange)
+```
+
+Perceba que:
+
+- Foi adicionado entradas (_input_) para que possa alterar os comprimentos das EMAs.
+- Foi adicionado a função embutida [ta.macd()](https://www.tradingview.com/pine-script-reference/v5/#fun_ta{dot}macd) para calcular o MACD, na qual poupa algumas linhas no código e torna-o mais fácil de ler.
+
+Repetindo o mesmo processo anterior para copiar esse código em um novo indicador:
+
+* Através do menu suspenso em "Abrir" (_Open_) localizado no canto superior direito do Editor selecione "Novo indicador" (_New indicator_).
+* Em seguida, copie o script de exemplo acima.
+* Selecione todo o código já no editor e substitua-o pela segunda versão do script.
+* Clique em "Salvar" (_Save_) e modifique o nome para o seu script.
+* Ao clicar em "Adicionar ao gráfico" (_Add to chart_) na barra de menu do Editor, o indicador "MACD #2" aparece em um painel separado abaixo do indicador "MACD #1".
+
+O seu segundo script Pine é executado no seu gráfico. Ao clicar duas vezes no nome do indicador no seu gráfico, abrirá a aba "Configurações/Entradas" (_Settings/Inputs_) do script, onde agora pode alterar os comprimentos lento e rápido (_slow length/fast length_):
+
+![Segunda versão](./imgs/FirstIndicator-Version2.png)
+
