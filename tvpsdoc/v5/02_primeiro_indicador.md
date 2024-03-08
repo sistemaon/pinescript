@@ -134,4 +134,4 @@ O código também é mais simples, com menos linhas. Resumindo, o script foi ref
 
 # Seguinte
 
-É recomendado seguir para [Próximos Passos](./03_proximos_passos.md)
+É recomendado seguir para [Próximos Passos](./03_proximos_passos.md).
