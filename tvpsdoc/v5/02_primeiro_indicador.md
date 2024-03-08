@@ -56,4 +56,19 @@ __Linha 4: `slow = 26`__
 - Define a variável do tipo _integer_ com nome de `slow` que será o comprimento da _EMA lenta_.
 
 __Linha 5: `fastMA = ta.ema(close, fast)`__
-- Define a variável `fastMA`, contendo o resultado do cálculo da _EMA (Média Móvel Exponencial)_ com um comprimento igual a _fast (12)_, na série de fechamento, ou seja, o preço de fechamento das barras (_candlestick_).
+- Define a variável `fastMA`, contendo o resultado do cálculo da _EMA (Média Móvel Exponencial)_ com um comprimento igual a _fast (12)_, na série de fechamento, ou seja, o preço de fechamento da barra (_candlestick_).
+
+__Linha 6: `slowMA = ta.ema(close, slow)`__
+- Define a variável `slowMA`, contendo o resultado do cálculo da _EMA_ com um comprimento igual a _slow (26)_, a partir do fechamento.
+
+__Linha 7: `macd = fastMA - slowMA`__
+- Define a variável `macd` como a diferença entre as duas _EMAs_.
+
+__Linha 8: `signal = ta.ema(macd, 9)`__
+- Define a variável `signal` como um valor suavizado (_smoothed_) de `macd` usando o algoritmo _EMA_ com um comprimento de 9.
+
+__Linha 9: `plot(macd, color = color.blue)`__
+- Função `plot` é chamada para exibir a variável `macd` usando uma linha de cor azul.
+
+__Linha 10: `plot(signal, color = color.orange)`__
+- Função `plot` é chamada para exibir a variável `signal` usando uma linha de cor laranja.
