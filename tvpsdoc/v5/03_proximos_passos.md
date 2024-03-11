@@ -30,3 +30,10 @@ Por exemplo, `close[1]` refere-se ao valor de fechamento ([close](https://www.tr
 Embora este mecanismo de indexação possa lembrar sobre matrizes (_arrays_), uma série temporal é diferente e pensar em termos de arrays pode dificultar a compreensão desse conceito fundamental do Pine Script.
 Um bom entendimento tanto do [modelo de execução](./000_execution_model.md) quanto das [séries temporais](./000_time_series.md) é essencial para compreender como os scripts Pine funcionam.
 Se desconhece dados organizados em séries temporais, será necessário praticar para aprender a utilizá-los eficientemente. Assim que familiarizar com esses conceitos-chave, descobrirá que, ao combinar o uso de séries temporais com funções integradas intrinsecamente projetadas para manuseá-las de forma eficiente, bastante pode ser realizado em poucas linhas de código.
+
+
+# Publicando Scripts
+
+TradingView é o lar de uma vasta comunidade de programadores de Pine Script e milhões de traders do mundo todo. Uma vez que se torne proficiente o suficiente em Pine Script, pode optar por compartilhar seus scripts com outros traders. Antes de fazer isso, por favor, reserve um tempo para aprender Pine Script o suficiente para fornecer aos traders uma ferramenta original e confiável. Todos os scripts publicados, sem exceção, são analisados por nossa equipe de moderadores e devem cumprir com as nossas [Regras de Publicação de Scripts](https://www.tradingview.com/support/solutions/43000590599), que exigem que sejam originais e bem documentados.
+
+Se deseja usar scripts em Pine para uso próprio, simplesmente escreva-os no Editor Pine e adicione-os ao gráfico a partir daí; não precisa publicá-los para usá-los. Se deseja compartilhar seus scripts com amigos, pode publicá-los de forma privada e enviar o link da sua publicação privada. Para mais informações veja a página [Publicando](./000_publishing.md)
