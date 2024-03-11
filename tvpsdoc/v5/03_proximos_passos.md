@@ -50,4 +50,4 @@ O [Manual do Usuário](https://www.tradingview.com/pine-script-docs/en/v5/index.
 
 O [Manual de Referência](https://www.tradingview.com/pine-script-reference/v5) do Pine Script v5 documenta o que cada variável, função ou palavra-chave faz. É uma ferramenta crucial para todos os programadores de Pine Script; é simplesmente improdutivo se tentar criar scripts de qualquer complexidade sem consultá-lo. Existe em dois formatos: o formato HTML para o qual foi fornecido o link e a versão de pop-up, que pode ser acessada a partir do Editor Pine, seja através do `ctrl` + `clique` ou usando o menu "Mais/Referência do Pine Script (pop-up)" (_“More/Pine Script reference (pop-up)”_) do Editor. O Manual de Referência também está traduzido em outros idiomas.
 
-Existem cinco versões diferentes do Pine Script. Certifique-se de que a documentação que está consumindo corresponde à versão do Pine Script com a qual você está programando.
+Existem cinco versões do Pine Script. Certifique-se de que a documentação que está consumindo corresponde à versão do Pine Script com a qual você está programando.
