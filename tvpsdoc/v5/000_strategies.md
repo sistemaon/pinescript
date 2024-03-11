@@ -1,0 +1,4 @@
+
+# TO DO
+
+-- Estratégias...
