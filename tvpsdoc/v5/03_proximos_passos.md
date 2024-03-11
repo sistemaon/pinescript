@@ -20,3 +20,13 @@ Um script em Pine __não__ é como programas em muitas das linguagens de program
 Quando o script é executado em uma barra histórica, a variável [close](https://www.tradingview.com/pine-script-reference/v5/#var_close), embutida, contém o valor do _fechamento_ daquela barra. Quando o script é executado na barra em tempo real, o [close](https://www.tradingview.com/pine-script-reference/v5/#var_close) retorna o preço __corrente__/__atual__ do símbolo até que a barra se fecha.
 
 Diferente dos indicadores, normalmente as estratégias são executadas apenas uma vez nas barras em tempo real, ao fecharem-se. Também podem ser configurados para executar em cada atualização de preço/volume, se for necessário. Para mais informações e para entender como as estratégias calculam diferentemente dos indicadores veja a página sobre [Estratégias](./000_strategies.md).
+
+
+# Série Temporal
+
+A principal estrutura de dados usada no Pine Script é chamada de [série temporal](./000_time_series.md) (_time series_). Séries temporais possui um valor para cada barra na qual o script é executado, então expandem-se continuamente à medida que o script é executado em demais barras. Valores passados da série temporal podem ser referenciados usando o operador de referência histórica: [[]](https://www.tradingview.com/pine-script-reference/v5/#op_[]).
+Por exemplo, `close[1]` refere-se ao valor de fechamento ([close](https://www.tradingview.com/pine-script-reference/v5/#var_close)) da barra anterior no momento em que o script está sendo executado.
+
+Embora este mecanismo de indexação possa lembrar sobre matrizes (_arrays_), uma série temporal é diferente e pensar em termos de arrays pode dificultar a compreensão desse conceito fundamental do Pine Script.
+Um bom entendimento tanto do [modelo de execução](./000_execution_model.md) quanto das [séries temporais](./000_time_series.md) é essencial para compreender como os scripts Pine funcionam.
+Se desconhece dados organizados em séries temporais, será necessário praticar para aprender a utilizá-los eficientemente. Assim que familiarizar com esses conceitos-chave, descobrirá que, ao combinar o uso de séries temporais com funções integradas intrinsecamente projetadas para manuseá-las de forma eficiente, bastante pode ser realizado em poucas linhas de código.
