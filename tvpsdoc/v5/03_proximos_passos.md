@@ -37,3 +37,17 @@ Se desconhece dados organizados em séries temporais, será necessário praticar
 TradingView é o lar de uma vasta comunidade de programadores de Pine Script e milhões de traders do mundo todo. Uma vez que se torne proficiente o suficiente em Pine Script, pode optar por compartilhar seus scripts com outros traders. Antes de fazer isso, por favor, reserve um tempo para aprender Pine Script o suficiente para fornecer aos traders uma ferramenta original e confiável. Todos os scripts publicados, sem exceção, são analisados por nossa equipe de moderadores e devem cumprir com as nossas [Regras de Publicação de Scripts](https://www.tradingview.com/support/solutions/43000590599), que exigem que sejam originais e bem documentados.
 
 Se deseja usar scripts em Pine para uso próprio, simplesmente escreva-os no Editor Pine e adicione-os ao gráfico a partir daí; não precisa publicá-los para usá-los. Se deseja compartilhar seus scripts com amigos, pode publicá-los de forma privada e enviar o link da sua publicação privada. Para mais informações veja a página [Publicando](./000_publishing.md).
+
+
+# Explorando a Documentação do Pine Script
+
+Enquanto ao ler o código de scripts publicados é, sem dúvida, útil, passar tempo em nossa documentação é preciso para obter qualquer grau de proficiência no Pine Script. Nossas duas principais fontes de documentação sobre o Pine Script são:
+- Este [Manual do Usuário](https://www.tradingview.com/pine-script-docs/en/v5/index.html) do Pine Script v5.
+- Nosso [Manual de Referência](https://www.tradingview.com/pine-script-reference/v5) do Pine Script v5.
+- Nosso [Manual de Referência](https://br.tradingview.com/pine-script-reference/v5) do Pine Script v5 em português do Brasil.
+
+O [Manual do Usuário](https://www.tradingview.com/pine-script-docs/en/v5/index.html) do Pine Script v5 está no formato HTML e apenas em inglês.
+
+O [Manual de Referência](https://www.tradingview.com/pine-script-reference/v5) do Pine Script v5 documenta o que cada variável, função ou palavra-chave faz. É uma ferramenta crucial para todos os programadores de Pine Script; é simplesmente improdutivo se tentar criar scripts de qualquer complexidade sem consultá-lo. Existe em dois formatos: o formato HTML para o qual foi fornecido o link e a versão de pop-up, que pode ser acessada a partir do Editor Pine, seja através do `ctrl` + `clique` ou usando o menu "Mais/Referência do Pine Script (pop-up)" (_“More/Pine Script reference (pop-up)”_) do Editor. O Manual de Referência também está traduzido em outros idiomas.
+
+Existem cinco versões diferentes do Pine Script. Certifique-se de que a documentação que está consumindo corresponde à versão do Pine Script com a qual você está programando.

@@ -6,7 +6,7 @@ Embora possa usar qualquer editor de texto que desejar para escrever seus script
 
 * Destaca seu código seguindo a sintaxe do Pine Script.
 * Exibe lembretes de sintaxe para funções integradas e de bibliotecas ao passar o mouse sobre elas.
-* Fornece rápido acesso ao Manual de Referência do Pine Script v5 através de um popup ao pressionar `ctrl` + `click` / `cmd` + `click` nas palavras-chave do Pine Script.
+* Fornece rápido acesso ao Manual de Referência do Pine Script v5 através de um popup ao pressionar `ctrl` + `clique` / `cmd` + `clique` nas palavras-chave do Pine Script.
 * Disponibiliza um recurso de auto-completar que pode ser ativado com `ctrl` + `espaço` / `cmd` + `espaço`.
 * Execução imediata ao salvar uma nova versão de um script já carregado no gráfico, tornando o ciclo de escrever/compilar/executar ágil.
 * Embora não seja tão repleto de recursos quanto os principais editores disponíveis, o Editor Pine oferece funcionalidades-chave, como busca e substituição, múltiplos cursores (edição simultânea) e versionamento.
