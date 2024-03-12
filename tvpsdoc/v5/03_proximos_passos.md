@@ -51,3 +51,23 @@ O [Manual do Usuário](https://www.tradingview.com/pine-script-docs/en/v5/index.
 O [Manual de Referência](https://www.tradingview.com/pine-script-reference/v5) do Pine Script v5 documenta o que cada variável, função ou palavra-chave faz. É uma ferramenta crucial para todos os programadores de Pine Script; é simplesmente improdutivo se tentar criar scripts de qualquer complexidade sem consultá-lo. Existe em dois formatos: o formato HTML para o qual foi fornecido o link e a versão de pop-up, que pode ser acessada a partir do Editor Pine, seja através do `ctrl` + `clique` ou usando o menu "Mais/Referência do Pine Script (pop-up)" (_“More/Pine Script reference (pop-up)”_) do Editor. O Manual de Referência também está traduzido em outros idiomas.
 
 Existem cinco versões do Pine Script. Certifique-se de que a documentação que está consumindo corresponde à versão do Pine Script com a qual está programando.
+
+
+# Onde Ir a Partir Daqui?
+
+O [Manual do Usuário](https://www.tradingview.com/pine-script-docs/en/v5/index.html) do Pine Script v5 contém vários exemplos de código utilizados para ilustrar os conceitos que discutimos. Ao explorá-lo, será capaz de estudar os scripts e aprender os fundamentos do Pine Script.
+Ler sobre conceitos-chave e experimentá-los imediatamente com código real é produtivo no aprendizado de qualquer linguagem de programação.
+Tendo feito o [Primeiro indicador](./02_primeiro_indicador.md), reproduze os exemplos da documentação no Editor e experimente-os. Explore! Não vai causar dano.
+
+Assim é como o [Manual do Usuário](https://www.tradingview.com/pine-script-docs/en/v5/index.html) do Pine Script v5 que está lendo encontra-se organizado:
+
+- A seção da [Linguagem](./000_language.md) explica os principais componentes do Pine Script e como os scripts são executados.
+- A seção de [Conceitos](./000_concepts.md) é mais direcionada para tarefas. Explica como efetuar coisas no Pine Script.
+- A seção da [Criação de Scripts](./000_writing.md) explora ferramentas e truques que ajudarão a programar e publicar scripts.
+- A seção de [Perguntas Frequentes](./000_faq.md) tira dúvidas das perguntas comuns dos desenvolvedores do Pine Script.
+- A página de [Mensagens de Erro](./000_error_messages.md) documenta as causas e soluções para os erros mais comuns de tempo de execução e compilador.
+- A página de [Notas de Lançamento](https://www.tradingview.com/pine-script-docs/en/v5/Release_notes.html#pagereleasenotes) é onde pode acompanhar as atualizações frequentes do Pine Script.
+- A seção da [Guia de Migração](https://www.tradingview.com/pine-script-docs/en/v5/migration_guides/index.html#indexmigrationguides) explica como fazer a portabilidade entre versões diferentes do Pine Script.
+- A página [Onde Obter Mais Informações](./000_where_can_i_get_more_information.md) lista outros conteúdos úteis relacionados ao Pine Script, incluindo onde fazer perguntas quando estiver com dúvidas.
+
+Desejamos uma jornada muito bem-sucedida com o Pine Script... e com suas operações!
