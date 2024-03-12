@@ -15,7 +15,7 @@ Tanto indicadores quanto estratégias podem ser executados em modo de sobreposi�
 
 # Como os Scripts são Executados
 
-Um script em Pine __não__ é como programas em muitas das linguagens de programação que executam uma única vez e depois param. No ambiente de _execução_ do Pine Script, um script roda de formar semelhante a um loop invisível, onde é executado uma vez em cada barra do gráfico, da esquerda para a direita. Barras do gráfico que fecham enquanto o script executa-os são chamadas de _barras históricas_ (_historical bars_). Quando a execução alcança a última barra do gráfico e o mercado está aberto, estamos na _barra em tempo real_ (_realtime bar_). O script então é executado uma vez a cada vez em que uma mudança de preço ou volume é detectada, e uma última vez para aquela _barra em tempo real_ ao fechar. A barra em tempo real então se torna em uma _barra em tempo real decorrido_. Note que quando o script é executado em tempo real, ele não recalcula em todas as barras históricas do gráfico em cada atualização de preço/volume. Pois já foi calculado uma vez nessas barras, então não é necessário recalculá-las a cada movimento do gráfico. Para mais informações veja a página do [modelo de execução](000_execution_model.md).
+Um script em Pine __não__ é como programas em muitas das linguagens de programação que executam uma única vez e depois param. No ambiente de _execução_ do Pine Script, um script roda de formar semelhante a um loop invisível, onde é executado uma vez em cada barra do gráfico, da esquerda para a direita. Barras do gráfico que fecham enquanto o script executa-os são chamadas de _barras históricas_ (_historical bars_). Quando a execução alcança a última barra do gráfico e o mercado está aberto, estamos na _barra em tempo real_ (_realtime bar_). O script então é executado uma vez a cada vez em que uma mudança de preço ou volume é detectada, e uma última vez para aquela _barra em tempo real_ ao fechar. A barra em tempo real então se torna em uma _barra em tempo real decorrido_. Note que quando o script é executado em tempo real, ele não recalcula em todas as barras históricas do gráfico em cada atualização de preço/volume. Pois já foi calculado uma vez nessas barras, então não é necessário recalculá-las a cada movimento do gráfico. Para mais informações veja a página do [modelo de execução](./04_01_modelo_de_execucao.md).
 
 Quando o script é executado em uma barra histórica, a variável [close](https://www.tradingview.com/pine-script-reference/v5/#var_close), embutida, contém o valor do _fechamento_ daquela barra. Quando o script é executado na barra em tempo real, o [close](https://www.tradingview.com/pine-script-reference/v5/#var_close) retorna o preço __corrente__/__atual__ do símbolo até que a barra se fecha.
 
@@ -28,7 +28,7 @@ A principal estrutura de dados usada no Pine Script é chamada de [série tempor
 Por exemplo, `close[1]` refere-se ao valor de fechamento ([close](https://www.tradingview.com/pine-script-reference/v5/#var_close)) da barra anterior no momento em que o script está sendo executado.
 
 Embora este mecanismo de indexação possa lembrar sobre matrizes (_arrays_), uma série temporal é diferente e pensar em termos de arrays pode dificultar a compreensão desse conceito fundamental do Pine Script.
-Um bom entendimento tanto do [modelo de execução](./000_execution_model.md) quanto das [séries temporais](./000_time_series.md) é essencial para compreender como os scripts Pine funcionam.
+Um bom entendimento tanto do [modelo de execução](./04_01_modelo_de_execucao.md) quanto das [séries temporais](./000_time_series.md) é essencial para compreender como os scripts Pine funcionam.
 Se desconhece dados organizados em séries temporais, será necessário praticar para aprender a utilizá-los eficientemente. Assim que familiarizar com esses conceitos-chave, descobrirá que, ao combinar o uso de séries temporais com funções integradas intrinsecamente projetadas para manuseá-las de forma eficiente, bastante pode ser realizado em poucas linhas de código.
 
 
@@ -61,7 +61,7 @@ Tendo feito o [Primeiro indicador](./02_primeiro_indicador.md), reproduze os exe
 
 Assim é como o [Manual do Usuário](https://www.tradingview.com/pine-script-docs/en/v5/index.html) do Pine Script v5 que está lendo encontra-se organizado:
 
-- A seção da [Linguagem](./000_language.md) explica os principais componentes do Pine Script e como os scripts são executados.
+- A seção da [Linguagem](./04_linguagem.md) explica os principais componentes do Pine Script e como os scripts são executados.
 - A seção de [Conceitos](./000_concepts.md) é mais direcionada para tarefas. Explica como efetuar coisas no Pine Script.
 - A seção da [Criação de Scripts](./000_writing.md) explora ferramentas e truques que ajudarão a programar e publicar scripts.
 - A seção de [Perguntas Frequentes](./000_faq.md) tira dúvidas das perguntas comuns dos desenvolvedores do Pine Script.
