@@ -96,6 +96,35 @@ Quando um evento gatilha a execução do script no gráfico e faz com que ele se
 - A página de [Estratégias](./000_strategies.md) explica detalhadamente os cálculos das estratégias, que não são idênticos aos dos indicadores.
 
 
-<!-- # Valores Históricos das Funções
+# Valores Históricos das Funções
 
-Cada chamada de função no Pine deixa um rastro de valores históricos que um script pode acessar em barras subsequentes usando o operador [[]](https://www.tradingview.com/pine-script-reference/v5/#op_%5B%5D). A série histórica de funções depende de chamadas sucessivas para registrar a saída em cada barra. -->
+Cada chamada de função no Pine deixa um rastro de valores históricos que o script pode acessar em barras subsequentes usando o operador [[]](https://www.tradingview.com/pine-script-reference/v5/#op_%5B%5D). A série histórica de funções depende de chamadas sucessivas para registrar a saída em cada barra. Quando um script não chama funções em cada barra, pode produzir um histórico inconsistente que afeta cálculos e resultados, especialmente quando depende da continuidade de sua série histórica para operar conforme o esperado. O compilador adverte os usuários nesses casos para alertá-los de que os valores de uma função, seja ela embutida ou definida pelo usuário, podem ser enganosos/falsos.
+
+Para demonstrar, vamos criar um script que calcula o índice da barra atual e imprime esse valor em cada segunda barra. No script a seguir, definimos uma função `calcBarIndex()` que adiciona 1 ao valor anterior de sua variável de índice (_index_) interna em cada barra. O script chama a função em cada barra em que a condição (`condition`) retorna verdadeiro (`true`) (a cada duas barras) para atualizar o valor `customIndex`. Plota esse valor ao lado do `bar_index` embutido para validar a saída:
+
+![Valores históricos das funções 01](./imgs/Function_historical_context_1.png)
+
+```c
+//@version=5
+indicator("My script")
+
+//@function Calculates the index of the current bar by adding 1 to its own value from the previous bar.
+// The first bar will have an index of 0.
+calcBarIndex() =>
+    int index = na
+    index := nz(index[1], replacement = -1) + 1
+
+//@variable Returns `true` on every other bar.
+condition = bar_index % 2 == 0
+
+int customIndex = na
+
+// Call `calcBarIndex()` when the `condition` is `true`. This prompts the compiler to raise a warning.
+if condition
+    customIndex := calcBarIndex()
+
+plot(bar_index,   "Bar index",    color = color.green)
+plot(customIndex, "Custom index", color = color.red, style = plot.style_cross)
+```
+
+__Note que:__
