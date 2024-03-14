@@ -51,5 +51,22 @@ Após a execução e a plotagem na primeira barra, o script é executado na segu
 
 O comportamento de um script Pine na barra em tempo real é muito diferente do que as barras históricas. Recorde que a barra em tempo real é a mais à direita no gráfico quando a negociação está ativa no símbolo do gráfico. Além disso, lembre-se de que as estratégias podem se comportar de duas maneiras diferentes na barra em tempo real. Por padrão, elas só são executadas quando a barra em tempo real se fecha, mas o parâmetro `calc_on_every_tick` da declaração de `strategy` pode ser definido como `true` para modificar o comportamento da estratégia para que ela seja executada cada vez que a barra em tempo real é atualizada, como os indicadores fazem. O comportamento descrito para os indicadores se aplicará apenas a estratégias que usam `calc_on_every_tick=true`.
 
+A diferença mais importante entre a execução de scripts em barras históricas e em tempo real é que enquanto eles são executados apenas uma vez em barras históricas, os scripts são executados toda vez que uma atualização ocorre durante uma barra em tempo real. Isso implica que variáveis embutidas, como `high`, `low` e `close`, que nunca mudam em uma barra histórica, __podem__ mudar a cada iteração do script na barra em tempo real. Mudanças nas variáveis integradas usadas nos cálculos do script, por sua vez, induzirão mudanças nos resultados desses cálculos. Isso é necessário para que o script acompanhe a ação do preço em tempo real. Como resultado, o mesmo script pode produzir resultados diferentes cada vez que é executado durante a barra em tempo real.
+
+__Observação__: Na barra em tempo real, a variável `close` sempre representa o __preço atual__. Da mesma forma, as variáveis embutidas `high` e `low` representam a _máxima mais alta_ e a _mínima mais baixa_ alcançadas desde o início da barra em tempo real. As variáveis integradas do Pine Script só representarão os valores finais da barra em tempo real na última barra atualizada.
+
+Vamos acompanhar nosso exemplo de script na barra em tempo real.
+
+Quando o script alcança a barra em tempo real, ele é executado pela primeira vez. Utiliza os valores atuais das variáveis embutidas para produzir um conjunto de resultados e os plota, se necessário. Antes do script executar novamente quando a próxima atualização ocorre, as variáveis definidas pelo usuário são redefinidas para um estado conhecido correspondente ao último _registro de mudanças_ (_commit_) no fechamento da barra anterior. Se nenhuma confirmação foi feita nas variáveis porque elas são inicializadas a cada barra, então elas são reinicializadas, ou seja, se as variáveis não foram confirmadas por serem inicializadas a cada barra, então são reinicializadas a cada barra. Em ambos os casos, o último estado calculado é perdido. O estado das _etiquetas_ e _linhas_ (_labels_ e _lines_) plotadas também é redefinido. Essa redefinição das variáveis definidas pelo usuário do script e dos desenhos anteriores de cada nova iteração do script na barra em tempo real é chamada de _rollback_. Seu efeito é resetar o script para o mesmo estado conhecido em que estava quando a barra em tempo real foi aberta, então os cálculos na barra em tempo real são sempre realizados a partir de um estado limpo.
+
+O recálculo constante dos valores de um script à medida que o preço ou volume mudam na barra em tempo real pode levar a uma situação em que a variável `c` em nosso exemplo se torna verdade porque ocorreu um cruzamento, e então a marca de cor vermelha plotado pela última linha do script apareceria no gráfico. Se na próxima atualização de preço o preço se movimentar de tal forma que o valor de `close` não produza mais cálculos fazendo com que `c` seja verdadeira porque não há mais cruzamento, então o marcador previamente plotado desaparecerá.
+
+Quando a barra em tempo real se fecha, o script é executado uma última vez. Como de costume, as variáveis são redefinidas antes da execução. No entanto, como esta iteração é a última na barra em tempo real, as variáveis são confirmadas com seus valores finais para a barra quando os cálculos são concluídos.
+
+Resumindo o processo da barra em tempo real:
+
+- Um script é executado __na abertura da barra em tempo real e então uma vez a cada atualização__.
+- As variáveis são redefinidas __antes de cada atualização em tempo real__.
+- As variáveis são confirmadas __uma vez na atualização de fechamento da barra__.
 
 # Eventos Desencadeando a Execução do Script
