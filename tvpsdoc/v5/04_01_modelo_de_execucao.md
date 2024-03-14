@@ -47,4 +47,9 @@ Após a execução e a plotagem na primeira barra, o script é executado na segu
 ![Cálculo baseado em barras históricas](./imgs/execution_model_calculation_on_history.png)
 
 
+# Cálculo Baseado em Barras em Tempo Real
+
+O comportamento de um script Pine na barra em tempo real é muito diferente do que as barras históricas. Recorde que a barra em tempo real é a mais à direita no gráfico quando a negociação está ativa no símbolo do gráfico. Além disso, lembre-se de que as estratégias podem se comportar de duas maneiras diferentes na barra em tempo real. Por padrão, elas só são executadas quando a barra em tempo real se fecha, mas o parâmetro `calc_on_every_tick` da declaração de `strategy` pode ser definido como `true` para modificar o comportamento da estratégia para que ela seja executada cada vez que a barra em tempo real é atualizada, como os indicadores fazem. O comportamento descrito para os indicadores se aplicará apenas a estratégias que usam `calc_on_every_tick=true`.
+
+
 # Eventos Desencadeando a Execução do Script
