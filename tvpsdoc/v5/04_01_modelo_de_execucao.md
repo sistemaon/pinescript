@@ -89,13 +89,13 @@ Note que quando um gráfico não é alterado enquanto o mercado está ativo, uma
 
 Quando um evento gatilha a execução do script no gráfico e faz com que ele seja executado nas barras que agora se tornaram barras históricas, os cálculos do script podem às vezes variar daqueles feitos na última atualização de fechamento das mesmas barras quando eram barras em tempo real. Isso pode ser causado por pequenas variações entre os valores __OHLCV__ salvos no fechamento das barras em tempo real e aqueles obtidos dos _feeds_ de dados quando as mesmas barras se tornaram barras históricas. Esse comportamento é uma das possíveis causas do _repintamento_ (_repainting_).
 
-<!-- 
+
 # Mais Informação
 
 - As variáveis integradas `barstate.*` fornecem informações sobre o [tipo de barra ou o evento](./000_bar_states.md) onde o script está executando. A página onde são documentadas também contém um script que permite visualizar a diferença entre barras em tempo real decorridas e barras históricas, por exemplo.
 - A página de [Estratégias](./000_strategies.md) explica detalhadamente os cálculos das estratégias, que não são idênticos aos dos indicadores.
 
 
-# Valores Históricos das Funções
+<!-- # Valores Históricos das Funções
 
 Cada chamada de função no Pine deixa um rastro de valores históricos que um script pode acessar em barras subsequentes usando o operador [[]](https://www.tradingview.com/pine-script-reference/v5/#op_%5B%5D). A série histórica de funções depende de chamadas sucessivas para registrar a saída em cada barra. -->
