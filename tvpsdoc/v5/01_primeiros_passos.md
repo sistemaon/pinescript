@@ -30,7 +30,7 @@ Encontrando as ferramentas que precisa, pode ser uma boa maneira de começar e g
 
 Para explorar e carregar scripts do seu gráfico, utilize o botão "Indicadores e Estratégias" (_Indicators & Strategies_):
 
-![Indicadores e Estratégias](./imgs/FirstSteps-LoadingScriptsFromTheChart-01.png)
+![Indicadores e estratégias](./imgs/FirstSteps-LoadingScriptsFromTheChart-01.png)
 
 
 A caixa de diálogo apresenta scripts de diferentes categorias no painel esquerdo:
