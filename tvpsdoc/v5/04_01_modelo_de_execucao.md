@@ -192,3 +192,10 @@ plot(localSMA,   "Local SMA",   color = color.red,  style = plot.style_cross)
 # Motivo pelo Comportamento?
 
 Esse comportamento é necessário porque, forçar a execução de funções em cada barra levaria a resultados inesperados em funções que produzem efeitos colaterais, ou seja, aquelas que fazem algo além de retornar o valor. Por exemplo, a função [label.new()](https://br.tradingview.com/pine-script-reference/v5/#fun_label{dot}new) cria um rótulo no gráfico, então forçá-la a ser chamada em cada barra mesmo quando estiver dentro de uma estrutura [if](https://br.tradingview.com/pine-script-reference/v5/#op_if) criaria rótulos onde logicamente não deveriam aparecer.
+
+
+# Exceções
+
+Nem todas as funções integradas usam seus valores anteriores em seus cálculos, o que significa que nem todas exigem execução em cada barra. Por exemplo, [math.max()](https://br.tradingview.com/pine-script-reference/v5/#fun_math{dot}max) compara todos os argumentos passados para retornar o valor mais alto. Funções como essas, que não interagem com histórico de forma alguma, não requerem tratamento especial.
+
+Se o uso de uma função dentro de um bloco condicional não causar um aviso do compilador, é seguro usá-la sem afetar os cálculos. Caso contrário, mova a chamada da função para o escopo global para forçar uma execução consistente. Quando manter uma chamada de função dentro de um bloco condicional apesar do aviso, garante-se de que a saída está correta pra pelo menos evitar resultados inesperados.
