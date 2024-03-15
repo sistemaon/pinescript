@@ -1,4 +1,0 @@
-
-# TO DO
-
--- Série Temporal...
