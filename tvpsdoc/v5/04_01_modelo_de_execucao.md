@@ -100,7 +100,7 @@ Quando um evento gatilha a execução do script no gráfico e faz com que ele se
 
 Cada chamada de função no Pine deixa um rastro de valores históricos que o script pode acessar em barras subsequentes usando o operador [[]](https://www.tradingview.com/pine-script-reference/v5/#op_%5B%5D). A série histórica de funções depende de chamadas sucessivas para registrar a saída em cada barra. Quando um script não chama funções em cada barra, pode produzir um histórico inconsistente que afeta cálculos e resultados, especialmente quando depende da continuidade de sua série histórica para operar conforme o esperado. O compilador adverte os usuários nesses casos para alertá-los de que os valores de uma função, seja ela embutida ou definida pelo usuário, podem ser enganosos/falsos.
 
-Para demonstrar, vamos criar um script que calcula o índice da barra atual e imprime esse valor em cada segunda barra. No script a seguir, definimos uma função `calcBarIndex()` que adiciona 1 ao valor anterior de sua variável de índice (_index_) interna em cada barra. O script chama a função em cada barra em que a condição (`condition`) retorna verdadeiro (`true`) (a cada duas barras) para atualizar o valor `customIndex`. Plota esse valor ao lado do `bar_index` embutido para validar a saída:
+Para demonstrar, vamos criar um script que calcula o índice da barra atual e imprime esse valor em cada segunda barra. No script a seguir, definimos uma função `calcBarIndex()` que adiciona 1 ao valor anterior de sua variável de índice (_index_) interna em cada barra. O script chama a função em cada barra em que a condição (`condition`) retorna verdadeiro (`true`) (em cada outra barra, ou seja, uma barra sim e outra não) para atualizar o valor `customIndex`. Plota esse valor ao lado do `bar_index` integrado para validar a saída:
 
 ![Valores históricos das funções 01](./imgs/Function_historical_context_1.png)
 
@@ -128,3 +128,62 @@ plot(customIndex, "Custom index", color = color.red, style = plot.style_cross)
 ```
 
 __Note que:__
+
+- A função [nz()](https://br.tradingview.com/pine-script-reference/v5/#fun_nz) substitui os valores [na](https://br.tradingview.com/pine-script-reference/v5/#var_na) "não disponível" por um valor de substituição (`replacement`) especificado (0 por padrão (_default_)). Na primeira barra do script, quando a série de índices (`index`) não tem histórico, o valor [na](https://br.tradingview.com/pine-script-reference/v5/#var_na) é substituído por -1 antes de adicionar 1 para retornar um valor inicial de 0.
+
+Ao inspecionar o gráfico, observamos que os dois plots diferem drasticamente. A razão para este comportamento é que o script chamou a função `calcBarIndex()` dentro do escopo de uma estrutura [if](https://br.tradingview.com/pine-script-reference/v5/#op_if) em cada outra barra, resultando em uma saída histórica inconsistente com a série `bar_index`. Ao chamar a função uma vez a cada duas barras, referenciar internamente o valor anterior do `index` obtém o valor de duas barras atrás, ou seja, a última barra em que a função foi executada. Esse comportamento resulta em um valor `customIndex` equivalente à metade do `bar_index` integrado.
+
+Para alinhar a saída de `calcBarIndex()` com o `bar_index`, podemos mover a chamada da função para o escopo global do script. Dessa forma, a função será executada em todas as barras, permitindo que todo o seu histórico seja registrado e referenciado, ao invés de apenas os resultados de cada duas barras, alternadamente. No código abaixo, definimos uma variável `globalScopeBarIndex` no escopo global e a atribuímos ao retorno de `calcBarIndex()` em vez de chamar a função localmente. O script define o `customIndex` com o valor de `globalScopeBarIndex` na ocorrência da condição (`condition`):
+
+![Valores históricos das funções 02](./imgs/Function_historical_context_2.png)
+
+```c
+//@version=5
+indicator("My script")
+
+//@function Calculates the index of the current bar by adding 1 to its own value from the previous bar.
+// The first bar will have an index of 0.
+calcBarIndex() =>
+    int index = na
+    index := nz(index[1], replacement = -1) + 1
+
+//@variable Returns `true` on every second bar.
+condition = bar_index % 2 == 0
+
+globalScopeBarIndex = calcBarIndex()
+int customIndex = na
+
+// Assign `customIndex` to `globalScopeBarIndex` when the `condition` is `true`. This won't produce a warning.
+if condition
+    customIndex := globalScopeBarIndex
+
+plot(bar_index,   "Bar index",    color = color.green)
+plot(customIndex, "Custom index", color = color.red, style = plot.style_cross)
+```
+
+Esse comportamento pode impactar radicalmente as funções embutidas que referenciam o histórico internamente. Por exemplo, a função [ta.sma()](https://br.tradingview.com/pine-script-reference/v5/#fun_ta{dot}sma) referencia valores passados "por debaixo dos panos". Se um script chama essa função condicionalmente em vez de em todas as barras, os valores dentro do cálculo podem mudar significativamente. Podemos garantir a consistência dos cálculos atribuindo [ta.sma()](https://br.tradingview.com/pine-script-reference/v5/#fun_ta{dot}sma) a uma variável no escopo global e referenciando o histórico dessa variável conforme necessário.
+
+O exemplo a seguir calcula três séries SMA: `controlSMA`, `localSMA` e `globalSMA`. O script calcula `controlSMA` no escopo global e `localSMA` dentro do escopo local de uma estrutura [if](https://br.tradingview.com/pine-script-reference/v5/#op_if). Dentro da estrutura [if](https://br.tradingview.com/pine-script-reference/v5/#op_if), atualiza o valor de `globalSMA` usando o valor de `controlSMA`. Como podemos ver, os valores das séries `globalSMA` e `controlSMA` se alinham, enquanto a série `localSMA` diverge das outras duas porque usa um histórico incompleto, na qual afeta os cálculos:
+
+![Valores históricos das funções 03](./imgs/Function_historical_context_3.png)
+
+```c
+//@version=5
+indicator("My script")
+
+//@variable Returns `true` on every second bar.
+condition = bar_index % 2 == 0
+
+controlSMA = ta.sma(close, 20)
+float globalSMA = na
+float localSMA  = na
+
+// Update `globalSMA` and `localSMA` when `condition` is `true`.
+if condition
+    globalSMA := controlSMA        // No warning.
+    localSMA  := ta.sma(close, 20) // Raises warning. This function depends on its history to work as intended.
+
+plot(controlSMA, "Control SMA", color = color.green)
+plot(globalSMA,  "Global SMA",  color = color.blue, style = plot.style_cross)
+plot(localSMA,   "Local SMA",   color = color.red,  style = plot.style_cross)
+```
