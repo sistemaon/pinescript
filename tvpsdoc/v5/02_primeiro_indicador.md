@@ -44,7 +44,7 @@ Seu primeiro script Pine está sendo executado no gráfico, que deve se assemelh
 Vamos analisar o código do script, linha por linha:
 
 __Linha 1: `//@version=5`__
-- Esta é uma [anotação do compilador](000_compiler_annotation.md) informando ao compilador que o script usará a versão 5 do Pine Script.
+- Esta é uma [anotação do compilador](./04_03_estrutura_do_script.md#anotações-do-compilador) informando ao compilador que o script usará a versão 5 do Pine Script.
 
 __Linha 2: `indicator("MACD #1")`__
 - Define o nome do script que aparecerá no gráfico como "_MACD_".
