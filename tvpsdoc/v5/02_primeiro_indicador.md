@@ -16,7 +16,7 @@ Para abrir o Editor, clique na aba "Editor Pine" (_Pine Editor_) na parte inferi
 
 # Primeira Versão
 
-Criando o primeiro script funcional em Pine, uma implementação do indicador [_MACD_](https://www.tradingview.com/support/solutions/43000502344-macd-moving-average-convergence-divergence) em Pine Script:
+Criando o primeiro script funcional em Pine, uma implementação do indicador [_MACD_](https://br.tradingview.com/support/solutions/43000502344-macd-moving-average-convergence-divergence) em Pine Script:
 
 ```c
 //@version=5
@@ -77,7 +77,7 @@ __Linha 10: `plot(signal, color = color.orange)`__
 # Segunda Versão
 
 A primeira versão do script calculou o MACD de forma "manual", e como o Pine Script é formulado para desenvolver indicadores e estratégias, existem funções nativas da própria linguagem para vários indicadores comuns, incluindo um para...
-__MACD__: [ta.macd()](https://www.tradingview.com/pine-script-reference/v5/#fun_ta{dot}macd).
+__MACD__: [ta.macd()](https://br.tradingview.com/pine-script-reference/v5/#fun_ta{dot}macd).
 
 Esta é a segunda versão do script:
 
@@ -94,7 +94,7 @@ plot(signalLine, color = color.orange)
 Perceba que:
 
 - Foi adicionado entradas (_input_) para que possa alterar os comprimentos das EMAs.
-- Foi adicionado a função embutida [ta.macd()](https://www.tradingview.com/pine-script-reference/v5/#fun_ta{dot}macd) para calcular o MACD, na qual poupa algumas linhas no código e torna-o mais fácil de ler.
+- Foi adicionado a função embutida [ta.macd()](https://br.tradingview.com/pine-script-reference/v5/#fun_ta{dot}macd) para calcular o MACD, na qual poupa algumas linhas no código e torna-o mais fácil de ler.
 
 Repetindo o mesmo processo anterior para copiar esse código em um novo indicador:
 
@@ -114,14 +114,14 @@ __Linha 2: `indicator("MACD #2")`__
 - Foi alterado _#1_ para _#2_ para que a segunda versão do indicador exiba um nome diferente no gráfico.
 
 __Linha 3: `fastInput = input(12, "Fast length")`__
-- Em vez de declarar um valor constante a uma variável, está sendo usado a função [input()](https://www.tradingview.com/pine-script-reference/v5/#fun_input) para que possa alterar o valor na aba "Configurações/Entradas" (_Settings/Inputs_) do script.
+- Em vez de declarar um valor constante a uma variável, está sendo usado a função [input()](https://br.tradingview.com/pine-script-reference/v5/#fun_input) para que possa alterar o valor na aba "Configurações/Entradas" (_Settings/Inputs_) do script.
 `12` será o valor padrão e o nome do campo será "Comprimento rápido" (_`Fast length`_). Se o valor for mudado na aba de "Entradas" (_Inputs_), o conteúdo da variável `fastInput` conterá um novo valor e o script será re-executado no gráfico com esse novo valor. Note que, conforme recomendado no [Guia de Estilo](000_style_guide.md) do Pine Script, foi adicionado o `Input` para ter em mente, mais adiante no script, de que seu valor provém de uma entrada do usuário.
 
 __Linha 4: `slowInput = input(26, "Slow length")`__
 - Feito o mesmo para o "Comprimento lento" (_`Slow length`_), usando um nome de variável, valor padrão e texto diferentes para o nome do campo.
 
 __Linha 5: `[macdLine, signalLine, histLine] = ta.macd(close, fastInput, slowInput, 9)`__
-- Aqui é onde é chamado a função integrada [ta.macd()](https://www.tradingview.com/pine-script-reference/v5/#fun_ta{dot}macd) para efetuar todos os cálculos da primeira versão em apenas numa única linha. A função exige quatro parâmetros (os valores após o nome da função, entre parênteses).
+- Aqui é onde é chamado a função integrada [ta.macd()](https://br.tradingview.com/pine-script-reference/v5/#fun_ta{dot}macd) para efetuar todos os cálculos da primeira versão em apenas numa única linha. A função exige quatro parâmetros (os valores após o nome da função, entre parênteses).
 Retornando três valores para as três variáveis em vez de apenas um, como as funções que usamos até agora.
 É preciso colocar a lista de três variáveis que recebem o resultado da função entre colchetes, à esquerda do sinal de `=`. Observe que dois dos valores que foi proporcionado para a função são as variáveis "input" que contêm os comprimentos rápido e lento: `fastInput` e `slowInput`.
 

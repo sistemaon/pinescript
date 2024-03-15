@@ -50,17 +50,17 @@ Ao clicar em um dos indicadores ou estratégias (aqueles com as setas verdes e v
 
 # Navegando pelos Scripts da Comunidade
 
-A partir da página inicial do [TradingView](https://www.tradingview.com), pode ter acesso aos Scripts da Comunidade através do menu "Comunidade" (_Community_).
+A partir da página inicial do [TradingView](https://br.tradingview.com), pode ter acesso aos Scripts da Comunidade através do menu "Comunidade" (_Community_).
 Aqui, estamos destacando a seção "Escolhas dos Editores" (_Editors’ Picks_), porém existem outras categorias que você pode escolher:
 
 ![Navegando pelos scripts da comunidade](./imgs/FirstSteps-BrowsingCommunityScripts-01.png)
 
 Os scripts pode ser pesquisado usando o campo "Pesquisa" (_Search_) da página inicial e filtrar os scripts usando diferentes critérios.
-O Centro de Ajuda tem uma página explicando os [diferentes tipos de scripts](https://www.tradingview.com/support/solutions/43000558522) disponíveis.
+O Centro de Ajuda tem uma página explicando os [diferentes tipos de scripts](https://br.tradingview.com/support/solutions/43000558522) disponíveis.
 
 O stream de scripts mostra os widgets, ou seja, espaços reservados que exibem uma visualização em miniatura do gráfico de cada publicação, sua descrição e seu autor.
 Ao clicar, abrirá a página do script, onde poderá ver o script em um gráfico, ler a descrição do autor, curtir o script, deixar comentários ou ler o código-fonte do script se ele for publicado como código aberto.
-Assim que encontrar um script de seu interesse nos Scripts da Comunidade, siga as instruções no Centro de Ajuda para [carregá-lo em seu gráfico](https://www.tradingview.com/support/solutions/43000555216).
+Assim que encontrar um script de seu interesse nos Scripts da Comunidade, siga as instruções no Centro de Ajuda para [carregá-lo em seu gráfico](https://br.tradingview.com/support/solutions/43000555216).
 _"Stream" é lista contínua de informações ou widgets de script que são exibidos na interface_.
 
 
@@ -85,11 +85,11 @@ E Isso é tão real para o Pine Script quanto para outras linguagens de programa
 Encontrar um bom código aberto em Pine Script é relativamente fácil, aqui encontra-se fontes confiáveis de códigos escritos por estes programadores no TradingView:
 
 * Indicadores integrados do TradingView (_Built-ins_).
-* Scripts selecionados como ["Escolhas dos Editores"](https://www.tradingview.com/scripts/editors-picks) (_Editors’ Picks_).
-* Scripts pelos [autores seguidos pela conta PineCoders](https://www.tradingview.com/u/PineCoders/#following-people).
+* Scripts selecionados como ["Sugestão da Casa"](https://br.tradingview.com/scripts/editors-picks) (_Editors’ Picks_).
+* Scripts pelos [autores seguidos pela conta PineCoders](https://br.tradingview.com/u/PineCoders/#following-people).
 * Scripts de autores com alta reputação e publicações de código aberto.
 
-Ler código dos [Scripts da Comunidade](https://www.tradingview.com/scripts) é fácil; caso não veja um ícone de "cadeado" de cor cinza ou vermelha no canto superior direito do widget do script, isso indica que o script é código aberto. Ao abrir a página do script, você poderá ver seu código-fonte.
+Ler código dos [Scripts da Comunidade](https://br.tradingview.com/scripts) é fácil; caso não veja um ícone de "cadeado" de cor cinza ou vermelha no canto superior direito do widget do script, isso indica que o script é código aberto. Ao abrir a página do script, você poderá ver seu código-fonte.
 
 Para ver o código dos recursos integrados do TradingView, carregue o indicador no gráfico, em seguida, passe o mouse sobre o nome do indicador e selecione o ícone de chaves de "Código-fonte" (_Source code_) (se não o ver, é porque o código-fonte do indicador encontra-se indisponível).
 Ao clicar no ícone, o Editor do Pine (_Pine Editor_) será aberto e apartir daí, poderá ver o código do script. Caso queira mexê-lo, precisará usar o botão "Mais" (_More_) do menu do Editor, localizado no canto superior direito do painel do Editor, e então selecionar em "Fazer uma cópia..." (_Make a copy…_).
