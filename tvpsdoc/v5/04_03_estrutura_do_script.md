@@ -33,5 +33,16 @@ Todos os scripts Pine devem conter uma declaração de instrução, que é uma c
 - Estratégia > [strategy()](https://br.tradingview.com/pine-script-reference/v5/#fun_strategy)
 - Biblioteca > [library()](https://br.tradingview.com/pine-script-reference/v5/#fun_library)
 
+A _declaração de instrução_:
+
+- Identifica o tipo do script, que por sua vez dita qual conteúdo é permitido nele e como pode ser usado e executado.
+- Define propriedades-chave do script, como _nome_ próprio, onde aparecerá ao ser adicionado no gráfico, a precisão e formato dos valores que exibe, e certos valores que governam o próprio comportamento em tempo de execução, como o número máximo de objetos de desenho que serão exibidos no gráfico. Com estratégias, as propriedades incluem parâmetros que controlam o _backtesting_, como capital inicial (_initial capital_), comissão (_commission_), variação de preço (_slippage_), etc.
+
+Cada tipo de script possui requisitos distintos:
+
+- Indicadores devem conter pelo menos uma chamada de função que produza a saída no gráfico (por exemplo, [plot()](https://br.tradingview.com/pine-script-reference/v5/#fun_plot), [plotshape()](https://br.tradingview.com/pine-script-reference/v5/#fun_plotshape), [barcolor()](https://br.tradingview.com/pine-script-reference/v5/#fun_barcolor), [line.new()](https://br.tradingview.com/pine-script-reference/v5/#fun_line{dot}new), etc.).
+- Estratégias devem conter pelo menos uma chamada de `strategy.*()`, por exemplo, [strategy.entry()](https://br.tradingview.com/pine-script-reference/v5/#fun_strategy{dot}entry).
+- Bibliotecas devem conter pelo menos uma [função](./000_library_functions.md) exportada ou um [tipo definido pelo usuário](./000_user_defined_types_objects.md).
+
 
 # Anotações do Compilador
