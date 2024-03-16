@@ -174,3 +174,72 @@ bgcolor(c)
 
 
 # Anotações do Compilador
+
+As anotações do compilador são [comentários](./04_03_estrutura_do_script.md#comentários) que emitem instruções especiais para um script:
+
+- `//@version=` especifica a versão do PineScript que o compilador utilizará. O número nesta anotação não deve ser confundido com o número de revisão do script, que é atualizado a cada alteração salva no código.
+- `//@description` define uma descrição personalizada para scripts que utilizam a instrução de declaração [library()](https://br.tradingview.com/pine-script-reference/v5/#fun_library).
+- `//@function`, `//@param` e `//@returns` adicionam descrições personalizadas para uma função definida pelo usuário, seus parâmetros e seu resultado quando colocados acima da declaração da função.
+- `//@type` e `//@field` adicionam descrições customizadas para um [tipo definido pelo usuário (UDT)](./000_user_defined_types.md) e seus campos quando colocados acima da declaração do tipo.
+- `//@variable` adiciona uma descrição personalizada para uma variável quando colocada acima de sua declaração.
+- `//@strategy_alert_message` fornece uma mensagem padrão para scripts de estratégia preencherem o campo "Mensagem" ("_Message_") no diálogo da criação do alerta.
+- `//#region` e `//#endregion` criam regiões de código que podem ser recolhidas no Editor Pine. Clicar na seta suspensa ao lado de `//#region` _oculta_ e/ou _colapsa_ as linhas de código entre as duas anotações.
+
+Este script desenha um retângulo usando três pontos selecionados interativamente no gráfico. Ilustrando como as anotações do compilador podem ser usadas:
+
+![Anotações do compilador](./imgs/ScriptStructure-CompilerAnnotations01.png)
+
+```c
+//@version=5
+indicator("Triangle", "", true)
+
+int   TIME_DEFAULT  = 0
+float PRICE_DEFAULT = 0.0
+
+x1Input = input.time(TIME_DEFAULT,   "Point 1", inline = "1", confirm = true)
+y1Input = input.price(PRICE_DEFAULT, "",        inline = "1", tooltip = "Pick point 1", confirm = true)
+x2Input = input.time(TIME_DEFAULT,   "Point 2", inline = "2", confirm = true)
+y2Input = input.price(PRICE_DEFAULT, "",        inline = "2", tooltip = "Pick point 2", confirm = true)
+x3Input = input.time(TIME_DEFAULT,   "Point 3", inline = "3", confirm = true)
+y3Input = input.price(PRICE_DEFAULT, "",        inline = "3", tooltip = "Pick point 3", confirm = true)
+
+// @type            Used to represent the coordinates and color to draw a triangle.
+// @field time1     Time of first point.
+// @field time2     Time of second point.
+// @field time3     Time of third point.
+// @field price1    Price of first point.
+// @field price2    Price of second point.
+// @field price3    Price of third point.
+// @field lineColor Color to be used to draw the triangle lines.
+type Triangle
+    int   time1
+    int   time2
+    int   time3
+    float price1
+    float price2
+    float price3
+    color lineColor
+
+//@function Draws a triangle using the coordinates of the `t` object.
+//@param t  (Triangle) Object representing the triangle to be drawn.
+//@returns  The ID of the last line drawn.
+drawTriangle(Triangle t) =>
+    line.new(t.time1, t.price1, t.time2, t.price2, xloc = xloc.bar_time, color = t.lineColor)
+    line.new(t.time2, t.price2, t.time3, t.price3, xloc = xloc.bar_time, color = t.lineColor)
+    line.new(t.time1, t.price1, t.time3, t.price3, xloc = xloc.bar_time, color = t.lineColor)
+
+// Draw the triangle only once on the last historical bar.
+if barstate.islastconfirmedhistory
+    //@variable Used to hold the Triangle object to be drawn.
+    Triangle triangle = Triangle.new()
+
+    triangle.time1  := x1Input
+    triangle.time2  := x2Input
+    triangle.time3  := x3Input
+    triangle.price1 := y1Input
+    triangle.price2 := y2Input
+    triangle.price3 := y3Input
+    triangle.lineColor := color.purple
+
+    drawTriangle(triangle)
+```
