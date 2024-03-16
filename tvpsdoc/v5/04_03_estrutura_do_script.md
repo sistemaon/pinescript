@@ -45,4 +45,68 @@ Cada tipo de script possui requisitos distintos:
 - Bibliotecas devem conter pelo menos uma [função](./000_library_functions.md) exportada ou um [tipo definido pelo usuário](./000_user_defined_types_objects.md).
 
 
+# Código
+
+Linhas em um script que não são [comentários](./04_03_estrutura_do_script.md#comentários) ou [anotações do compilador](./04_03_estrutura_do_script.md#anotações-do-compilador) são _instruções_, que implementam o algoritmo do script. Uma instrução pode ser uma das seguintes:
+
+- Declaração de variável.
+- Reatribuição de variável.
+- Declaração de função.
+- Chamada de função interna, chamada de [função definida pelo usuário](./000_user_defined_functions.md) ou chamada de [função de biblioteca](./000_using_a_library.md).
+- _Estrutura_ [if](https://br.tradingview.com/pine-script-reference/v5/#op_if), [for](https://br.tradingview.com/pine-script-reference/v5/#op_for), [while](https://br.tradingview.com/pine-script-reference/v5/#op_while), [switch](https://br.tradingview.com/pine-script-reference/v5/#op_switch) ou [type](https://br.tradingview.com/pine-script-reference/v5/#op_type).
+
+As instruções podem ser organizadas em várias maneiras:
+
+- Algumas instruções podem ser expressas em uma única linha, como a maioria das declarações de variáveis, linhas contendo apenas uma chamada de função ou declarações de função em uma única linha. As linhas também podem ser [quebradas](./04_03_estrutura_do_script.md#quebra-de-linha) (continuadas em diversas linhas). Múltiplas instruções de uma linha podem ser concatenadas em uma única linha usando a vírgula como separador.
+- Outras instruções, como estruturas ou declarações de função em múltiplas linhas, sempre exigem várias linhas porque necessitam de um _bloco local_. Um bloco local (_local block_) deve ser indentado por uma tabulação (_tab_) ou quatro espaços (_spaces_). Cada bloco local define um _escopo local_ distinto.
+- Instruções no _escopo global_ do script (isto é, que não fazem parte de blocos locais) não podem começar com espaço em branco (um espaço ou uma tabulação). O primeiro caractere delas também deve ser o primeiro caractere da linha. Linhas que começam na primeira posição de uma linha se tornam, por definição, parte do _escopo global_ do script.
+
+Um simples indicador Pine Script v5 válido pode ser criado no Editor Pine Script ao usar o botão "Abrir" ("_Open_") e selecionar "Novo indicador" ("_New indicator_"):
+
+```c
+//@version=5
+indicator("My Script")
+plot(close)
+```
+
+Este indicador inclui três blocos locais, um na declaração da função `f()` e dois na declaração da variável usando uma estrutura [if](https://br.tradingview.com/pine-script-reference/v5/#op_if):
+
+```c
+//@version=5
+
+indicator("", "", true)    // Declaration statement (global scope)
+
+barIsUp() =>    // Function declaration (global scope)
+    close > open    // Local block (local scope)
+
+plotColor = if barIsUp()  // Variable declaration (global scope)
+    color.green     // Local block (local scope)
+else
+    color.red       // Local block (local scope)
+
+bgcolor(color.new(plotColor, 70))   // Call to a built-in function  (global scope)
+```
+
+Consegue-se criar uma estratégia simples em Pine Script v5 selecionando "Nova estratégia" ("_New strategy_"):
+
+```c
+//@version=5
+strategy("My Strategy", overlay=true, margin_long=100, margin_short=100)
+
+longCondition = ta.crossover(ta.sma(close, 14), ta.sma(close, 28))
+if (longCondition)
+    strategy.entry("My Long Entry Id", strategy.long)
+
+shortCondition = ta.crossunder(ta.sma(close, 14), ta.sma(close, 28))
+if (shortCondition)
+    strategy.entry("My Short Entry Id", strategy.short)
+```
+
+
+# Comentários
+
+
+# Quebra de Linha
+
+
 # Anotações do Compilador
