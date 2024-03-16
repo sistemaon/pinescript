@@ -105,8 +105,22 @@ if (shortCondition)
 
 # Comentários
 
+Barras duplas (`//`) definem comentários no Pine Script. Os comentários podem começar em qualquer lugar da linha. Eles também podem seguir o código do Pine Script na mesma linha:
+
+```c
+//@version=5
+indicator("")
+// This line is a comment
+a = close // This is also a comment
+plot(a)
+```
+
+O Editor Pine tem um atalho no teclado para comentar/descomentar linhas: `ctrl` + `/`. Pode ser usado em várias linhas destacando-as primeiro.
+
 
 # Quebra de Linha
+
+Linhas longas podem ser divididas em várias linhas, ou "quebradas". Linhas quebradas devem ser indentadas com qualquer número de espaços, desde que não seja um múltiplo de quatro (esses limites são usados para indentar blocos locais):
 
 
 # Anotações do Compilador
