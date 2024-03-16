@@ -120,7 +120,57 @@ O Editor Pine tem um atalho no teclado para comentar/descomentar linhas: `ctrl` 
 
 # Quebra de Linha
 
-Linhas longas podem ser divididas em várias linhas, ou "quebradas". Linhas quebradas devem ser indentadas com qualquer número de espaços, desde que não seja um múltiplo de quatro (esses limites são usados para indentar blocos locais):
+Linhas longas podem ser separadas em diversas linhas, ou "quebradas". Linhas quebradas devem ser indentadas com qualquer número de espaços, desde que não seja um múltiplo de quatro (esses limites são usados para indentar blocos locais):
+
+```c
+a = open + high + low + close
+```
+
+Pode ser quebrada assim:
+
+```c
+a = open +
+      high +
+          low +
+             close
+```
+
+A função [plot()](https://br.tradingview.com/pine-script-reference/v5/#fun_plot) pode ser quebrada assim:
+
+```c
+plot(ta.correlation(src, ovr, length),
+   color = color.new(color.purple, 40),
+   style = plot.style_area,
+   trackprice = true)
+```
+
+Instruções dentro de declarações de funções definidas pelo usuário também podem ser quebradas em múltiplas linhas. No entanto, como um bloco local deve começar sintaticamente com uma indentação (4 espaços ou 1 tab), ao dividir para a próxima linha, a continuação da instrução deve começar com mais de uma indentação (não igual a um múltiplo de quatro espaços). Por exemplo:
+
+```c
+updown(s) =>
+    isEqual = s == s[1]
+    isGrowing = s > s[1]
+    ud = isEqual ?
+           0 :
+           isGrowing ?
+               (nz(ud[1]) <= 0 ?
+                     1 :
+                   nz(ud[1])+1) :
+               (nz(ud[1]) >= 0 ?
+                   -1 :
+                   nz(ud[1])-1)
+```
+
+Pode-se usar comentários em linhas quebradas:
+
+```c
+//@version=5
+indicator("")
+c = open > close ? color.red :
+  high > high[1] ? color.lime : // A comment
+  low < low[1] ? color.blue : color.black
+bgcolor(c)
+```
 
 
 # Anotações do Compilador
