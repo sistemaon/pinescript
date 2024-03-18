@@ -149,3 +149,36 @@ O exemplo é calculado da esquerda para a direita:
 
 Repare que os valores de retorno em cada lado do `:` são expressões — não blocos locais, então eles não afetarão o limite de 500 blocos locais por escopo.
 
+
+# Operador de Referência Histórica `[]`
+
+É possível fazer referência dos valores passados das [séries temporais](./04_02_series_temporais.md) usando o operador de referência histórica [[]](https://br.tradingview.com/pine-script-reference/v5/#op_[]). Valores passados são os valores que uma variável teve em barras anteriores à barra onde o script está executando atualmente - a barra _atual_. Consulte a página [Modelo de Execução](./04_01_modelo_de_execucao.md) para mais informações sobre a maneira como os scripts são executados nas barras.
+
+O operador [[]](https://br.tradingview.com/pine-script-reference/v5/#op_[]) é usado após uma variável, expressão ou chamada de função. O valor usado dentro dos colchetes do operador é o deslocamento no passado ao qual referir. Para fazer referência ao valor da variável integrada do [volume](https://br.tradingview.com/pine-script-reference/v5/#var_volume) de duas barras atrás da barra atual, usaria `volume[2]`.
+
+Como as séries crescem dinamicamente, à medida que o script avança em barras sucessivas, o deslocamento usado com o operador se referirá a diferentes barras. Veja como o valor retornado pelo mesmo deslocamento é dinâmico e por que as séries são muito diferentes de arrays. No Pine Script, a variável [close](https://br.tradingview.com/pine-script-reference/v5/#var_close), ou `close[0]` que é equivalente, contém o valor do "fechamento" da barra atual. Se o código estiver sendo executado na __terceira__ barra do _conjunto de dados_ (o conjunto de todas as barras no gráfico), `close` conterá o preço no fechamento daquela barra, `close[1]` conterá o preço no fechamento da barra anterior (a segunda barra do conjunto de dados), e `close[2]`, a primeira barra. `close[3]` retornará [na](https://br.tradingview.com/pine-script-reference/v5/#var_na) porque nenhuma barra existe nessa posição, e portanto seu valor é _não disponível_.
+
+Quando o mesmo código é executado na próxima barra, a __quarta__ do conjunto de dados, `close` conterá o preço de fechamento daquela barra, e o mesmo `close[1]` usado no código agora se referirá ao "fechamento" da terceira barra no conjunto de dados. O fechamento da primeira barra no conjunto de dados agora será `close[3]`, e desta vez `close[4]` retornará [na](https://br.tradingview.com/pine-script-reference/v5/#var_na).
+
+No ambiente de execução do Pine Script, à medida que o código é executado uma vez para cada barra histórica no conjunto de dados, começando da esquerda do gráfico, o Pine Script está adicionando um novo elemento na série no index 0 e movendo os elementos pré-existentes na série para abrir espaço para um novo elemento. [Arrays](https://br.tradingview.com/pine-script-reference/v5/#type_array), em comparação, podem ter tamanhos constantes ou variáveis, e seu conteúdo ou estrutura de indexação não são modificados pelo ambiente de execução. Portanto, as séries do Pine Script são muito diferentes de arrays e apenas compartilham familiaridade por meio de sua sintaxe de indexação.
+
+Pine Script possui uma variável que contém o número da barra na qual o script está sendo executado: [bar_index](https://br.tradingview.com/pine-script-reference/v5/#var_bar_index). Na primeira barra, [bar_index](https://br.tradingview.com/pine-script-reference/v5/#var_bar_index) é igual a 0 e aumenta em 1 a cada barra sucessiva em que o script é executado. Na última barra, [bar_index](https://br.tradingview.com/pine-script-reference/v5/#var_bar_index) é igual ao número de barras no conjunto de dados, _menos um_.
+
+Há outra consideração importante para ter em mente ao usar o operador `[]` em Pine Script. Vimos casos em que uma referência histórica pode retornar o valor [na](https://br.tradingview.com/pine-script-reference/v5/#var_na). O [na](https://br.tradingview.com/pine-script-reference/v5/#var_na) representa um valor que não é um número e usar isso em qualquer expressão resultará em [na](https://br.tradingview.com/pine-script-reference/v5/#var_na) (semelhante a [NaN](https://pt.wikipedia.org/wiki/NaN)). Esses casos geralmente ocorrem durante os cálculos do script nas primeiras barras do conjunto de dados, mas também pode ocorrer em barras posteriores sob certas condições. Se o código não lidar explicitamente com esses casos especiais, pode introduzir resultados inválidos nos cálculos do script, que pode-se propagar até a barra em tempo real. As funções [na](https://br.tradingview.com/pine-script-reference/v5/#fun_na) e [nz](https://br.tradingview.com/pine-script-reference/v5/#fun_nz) são projetadas para lidar com tais casos.
+
+Estes são todos os usos válidos do operador [[]](https://br.tradingview.com/pine-script-reference/v5/#op_[]):
+
+```c
+high[10]
+ta.sma(close, 10)[1]
+ta.highest(high, 10)[20]
+close > nz(close[1], open)
+```
+
+Note que o operador [[]](https://br.tradingview.com/pine-script-reference/v5/#op_[]) só pode ser usado uma única vez no mesmo valor.
+
+Isso não é permitido:
+
+```c
+close[1][2] // Error: incorrect use of [] operator
+```
