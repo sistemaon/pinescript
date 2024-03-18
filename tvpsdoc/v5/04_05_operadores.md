@@ -47,6 +47,7 @@ Existem cinco operadores aritméticos no Pine Script:
 | `*` | Multiplicação                    |
 | `/` | Divisão                          |
 | `%` | Módulo (sobra/resto da divisão)  |
+|     |                                  |
 
 Os operadores aritméticos acima são todos binários (significa que precisam de _dois operandos_ - ou valores - para funcionar, exemplo `1 + 2`). O `+` e o `-` também servem como operadores unários (significa que funcionam com um único operando, como `-1` ou `+1`).
 
@@ -62,4 +63,29 @@ indicator("Modulo function")
 modulo(series int a, series int b) =>
     a - b * math.floor(nz(a/b))
 plot(modulo(-1, 100))
+```
+
+
+# Operadores de Comparação
+
+Existem seis operadores de comparação no Pine Script:
+
+|      |                  |
+| ---- | ---------------: |
+| `<`  | Menor que        |
+| `<=` | Menor ou igual a |
+| `!=` | Não igual        |
+| `==` | Igual            |
+| `>`  | Maior que        |
+| `>=` | Maior ou igual a |
+|      |                  |
+
+As operações de comparação são binárias. Se ambos os operandos tiverem um valor numérico, o resultado será do tipo [bool](https://br.tradingview.com/pine-script-reference/v5/#type_bool), isto é, `true`, `false` ou [na](https://br.tradingview.com/pine-script-reference/v5/#var_na).
+
+Exemplos:
+
+```c
+1 > 2  // false
+1 != 1 // false
+close >= open  // Depends on values of `close` and `open`
 ```
