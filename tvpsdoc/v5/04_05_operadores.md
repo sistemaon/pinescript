@@ -34,3 +34,31 @@ A solução para este dilema requer uma das duas opções:
 
 - Usar outra função de média móvel que suporta um comprimento "series int", como [ta.sma()](https://br.tradingview.com/pine-script-reference/v5/#fun_ta{dot}sma).
 - Não utilizar o cálculo que produza um valor "series int" para o comprimento.
+
+
+# Operadores Aritméticos
+
+Existem cinco operadores aritméticos no Pine Script:
+
+| --- | -------------------------------: |
+| `+` | Adição e concatenação de strings |
+| `-` | Subtração                        |
+| `*` | Multiplicação                    |
+| `/` | Divisão                          |
+| `%` | Módulo (sobra/resto da divisão)  |
+
+Os operadores aritméticos acima são todos binários (significa que precisam de _dois operandos_ - ou valores - para funcionar, exemplo `1 + 2`). O `+` e o `-` também servem como operadores unários (significa que funcionam com um único operando, como `-1` ou `+1`).
+
+Se ambos os operandos são números, mas pelo menos um deles é do tipo [float](https://br.tradingview.com/pine-script-reference/v5/#op_float), o resultado também será um [float](https://br.tradingview.com/pine-script-reference/v5/#op_float). Se ambos os operandos são do tipo [int](https://br.tradingview.com/pine-script-reference/v5/#op_int), o resultado também será um [int](https://br.tradingview.com/pine-script-reference/v5/#op_int). Se pelo menos um operando for [na](https://br.tradingview.com/pine-script-reference/v5/#var_na), o resultado também será [na](https://br.tradingview.com/pine-script-reference/v5/#var_na).
+
+O operador `+` também serve como operador de concatenação para strings. `"EUR" + "USD"` resulta na [string](https://br.tradingview.com/pine-script-reference/v5/#op_string) `"EURUSD"`.
+
+O operador `%` calcula o módulo arredondando para baixo o quociente para o menor valor possível. Aqui está um exemplo simples que ajuda a ilustrar como o módulo é calculado nos bastidores:
+
+```c
+//@version=5
+indicator("Modulo function")
+modulo(series int a, series int b) =>
+    a - b * math.floor(nz(a/b))
+plot(modulo(-1, 100))
+```
