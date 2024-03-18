@@ -89,3 +89,39 @@ Exemplos:
 1 != 1 // false
 close >= open  // Depends on values of `close` and `open`
 ```
+
+
+# Operadores Lógicos
+
+Existem três operadores lógicos no Pine Script:
+
+|       |                  |
+| ----- | ---------------: |
+| `not` | Negação          |
+| `and` | Conjunção lógica |
+| `or`  | Disjunção lógica |
+|       |                  |
+
+O operador `not` é unário. Quando aplicado a um operando `true`, o resultado será `false`, e vice-versa.
+
+Tabela verdade do operador `and`:
+
+|       |       |         |
+| a     | b     | a and b |
+| ----- | ----: | ------: |
+| true  | true  | true    |
+| true  | false | false   |
+| false | true  | false   |
+| false | false | false   |
+|       |       |         |
+
+Tabela verdade do operador `or`:
+
+|       |       |         |
+| a     | b     | a or b  |
+| ----- | ----: | ------: |
+| true  | true  | true    |
+| true  | false | true    |
+| false | true  | true    |
+| false | false | false   |
+|       |       |         |
