@@ -40,7 +40,6 @@ A solução para este dilema requer uma das duas opções:
 
 Existem cinco operadores aritméticos no Pine Script:
 
-| --- | ---: |
 | `+` | Adição e concatenação de strings |
 | `-` | Subtração |
 | `*` | Multiplicação |
