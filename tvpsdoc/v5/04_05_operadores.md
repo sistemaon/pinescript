@@ -40,11 +40,13 @@ A solução para este dilema requer uma das duas opções:
 
 Existem cinco operadores aritméticos no Pine Script:
 
+|     |                                  |
+| --- | -------------------------------: |
 | `+` | Adição e concatenação de strings |
-| `-` | Subtração |
-| `*` | Multiplicação |
-| `/` | Divisão |
-| `%` | Módulo (sobra/resto da divisão) |
+| `-` | Subtração                        |
+| `*` | Multiplicação                    |
+| `/` | Divisão                          |
+| `%` | Módulo (sobra/resto da divisão)  |
 
 Os operadores aritméticos acima são todos binários (significa que precisam de _dois operandos_ - ou valores - para funcionar, exemplo `1 + 2`). O `+` e o `-` também servem como operadores unários (significa que funcionam com um único operando, como `-1` ou `+1`).
 
