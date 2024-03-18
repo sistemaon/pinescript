@@ -106,9 +106,8 @@ O operador `not` é unário. Quando aplicado a um operando `true`, o resultado s
 
 Tabela verdade do operador `and`:
 
-|       |       |         |
 | a     | b     | a and b |
-| ----- | ----: | ------: |
+| ----- | ----- | ------: |
 | true  | true  | true    |
 | true  | false | false   |
 | false | true  | false   |
@@ -117,11 +116,36 @@ Tabela verdade do operador `and`:
 
 Tabela verdade do operador `or`:
 
-|       |       |         |
 | a     | b     | a or b  |
-| ----- | ----: | ------: |
+| ----- | ----- | ------: |
 | true  | true  | true    |
 | true  | false | true    |
 | false | true  | true    |
 | false | false | false   |
 |       |       |         |
+
+
+# Operador ternário `?:`
+
+O operador ternário `?:` é usado para criar expressões do tipo:
+
+```c
+condition ? valueWhenConditionIsTrue : valueWhenConditionIsFalse
+```
+
+O operador ternário retorna um resultado que depende do valor da `condition`. Se for `true`, então `valueWhenConditionIsTrue` é retornado. Se `condition` for `false` ou [na](https://br.tradingview.com/pine-script-reference/v5/#var_na), então `valueWhenConditionIsFalse` é retornado.
+
+Uma combinação de expressões ternárias pode ser usada para alcançar o mesmo efeito de uma estrutura [switch](https://br.tradingview.com/pine-script-reference/v5/#op_switch), por exemplo:
+
+```c
+timeframe.isintraday ? color.red : timeframe.isdaily ? color.green : timeframe.ismonthly ? color.blue : na
+```
+
+O exemplo é calculado da esquerda para a direita:
+
+- Se [timeframe.isintraday](https://br.tradingview.com/pine-script-reference/v5/#var_timeframe{dot}isintraday) for `true`, então é retornado `color.red`. Se for `false`, então [timeframe.isdaily](https://br.tradingview.com/pine-script-reference/v5/#var_timeframe{dot}isdaily) é avaliado.
+- Se [timeframe.isdaily](https://br.tradingview.com/pine-script-reference/v5/#var_timeframe{dot}isdaily) for `true`, então é retornado `color.green`. Se for `false`, então [timeframe.ismonthly](https://br.tradingview.com/pine-script-reference/v5/#var_timeframe{dot}ismonthly) é avaliado.
+- Se [timeframe.ismonthly](https://br.tradingview.com/pine-script-reference/v5/#var_timeframe{dot}ismonthly) for `true`, então é retornado `color.blue`, caso contrário, é retornado [na](https://br.tradingview.com/pine-script-reference/v5/#var_na).
+
+Repare que os valores de retorno em cada lado do `:` são expressões — não blocos locais, então eles não afetarão o limite de 500 blocos locais por escopo.
+
