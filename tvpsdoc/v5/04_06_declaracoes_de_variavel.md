@@ -136,4 +136,24 @@ Três modos podem ser usados:
 - [var](https://br.tradingview.com/pine-script-reference/v5/#op_var).
 - [varip](https://br.tradingview.com/pine-script-reference/v5/#op_varip).
 
+## Em Cada Barra
+
+Quando nenhum modo de declaração explícito é especificado, ou seja, nenhuma palavra-chave [var](https://br.tradingview.com/pine-script-reference/v5/#op_var) ou [varip](https://br.tradingview.com/pine-script-reference/v5/#op_varip) é usada, a variável é declarada e inicializada em cada barra.
+
+Por exemplo, as seguintes declarações:
+
+```c
+BULL_COLOR = color.lime
+i = 1
+len = input(20, "Length")
+float f = 10.5
+closeRoundedToTick = math.round_to_mintick(close)
+st = ta.supertrend(4, 14)
+[macdLine, signalLine, histLine] = ta.macd(close, 12, 26, 9)
+plotColor = if close > open
+    color.green
+else
+    color.red
+```
+
 # Var
