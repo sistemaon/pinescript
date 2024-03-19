@@ -78,6 +78,17 @@ baseLine2 = float(na)   // OK
 Na primeira linha do exemplo, o compilador não pode determinar o tipo da variável `baseLine0` porque [na](https://br.tradingview.com/pine-script-reference/v5/#var_na) é um valor genérico sem um tipo específico. A declaração da variável `baseLine1` está correta porque seu tipo [float](https://br.tradingview.com/pine-script-reference/v5/#op_float) é declarado explicitamente. A declaração da variável `baseLine2` também está correta porque seu tipo pode ser derivado da expressão `float(na)`, que é uma conversão explícita do valor [na](https://br.tradingview.com/pine-script-reference/v5/#var_na) para o tipo [float](https://br.tradingview.com/pine-script-reference/v5/#op_float). As declarações de `baseLine1` e `baseLine2` são equivalentes.
 
 
+# Declarações de Tupla
+
+Chamadas de função ou estruturas podem retornar múltiplos valores. Ao chamá-las e armazená-las os valores que retornam, é necessário usar uma _declaração de tupla_, que é um conjunto separado por vírgulas de um ou mais valores entre colchetes. Isso nos permite declarar múltiplas variáveis simultaneamente.
+
+Como exemplo, a função embutida [ta.bb()](https://br.tradingview.com/pine-script-reference/v5/#fun_ta{dot}bb) para _Bandas de Bollinger_ retorna três valores:
+
+```c
+[bbMiddle, bbUpper, bbLower] = ta.bb(close, 5, 4)
+```
+
+
 # Reatribuição de Variável
 
 
