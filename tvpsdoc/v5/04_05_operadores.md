@@ -186,7 +186,7 @@ close[1][2] // Error: incorrect use of [] operator
 
 # Operadores de Precedência
 
-A ordem dos cálculos é determinada pela precedência dos operadores. Operadores com __maior precedência são calculados primeiro__.
+A ordem dos cálculos é determinada pela __prioridade__ dos operadores. Operadores com __maior precedência são calculados primeiro__.
 
 Abaixo está uma lista de operadores ordenados por precedência decrescente:
 
