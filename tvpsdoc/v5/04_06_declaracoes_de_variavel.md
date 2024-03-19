@@ -91,6 +91,37 @@ Como exemplo, a função embutida [ta.bb()](https://br.tradingview.com/pine-scri
 
 # Reatribuição de Variável
 
+Uma reatribuição de variável é realizada usando o operador de reatribuição [:=](./04_05_operadores.md#operador-de-reatribuição). Isso só pode ser feito depois que uma variável foi declarada inicialmente e recebeu um valor inicial. Reatribuir um novo valor a uma variável é frequentemente necessário em cálculos, e é sempre necessário quando uma variável do escopo global precisa receber um novo valor de dentro do bloco local de uma estrutura.
+
+Por exemplo:
+
+```c
+//@version=5
+indicator("", "", true)
+sensitivityInput = input.int(2, "Sensitivity", minval = 1, tooltip = "Higher values make color changes less sensitive.")
+ma = ta.sma(close, 20)
+maUp = ta.rising(ma, sensitivityInput)
+maDn = ta.falling(ma, sensitivityInput)
+
+// On first bar only, initialize color to gray
+var maColor = color.gray
+if maUp
+    // MA has risen for two bars in a row; make it lime.
+    maColor := color.lime
+else if maDn
+    // MA has fallen for two bars in a row; make it fuchsia.
+    maColor := color.fuchsia
+
+plot(ma, "MA", maColor, 2)
+```
+
+Perceba que:
+
+- A variável `maColor` foi inicializada apenas na primeira barra, para que preserve seu valor através das barras subsequentes.
+- A cada barra, a instrução [if](https://br.tradingview.com/pine-script-reference/v5/#op_if) verifica se a média móvel tem aumentado ou diminuído pelo número especificado de barras pelo usuário (o padrão é 2). Quando isso acontece, o valor de `maColor` precisa ser reatribuído a um novo valor de dentro dos blocos locais [if](https://br.tradingview.com/pine-script-reference/v5/#op_if). Para fazer isso, utilize-se o operador de reatribuição [:=](./04_05_operadores.md#operador-de-reatribuição).
+- Caso não utiliza-se o operador de reatribuição [:=](./04_05_operadores.md#operador-de-reatribuição), o efeito seria inicializar uma nova variável local `maColor` que teria o mesmo nome que a do escopo global, mas na verdade seria uma entidade independente muito confusa que persistiria apenas pelo comprimento do bloco local e então desapareceria sem deixar rastros.
+
+Todas as variáveis definidas pelo usuário no Pine Script são _mutáveis_, o que significa que seu valor pode ser alterado usando o operador de reatribuição [:=](./04_05_operadores.md#operador-de-reatribuição). Atribuir um novo valor a uma variável pode alterar seu _qualificador de tipo_ (consulte [Tipagem do Sistema](./000_type_system.md) do Pine Script para maiores informações). Uma variável pode receber um novo valor quantas vezes forem necessárias durante a execução do script em uma barra, então um script pode conter qualquer número de reatribuições de uma variável. O [modo de declaração](./04_06_declaracoes_de_variavel.md#modos-de-declaração) de uma variável determina como os novos valores atribuídos a ela serão salvos.
 
 
 # Modos de Declaração
