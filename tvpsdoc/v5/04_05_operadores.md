@@ -182,3 +182,31 @@ Isso não é permitido:
 ```c
 close[1][2] // Error: incorrect use of [] operator
 ```
+
+
+# Operadores de Precedência
+
+A ordem dos cálculos é determinada pela precedência dos operadores. Operadores com maior precedência são calculados primeiro.
+
+Abaixo está uma lista de operadores ordenados por precedência decrescente:
+
+| Precedência     | Operador                      |
+| :-------------- | ----------------------------- |
+| 9               | `[]`                          |
+| 8               | unário `+`, unário `-`, `not` |
+| 7               | `*`, `/`, `%`                 |
+| 6               | `+`, `-`                      |
+| 5               | `>`, `<`, `>=`, `<=`          |
+| 4               | `==`, `!=`                    |
+| 3               | `and`                         |
+| 2               | `or`                          |
+| 1               | `?:`                          |
+|                 |                               |
+
+Se em uma expressão houver vários operadores com a mesma precedência, então eles são calculados da esquerda para a direita.
+
+Se a expressão deve ser calculada em uma ordem diferente da que a precedência indicaria, então partes da expressão podem ser agrupadas com parênteses.
+
+
+# Operador de Atribuição
+
