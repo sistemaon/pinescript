@@ -166,7 +166,7 @@ Pine Script possui uma variável que contém o número da barra na qual o script
 
 Há outra consideração importante para ter em mente ao usar o operador `[]` em Pine Script. Vimos casos em que uma referência histórica pode retornar o valor [na](https://br.tradingview.com/pine-script-reference/v5/#var_na). O [na](https://br.tradingview.com/pine-script-reference/v5/#var_na) representa um valor que não é um número e usar isso em qualquer expressão resultará em [na](https://br.tradingview.com/pine-script-reference/v5/#var_na) (semelhante a [NaN](https://pt.wikipedia.org/wiki/NaN)). Esses casos geralmente ocorrem durante os cálculos do script nas primeiras barras do conjunto de dados, mas também pode ocorrer em barras posteriores sob certas condições. Se o código não lidar explicitamente com esses casos especiais, pode introduzir resultados inválidos nos cálculos do script, que pode-se propagar até a barra em tempo real. As funções [na](https://br.tradingview.com/pine-script-reference/v5/#fun_na) e [nz](https://br.tradingview.com/pine-script-reference/v5/#fun_nz) são projetadas para lidar com tais casos.
 
-Estes são todos os usos válidos do operador [[]](https://br.tradingview.com/pine-script-reference/v5/#op_[]):
+Estes são usos válidos do operador [[]](https://br.tradingview.com/pine-script-reference/v5/#op_[]):
 
 ```c
 high[10]
@@ -186,7 +186,7 @@ close[1][2] // Error: incorrect use of [] operator
 
 # Operadores de Precedência
 
-A ordem dos cálculos é determinada pela precedência dos operadores. Operadores com maior precedência são calculados primeiro.
+A ordem dos cálculos é determinada pela precedência dos operadores. Operadores com __maior precedência são calculados primeiro__.
 
 Abaixo está uma lista de operadores ordenados por precedência decrescente:
 
@@ -208,5 +208,21 @@ Se em uma expressão houver vários operadores com a mesma precedência, então 
 Se a expressão deve ser calculada em uma ordem diferente da que a precedência indicaria, então partes da expressão podem ser agrupadas com parênteses.
 
 
-# Operador de Atribuição
+# Operador de Atribuição `=`
+
+O operador `=` é utilizado para atribuir valor a uma variável ao ser inicializada - ou declarada -, ou seja, na primeira vez que é utilizada. Ele aponta que se _trata de uma nova variável que será utilizada, e deseja-se que ela comece em cada barra com este valor_.
+
+Estas são declarações de variáveis válidas:
+
+```c
+i = 1
+MS_IN_ONE_MINUTE = 1000 * 60
+showPlotInput = input.bool(true, "Show plots")
+pHi = pivothigh(5, 5)
+plotColor = color.green
+```
+
+Consulte [Declarações de Variável](./04_06_declaracoes_de_variavel.md) para mais informações sobre como declarar variáveis.
+
+
 
