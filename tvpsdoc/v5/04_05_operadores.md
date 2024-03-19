@@ -225,4 +225,37 @@ plotColor = color.green
 Consulte [Declarações de Variável](./04_06_declaracoes_de_variavel.md) para mais informações sobre como declarar variáveis.
 
 
+# Operador de Reatribuição `:=`
 
+O operador `:=` é usado para reatribuir valor a uma variável existente. Isso significa _usar esta variável que foi declarada anteriormente no script e atribuir a ela um novo valor_.
+
+Variáveis que foram primeiramente declaradas e, em seguida, reatribuídas com o operador `:=`, são chamadas de _variáveis mutáveis_.
+Encontrará mais informações sobre como [var](https://br.tradingview.com/pine-script-reference/v5/#op_var) funciona na seção [modo de declaração 'var'](./04_06_declaracoes_de_variavel.md#var).
+
+Estas são reatribuições de variáveis válidas:
+
+```c
+//@version=5
+indicator("", "", true)
+// Declare `pHi` and initilize it on the first bar only.
+var float pHi = na
+// Reassign a value to `pHi`
+pHi := nz(ta.pivothigh(5, 5), pHi)
+plot(pHi)
+```
+
+Observe-se que:
+
+- Declaramos `pHi` com este código: `var float pHi = na`. A palavra-chave [var](https://br.tradingview.com/pine-script-reference/v5/#op_var) informa ao Pine Script que apenas essa variável seja inicializada com [na](https://br.tradingview.com/pine-script-reference/v5/#var_na) na primeira barra do conjunto de dados. A palavra-chave [`float`](https://br.tradingview.com/pine-script-reference/v5/#type_float) informa ao compilador que estamos declarando uma variável do tipo "float". Isso é necessário porque, ao contrário da maioria dos casos, o compilador não pode determinar automaticamente o tipo do valor do lado direito do sinal `=`.
+- Enquanto a declaração de variável será executada apenas na primeira barra por usa [var](https://br.tradingview.com/pine-script-reference/v5/#op_var), a linha `pHi := nz(ta.pivothigh(5, 5), pHi)` será executada em todas as barras do gráfico. Em cada barra, ela avalia se a chamada da função [pivothigh()](https://br.tradingview.com/pine-script-reference/v5/#fun_ta{dot}pivothigh) retorna [na](https://br.tradingview.com/pine-script-reference/v5/#var_na) porque é isso que a função faz quando _não encontrou_ um novo pivô (_pivot_). A função [nz()](https://br.tradingview.com/pine-script-reference/v5/#fun_nz) é a que faz o trabalho de "verificar por [na](https://br.tradingview.com/pine-script-reference/v5/#var_na)". Quando seu primeiro argumento (`ta.pivothigh(5, 5)`) é [na](https://br.tradingview.com/pine-script-reference/v5/#var_na), ela retorna o segundo argumento (`pHi`) em vez do primeiro. Quando [pivothigh()](https://br.tradingview.com/pine-script-reference/v5/#fun_ta{dot}pivothigh) retorna o ponto de preço de um novo pivô encontrado, esse valor é atribuído a `pHi`. Quando ele retorna [na](https://br.tradingview.com/pine-script-reference/v5/#var_na) porque nenhum novo pivô foi encontrado, atribuímos o valor anterior de `pHi` a si mesmo, efetivamente preservando seu valor anterior.
+
+A saída do script aparenta-se com isto:
+
+![Operador de reatribuição](./imgs/Operators-ReassignmentOperator-1.png)
+
+Note que:
+
+- A linha preserva seu valor anterior até que um novo pivô seja encontrado.
+- Os pivôs são detectados cinco barras após o pivô realmente ocorrer pois na chamada de função `ta.pivothigh(5, 5)` indica que precisamos de cinco altas mais baixas de ambos os lados de um ponto alto para que seja detectado como um pivô.
+
+Consulte [Reatribuição de Variável](./04_06_declaracoes_de_variavel.md#reatribuição-de-variável) para mais informações sobre como reatribuir valores a variáveis.

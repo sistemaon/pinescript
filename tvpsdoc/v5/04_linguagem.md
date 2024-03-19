@@ -12,3 +12,5 @@
 ## 04 [Identificadores](./04_04_identificadores.md)
 
 ## 05 [Operadores](./04_05_operadores.md)
+
+## 06 [Declarações de Variável](./04_06_declaracoes_de_variavel.md)
