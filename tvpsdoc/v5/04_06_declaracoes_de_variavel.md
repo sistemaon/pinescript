@@ -63,6 +63,21 @@ A sintaxe formal de uma declaração de variável é:
 ```
 
 
+# Inicialização com `na`
+
+Na maioria dos casos, uma declaração explícita de tipo é redundante porque o tipo é automaticamente inferido a partir do valor à direita do `=` durante a compilação, então a decisão de usá-los geralmente é uma questão de preferência. 
+
+Por exemplo:
+
+```c
+baseLine0 = na          // compile time error!
+float baseLine1 = na    // OK
+baseLine2 = float(na)   // OK
+```
+
+Na primeira linha do exemplo, o compilador não pode determinar o tipo da variável `baseLine0` porque [na](https://br.tradingview.com/pine-script-reference/v5/#var_na) é um valor genérico sem um tipo específico. A declaração da variável `baseLine1` está correta porque seu tipo [float](https://br.tradingview.com/pine-script-reference/v5/#op_float) é declarado explicitamente. A declaração da variável `baseLine2` também está correta porque seu tipo pode ser derivado da expressão `float(na)`, que é uma conversão explícita do valor [na](https://br.tradingview.com/pine-script-reference/v5/#var_na) para o tipo [float](https://br.tradingview.com/pine-script-reference/v5/#op_float). As declarações de `baseLine1` e `baseLine2` são equivalentes.
+
+
 # Reatribuição de Variável
 
 
