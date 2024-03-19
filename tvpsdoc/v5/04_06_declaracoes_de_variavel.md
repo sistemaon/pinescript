@@ -126,5 +126,14 @@ Todas as variáveis definidas pelo usuário no Pine Script são _mutáveis_, o q
 
 # Modos de Declaração
 
+Para compreender o impacto que os modos de declaração têm sobre o comportamento das variáveis, é necessário ter conhecimento prévio do [modelo de execução](./04_01_modelo_de_execucao.md) do Pine Script.
+
+Ao declarar uma variável, se um modo de declaração for especificado, esse deve vir primeiro.
+
+Três modos podem ser usados:
+
+- "Em cada barra", quando nenhum é especificado.
+- [var](https://br.tradingview.com/pine-script-reference/v5/#op_var).
+- [varip](https://br.tradingview.com/pine-script-reference/v5/#op_varip).
 
 # Var
