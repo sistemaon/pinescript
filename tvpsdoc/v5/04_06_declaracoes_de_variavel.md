@@ -206,3 +206,47 @@ Note que:
 - Foi restringido a execução do restante do código à última barra do gráfico ao incluir o código que atualiza a linha em uma estrutura [if](https://br.tradingview.com/pine-script-reference/v5/#op_if) [barstate.islast](https://br.tradingview.com/pine-script-reference/v5/#var_barstate{dot}islast).
 
 Há uma penalidade muito leve de desempenho ao usar o modo de declaração [var](https://br.tradingview.com/pine-script-reference/v5/#op_var). Por esse motivo, ao declarar constantes, é preferível não utilizar [var](https://br.tradingview.com/pine-script-reference/v5/#op_var) se o desempenho for uma preocupação, a menos que a inicialização envolva cálculos que levem mais tempo do que a penalidade de manutenção, por exemplo, funções com código complexo ou manipulações de string.
+
+## Varip `varip`
+
+Para compreender o comportamento das variáveis usando o modo de declaração [varip](https://br.tradingview.com/pine-script-reference/v5/#op_varip), é necessário ter conhecimento prévio do [modelo de execução](./04_01_modelo_de_execucao.md) do Pine Script e dos [estados das barras](./000_bar_states.md).
+
+A palavra-chave [varip](https://br.tradingview.com/pine-script-reference/v5/#op_varip) pode ser usada para declarar variáveis que escapam do _processo de rollback_, sobre o qual é explicado no [modelo de execução](./04_01_modelo_de_execucao.md) do Pine Script.
+
+Enquanto os scripts executam apenas uma vez no fechamento de barras históricas, quando um script está sendo executado em tempo real, o mesmo executa toda vez que o feed (fluxo de dados em tempo real que fornece informações atualizadas) do gráfico detecta uma atualização de preço ou volume. Em cada atualização em tempo real, o tempo de execução do Pine Script normalmente redefine os valores das variáveis do script para o seu último valor confirmado, isto é, o valor que tinham quando a barra anterior fechou. Isso geralmente é útil, já que cada execução de script em tempo real começa de um estado conhecido, o que simplifica a lógica do script.
+
+Às vezes, no entanto, a lógica do script requer que o código possa salvar valores de variáveis __entre diferentes execuções__ na barra em tempo real. Declarar variáveis com [varip](https://br.tradingview.com/pine-script-reference/v5/#op_varip) torna isso possível. O "ip" em [varip](https://br.tradingview.com/pine-script-reference/v5/#op_varip) significa persistência intrabar (_intrabar persist_).
+
+Olhe o código a seguir, que não utiliza [varip](https://br.tradingview.com/pine-script-reference/v5/#op_varip):
+
+```c
+//@version=5
+indicator("")
+int updateNo = na
+if barstate.isnew
+    updateNo := 1
+else
+    updateNo := updateNo + 1
+
+plot(updateNo, style = plot.style_circles)
+```
+
+Nas barras históricas, [barstate.isnew](https://br.tradingview.com/pine-script-reference/v5/#var_barstate{dot}isnew) sempre é verdadeiro, então o gráfico mostra um valor de "1" porque a parte `else` da estrutura [if](https://br.tradingview.com/pine-script-reference/v5/#op_if) nunca é executada. Nas barras em tempo real, [barstate.isnew](https://br.tradingview.com/pine-script-reference/v5/#var_barstate{dot}isnew) só é [true](https://br.tradingview.com/pine-script-reference/v5/#const_true) quando o script é executado pela primeira vez na "abertura" da barra. O gráfico então exibirá brevemente "1" até que ocorram execuções subsequentes. Nas próximas execuções durante a barra em tempo real, o segundo ramo da instrução [if](https://br.tradingview.com/pine-script-reference/v5/#op_if) é executado porque [barstate.isnew](https://br.tradingview.com/pine-script-reference/v5/#var_barstate{dot}isnew) já não é [true](https://br.tradingview.com/pine-script-reference/v5/#const_true). Como `updateNo` é inicializado como [na](https://br.tradingview.com/pine-script-reference/v5/#var_na) em cada execução, a expressão `updateNo + 1` resulta em [na](https://br.tradingview.com/pine-script-reference/v5/#var_na), então nada é plotado em execuções posteriores em tempo real do script.
+
+Agora, se usarmos [varip](https://br.tradingview.com/pine-script-reference/v5/#op_varip) para declarar a variável `updateNo`, o script se comporta de maneira muito diferente:
+
+```c
+//@version=5
+indicator("")
+varip int updateNo = na
+if barstate.isnew
+    updateNo := 1
+else
+    updateNo := updateNo + 1
+
+plot(updateNo, style = plot.style_circles)
+```
+
+A diferença agora é que o `updateNo` acompanha o número de atualizações em tempo real que ocorrem em cada barra em tempo real. Isso pode acontecer porque a declaração [varip](https://br.tradingview.com/pine-script-reference/v5/#op_varip) permite que o valor de `updateNo` seja preservado entre as atualizações em tempo real; não é mais revertido a cada execução em tempo real do script. O teste em [barstate.isnew](https://br.tradingview.com/pine-script-reference/v5/#var_barstate{dot}isnew) permite redefinir a contagem de atualizações quando uma nova barra em tempo real aparece.
+
+Como [varip](https://br.tradingview.com/pine-script-reference/v5/#op_varip) afeta apenas o comportamento do código na barra em tempo real, segue-se que os resultados de backtest em estratégias projetadas usando lógica baseada em variáveis [varip](https://br.tradingview.com/pine-script-reference/v5/#op_varip) não serão capazes de reproduzir esse comportamento em barras históricas, o que invalidará os resultados dos testes nelas. Isso também implica que os gráficos em barras históricas não serão capazes de reproduzir o comportamento do script em tempo real.
