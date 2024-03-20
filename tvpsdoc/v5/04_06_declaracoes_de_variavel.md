@@ -156,4 +156,53 @@ else
     color.red
 ```
 
-# Var
+## Var `var`
+
+Quando a palavra-chave [var](https://br.tradingview.com/pine-script-reference/v5/#op_var) é usada, a variável é inicializada apenas uma vez, na primeira barra, se a declaração estiver no escopo global, ou na primeira vez que o bloco local é executado se a declaração estiver dentro de um bloco local. Após isso, ela preservará seu último valor nas barras sucessivas, até que reatribua um novo valor a ela. Esse comportamento é muito útil em muitos casos onde o valor de uma variável deve persistir através das iterações de um script em barras sucessivas.
+
+Por exemplo, contagem de barras verdes no gráfico:
+
+```c
+//@version=5
+indicator("Green Bars Count")
+var count = 0
+isGreen = close >= open
+if isGreen
+    count := count + 1
+plot(count)
+```
+
+![Var contagem de barras verdes](./imgs/VariableDeclarations-GreenBarsCount.png)
+
+Sem o modificador `var`, a variável `count` seria resetada para zero (perdendo assim seu valor) toda vez que uma nova atualização de barra disparasse um novo recálculo do script.
+
+Declarar variáveis apenas na primeira barra é frequentemente útil para gerenciar desenhos de forma mais eficiente. Suponha que queiramos estender a linha de [close](https://br.tradingview.com/pine-script-reference/v5/#var_close) da última barra para a direita do gráfico.
+
+Por exemplo:
+
+```c
+//@version=5
+indicator("Inefficient version", "", true)
+closeLine = line.new(bar_index - 1, close, bar_index, close, extend = extend.right, width = 3)
+line.delete(closeLine[1])
+```
+
+Porém isso é ineficiente porque estamos criando e deletando a linha em cada barra histórica e em cada atualização na barra em tempo real.
+
+É mais eficiente usar:
+
+```c
+//@version=5
+indicator("Efficient version", "", true)
+var closeLine = line.new(bar_index - 1, close, bar_index, close, extend = extend.right, width = 3)
+if barstate.islast
+    line.set_xy1(closeLine, bar_index - 1, close)
+    line.set_xy2(closeLine, bar_index, close)
+```
+
+Note que:
+
+- O `closeLine` foi inicializado apenas na primeira barra, usando o modo de declaração [var](https://br.tradingview.com/pine-script-reference/v5/#op_var).
+- Foi restringido a execução do restante do código à última barra do gráfico ao incluir o código que atualiza a linha em uma estrutura [if](https://br.tradingview.com/pine-script-reference/v5/#op_if) [barstate.islast](https://br.tradingview.com/pine-script-reference/v5/#var_barstate{dot}islast).
+
+Há uma penalidade muito leve de desempenho ao usar o modo de declaração [var](https://br.tradingview.com/pine-script-reference/v5/#op_var). Por esse motivo, ao declarar constantes, é preferível não utilizar [var](https://br.tradingview.com/pine-script-reference/v5/#op_var) se o desempenho for uma preocupação, a menos que a inicialização envolva cálculos que levem mais tempo do que a penalidade de manutenção, por exemplo, funções com código complexo ou manipulações de string.
