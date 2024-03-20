@@ -14,3 +14,5 @@
 ## 05 [Operadores](./04_05_operadores.md)
 
 ## 06 [Declarações de Variável](./04_06_declaracoes_de_variavel.md)
+
+## 07 [Estruturas Condicionais](./04_07_estruturas_condicionais.md)
