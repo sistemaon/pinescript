@@ -187,7 +187,7 @@ Ambas as formas são permitidas como o valor usado para inicializar uma variáve
 
 Assim como na estrutura [if](https://br.tradingview.com/pine-script-reference/v5/#op_if), se nenhum bloco local for executado, é retornado [na](https://br.tradingview.com/pine-script-reference/v5/#var_na).
 
-## Expressão com `switch`
+## `switch` com Expressão 
 
 Veja um exemplo de um [switch](https://br.tradingview.com/pine-script-reference/v5/#op_switch) usando uma expressão:
 
@@ -213,4 +213,42 @@ plot(ma)
 Perceba que:
 
 - A expressão pela qual está alternando é a variável `maType`, que é do tipo "input int" (veja mais sobre o qualificador ["input"](./000_type_system.md#entrada)). Como ela não pode ser alterada durante a execução do script, isso garante que qualquer tipo de _MA_ que o usuário selecione será executado em cada barra, o que é um requisito para funções como [ta.ema()](https://br.tradingview.com/pine-script-reference/v5/#fun_ta{dot}ema), que exigem um argumento "int simples" ("_simple int_") para seu parâmetro de `length`.
-- Se nenhum valor correspondente for encontrado para `maType`, o [switch](https://br.tradingview.com/pine-script-reference/v5/#op_switch) executa o último bloco local introduzido por =>, que age como um capturador geral. Geramos um erro em tempo de execução nesse bloco. Também o encerramos com float(na) para que o bloco local retorne um valor cujo tipo seja compatível com o dos outros blocos locais na estrutura, evitando um erro de compilação.
+- Se nenhum valor correspondente for encontrado para `maType`, o [switch](https://br.tradingview.com/pine-script-reference/v5/#op_switch) executa o último bloco local introduzido por` =>`, que age como um _capturador geral_. Gerado um erro em tempo de execução nesse bloco. Também encerrado-o com `float(na)` para que o bloco local retorne um valor cujo tipo seja compatível com o dos outros blocos locais na estrutura, evitando um erro de compilação.
+
+## `switch` sem Expressão
+
+Veja um exemplo de uma estrutura [switch](https://br.tradingview.com/pine-script-reference/v5/#op_switch) que não utiliza expressão:
+
+```c
+//@version=5
+strategy("Switch without an expression", "", true)
+
+bool longCondition  = ta.crossover( ta.sma(close, 14), ta.sma(close, 28))
+bool shortCondition = ta.crossunder(ta.sma(close, 14), ta.sma(close, 28))
+
+switch
+    longCondition  => strategy.entry("Long ID", strategy.long)
+    shortCondition => strategy.entry("Short ID", strategy.short)
+```
+
+- Usando o [switch](https://br.tradingview.com/pine-script-reference/v5/#op_switch) para selecionar apropriadamente a ordem estratégica para emitir, dependendo se as condições `longCondition` ou `shortCondition` do tipo "bool" são `true`.
+- As condições de formação de `longCondition` e `shortCondition` são exclusivas. Embora ambas possam ser `false` simultaneamente, não podem ser `true` ao mesmo tempo. O fato de apenas __um único__ bloco local da estrutura [switch](https://br.tradingview.com/pine-script-reference/v5/#op_switch) ser executado nunca é, portanto, um problema.
+- Avaliando-as as chamadas para [ta.crossover()](https://br.tradingview.com/pine-script-reference/v5/#fun_ta{dot}crossover) e [ta.crossunder()](https://br.tradingview.com/pine-script-reference/v5/#fun_ta{dot}crossunder) __antes__ da entrada na estrutura de [switch](https://br.tradingview.com/pine-script-reference/v5/#op_switch). Não fazê-lo, como no exemplo a seguir, impediria que as funções fossem executadas em cada barra, o que resultaria em um aviso do compilador e em um comportamento errático.
+
+Exemplo:
+
+```c
+//@version=5
+strategy("Switch without an expression", "", true)
+
+switch
+    // Compiler warning! Will not calculate correctly!
+    ta.crossover( ta.sma(close, 14), ta.sma(close, 28)) => strategy.entry("Long ID", strategy.long)
+    ta.crossunder(ta.sma(close, 14), ta.sma(close, 28)) => strategy.entry("Short ID", strategy.short)
+```
+
+# Correspondência com o Requisito de Tipo do Bloco Local
+
+
+
+
