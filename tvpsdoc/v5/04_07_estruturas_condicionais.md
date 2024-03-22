@@ -247,8 +247,26 @@ switch
     ta.crossunder(ta.sma(close, 14), ta.sma(close, 28)) => strategy.entry("Short ID", strategy.short)
 ```
 
+
 # Correspondência com o Requisito de Tipo do Bloco Local
 
+Quando múltiplos blocos locais são usados em estruturas, o tipo do valor de retorno de todos os seus blocos locais deve corresponder. Isso se aplica apenas se a estrutura for usada para atribuir um valor a uma variável em uma declaração, porque uma variável só pode ter um tipo, e se a instrução retornar dois tipos incompatíveis em seus ramos (_branches_), o tipo da variável não pode ser determinado adequadamente. Se a estrutura não for atribuída em nenhum lugar, seus ramos podem retornar valores diferentes.
 
+O exemplo a seguir compila sem problemas porque tanto [close](https://br.tradingview.com/pine-script-reference/v5/#var_close) quanto [open](https://br.tradingview.com/pine-script-reference/v5/#var_open) são do tipo [float](https://br.tradingview.com/pine-script-reference/v5/#type_float):
 
+```c
+x = if close > open
+    close
+else
+    open
+```
 
+O exemplo a seguir não compila porque o primeiro bloco local retorna um valor `float`, enquanto o segundo retorna uma `string`, e o resultado da instrução `if` é atribuído à variável `x`:
+
+```c
+// Compilation error!
+x = if close > open
+    close
+else
+    "open"
+```
