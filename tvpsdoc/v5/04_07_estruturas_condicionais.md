@@ -21,7 +21,7 @@ Os blocos locais em estruturas condicionais devem ser indentados por quatro espa
 
 # Estrutura `if`
 
-## `if` usado por seus efeitos colaterais/adicionais
+## `if` Usado por seus Efeitos Colaterais/Adicionais
 
 Uma estrutura [if](https://br.tradingview.com/pine-script-reference/v5/#op_if) utilizada por seus efeitos adicionais tem a seguinte sintaxe:
 
@@ -80,4 +80,77 @@ Note que:
 - Ao exibir o texto do _label_ sem um fundo, então define-se o fundo de _label_ como [na](https://br.tradingview.com/pine-script-reference/v5/#var_na) em chamada da função [label.new()](https://br.tradingview.com/pine-script-reference/v5/#fun_label{dot}new), e usa-se `hl2[1]` para a _posição y_ do _label_ para que ele não se mova o tempo todo. Ao usar a média dos valores [high](https://br.tradingview.com/pine-script-reference/v5/#var_high) e [low](https://br.tradingview.com/pine-script-reference/v5/#var_low) da barra __anterior__, o _label_ não se move até o momento em que a próxima barra em tempo real se abre.
 - Usa-se `bar_index + 2` na chamada de [label.set_xy()](https://br.tradingview.com/pine-script-reference/v5/#fun_label{dot}set_xy) para deslocar o _label_ para a direita em duas barras.
 
-## `if` usado pra retorno de valor
+## `if` Usado para Retorno de Valor
+
+Uma estrutura [if](https://br.tradingview.com/pine-script-reference/v5/#op_if) usada para retornar um ou mais valores tem a seguinte sintaxe:
+
+```c
+[<declaration_mode>] [<type>] <identifier> = if <expression>
+    <local_block>
+{else if <expression>
+    <local_block>}
+[else
+    <local_block>]
+```
+
+Onde:
+
+- Partes entre colchetes (`[]`) podem não aparecer ou aparecer uma vez, e aquelas entre chaves (`{}`) podem não aparecer ou aparecer mais vezes.
+- `<declaration_mode>` é o [modo de declaração](./04_06_declaracoes_de_variavel.md#modos-de-declaração) da variável.
+- `<type>` é opcional, como em quase todas as declarações de variáveis do Pine Script (veja [tipos](./000_type_system.md#tipos)).
+- `<identifier>` é o [nome](./04_04_identificadores.md) da variável.
+- `<expression>` pode ser um literal, uma variável, uma expressão ou uma chamada de função.
+- `<local_block>` consiste em nenhum ou mais instruções seguidas de um valor de retorno, que pode ser uma tupla de valores. Deve ser indentado por quatro espaços ou uma tabulação (_tab_).
+- O valor atribuído à variável é o valor de retorno do `<local_block>`, ou [na](https://br.tradingview.com/pine-script-reference/v5/#var_na) se nenhum bloco local for executado.
+
+Exemplo:
+
+```c
+//@version=5
+indicator("", "", true)
+string barState = if barstate.islastconfirmedhistory
+    "islastconfirmedhistory"
+else if barstate.isnew
+    "isnew"
+else if barstate.isrealtime
+    "isrealtime"
+else
+    "other"
+
+f_print(_text) =>
+    var table _t = table.new(position.middle_right, 1, 1)
+    table.cell(_t, 0, 0, _text, bgcolor = color.yellow)
+f_print(barState)
+```
+
+É possível omitir o bloco `else`. Nesse caso, se a `condition` for [false](https://br.tradingview.com/pine-script-reference/v5/#const_false), um valor _vazio_ (`na`, `false` ou `""`) será atribuído à variável `var_declarationX`.
+
+Este exemplo mostra como [na](https://br.tradingview.com/pine-script-reference/v5/#var_na) é retornado quando nenhum bloco local é executado. Se `close > open` for `false` aqui, [na](https://br.tradingview.com/pine-script-reference/v5/#var_na) é retornado.
+
+```c
+x = if close > open
+    close
+```
+
+Scripts podem conter estruturas `if` com `if` aninhados e outras estruturas condicionais.
+
+Por exemplo:
+
+```c
+if condition1
+    if condition2
+        if condition3
+            expression
+```
+
+No entanto, aninhar essas estruturas não é recomendado do ponto de vista de desempenho. Quando possível, geralmente é mais otimizador compor uma única instrução `if` com múltiplos operadores lógicos em vez de vários blocos `if` aninhados.
+
+Exemplo:
+
+```c
+if condition1 and condition2 and condition3
+    expression
+```
+
+
+# Estrutura `switch`
