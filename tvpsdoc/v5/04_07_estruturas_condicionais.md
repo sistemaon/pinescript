@@ -179,7 +179,7 @@ Onde:
 - `<identifier>` é o [nome](./04_04_identificadores.md) da variável.
 - `<expression>` pode ser um literal, uma variável, uma expressão ou uma chamada de função.
 - `<local_block>` consiste em nenhum ou mais instruções seguidas de um valor de retorno, que pode ser uma tupla de valores. Deve ser indentado por quatro espaços ou uma tabulação (_tab_).
-- O `=> <local_block>` no final permite que especifique um valor de retorno que atua como padrão paraa ser usado quando nenhum outro caso na estrutura é executado.
+- O `=> <local_block>` no final permite que especifique um valor de retorno que atua como padrão para ser usado quando nenhum outro caso na estrutura é executado.
 
 Apenas um bloco local de uma estrutura [switch](https://br.tradingview.com/pine-script-reference/v5/#op_switch) é executado. Portanto, é uma _estruturada switch_ que _não passa pelos_ casos. Consequentemente, as instruções de `break` são desnecessárias.
 
@@ -187,6 +187,30 @@ Ambas as formas são permitidas como o valor usado para inicializar uma variáve
 
 Assim como na estrutura [if](https://br.tradingview.com/pine-script-reference/v5/#op_if), se nenhum bloco local for executado, é retornado [na](https://br.tradingview.com/pine-script-reference/v5/#var_na).
 
+## Expressão com `switch`
 
+Veja um exemplo de um [switch](https://br.tradingview.com/pine-script-reference/v5/#op_switch) usando uma expressão:
 
+```c
+//@version=5
+indicator("Switch using an expression", "", true)
 
+string maType = input.string("EMA", "MA type", options = ["EMA", "SMA", "RMA", "WMA"])
+int maLength = input.int(10, "MA length", minval = 2)
+
+float ma = switch maType
+    "EMA" => ta.ema(close, maLength)
+    "SMA" => ta.sma(close, maLength)
+    "RMA" => ta.rma(close, maLength)
+    "WMA" => ta.wma(close, maLength)
+    =>
+        runtime.error("No matching MA type found.")
+        float(na)
+
+plot(ma)
+```
+
+Perceba que:
+
+- A expressão pela qual está alternando é a variável `maType`, que é do tipo "input int" (veja mais sobre o qualificador ["input"](./000_type_system.md#entrada)). Como ela não pode ser alterada durante a execução do script, isso garante que qualquer tipo de _MA_ que o usuário selecione será executado em cada barra, o que é um requisito para funções como [ta.ema()](https://br.tradingview.com/pine-script-reference/v5/#fun_ta{dot}ema), que exigem um argumento "int simples" ("_simple int_") para seu parâmetro de `length`.
+- Se nenhum valor correspondente for encontrado para `maType`, o [switch](https://br.tradingview.com/pine-script-reference/v5/#op_switch) executa o último bloco local introduzido por =>, que age como um capturador geral. Geramos um erro em tempo de execução nesse bloco. Também o encerramos com float(na) para que o bloco local retorne um valor cujo tipo seja compatível com o dos outros blocos locais na estrutura, evitando um erro de compilação.
