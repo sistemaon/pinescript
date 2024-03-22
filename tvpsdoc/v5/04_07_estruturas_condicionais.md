@@ -95,7 +95,7 @@ Uma estrutura [if](https://br.tradingview.com/pine-script-reference/v5/#op_if) u
 
 Onde:
 
-- Partes entre colchetes (`[]`) podem não aparecer ou aparecer uma vez, e aquelas entre chaves (`{}`) podem não aparecer ou aparecer mais vezes.
+- Elementos entre colchetes (`[]`) podem não aparecer ou aparecer uma vez, e elementos entre chaves (`{}`) podem não aparecer ou aparecer mais vezes.
 - `<declaration_mode>` é o [modo de declaração](./04_06_declaracoes_de_variavel.md#modos-de-declaração) da variável.
 - `<type>` é opcional, como em quase todas as declarações de variáveis do Pine Script (veja [tipos](./000_type_system.md#tipos)).
 - `<identifier>` é o [nome](./04_04_identificadores.md) da variável.
@@ -143,7 +143,7 @@ if condition1
             expression
 ```
 
-No entanto, aninhar essas estruturas não é recomendado do ponto de vista de desempenho. Quando possível, geralmente é mais otimizador compor uma única instrução `if` com múltiplos operadores lógicos em vez de vários blocos `if` aninhados.
+No entanto, aninhar essas estruturas não é recomendado do ponto de vista de desempenho. Quando possível, geralmente é mais otimizador compor uma única instrução `if` com múltiplos [operadores lógicos](./04_05_operadores.md#operadores-lógicos) em vez de vários blocos `if` aninhados.
 
 Exemplo:
 
@@ -154,3 +154,39 @@ if condition1 and condition2 and condition3
 
 
 # Estrutura `switch`
+
+A estrutura [switch](https://br.tradingview.com/pine-script-reference/v5/#op_switch) existe em duas formas. Uma delas alterna entre os diferentes valores de uma expressão chave:
+
+```c
+[[<declaration_mode>] [<type>] <identifier> = ]switch <expression>
+    {<expression> => <local_block>}
+    => <local_block>
+```
+
+A outra forma não utiliza uma expressão como chave; ela alterna com base na avaliação de diferentes expressões:
+
+```c
+[[<declaration_mode>] [<type>] <identifier> = ]switch
+    {<expression> => <local_block>}
+    => <local_block>
+```
+
+Onde:
+
+- Elementos entre colchetes (`[]`) podem não aparecer ou aparecer uma vez, e elementos entre chaves (`{}`) podem não aparecer ou aparecer mais vezes.
+- `<declaration_mode>` é o [modo de declaração](./04_06_declaracoes_de_variavel.md#modos-de-declaração) da variável.
+- `<type>` é opcional, como em quase todas as declarações de variáveis do Pine Script (veja [tipos](./000_type_system.md#tipos)).
+- `<identifier>` é o [nome](./04_04_identificadores.md) da variável.
+- `<expression>` pode ser um literal, uma variável, uma expressão ou uma chamada de função.
+- `<local_block>` consiste em nenhum ou mais instruções seguidas de um valor de retorno, que pode ser uma tupla de valores. Deve ser indentado por quatro espaços ou uma tabulação (_tab_).
+- O `=> <local_block>` no final permite que especifique um valor de retorno que atua como padrão paraa ser usado quando nenhum outro caso na estrutura é executado.
+
+Apenas um bloco local de uma estrutura [switch](https://br.tradingview.com/pine-script-reference/v5/#op_switch) é executado. Portanto, é uma _estruturada switch_ que _não passa pelos_ casos. Consequentemente, as instruções de `break` são desnecessárias.
+
+Ambas as formas são permitidas como o valor usado para inicializar uma variável.
+
+Assim como na estrutura [if](https://br.tradingview.com/pine-script-reference/v5/#op_if), se nenhum bloco local for executado, é retornado [na](https://br.tradingview.com/pine-script-reference/v5/#var_na).
+
+
+
+
