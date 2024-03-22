@@ -17,7 +17,7 @@ _OU_
 
 Onde:
 
-- O símbolo `|` significa "`or`" (_ou_), e partes contidas entre colchetes (`[]`) podem aparecer zero ou uma vez, significa que a parte entre colchetes pode estar presente no texto (aparecer uma vez) ou pode não estar presente (aparecer zero vezes), ou seja, é opcional.
+- O símbolo `|` significa "`or`" (_ou_), e partes contidas entre colchetes (`[]`) podem aparecer nunhuma ou uma vez, significa que a parte entre colchetes pode estar presente no texto (aparecer uma vez) ou pode não estar presente (não aparecer), ou seja, é opcional.
 - `<declaration_mode>` é o [modo de declaração](./04_06_declaracoes_de_variavel.md#modos-de-declaração) da variável. Pode ser [var](https://br.tradingview.com/pine-script-reference/v5/#op_var) ou [varip](https://br.tradingview.com/pine-script-reference/v5/#op_varip), ou nothing (_nada_).
 - `<type>` é opcional, como na maioria das declarações de variáveis no Pine Script (veja [tipos](./000_type_system.md#tipos)).
 - `<identifier>` é o [nome](./04_04_identificadores.md) da variável.
