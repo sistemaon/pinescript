@@ -105,14 +105,60 @@ requestedSource = request.security(symbolInput, timeframeInput, sourceInput)
 plot(requestedSource)
 ```
 
-
 ## `simple`
+
+Valores qualificados como "simple" estão disponíveis apenas quando o script inicia a execução na _primeira_ barra do histórico do gráfico, e permanecem consistentes durante a execução do script.
+
+Os usuários podem definir explicitamente variáveis e parâmetros que aceitam valores "simple" incluindo a palavra-chave `simple` em sua declaração.
+
+Muitas variáveis integradas retornam valores qualificados como "simple" porque dependem de informações que um script só pode obter uma vez que ele começa sua execução. Além disso, muitas funções embutidas requerem argumentos "simple" que não alteram ao longo do tempo. Onde quer que um script permita valores "simple", ele também pode aceitar valores qualificados como "input" ou "const".
+
+O script a seguir, destaca o plano de fundo para alertar os usuários de que estão usando um tipo de gráfico não padrão. Ele usa o valor de [chart.is_standard](https://br.tradingview.com/pine-script-reference/v5/#var_chart.is_standard) para calcular a variável `isNonStandard` e, em seguida, usa o valor dessa variável para calcular `warningColor` que também referencia um valor "simple". O parâmetro `color` do [bgcolor()](https://br.tradingview.com/pine-script-reference/v5/#fun_bgcolor) permite um argumento de "series color", o que significa que também pode aceitar um valor de "simple color", já que "simple" está abaixo na hierarquia.
+
+```c
+//@version=5
+indicator("simple demo", overlay = true)
+
+//@variable Is `true` when the current chart is non-standard. Qualified as "simple bool".
+isNonStandard = not chart.is_standard
+//@variable Is orange when the the current chart is non-standard. Qualified as "simple color".
+simple color warningColor = isNonStandard ? color.new(color.orange, 70) : na
+
+// Colors the chart's background to warn that it's a non-standard chart type.
+bgcolor(warningColor, title = "Non-standard chart color")
+```
 
 ## `series`
 
+Valores qualificados como "series" oferecem a maior flexibilidade em scripts, pois podem mudar em qualquer barra, até mesmo várias vezes na mesma barra.
 
+Os usuários podem definir explicitamente variáveis e parâmetros que aceitam valores "series" ao incluir a palavra-chave `series` em sua declaração.
+
+Variáveis integradas como [open](https://br.tradingview.com/pine-script-reference/v5/#var_open), [high](https://br.tradingview.com/pine-script-reference/v5/#var_high), [low](https://br.tradingview.com/pine-script-reference/v5/#var_low), [close](https://br.tradingview.com/pine-script-reference/v5/#var_close), [volume](https://br.tradingview.com/pine-script-reference/v5/#var_volume), [time](https://br.tradingview.com/pine-script-reference/v5/#var_time) e [bar_index](https://br.tradingview.com/pine-script-reference/v5/#var_bar_index), e o resultado de qualquer expressão que use essas variáveis embutidas, são qualificadas como "series". O resultado de qualquer função ou operação que retorna um valor dinâmico sempre será uma "series", assim como os resultados ao usar o operador de referência histórica [[]](https://br.tradingview.com/pine-script-reference/v5/#op_[]) para acessar valores históricos. Onde quer que um script aceite valores "series", ele também aceitará valores com qualquer outro qualificador, pois "series" é o _maior_ qualificador na hierarquia.
+
+O script abaixo exibe o valor [highest](https://br.tradingview.com/pine-script-reference/v5/#fun_ta.highest) e [lowest](https://br.tradingview.com/pine-script-reference/v5/#fun_ta.lowest) de `sourceInput` ao longo de `lengthInput` barras. Os valores atribuídos às variáveis `highest` e `lowest` são do tipo qualificado "series float", podendo mudar ao longo da execução do script:
+
+```c
+//@version=5
+indicator("series demo", overlay = true)
+
+//@variable The source value to calculate on. Qualified as "series float".
+series float sourceInput = input.source(close, "Source")
+//@variable The number of bars in the calculation. Qualified as "input int".
+lengthInput = input.int(20, "Length")
+
+//@variable The highest `sourceInput` value over `lengthInput` bars. Qualified as "series float".
+series float highest = ta.highest(sourceInput, lengthInput)
+//@variable The lowest `sourceInput` value over `lengthInput` bars. Qualified as "series float".
+lowest = ta.lowest(sourceInput, lengthInput)
+
+plot(highest, "Highest source", color.green)
+plot(lowest, "Lowest source", color.red)
+```
 
 # Tipos
+
+
 
 
 # Entrada
