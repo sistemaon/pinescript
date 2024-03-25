@@ -81,11 +81,29 @@ plot(close)
 
 ## `input`
 
+Valores qualificados como "input" são estabelecidos após a inicialização por meio das funções `input.*()`. Essas funções produzem valores que os usuários podem modificar na aba "Inputs" das configurações do script. Quando se altera qualquer um dos valores nesta guia, o script é re-executado desde o início do histórico do gráfico para garantir que seus valores de entrada sejam consistentes ao longo de sua execução.
 
+> ## Note
+> A função [input.source()](https://br.tradingview.com/pine-script-reference/v5/#fun_input.source) é uma exceção no espaço de nomes (_namespace_) `input.*()`, pois ela retorna valores qualificados como "series" em vez de "input", uma vez que variáveis integradas como [open](https://br.tradingview.com/pine-script-reference/v5/#var_open), [close](https://br.tradingview.com/pine-script-reference/v5/#var_close), etc., assim como os valores de outros plots de script, são qualificados como "series".
 
+O script a seguir plota o valor de `sourceInput` do `symbolInput` e contexto do `timeframeInput`. A chamada [request.security()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.security) é válida neste script, pois seus parâmetros `symbol` e `timeframe` permitem argumentos do tipo "simple string", o que significa que também podem aceitar valores do tipo "input string", pois o qualificador "input" é _inferior_ na hierarquia:
 
+```c
+//@version=5
+indicator("input demo", overlay = true)
 
+//@variable The symbol to request data from. Qualified as "input string".
+symbolInput = input.symbol("AAPL", "Symbol")
+//@variable The timeframe of the data request. Qualified as "input string".
+timeframeInput = input.timeframe("D", "Timeframe")
+//@variable The source of the calculation. Qualified as "series float".
+sourceInput = input.source(close, "Source")
 
+//@variable The `sourceInput` value from the requested context. Qualified as "series float".
+requestedSource = request.security(symbolInput, timeframeInput, sourceInput)
+
+plot(requestedSource)
+```
 
 
 ## `simple`
