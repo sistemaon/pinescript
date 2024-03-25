@@ -166,3 +166,85 @@ else if not na(loPivot)
 checkLinesForBreaches(hiPivotLines)
 checkLinesForBreaches(loPivotLines)
 ```
+
+## `while`
+
+A estrutura [while](https://br.tradingview.com/pine-script-reference/v5/#op_while) permite a execução repetitiva de declarações até que uma condição seja falsa. Sua sintaxe é:
+
+```c
+[[<declaration_mode>] [<type>] <identifier> = ]while <expression>
+    <local_block_loop>
+```
+
+Onde:
+
+- Elementos entre colchetes (`[]`) podem não aparecer ou aparecer uma vez.
+- `<declaration_mode>` é o [modo de declaração](./04_06_declaracoes_de_variavel.md#modos-de-declaração) da variável.
+- `<type>` é opcional, como em quase todas as declarações de variáveis do Pine Script (veja [tipos](./000_type_system.md#tipos)).
+- `<identifier>` é o [nome](./04_04_identificadores.md) da variável.
+- `<expression>` pode ser um literal, uma variável, uma expressão ou uma chamada de função. É avaliado a cada iteração do loop. Quando ele avalia como `true`, o loop é executado. Quando ele avalia como `false`, o loop para. Observe que a avaliação da expressão é apenas feita antes de cada iteração. As alterações no valor da expressão dentro do loop só terão impacto na próxima iteração.
+- `<local_block_loop>` consiste em nenhum ou mais declarações seguidas por um valor de retorno, que pode ser uma tupla de valores. Deve ser indentado por quatro espaços ou uma tabulação (_tab_). Pode conter o comando `break` para sair do loop, ou o comando `continue` para sair da iteração atual e continuar com a próxima.
+- O valor atribuído à variável `<identifier>` é o valor de retorno do `<local_block_loop>`, isto é, o último valor calculado na última iteração do loop, ou [na](https://br.tradingview.com/pine-script-reference/v5/#var_na) se o loop não for executado.
+
+Este é o primeiro exemplo de código da seção [for](./04_08_loops.md#for) escrito usando uma estrutura [while](https://br.tradingview.com/pine-script-reference/v5/#op_while) em vez de uma estrutura [for](https://br.tradingview.com/pine-script-reference/v5/#op_for):
+
+```c
+//@version=5
+indicator("`for` loop")
+lookbackInput = input.int(50, "Lookback in bars", minval = 1, maxval = 4999)
+higherBars = 0
+lowerBars = 0
+if barstate.islast
+    var label lbl = label.new(na, na, "", style = label.style_label_left)
+    // Initialize the loop counter to its start value.
+    i = 1
+    // Loop until the `i` counter's value is <= the `lookbackInput` value.
+    while i <= lookbackInput
+        if high[i] > high
+            higherBars += 1
+        else if high[i] < high
+            lowerBars += 1
+        // Counter must be managed "manually".
+        i += 1
+    label.set_xy(lbl, bar_index, high)
+    label.set_text(lbl, str.tostring(higherBars, "# higher bars\n") + str.tostring(lowerBars, "# lower bars"))
+```
+
+Perceba que:
+
+- O contador `i` deve ser incrementado explicitamente em um dentro do bloco local do [while](https://br.tradingview.com/pine-script-reference/v5/#op_while).
+- Usa-se o operador [+=](https://br.tradingview.com/pine-script-reference/v5/#op_{plus}=) para adicionar um ao contador. `lowerBars += 1` é equivalente a `lowerBars := lowerBars + 1`.
+
+Calculando a função fatorial usando uma estrutura de repetição [while](https://br.tradingview.com/pine-script-reference/v5/#op_while):
+
+```c
+//@version=5
+indicator("")
+int n = input.int(10, "Factorial of", minval=0)
+
+factorial(int val = na) =>
+    int counter = val
+    int fact = 1
+    result = while counter > 0
+        fact := fact * counter
+        counter := counter - 1
+        fact
+
+// Only evaluate the function on the first bar.
+var answer = factorial(n)
+plot(answer)
+```
+
+Repare que:
+
+- Utiliza-se [input.int()](https://br.tradingview.com/pine-script-reference/v5/#fun_input{dot}int) para a entrada porque precisa especificar um valor `minval` para proteger o código. Embora [input()](https://br.tradingview.com/pine-script-reference/v5/#fun_input) também suporta a entrada de valores do tipo "int", ele não suporta o parâmetro `minval`.
+- Encapsulando a funcionalidade do script em uma função `factorial()` que aceita como argumento o valor cujo fatorial deve calcular. Usando `int val = na` para declarar o parâmetro da função, o que significa que se a função for chamada sem um argumento, como em `factorial()`, então o parâmetro `val` será inicializado como [na](https://br.tradingview.com/pine-script-reference/v5/#var_na), o que impedirá a execução do loop [while](https://br.tradingview.com/pine-script-reference/v5/#op_while) porque sua expressão `counter > 0` retornará [na](https://br.tradingview.com/pine-script-reference/v5/#var_na). A estrutura [while](https://br.tradingview.com/pine-script-reference/v5/#op_while) inicializará a variável de `result` como [na](https://br.tradingview.com/pine-script-reference/v5/#var_na). Por sua vez, como a inicialização do `result` é o valor de retorno do bloco local da função, a função retornará [na](https://br.tradingview.com/pine-script-reference/v5/#var_na).
+- Note a última linha do bloco local do [while](https://br.tradingview.com/pine-script-reference/v5/#op_while): `fact`. É o valor de retorno do bloco local, portanto, o valor que ele tinha na última iteração da estrutura [while](https://br.tradingview.com/pine-script-reference/v5/#op_while).
+- A inicialização de `result` não é necessária; foi feito isso para legibilidade. Pode-se muito bem ter usado:
+
+```c
+while counter > 0
+    fact := fact * counter
+    counter := counter - 1
+    fact
+```
