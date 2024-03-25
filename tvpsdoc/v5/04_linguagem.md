@@ -16,3 +16,5 @@
 ## 06 [Declarações de Variável](./04_06_declaracoes_de_variavel.md)
 
 ## 07 [Estruturas Condicionais](./04_07_estruturas_condicionais.md)
+
+## 08 [Loops](./04_08_loops.md)
