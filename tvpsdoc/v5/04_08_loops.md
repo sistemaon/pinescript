@@ -77,7 +77,7 @@ Onde:
 
 - Elementos entre colchetes (`[]`) podem não aparecer ou aparecer uma vez, e elementos entre chaves (`{}`) podem não aparecer ou aparecer mais vezes.
 - `<declaration_mode>` é o [modo de declaração](./04_06_declaracoes_de_variavel.md#modos-de-declaração) da variável.
-- `<type>` é opcional, como em quase todas as declarações de variáveis do Pine Script (veja [tipos](./000_type_system.md#tipos)).
+- `<type>` é opcional, como em quase todas as declarações de variáveis do Pine Script (veja [tipos](./04_09_tipagem_do_sistema.md#tipos)).
 - `<identifier>` é o [nome](./04_04_identificadores.md) da variável.
 - `<expression>` pode ser um literal, uma variável, uma expressão ou uma chamada de função.
 - `<local_block_loop>` consiste em nenhum ou mais instruções seguidas de um valor de retorno, que pode ser uma tupla de valores. Deve ser indentado por quatro espaços ou uma tabulação (_tab_). Pode conter a instrução `break` para sair do loop, ou a instrução `continue` para sair da iteração atual e continuar com a próxima.
@@ -180,7 +180,7 @@ Onde:
 
 - Elementos entre colchetes (`[]`) podem não aparecer ou aparecer uma vez.
 - `<declaration_mode>` é o [modo de declaração](./04_06_declaracoes_de_variavel.md#modos-de-declaração) da variável.
-- `<type>` é opcional, como em quase todas as declarações de variáveis do Pine Script (veja [tipos](./000_type_system.md#tipos)).
+- `<type>` é opcional, como em quase todas as declarações de variáveis do Pine Script (veja [tipos](./04_09_tipagem_do_sistema.md#tipos)).
 - `<identifier>` é o [nome](./04_04_identificadores.md) da variável.
 - `<expression>` pode ser um literal, uma variável, uma expressão ou uma chamada de função. É avaliado a cada iteração do loop. Quando ele avalia como `true`, o loop é executado. Quando ele avalia como `false`, o loop para. Observe que a avaliação da expressão é apenas feita antes de cada iteração. As alterações no valor da expressão dentro do loop só terão impacto na próxima iteração.
 - `<local_block_loop>` consiste em nenhum ou mais declarações seguidas por um valor de retorno, que pode ser uma tupla de valores. Deve ser indentado por quatro espaços ou uma tabulação (_tab_). Pode conter o comando `break` para sair do loop, ou o comando `continue` para sair da iteração atual e continuar com a próxima.

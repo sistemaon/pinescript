@@ -37,7 +37,7 @@ if <expression>
 Onde:
 
 - As partes entre colchetes (`[]`) podem aparecer nenhuma ou uma vez, ou seja, é opcional e pode estar presente no código uma única vez ou não estar presente. E aquelas entre chaves (`{}`) podem aparecer nenhuma ou mais vezes, ou seja, é opcional e pode estar presente no código nenhuma vez, uma vez ou várias vezes.
-- `<expression>` deve ser do tipo [bool](https://br.tradingview.com/pine-script-reference/v5/#type_bool) ou ser autoconvertível para esse tipo, o que é possível apenas para valores [int](https://br.tradingview.com/pine-script-reference/v5/#type_int) ou [float](https://br.tradingview.com/pine-script-reference/v5/#type_float) (consulte o [sistema de tipos](./000_type_system.md#tipos) para maiores informações).
+- `<expression>` deve ser do tipo [bool](https://br.tradingview.com/pine-script-reference/v5/#type_bool) ou ser autoconvertível para esse tipo, o que é possível apenas para valores [int](https://br.tradingview.com/pine-script-reference/v5/#type_int) ou [float](https://br.tradingview.com/pine-script-reference/v5/#type_float) (consulte o [sistema de tipos](./04_09_tipagem_do_sistema.md#tipos) para maiores informações).
 - `<local_block>` consiste em nenhuma ou mais instruções seguidas de um valor de retorno, que pode ser uma tupla de valores. Deve ser indentado por quatro espaços ou uma tabulação (_tab_).
 - Pode _não haver_ ou _haver mais cláusulas_ `else if`.
 - Pode _não haver_ ou _haver uma cláusula_ `else`.
@@ -97,7 +97,7 @@ Onde:
 
 - Elementos entre colchetes (`[]`) podem não aparecer ou aparecer uma vez, e elementos entre chaves (`{}`) podem não aparecer ou aparecer mais vezes.
 - `<declaration_mode>` é o [modo de declaração](./04_06_declaracoes_de_variavel.md#modos-de-declaração) da variável.
-- `<type>` é opcional, como em quase todas as declarações de variáveis do Pine Script (veja [tipos](./000_type_system.md#tipos)).
+- `<type>` é opcional, como em quase todas as declarações de variáveis do Pine Script (veja [tipos](./04_09_tipagem_do_sistema.md#tipos)).
 - `<identifier>` é o [nome](./04_04_identificadores.md) da variável.
 - `<expression>` pode ser um literal, uma variável, uma expressão ou uma chamada de função.
 - `<local_block>` consiste em nenhum ou mais instruções seguidas de um valor de retorno, que pode ser uma tupla de valores. Deve ser indentado por quatro espaços ou uma tabulação (_tab_).
@@ -175,7 +175,7 @@ Onde:
 
 - Elementos entre colchetes (`[]`) podem não aparecer ou aparecer uma vez, e elementos entre chaves (`{}`) podem não aparecer ou aparecer mais vezes.
 - `<declaration_mode>` é o [modo de declaração](./04_06_declaracoes_de_variavel.md#modos-de-declaração) da variável.
-- `<type>` é opcional, como em quase todas as declarações de variáveis do Pine Script (veja [tipos](./000_type_system.md#tipos)).
+- `<type>` é opcional, como em quase todas as declarações de variáveis do Pine Script (veja [tipos](./04_09_tipagem_do_sistema.md#tipos)).
 - `<identifier>` é o [nome](./04_04_identificadores.md) da variável.
 - `<expression>` pode ser um literal, uma variável, uma expressão ou uma chamada de função.
 - `<local_block>` consiste em nenhum ou mais instruções seguidas de um valor de retorno, que pode ser uma tupla de valores. Deve ser indentado por quatro espaços ou uma tabulação (_tab_).
@@ -212,7 +212,7 @@ plot(ma)
 
 Perceba que:
 
-- A expressão pela qual está alternando é a variável `maType`, que é do tipo "input int" (veja mais sobre o qualificador ["input"](./000_type_system.md#entrada)). Como ela não pode ser alterada durante a execução do script, isso garante que qualquer tipo de _MA_ que o usuário selecione será executado em cada barra, o que é um requisito para funções como [ta.ema()](https://br.tradingview.com/pine-script-reference/v5/#fun_ta{dot}ema), que exigem um argumento "int simples" ("_simple int_") para seu parâmetro de `length`.
+- A expressão pela qual está alternando é a variável `maType`, que é do tipo "input int" (veja mais sobre o qualificador ["input"](./04_09_tipagem_do_sistema.md#entrada)). Como ela não pode ser alterada durante a execução do script, isso garante que qualquer tipo de _MA_ que o usuário selecione será executado em cada barra, o que é um requisito para funções como [ta.ema()](https://br.tradingview.com/pine-script-reference/v5/#fun_ta{dot}ema), que exigem um argumento "int simples" ("_simple int_") para seu parâmetro de `length`.
 - Se nenhum valor correspondente for encontrado para `maType`, o [switch](https://br.tradingview.com/pine-script-reference/v5/#op_switch) executa o último bloco local introduzido por` =>`, que age como um _capturador geral_. Gerado um erro em tempo de execução nesse bloco. Também encerrado-o com `float(na)` para que o bloco local retorne um valor cujo tipo seja compatível com o dos outros blocos locais na estrutura, evitando um erro de compilação.
 
 ## `switch` sem Expressão

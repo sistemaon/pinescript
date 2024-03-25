@@ -14,7 +14,7 @@ Outros operadores são usados para atribuir valores a variáveis:
 - `=` é usado para atribuir um valor a uma variável, __mas apenas quando a variável é declarada__ (na primeira vez que a usa).
 - `:=` é usado para atribuir um valor a uma variável __previamente declarada__. Os seguintes operadores também podem ser usados dessa maneira: `+=`, `-=`, `*=`, `/=`, `%=`.
 
-Explicado em [Tipagem do Sistema](./000_type_system.md), _qualificadores_ e _tipos_ desempenham um papel crítico na determinação do tipo de resultados que as expressões produzem. Por sua vez, tem um impacto sobre como e com quais funções é permitido usar esses resultados. As expressões sempre retornam um valor com o qualificador mais forte usado na expressão, por exemplo, se multiplicar um "input int" com um "series int", a expressão produzirá um resultado "series int", o qual não poderá utilizar como argumento para o _comprimento_ (`length`) em [ta.ema()](https://br.tradingview.com/pine-script-reference/v5/#fun_ta{dot}ema).
+Explicado em [Tipagem do Sistema](./04_09_tipagem_do_sistema.md), _qualificadores_ e _tipos_ desempenham um papel crítico na determinação do tipo de resultados que as expressões produzem. Por sua vez, tem um impacto sobre como e com quais funções é permitido usar esses resultados. As expressões sempre retornam um valor com o qualificador mais forte usado na expressão, por exemplo, se multiplicar um "input int" com um "series int", a expressão produzirá um resultado "series int", o qual não poderá utilizar como argumento para o _comprimento_ (`length`) em [ta.ema()](https://br.tradingview.com/pine-script-reference/v5/#fun_ta{dot}ema).
 
 O script seguinte produzirá um erro de compilação:
 
