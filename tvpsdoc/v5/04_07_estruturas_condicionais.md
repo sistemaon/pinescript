@@ -212,7 +212,7 @@ plot(ma)
 
 Perceba que:
 
-- A expressão pela qual está alternando é a variável `maType`, que é do tipo "input int" (veja mais sobre o qualificador ["input"](./04_09_tipagem_do_sistema.md#entrada)). Como ela não pode ser alterada durante a execução do script, isso garante que qualquer tipo de _MA_ que o usuário selecione será executado em cada barra, o que é um requisito para funções como [ta.ema()](https://br.tradingview.com/pine-script-reference/v5/#fun_ta{dot}ema), que exigem um argumento "int simples" ("_simple int_") para seu parâmetro de `length`.
+- A expressão pela qual está alternando é a variável `maType`, que é do tipo "input int" (veja mais sobre o qualificador ["input"](./04_09_tipagem_do_sistema.md#input)). Como ela não pode ser alterada durante a execução do script, isso garante que qualquer tipo de _MA_ que o usuário selecione será executado em cada barra, o que é um requisito para funções como [ta.ema()](https://br.tradingview.com/pine-script-reference/v5/#fun_ta{dot}ema), que exigem um argumento "int simples" ("_simple int_") para seu parâmetro de `length`.
 - Se nenhum valor correspondente for encontrado para `maType`, o [switch](https://br.tradingview.com/pine-script-reference/v5/#op_switch) executa o último bloco local introduzido por` =>`, que age como um _capturador geral_. Gerado um erro em tempo de execução nesse bloco. Também encerrado-o com `float(na)` para que o bloco local retorne um valor cujo tipo seja compatível com o dos outros blocos locais na estrutura, evitando um erro de compilação.
 
 ## `switch` sem Expressão

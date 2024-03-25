@@ -156,10 +156,81 @@ plot(highest, "Highest source", color.green)
 plot(lowest, "Lowest source", color.red)
 ```
 
+
 # Tipos
 
+Os _tipos_ do Pine Script classificam os valores e determinam as funções e operações com as quais eles são compatíveis. Isto incluem:
 
+- Os tipos fundamentais: [int](./04_09_tipagem_do_sistema.md#int), [float](./04_09_tipagem_do_sistema.md#float), [bool](./04_09_tipagem_do_sistema.md#bool), [color](./04_09_tipagem_do_sistema.md#color) e [string](./04_09_tipagem_do_sistema.md#string).
+- Os tipos especiais: [plot](./04_09_tipagem_do_sistema.md#plot-e-hline), [hline](./04_09_tipagem_do_sistema.md#plot-e-hline), [line](./04_09_tipagem_do_sistema.md#tipos-de-desenho), [linefill](./04_09_tipagem_do_sistema.md#tipos-de-desenho), [box](./04_09_tipagem_do_sistema.md#tipos-de-desenho), [polyline](./04_09_tipagem_do_sistema.md#tipos-de-desenho), [label](./04_09_tipagem_do_sistema.md#tipos-de-desenho), [table](./04_09_tipagem_do_sistema.md#tipos-de-desenho), [chart.point](./04_09_tipagem_do_sistema.md#pontos-do-gráfico), [array](./04_09_tipagem_do_sistema.md#coleções), [matrix](./04_09_tipagem_do_sistema.md#coleções) e [map](./04_09_tipagem_do_sistema.md#coleções).
+- [Tipos definidos pelo usuário](./04_09_tipagem_do_sistema.md#tipos-definidos-pelo-usuário) (_User-defined types (UDTs)_).
+- [vazio](./04_09_tipagem_do_sistema.md#void) (_void_).
 
+Tipos fundamentais se referem à natureza subjacente de um valor, por exemplo, um valor de 1 é do tipo "int", 1.0 é do tipo "float", "AAPL" é do tipo "string", etc. Tipos especiais e tipos definidos pelo usuário utilizam _IDs_ que se referem a objetos de uma classe específica. Por exemplo, um valor do tipo "label" contém um ID que age como um _ponteiro_ referente a um objeto "label". O tipo "void" se refere à saída de uma função ou [método](./04_13_metodos.md) que não retorna um valor utilizável.
 
-# Entrada
+Pine Script pode converter automaticamente valores de alguns tipos para outros. As regras de conversão automática são: __int → float → bool__. Veja a seção de [Conversão de Tipo](./04_09_tipagem_do_sistema.md#conversão-de-tipo) para maiores informações.
 
+Na maioria dos casos, o Pine Script pode determinar automaticamente o tipo de um valor. No entanto, também pode-se usar palavras-chave de tipo para especificar _explicitamente_ os tipos para legibilidade e para código que requer definições explícitas (por exemplo, declarar uma variável atribuída a [na](https://br.tradingview.com/pine-script-reference/v5/#var_na)).
+
+Por exemplo:
+
+```c
+//@version=5
+indicator("Types demo", overlay = true)
+
+//@variable A value of the "const string" type for the `ma` plot's title.
+string MA_TITLE = "MA"
+
+//@variable A value of the "input int" type. Controls the length of the average.
+int lengthInput = input.int(100, "Length", minval = 2)
+
+//@variable A "series float" value representing the last `close` that crossed over the `ma`.
+var float crossValue = na
+
+//@variable A "series float" value representing the moving average of `close`.
+float ma = ta.sma(close, lengthInput)
+//@variable A "series bool" value that's `true` when the `close` crosses over the `ma`.
+bool crossUp = ta.crossover(close, ma)
+//@variable A "series color" value based on whether `close` is above or below its `ma`.
+color maColor = close > ma ? color.lime : color.fuchsia
+
+// Update the `crossValue`.
+if crossUp
+    crossValue := close
+
+plot(ma, MA_TITLE, maColor)
+plot(crossValue, "Cross value", style = plot.style_circles)
+plotchar(crossUp, "Cross Up", "▲", location.belowbar, size = size.small)
+```
+
+## `int`
+
+## `float`
+
+## `bool`
+
+## `color`
+
+## `string`
+
+## `plot` e `hline`
+
+## Tipos de Desenho
+
+## Pontos do gráfico
+
+## Coleções
+
+## Tipos Definidos pelo Usuário
+
+## Tipos Definidos pelo Usuário
+
+## void
+
+## valor `na`
+
+# Templates de Tipo
+
+# Conversão de Tipo
+
+# Tuples
