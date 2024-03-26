@@ -300,9 +300,67 @@ int transparency = 50 + int(40 * dayofweek / 7)
 bgcolor(color.new(BASE_COLOR, transparency))
 ```
 
-Consulte a página do Manual do Usuário sobre [cores](./000_colors.md) para mais informações sobre como usar cores em scripts.
+Para mais informações veja [cores](./000_colors.md) e como usá-los em scripts.
 
 ## `string`
+
+Valores do tipo "string" representam sequências de letras, números, símbolos, espaços e outros caracteres.
+
+Literais de string no Pine são caracteres contidos entre aspas simples ou duplas.
+
+Por exemplo:
+
+```c
+"This is a string literal using double quotes."
+'This is a string literal using single quotes.'
+```
+
+Aspas simples e duplas são equivalentes em função no Pine Script. Uma "string" entre aspas duplas pode conter qualquer quantidade de aspas simples e vice-versa:
+
+```c
+"It's an example"
+'The "Star" indicator'
+```
+
+Os scripts podem usar a barra invertida (`\`) para incluir o delimitador de fechamento em uma "string".
+
+Por exemplo:
+
+```c
+'It\'s an example'
+"The \"Star\" indicator"
+```
+
+Pode-se criar valores de "string" contendo o caractere de _escape_ de nova linha (`\n`) para exibir texto em várias linhas com funções `plot*()` e `log.*()` e objetos de [tipos de desenho](./04_09_tipagem_do_sistema.md#tipos-de-desenho).
+
+Por exemplo:
+
+```c
+"This\nString\nHas\nOne\nWord\nPer\nLine"
+```
+
+Pode-se usar o operador [+](https://br.tradingview.com/pine-script-reference/v5/#op_+) para concatenar valores de "string":
+
+```c
+"This is a " + "concatenated string."
+```
+
+Os elementos incorporados no espaço de nomes (_namespace_) `str.*()` criam valores de "string" usando operações especializadas. Por exemplo, o script a seguir cria uma _string formatada_ para representar valores de preço "float" e exibe o resultado usando um rótulo:
+
+```c
+//@version=5
+indicator("Formatted string demo", overlay = true)
+
+//@variable A "series string" value representing the bar's OHLC data.
+string ohlcString = str.format("Open: {0}\nHigh: {1}\nLow: {2}\nClose: {3}", open, high, low, close)
+
+// Draw a label containing the `ohlcString`.
+label.new(bar_index, high, ohlcString, textcolor = color.white)
+```
+
+Para mais informações sobre exibir valores "string" a partir de um script veja [Texto e Formas](./000_text_and_shapes.md).
+
+As variáveis internas como [syminfo.tickerid](https://br.tradingview.com/pine-script-reference/v5/#var_syminfo.tickerid), [syminfo.currency](https://br.tradingview.com/pine-script-reference/v5/#var_syminfo.currency) e [timeframe.period](https://br.tradingview.com/pine-script-reference/v5/#var_timeframe.period) retornam valores do tipo "string".
 
 ## `plot` e `hline`
 
