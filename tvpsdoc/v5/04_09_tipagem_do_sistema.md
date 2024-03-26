@@ -221,6 +221,23 @@ Variáveis embutidas como [bar_index](https://br.tradingview.com/pine-script-ref
 
 ## `float`
 
+Valores do tipo "float" representam números de ponto flutuante, ou seja, números que podem conter quantidades inteiras e fracionárias.
+
+Literais de ponto flutuante são valores numéricos escritos com um `.` de delimitador. Eles também podem conter o símbolo `e` ou `E` (que significa "10 elevado à potência de X", onde X é o número após o símbolo `e` ou `E`).
+
+Por exemplo:
+
+```c
+3.14159    // Rounded value of Pi (π)
+- 3.0
+6.02e23    // 6.02 * 10^23 (a very large value)
+1.6e-19    // 1.6 * 10^-19 (a very small value)
+```
+
+A precisão interna dos valores "float" no Pine Script é de 1e-16.
+
+As variáveis internas como [close](https://br.tradingview.com/pine-script-reference/v5/#var_close), hlcc4, volume, ta.vwap e strategy.position_size retornam valores do tipo "float".
+
 ## `bool`
 
 ## `color`
