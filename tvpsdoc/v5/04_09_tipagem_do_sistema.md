@@ -364,6 +364,32 @@ As variáveis internas como [syminfo.tickerid](https://br.tradingview.com/pine-s
 
 ## `plot` e `hline`
 
+As funções [plot()](https://br.tradingview.com/pine-script-reference/v5/#fun_plot) e [hline()](https://br.tradingview.com/pine-script-reference/v5/#fun_hline) do Pine Script retornam IDs que referenciam respectivamente instâncias dos tipos "plot" e "hline". Esses tipos exibem valores calculados e níveis horizontais no gráfico, e pode-se atribuir seus IDs a variáveis para uso com a função [fill()](https://br.tradingview.com/pine-script-reference/v5/#fun_fill) integrada.
+
+Por exemplo, o script a seguir plota duas _EMAs_ no gráfico e preenche o espaço entre elas usando a função [fill()](https://br.tradingview.com/pine-script-reference/v5/#fun_fill):
+
+```c
+//@version=5
+indicator("plot fill demo", overlay = true)
+
+//@variable A "series float" value representing a 10-bar EMA of `close`.
+float emaFast = ta.ema(close, 10)
+//@variable A "series float" value representing a 20-bar EMA of `close`.
+float emaSlow = ta.ema(close, 20)
+
+//@variable The plot of the `emaFast` value.
+emaFastPlot = plot(emaFast, "Fast EMA", color.orange, 3)
+//@variable The plot of the `emaSlow` value.
+emaSlowPlot = plot(emaSlow, "Slow EMA", color.gray, 3)
+
+// Fill the space between the `emaFastPlot` and `emaSlowPlot`.
+fill(emaFastPlot, emaSlowPlot, color.new(color.purple, 50), "EMA Fill")
+```
+
+É importante notar que, ao contrário de outros tipos especiais, não há palavras-chave `plot` ou `hline` em Pine para declarar explicitamente o tipo de variável como "plot" ou "hline".
+
+Os usuários podem controlar onde os gráficos de seus scripts são exibidos por meio das variáveis no `display.*`. Além disso, um script pode usar os valores dos gráficos de outro script como _entradas externas_ por meio da função [input.source()](https://br.tradingview.com/pine-script-reference/v5/#fun_input.source) (consulte [entradas de origem](./000_inputs.md#input-de-origem) para maiores informações).
+
 ## Tipos de Desenho
 
 ## Pontos do gráfico
