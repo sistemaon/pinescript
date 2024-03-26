@@ -205,6 +205,20 @@ plotchar(crossUp, "Cross Up", "▲", location.belowbar, size = size.small)
 
 ## `int`
 
+Valores do tipo "int" representam inteiros, isto é, números inteiros sem quaisquer quantidades fracionárias.
+
+Literais inteiros são valores numéricos escritos em notação _decimal_.
+
+Por exemplo:
+
+```c
+1
+-1
+750
+```
+
+Variáveis embutidas como [bar_index](https://br.tradingview.com/pine-script-reference/v5/#var_bar_index), [time](https://br.tradingview.com/pine-script-reference/v5/#var_time), [timenow](https://br.tradingview.com/pine-script-reference/v5/#var_timenow), [dayofmonth](https://br.tradingview.com/pine-script-reference/v5/#var_dayofmonth) e [strategy.wintrades](https://br.tradingview.com/pine-script-reference/v5/#var_strategy.wintrades) retornam valores do tipo "int".
+
 ## `float`
 
 ## `bool`
