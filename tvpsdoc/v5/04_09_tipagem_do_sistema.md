@@ -255,6 +255,53 @@ Variáveis embutidas como [barstate.isfirst](https://br.tradingview.com/pine-scr
 
 ## `color`
 
+Literais de cor têm o seguinte formato: `#RRGGBB` ou `#RRGGBBAA`. Os pares de letras representam valores _hexadecimais_ entre `00` e `FF` (0 a 255 em decimal).
+
+Onde:
+
+- Os pares `RR`, `GG` e `BB` representam, respectivamente, os valores para os componentes de cor vermelha, verde e azul.
+- `AA` é um valor opcional para a opacidade da cor (ou componente _alfa_), onde `00` é invisível e `FF` é opaco. Quando o literal não inclui um par `AA`, o script o trata como totalmente opaco (o mesmo que usar `FF`).
+- As letras hexadecimais nos literais podem ser maiúsculas ou minúsculas.
+
+Exemplos de literais de "cor":
+
+```c
+#000000      // black color
+#FF0000      // red color
+#00FF00      // green color
+#0000FF      // blue color
+#FFFFFF      // white color
+#808080      // gray color
+#3ff7a0      // some custom color
+#FF000080    // 50% transparent red color
+#FF0000ff    // same as #FF0000, fully opaque red color
+#FF000000    // completely transparent red color
+```
+
+Pine Script também possui [constantes de cores integradas](./000_colors.md#constante-de-cores), incluindo [color.green](https://br.tradingview.com/pine-script-reference/v5/#const_color{dot}green), [color.red](https://br.tradingview.com/pine-script-reference/v5/#const_color.red), [color.orange](https://br.tradingview.com/pine-script-reference/v5/#const_color.orange), [color.blue](https://br.tradingview.com/pine-script-reference/v5/#const_color.blue) (a cor padrão nas funções `plot*()` e muitas das propriedades padrão relacionadas à cor nos [tipos de desenho](./04_09_tipagem_do_sistema.md#tipos-de-desenho)), etc.
+
+Ao usar constantes de cores embutidas, é possível adicionar transparência a elas por meio da função [color.new()](https://br.tradingview.com/pine-script-reference/v5/#fun_color.new).
+
+Observe que ao especificar os componentes de cor vermelha, verde ou azul nas funções `color.*()`, usa-se argumentos "int" ou "float" com valores entre 0 e 255. Ao especificar a transparência, utiliza-se um valor entre 0 e 100, onde 0 significa totalmente opaco e 100 significa completamente transparente.
+
+Por exemplo:
+
+```c
+//@version=5
+indicator("Shading the chart's background", overlay = true)
+
+//@variable A "const color" value representing the base for each day's color.
+color BASE_COLOR = color.rgb(0, 99, 165)
+
+//@variable A "series int" value that modifies the transparency of the `BASE_COLOR` in `color.new()`.
+int transparency = 50 + int(40 * dayofweek / 7)
+
+// Color the background using the modified `BASE_COLOR`.
+bgcolor(color.new(BASE_COLOR, transparency))
+```
+
+Consulte a página do Manual do Usuário sobre [cores](./000_colors.md) para mais informações sobre como usar cores em scripts.
+
 ## `string`
 
 ## `plot` e `hline`
