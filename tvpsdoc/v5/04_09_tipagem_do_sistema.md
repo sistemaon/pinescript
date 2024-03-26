@@ -236,9 +236,22 @@ Por exemplo:
 
 A precisão interna dos valores "float" no Pine Script é de 1e-16.
 
-As variáveis internas como [close](https://br.tradingview.com/pine-script-reference/v5/#var_close), hlcc4, volume, ta.vwap e strategy.position_size retornam valores do tipo "float".
+As variáveis internas como [close](https://br.tradingview.com/pine-script-reference/v5/#var_close), [hlcc4](https://br.tradingview.com/pine-script-reference/v5/#var_hlcc4), [volume](https://br.tradingview.com/pine-script-reference/v5/#var_volume), [ta.vwap](https://br.tradingview.com/pine-script-reference/v5/#var_ta.vwap) e [strategy.position_size](https://br.tradingview.com/pine-script-reference/v5/#var_strategy.position_size) retornam valores do tipo "float".
 
 ## `bool`
+
+Valores do tipo "bool" representam o valor de verdade de uma comparação ou condição, os quais os scripts podem usar em [estruturas condicionais](./04_07_estruturas_condicionais.md) e outras expressões.
+
+Existem apenas dois literais que representam valores booleanos:
+
+```c
+true    // true value
+false   // false value
+```
+
+Quando uma expressão do tipo "bool" retorna [na](https://br.tradingview.com/pine-script-reference/v5/#var_na), os scripts tratam seu valor como `false` ao avaliar instruções condicionais e operadores.
+
+Variáveis embutidas como [barstate.isfirst](https://br.tradingview.com/pine-script-reference/v5/#var_barstate.isfirst), [chart.is_heikinashi](https://br.tradingview.com/pine-script-reference/v5/#var_chart.is_heikinashi), [session.ismarket](https://br.tradingview.com/pine-script-reference/v5/#var_session.ismarket) e [timeframe.isdaily](https://br.tradingview.com/pine-script-reference/v5/#var_timeframe.isdaily) retornam valores do tipo "bool".
 
 ## `color`
 
