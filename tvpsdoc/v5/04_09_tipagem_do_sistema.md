@@ -440,7 +440,29 @@ label.new(
 
 ## Coleções
 
-## Tipos Definidos pelo Usuário
+Coleções no Pine Script ([arrays](./000_arrays.md), [matrices](./000_matrices.md), e [maps](./000_maps.md)) (_arrays, matrizes e mapas_) utilizam IDs de referência, assim como outros tipos especiais (por exemplo, labels). O tipo do ID define o tipo de _elementos_ que a coleção conterá. No Pine, especifica-se os tipos de array, matrix, e map (_array, matriz e mapa_) acrescentando um [modelo de tipo](./04_09_tipagem_do_sistema.md#templates-de-tipo) às palavras-chave [array](https://br.tradingview.com/pine-script-reference/v5/#type_array), [matrix](https://br.tradingview.com/pine-script-reference/v5/#type_matrix) ou [map](https://br.tradingview.com/pine-script-reference/v5/#type_map):
+
+- `array<int>` define um array contendo elementos do tipo “int”.
+- `array<label>` define um array contendo IDs de “label”.
+- `array<UDT>` define um array contendo IDs referenciando objetos de um [tipo definido pelo usuário (UDT)](./04_09_tipagem_do_sistema.md#tipos-definidos-pelo-usuário).
+- `matrix<float>` define uma matriz contendo elementos do tipo “float”.
+- `matrix<UDT>` define uma matriz contendo IDs referenciando objetos de um [tipo definido pelo usuário (UDT)](./04_09_tipagem_do_sistema.md#tipos-definidos-pelo-usuário).
+- `map<string, float>` define um mapa contendo chaves do tipo “string” e valores do tipo “float”.
+- `map<int, UDT>` define um mapa contendo chaves do tipo “int” e IDs de instâncias de [tipo definido pelo usuário (UDT)](./04_09_tipagem_do_sistema.md#tipos-definidos-pelo-usuário) como valores.
+
+Pode-se declarar um array de "int" com um único elemento de valor 10 de qualquer uma das seguintes formas, por exemplo:
+
+```c
+a1 = array.new<int>(1, 10)
+array<int> a2 = array.new<int>(1, 10)
+a3 = array.from(10)
+array<int> a4 = array.from(10)
+```
+
+Observe que:
+
+- A sintaxe `int[]` também pode especificar um array de elementos "int", mas seu uso é desencorajado. Não existe equivalente para especificar os tipos de matrizes ou mapas dessa maneira.
+- Existe tipo específico integrado para [arrays](https://br.tradingview.com/pine-script-reference/v5/#type_array), como [array.new_int()](https://br.tradingview.com/pine-script-reference/v5/#fun_array{dot}new_int), mas a forma mais genérica [array.new<type>](https://br.tradingview.com/pine-script-reference/v5/#fun_array.new%3Ctype%3E) é preferível, o que seria `array.new<int>()` para criar um array de elementos "int".
 
 ## Tipos Definidos pelo Usuário
 
