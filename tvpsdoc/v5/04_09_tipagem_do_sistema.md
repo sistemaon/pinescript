@@ -392,6 +392,12 @@ Os usuários podem controlar onde os gráficos de seus scripts são exibidos por
 
 ## Tipos de Desenho
 
+Os tipos de desenho do Pine Script permitem que os scripts criem desenhos personalizados nos gráficos. Isto incluem: [line](https://br.tradingview.com/pine-script-reference/v5/#type_line), [linefill](https://br.tradingview.com/pine-script-reference/v5/#type_linefill), [box](https://br.tradingview.com/pine-script-reference/v5/#type_box), [polyline](https://br.tradingview.com/pine-script-reference/v5/#type_polyline), [label](https://br.tradingview.com/pine-script-reference/v5/#type_label) e [table](https://br.tradingview.com/pine-script-reference/v5/#type_table).
+
+Cada tipo também possui um espaço de nomes que contém todos os construtores embutidos que criam e gerenciam instâncias de desenhos. Por exemplo, os seguintes construtores `*.new()` criam novos objetos desses tipos em um script: [line.new()](https://br.tradingview.com/pine-script-reference/v5/#fun_line.new), [linefill.new()](https://br.tradingview.com/pine-script-reference/v5/#fun_linefill.new), [box.new()](https://br.tradingview.com/pine-script-reference/v5/#fun_box.new), [polyline.new()](https://br.tradingview.com/pine-script-reference/v5/#fun_polyline.new), [label.new()](https://br.tradingview.com/pine-script-reference/v5/#fun_label.new) e [table.new()](https://br.tradingview.com/pine-script-reference/v5/#fun_table.new).
+
+Cada uma dessas funções retorna um _ID_ que é uma referência que identifica unicamente um objeto de desenho. Os IDs são sempre qualificados como "series", significando que seus tipos qualificados são "series line", "series label", etc. Os IDs de desenho agem como ponteiros, pois cada ID referencia uma instância específica de um desenho em todas as funções do espaço de nomes desse desenho. Por exemplo, o ID de uma linha retornado por uma chamada [line.new()](https://br.tradingview.com/pine-script-reference/v5/#fun_line.new) é usado posteriormente para se referir a esse objeto específico quando é hora de excluí-lo com [line.delete()](https://br.tradingview.com/pine-script-reference/v5/#fun_line.delete).
+
 ## Pontos do gráfico
 
 ## Coleções
