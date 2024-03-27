@@ -398,7 +398,45 @@ Cada tipo também possui um espaço de nomes que contém todos os construtores e
 
 Cada uma dessas funções retorna um _ID_ que é uma referência que identifica unicamente um objeto de desenho. Os IDs são sempre qualificados como "series", significando que seus tipos qualificados são "series line", "series label", etc. Os IDs de desenho agem como ponteiros, pois cada ID referencia uma instância específica de um desenho em todas as funções do espaço de nomes desse desenho. Por exemplo, o ID de uma linha retornado por uma chamada [line.new()](https://br.tradingview.com/pine-script-reference/v5/#fun_line.new) é usado posteriormente para se referir a esse objeto específico quando é hora de excluí-lo com [line.delete()](https://br.tradingview.com/pine-script-reference/v5/#fun_line.delete).
 
-## Pontos do gráfico
+## Pontos do Gráfico
+
+Pontos de gráfico são tipos especiais que representam coordenadas no gráfico. Os scripts usam as informações de objetos [chart.point](https://br.tradingview.com/pine-script-reference/v5/#type_chart.point) para determinar as localizações no gráfico de [lines](./000_lines_and_boxes.md#lines), [boxes](./000_lines_and_boxes.md#boxes), [polylines](./000_lines_and_boxes.md#polylines), e [labels](./000_text_and_shapes.md#labels).
+
+Objetos deste tipo contêm três _campos_: `time`, `index` e `price` (_tempo, índice e preço_). Se uma instância de desenho usa o campo `time` ou `price` de um [chart.point](https://br.tradingview.com/pine-script-reference/v5/#type_chart.point) como _coordenada-x_ depende da propriedade `xloc` do desenho.
+
+Pode-se usar qualquer uma das seguintes funções para criar pontos de gráfico em um script:
+
+- [chart.point.new()](https://br.tradingview.com/pine-script-reference/v5/#fun_chart.point.new) -> Cria um novo [chart.point](https://br.tradingview.com/pine-script-reference/v5/#type_chart.point) com `time`, `index` e `price` especificados.
+- [chart.point.now()](https://br.tradingview.com/pine-script-reference/v5/#fun_chart.point.now) -> Cria um novo [chart.point](https://br.tradingview.com/pine-script-reference/v5/#type_chart.point) com uma _coordenada-y_ de `price` especificada. Os campos de `time` e `index` contêm o [time](https://br.tradingview.com/pine-script-reference/v5/#var_time) e o [bar_index](https://br.tradingview.com/pine-script-reference/v5/#var_bar_index) da barra em que a função é executada.
+- [chart.point_from_index()](https://br.tradingview.com/pine-script-reference/v5/#fun_chart.point.from_index) -> Cria um novo [chart.point](https://br.tradingview.com/pine-script-reference/v5/#type_chart.point) com uma _coordenada-x_ de `index` e uma _coordenada-y_ de `price` especificadas. O campo de `time` da instância resultante é [na](https://br.tradingview.com/pine-script-reference/v5/#var_na), o que significa que não funcionará com objetos de desenho que usam um valor `xloc` de [xloc.bar_time](https://br.tradingview.com/pine-script-reference/v5/#var_xloc.bar_time).
+- [chart.point.from_time()](https://br.tradingview.com/pine-script-reference/v5/#fun_chart.point.from_time) -> Cria um novo [chart.point](https://br.tradingview.com/pine-script-reference/v5/#type_chart.point) com uma _coordenada-x_ de `time` e uma _coordenada-y_ de `price` especificadas. O campo de `index` da instância resultante é [na](https://br.tradingview.com/pine-script-reference/v5/#var_na), o que significa que não funcionará com objetos de desenho que usam um valor `xloc` de [xloc.bar_index](https://br.tradingview.com/pine-script-reference/v5/#var_xloc.bar_index).
+- [chart.point.copy()](https://br.tradingview.com/pine-script-reference/v5/#fun_chart.point.copy) -> Cria um novo [chart.point](https://br.tradingview.com/pine-script-reference/v5/#type_chart.point) contendo as mesmas informações de `time`, `index` e `price` que o id na chamada da função.
+
+O exemplo seguinte, desenha linhas conectando o [high](https://br.tradingview.com/pine-script-reference/v5/#var_high) da barra anterior com o [low](https://br.tradingview.com/pine-script-reference/v5/#var_low) da barra atual em cada barra do gráfico. Também exibe labels (_rótulos_) em ambos os pontos de cada linha. A linha e os labels obtêm informações das variáveis `firstPoint` e `secondPoint`, que referenciam pontos de gráfico criados usando [chart.point_from_index()](https://br.tradingview.com/pine-script-reference/v5/#fun_chart.point.from_index) e [chart.point.now()](https://br.tradingview.com/pine-script-reference/v5/#fun_chart.point.now):
+
+```c
+//@version=5
+indicator("Chart points demo", overlay = true)
+
+//@variable A new `chart.point` at the previous `bar_index` and `high`.
+firstPoint = chart.point.from_index(bar_index - 1, high[1])
+//@variable A new `chart.point` at the current bar's `low`.
+secondPoint = chart.point.now(low)
+
+// Draw a new line connecting coordinates from the `firstPoint` and `secondPoint`.
+// This line uses the `index` fields from the points as x-coordinates.
+line.new(firstPoint, secondPoint, color = color.purple, width = 3)
+// Draw a label at the `firstPoint`. Uses the point's `index` field as its x-coordinate.
+label.new(
+     firstPoint, str.tostring(firstPoint.price), color = color.green,
+     style = label.style_label_down, textcolor = color.white
+ )
+// Draw a label at the `secondPoint`. Uses the point's `index` field as its x-coordinate.
+label.new(
+     secondPoint, str.tostring(secondPoint.price), color = color.red,
+     style = label.style_label_up, textcolor = color.white
+ )
+```
 
 ## Coleções
 
