@@ -520,6 +520,99 @@ Scripts não podem usar resultados "void" em expressões ou atribuí-los a vari�
 
 ## valor `na`
 
+Existe um valor especial no Pine Script chamado [na](https://br.tradingview.com/pine-script-reference/v5/#var_na), que é um acrônimo para _not available_ (_não disponível_). Usa-se [na](https://br.tradingview.com/pine-script-reference/v5/#var_na) para representar um valor undefined (_indefinido_) de uma variável ou expressão. É semelhante a `null` em Java e `None` em Python.
+
+Os scripts podem automaticamente converter valores [na](https://br.tradingview.com/pine-script-reference/v5/#var_na) para quase qualquer tipo. No entanto, em alguns casos, o compilador não pode inferir o tipo associado a um valor [na](https://br.tradingview.com/pine-script-reference/v5/#var_na) porque mais de uma regra de conversão de tipo pode ser aplicável.
+
+Por exemplo:
+
+```c
+// Compilation error!
+myVar = na
+```
+
+A linha de código acima causa um erro de compilação porque o compilador não pode determinar a natureza da variável `myVar`, ou seja, se a variável fará referência a valores numéricos para plotagem, valores de string para definição de texto em uma label ou outros valores para algum outro propósito posterior na execução do script.
+
+Para resolver tais erros, devemos declarar explicitamente o tipo associado à variável. Suponha que a variável `myVar` fará referência a valores "float" em iterações de script subsequentes. Podemos resolver o erro declarando a variável com a palavra-chave [float](https://br.tradingview.com/pine-script-reference/v5/#type_float):
+
+```c
+float myVar = na
+```
+
+ou por conversão explícito do valor [na](https://br.tradingview.com/pine-script-reference/v5/#var_na) para o tipo "float" através da função [float()](https://br.tradingview.com/pine-script-reference/v5/#fun_float):
+
+```c
+myVar = float(na)
+```
+
+Para testar se o valor de uma variável ou expressão é [na](https://br.tradingview.com/pine-script-reference/v5/#var_na), pode chamar a função [na()](https://br.tradingview.com/pine-script-reference/v5/#fun_na), que retorna `true` se o valor for indefinido.
+
+Por exemplo:
+
+```c
+//@variable Is 0 if the `myVar` is `na`, `close` otherwise.
+float myClose = na(myVar) ? 0 : close
+```
+
+Não utilize o operador de comparação `==` para testar valores [na](https://br.tradingview.com/pine-script-reference/v5/#var_na), pois os scripts não podem determinar a igualdade de um valor indefinido:
+
+```c
+//@variable Returns the `close` value. The script cannot compare the equality of `na` values, as they're undefined.
+float myClose = myVar == na ? 0 : close
+```
+
+As melhores práticas de programação frequentemente envolvem o tratamento de valores [na](https://br.tradingview.com/pine-script-reference/v5/#var_na) para evitar valores indefinidos em cálculos.
+
+Por exemplo, a linha de código seguinte verifica se o valor de [close](https://br.tradingview.com/pine-script-reference/v5/#var_close) na barra atual é maior que o valor da barra anterior:
+
+```c
+//@variable Is `true` when the `close` exceeds the last bar's `close`, `false` otherwise.
+bool risingClose = close > close[1]
+```
+
+Na primeira barra do gráfico, o valor de `risingClose` é [na](https://br.tradingview.com/pine-script-reference/v5/#var_na), já que não há nenhum valor de [close](https://br.tradingview.com/pine-script-reference/v5/#var_close) anterior para referência.
+
+Pode-se garantir que a expressão também retorne um valor utilizável na primeira barra substituindo o valor passado indefinido por um valor da barra atual. Esta linha de código seguinte, utiliza a função [nz()](https://br.tradingview.com/pine-script-reference/v5/#fun_nz) para substituir o [close](https://br.tradingview.com/pine-script-reference/v5/#var_close) da barra passada pelo [open](https://br.tradingview.com/pine-script-reference/v5/#var_open) da barra atual quando o valor for [na](https://br.tradingview.com/pine-script-reference/v5/#var_na):
+
+```c
+//@variable Is `true` when the `close` exceeds the last bar's `close` (or the current `open` if the value is `na`).
+bool risingClose = close > nz(close[1], open)
+```
+
+Proteger scripts contra instâncias [na](https://br.tradingview.com/pine-script-reference/v5/#var_na) ajuda a evitar que valores indefinidos se propaguem nos resultados de um cálculo.
+
+Por exemplo, o script a seguir, declara uma variável `allTimeHigh` na primeira barra. Em seguida, utiliza o [math.max()](https://br.tradingview.com/pine-script-reference/v5/#fun_math.max) entre `allTimeHigh` e o [high](https://br.tradingview.com/pine-script-reference/v5/#var_high) da barra para atualizar o `allTimeHigh` ao longo de sua execução:
+
+```c
+//@version=5
+indicator("na protection demo", overlay = true)
+
+//@variable The result of calculating the all-time high price with an initial value of `na`.
+var float allTimeHigh = na
+
+// Reassign the value of the `allTimeHigh`.
+// Returns `na` on all bars because `math.max()` can't compare the `high` to an undefined value.
+allTimeHigh := math.max(allTimeHigh, high)
+
+plot(allTimeHigh) // Plots `na` on all bars.
+```
+
+O script abaixo, plota um valor de [na](https://br.tradingview.com/pine-script-reference/v5/#var_na) em todas as barras, pois não foi incluido alguma proteção contra [na](https://br.tradingview.com/pine-script-reference/v5/#var_na) no código. Para corrigir o comportamento e plotar o resultado pretendido (ou seja, o máximo de todos os tempos dos preços do gráfico), pode-se usar [nz()](https://br.tradingview.com/pine-script-reference/v5/#fun_nz) para substituir os valores [na](https://br.tradingview.com/pine-script-reference/v5/#var_na) na série `allTimeHigh`:
+
+```c
+//@version=5
+indicator("na protection demo", overlay = true)
+
+//@variable The result of calculating the all-time high price with an initial value of `na`.
+var float allTimeHigh = na
+
+// Reassign the value of the `allTimeHigh`.
+// We've used `nz()` to prevent the initial `na` value from persisting throughout the calculation.
+allTimeHigh := math.max(nz(allTimeHigh), high)
+
+plot(allTimeHigh)
+```
+
 # Templates de Tipo
 
 # Conversão de Tipo
