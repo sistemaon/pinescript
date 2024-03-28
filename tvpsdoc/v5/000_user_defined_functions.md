@@ -1,4 +1,2 @@
 
-# TO DO
-
--- Funções Definida pelo Usuário ...
+# Funções Definida pelo Usuário

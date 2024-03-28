@@ -42,7 +42,7 @@ Cada tipo de script possui requisitos distintos:
 
 - Indicadores devem conter pelo menos uma chamada de função que produza a saída no gráfico (por exemplo, [plot()](https://br.tradingview.com/pine-script-reference/v5/#fun_plot), [plotshape()](https://br.tradingview.com/pine-script-reference/v5/#fun_plotshape), [barcolor()](https://br.tradingview.com/pine-script-reference/v5/#fun_barcolor), [line.new()](https://br.tradingview.com/pine-script-reference/v5/#fun_line{dot}new), etc.).
 - Estratégias devem conter pelo menos uma chamada de `strategy.*()`, por exemplo, [strategy.entry()](https://br.tradingview.com/pine-script-reference/v5/#fun_strategy{dot}entry).
-- Bibliotecas devem conter pelo menos uma [função](./000_library_functions.md) exportada ou um [tipo definido pelo usuário](./000_user_defined_types_objects.md).
+- Bibliotecas devem conter pelo menos uma [função](./000_library.md#funções-da-biblioteca) exportada ou um [tipo definido pelo usuário](./000_library.md#tipos-e-objetos-definidos-pelo-usuário.md).
 
 
 # Código
@@ -52,7 +52,7 @@ Linhas em um script que não são [comentários](./04_03_estrutura_do_script.md#
 - Declaração de variável.
 - Reatribuição de variável.
 - Declaração de função.
-- Chamada de função interna, chamada de [função definida pelo usuário](./000_user_defined_functions.md) ou chamada de [função de biblioteca](./000_using_a_library.md).
+- Chamada de função interna, chamada de [função definida pelo usuário](./000_user_defined_functions.md) ou chamada de [função de biblioteca](./000_library.md#usando-uma-biblioteca).
 - _Estrutura_ [if](https://br.tradingview.com/pine-script-reference/v5/#op_if), [for](https://br.tradingview.com/pine-script-reference/v5/#op_for), [while](https://br.tradingview.com/pine-script-reference/v5/#op_while), [switch](https://br.tradingview.com/pine-script-reference/v5/#op_switch) ou [type](https://br.tradingview.com/pine-script-reference/v5/#op_type).
 
 As instruções podem ser organizadas em várias maneiras:
@@ -180,7 +180,7 @@ As anotações do compilador são [comentários](./04_03_estrutura_do_script.md#
 - `//@version=` especifica a versão do PineScript que o compilador utilizará. O número nesta anotação não deve ser confundido com o número de revisão do script, que é atualizado a cada alteração salva no código.
 - `//@description` define uma descrição personalizada para scripts que utilizam a instrução de declaração [library()](https://br.tradingview.com/pine-script-reference/v5/#fun_library).
 - `//@function`, `//@param` e `//@returns` adicionam descrições personalizadas para uma função definida pelo usuário, seus parâmetros e seu resultado quando colocados acima da declaração da função.
-- `//@type` e `//@field` adicionam descrições customizadas para um [tipo definido pelo usuário (UDT)](./000_user_defined_types.md) e seus campos quando colocados acima da declaração do tipo.
+- `//@type` e `//@field` adicionam descrições customizadas para um [tipo definido pelo usuário (UDT)](./04_09_tipagem_do_sistema.md#tipos-definidos-pelo-usuário) e seus campos quando colocados acima da declaração do tipo.
 - `//@variable` adiciona uma descrição personalizada para uma variável quando colocada acima de sua declaração.
 - `//@strategy_alert_message` fornece uma mensagem padrão para scripts de estratégia preencherem o campo "Mensagem" ("_Message_") no diálogo da criação do alerta.
 - `//#region` e `//#endregion` criam regiões de código que podem ser recolhidas no Editor Pine. Clicar na seta suspensa ao lado de `//#region` _oculta_ e/ou _colapsa_ as linhas de código entre as duas anotações.

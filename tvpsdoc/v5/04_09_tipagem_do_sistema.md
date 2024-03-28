@@ -466,6 +466,52 @@ Observe que:
 
 ## Tipos Definidos pelo Usuário
 
+A palavra-chave [type](https://br.tradingview.com/pine-script-reference/v5/#op_type) permite a criação de _tipos definidos pelo usuário (UDTs (User-Defined Types))_ na qual scripts podem criar [objetos](./04_12_objetos.md). _UDTs_ são tipos compostos; eles contêm um número arbitrário de _campos_ que podem ser de qualquer tipo, incluindo outros _tipos definidos pelo usuário_.
+
+A sintaxe para definir um tipo definido pelo usuário é:
+
+```c
+[export] type <UDT_identifier>
+    <field_type> <field_name> [= <value>]
+    ...
+```
+
+Onde:
+
+- `export` é a palavra-chave que um script de [biblioteca](https://br.tradingview.com/pine-script-reference/v5/#fun_library) usa para exportar o tipo definido pelo usuário. Para saber mais sobre a exportação de _UDTs_, veja [Bibliotecas](./000_library.md#tipos-e-objetos-definidos-pelo-usuário).
+- `<UDT_identifier>` é o nome do tipo definido pelo usuário.
+- `<field_type>` é o tipo do campo.
+- `<field_name>` é o nome do campo.
+- `<value>` é um valor padrão opcional para o campo, em que o script atribuirá a ele ao criar novos objetos desse _UDT_. Se não fornecer um valor, o padrão do campo será [na](https://br.tradingview.com/pine-script-reference/v5/#var_na). As mesmas regras que regem os valores padrão dos parâmetros nas assinaturas de funções se aplicam aos valores padrão dos campos. Por exemplo, os valores padrão de um _UDT_ não podem usar resultados do operador de referência histórica [[]](https://br.tradingview.com/pine-script-reference/v5/#op_[]) ou expressões.
+
+O exemplo seguinte, declara um _UDT (User-Defined Type)_ chamado `pivotPoint` com um campo `pivotTime` do tipo "int" e um campo `priceLevel` do tipo "float", que irão armazenar, respectivamente, informações de tempo e preço sobre um pivot calculado:
+
+```c
+//@type             A user-defined type containing pivot information.
+//@field pivotTime  Contains time information about the pivot.
+//@field priceLevel Contains price information about the pivot.
+type pivotPoint
+    int   pivotTime
+    float priceLevel
+```
+
+Os tipos definidos pelo usuário suportam `recursão de tipo`, ou seja, os campos de um _UDT_ podem referenciar objetos do mesmo tipo de _UDT_.
+
+No exemplo abaixo, foi adicionado um campo `nextPivot` ao nosso tipo `pivotPoint` anterior que faz referência a outra instância de `pivotPoint`:
+
+```c
+//@type             A user-defined type containing pivot information.
+//@field pivotTime  Contains time information about the pivot.
+//@field priceLevel Contains price information about the pivot.
+//@field nextPivot  A `pivotPoint` instance containing additional pivot information.
+type pivotPoint
+    int        pivotTime
+    float      priceLevel
+    pivotPoint nextPivot
+```
+
+Os scripts podem usar dois métodos integrados para criar e copiar _UDTs_: `new()` e `copy()`. Veja [Objetos](./04_12_objetos.md) para saber mais sobre _UDTs_.
+
 ## void
 
 ## valor `na`
