@@ -613,8 +613,43 @@ allTimeHigh := math.max(nz(allTimeHigh), high)
 plot(allTimeHigh)
 ```
 
+
 # Templates de Tipo
 
+Os modelos de tipo especificam os tipos de dados que as coleções ([arrays](./000_arrays.md), [matrices](./000_matrices.md), e [maps](./000_maps.md)) (_arrays, matrizes e mapas_) podem conter.
+
+Modelos para [arrays](./000_arrays.md) e [matrices](./000_matrices.md) consistem de _um único_ tipo de identificador especificado entre os símbolos `<` e `>`, por exemplo, `<int>`, `<label>` e `<PivotPoint>` (onde `PivotPoint` é um [tipo definido pelo usuário (UDT)](./04_09_tipagem_do_sistema.md#tipos-definidos-pelo-usuário)).
+
+Templates para [maps](./000_maps.md) consistem em _dois_ tipos de identificadores de especificado entre os símbolos `<` e `>`, onde o primeiro especifica o tipo das _chaves_ em cada par de chave-valor, e o segundo especifica o tipo do _valor_. Por exemplo, `<string, float>` é um modelo de tipo para um mapa que contém chaves de `string` e valores `float`.
+
+Os usuários podem construir templates de tipo a partir de:
+
+- Tipos fundamentais: [int](./04_09_tipagem_do_sistema.md#int), [float](./04_09_tipagem_do_sistema.md#float), [bool](./04_09_tipagem_do_sistema.md#bool), [color](./04_09_tipagem_do_sistema.md#color) e [string](./04_09_tipagem_do_sistema.md#string).
+- Os seguintes tipos especiais: [line](./04_09_tipagem_do_sistema.md#tipos-de-desenho), [linefill](./04_09_tipagem_do_sistema.md#tipos-de-desenho), [box](./04_09_tipagem_do_sistema.md#tipos-de-desenho), [polyline](./04_09_tipagem_do_sistema.md#tipos-de-desenho), [label](./04_09_tipagem_do_sistema.md#tipos-de-desenho), [table](./04_09_tipagem_do_sistema.md#tipos-de-desenho) e [chart.point](./04_09_tipagem_do_sistema.md#pontos-do-gráfico).
+- [Tipos definidos pelo usuário (UDTs)](./04_09_tipagem_do_sistema.md#tipos-definidos-pelo-usuário).
+
+Note que:
+
+- [Maps](./000_maps.md) podem usar qualquer um desses tipos como _valores_, mas só podem aceitar tipos fundamentais como _chaves_.
+
+Os scripts usam templates de tipo para declarar variáveis que apontam para coleções, e ao criar novas instâncias de coleções.
+
+Por exemplo:
+
+```c
+//@version=5
+indicator("Type templates demo")
+
+//@variable A variable initially assigned to `na` that accepts arrays of "int" values.
+array<int> intArray = na
+//@variable An empty matrix that holds "float" values.
+floatMatrix = matrix.new<float>()
+//@variable An empty map that holds "string" keys and "color" values.
+stringColorMap = map.new<string, color>()
+```
+
+
 # Conversão de Tipo
+
 
 # Tuples
