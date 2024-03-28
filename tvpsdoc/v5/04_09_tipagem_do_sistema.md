@@ -514,6 +514,10 @@ Os scripts podem usar dois métodos integrados para criar e copiar _UDTs_: `new(
 
 ## void
 
+Existe um tipo "void" no Pine Script. Funções que têm apenas efeitos adicionais e não retornam nenhum resultado utilizável retornam o tipo "void". Um exemplo de é a função [alert()](https://br.tradingview.com/pine-script-reference/v5/#fun_alert); fazendo algo (dispara um evento de alerta), mas não retorna valor utilizável.
+
+Scripts não podem usar resultados "void" em expressões ou atribuí-los a variáveis. Não existe a palavra-chave `void` no Pine Script, já que não é possível declarar uma variável do tipo "void".
+
 ## valor `na`
 
 # Templates de Tipo
