@@ -731,4 +731,119 @@ label myLabel = na
 myLabel = label(na)
 ```
 
+
 # Tuples
+
+Uma _tupla_ é um conjunto de expressões separadas por vírgulas, envolvidas por colchetes. Quando uma função, [método](./04_13_metodos.md) ou outro bloco local retorna mais de um valor, os scripts retornam esses valores na forma de uma tupla.
+
+Por exemplo, a seguinte [função definida pelo usuário](./000_user_defined_functions.md) retorna a soma e o produto de dois valores "float":
+
+```c
+//@function Calculates the sum and product of two values.
+calcSumAndProduct(float a, float b) =>
+    //@variable The sum of `a` and `b`.
+    float sum = a + b
+    //@variable The product of `a` and `b`.
+    float product = a * b
+    // Return a tuple containing the `sum` and `product`.
+    [sum, product]
+```
+
+Ao chamar esta função posteriormente no script, usa-se uma _declaração de tupla_ para declarar várias variáveis correspondentes aos valores retornados pela chamada da função:
+
+```c
+// Declare a tuple containing the sum and product of the `high` and `low`, respectively.
+[hlSum, hlProduct] = calcSumAndProduct(high, low)
+```
+
+Tenha em mente que, ao contrário da declaração de variáveis individuais, não pode-se definir explicitamente os tipos das variáveis da tupla (neste caso; `hlSum` e `hlProduct`). O compilador automaticamente infere os tipos associados às variáveis em uma tupla.
+
+No exemplo acima, o resultado da tupla contém valores do mesmo tipo ("float"). No entanto, é importante observar que as tuplas podem conter valores de _tipos múltiplos_.
+
+Por exemplo, a função `chartInfo()` abaixo retorna uma tupla contendo valores do tipo "int", "float", "bool", "color" e "string":
+
+```c
+//@function Returns information about the current chart.
+chartInfo() =>
+    //@variable The first visible bar's UNIX time value.
+    int firstVisibleTime = chart.left_visible_bar_time
+    //@variable The `close` value at the `firstVisibleTime`.
+    float firstVisibleClose = ta.valuewhen(ta.cross(time, firstVisibleTime), close, 0)
+    //@variable Is `true` when using a standard chart type, `false` otherwise.
+    bool isStandard = chart.is_standard
+    //@variable The foreground color of the chart.
+    color fgColor = chart.fg_color
+    //@variable The ticker ID of the current chart.
+    string symbol = syminfo.tickerid
+    // Return a tuple containing the values.
+    [firstVisibleTime, firstVisibleClose, isStandard, fgColor, symbol]
+```
+
+Tuplas são especialmente úteis para solicitar múltiplos valores em uma única chamada [request.security()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.security).
+
+Por exemplo, esta função `roundedOHLC()` retorna uma tupla contendo valores __OHLC__ arredondados para os preços mais próximos que são divisíveis pelo valor [mintick](https://br.tradingview.com/pine-script-reference/v5/#var_syminfo.mintick) (_mínimo do tick_) do símbolo. Chamando esta função como o argumento de `expression` em [request.security()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.security) para solicitar uma tupla contendo valores __OHLC__ diários:
+
+```c
+//@function Returns a tuple of OHLC values, rounded to the nearest tick.
+roundedOHLC() =>
+    [math.round_to_mintick(open), math.round_to_mintick(high), math.round_to_mintick(low), math.round_to_mintick(close)]
+
+[op, hi, lo, cl] = request.security(syminfo.tickerid, "D", roundedOHLC())
+```
+
+Também consegue-se obter o mesmo resultado passando diretamente uma tupla de valores arredondados como a `expression` na chamada de [request.security()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.security).
+
+```c
+[op, hi, lo, cl] = request.security(
+     syminfo.tickerid, "D",
+     [math.round_to_mintick(open), math.round_to_mintick(high), math.round_to_mintick(low), math.round_to_mintick(close)]
+ )
+```
+
+Blocos locais de [estruturas condicionais](./04_07_estruturas_condicionais.md), incluindo instruções [if](https://br.tradingview.com/pine-script-reference/v5/#kw_if) e [switch](https://br.tradingview.com/pine-script-reference/v5/#kw_switch), podem retornar tuplas.
+
+Por exemplo:
+
+```c
+[v1, v2] = if close > open
+    [high, close]
+else
+    [close, low]
+```
+
+e:
+
+```c
+[v1, v2] = switch
+close > open => [high, close]
+=>              [close, low]
+```
+
+No entanto, ternários não podem conter tuplas, pois os valores de retorno em uma declaração ternária não são considerados blocos locais:
+
+```c
+// Not allowed.
+[v1, v2] = close > open ? [high, close] : [close, low]
+```
+
+Observe que todos os itens dentro de uma tupla retornada de uma função são qualificados como "simple" ou "series", dependendo de seu conteúdo. Se uma tupla contiver um valor "series", todos os outros elementos dentro da tupla também adotarão o qualificador "series".
+
+Por exemplo:
+
+```c
+//@version=5
+indicator("Qualified types in tuples demo")
+
+makeTicker(simple string prefix, simple string ticker) =>
+    tId = prefix + ":" + ticker // simple string
+    source = close  // series float
+    [tId, source]
+
+// Both variables are series now.
+[tId, source] = makeTicker("BATS", "AAPL")
+
+// Error cannot call 'request.security' with 'series string' tId.
+r = request.security(tId, "", source)
+
+plot(r)
+```
