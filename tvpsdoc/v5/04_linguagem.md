@@ -20,3 +20,5 @@
 ## 08 [Loops](./04_08_loops.md)
 
 ## 09 [Tipagem do Sistema](./04_09_tipagem_do_sistema.md)
+
+## 10 [Built-ins (_Incorporados_)](./04_10.incorporados.md)
