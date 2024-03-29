@@ -651,5 +651,84 @@ stringColorMap = map.new<string, color>()
 
 # Conversão de Tipo
 
+O Pine Script inclui um mecanismo automático de conversão de tipo que _converte_ valores "__int__" para "__float__" quando necessário. Variáveis ou expressões que requerem valores "float" também podem usar valores "int" porque qualquer número inteiro pode ser representado como um número de ponto flutuante com sua parte fracionária igual a 0.
+
+Por questões de compatibilidade com versões anteriores, o Pine Script também converte automaticamente valores "__int__" e "__float__" para "__bool__" quando necessário. Ao passar valores numéricos para os parâmetros de funções e operações que esperam tipos "bool", o Pine os converte automaticamente para "bool". No entanto, não é recomendado depender desse comportamento. A maioria dos scripts que convertem automaticamente valores numéricos para o tipo "bool" irá gerar um _compiler warning_ (_aviso do compilador_). É possível evitar o aviso do compilador e promover a legibilidade do código usando a função [bool()](https://br.tradingview.com/pine-script-reference/v5/#fun_bool), que converte explicitamente um valor numérico para o tipo "bool".
+
+Ao converter um valor "int" ou "float" para "bool", um valor de 0 é convertido para `false` e qualquer outro valor numérico sempre é convertido para `true`.
+
+O código abaixo demonstra o comportamento de autoconversão obsoleto no Pine. Ele cria uma variável `randomValue` com um valor "series float" em cada barra, que é passada para o parâmetro de `condition` (_condição_) em uma estrutura [if](https://br.tradingview.com/pine-script-reference/v5/#kw_if) e o parâmetro `series` na chamada de função [plotchar()](https://br.tradingview.com/pine-script-reference/v5/#fun_plotchar). Como ambos os parâmetros aceitam valores "bool", o script converte automaticamente o `randomValue` para "bool" ao avaliá-los:
+
+```c
+//@version=5
+indicator("Auto-casting demo", overlay = true)
+
+//@variable A random rounded value between -1 and 1.
+float randomValue = math.round(math.random(-1, 1))
+//@variable The color of the chart background.
+color bgColor = na
+
+// This raises a compiler warning since `randomValue` is a "float", but `if` expects a "bool".
+if randomValue
+    bgColor := color.new(color.blue, 60)
+// This does not raise a warning, as the `bool()` function explicitly casts the `randomValue` to "bool".
+if bool(randomValue)
+    bgColor := color.new(color.blue, 60)
+
+// Display unicode characters on the chart based on the `randomValue`.
+// Whenever `math.random()` returns 0, no character will appear on the chart because 0 converts to `false`.
+plotchar(randomValue)
+// We recommend explicitly casting the number with the `bool()` function to make the type transformation more obvious.
+plotchar(bool(randomValue))
+
+// Highlight the background with the `bgColor`.
+bgcolor(bgColor)
+```
+
+Às vezes, é necessário converter um tipo para outro quando as regras de autoconversão não são suficientes. Para esses casos, as seguintes funções de conversão de tipo estão disponíveis: [int()](https://br.tradingview.com/pine-script-reference/v5/#fun_int), [float()](https://br.tradingview.com/pine-script-reference/v5/#fun_float), [bool()](https://br.tradingview.com/pine-script-reference/v5/#fun_bool), [color()](https://br.tradingview.com/pine-script-reference/v5/#fun_color), [string()](https://br.tradingview.com/pine-script-reference/v5/#fun_string), [line()](https://br.tradingview.com/pine-script-reference/v5/#fun_line), [linefill()](https://br.tradingview.com/pine-script-reference/v5/#fun_linefill), [label()](https://br.tradingview.com/pine-script-reference/v5/#fun_label), [box()](https://br.tradingview.com/pine-script-reference/v5/#fun_box), e [table()](https://br.tradingview.com/pine-script-reference/v5/#fun_table).
+
+O exemplo abaixo mostra um código que tenta usar um valor "const float" como argumento `length` na chamada da função [ta.sma()](https://br.tradingview.com/pine-script-reference/v5/#fun_ta.sma). O script falhará na compilação, pois não é possível converter automaticamente o valor "float" para o tipo "int" necessário:
+
+```c
+//@version=5
+indicator("Explicit casting demo", overlay = true)
+
+//@variable The length of the SMA calculation. Qualified as "const float".
+float LENGTH = 10.0
+
+float sma = ta.sma(close, LENGTH) // Compilation error. The `length` parameter requires an "int" value.
+
+plot(sma)
+```
+
+O código gera o seguinte erro: "_Cannot call ‘ta.sma’ with argument ‘length’=’LENGTH’. An argument of ‘const float’ type was used but a ‘series int’ is expected._" ("_Não é possível chamar 'ta.sma' com o argumento 'length'='LENGTH'. Foi usado um argumento do tipo 'const float', mas é esperado um 'series int'._").
+
+O compilador está informando que o código está usando um valor "float" onde é necessário um "int". Não há uma regra de auto-conversão para converter um "float" em um "int", então deve-se fazer o trabalho manualmente.
+
+Nesta versão do código, usa-se a função [int()](https://br.tradingview.com/pine-script-reference/v5/#fun_int) para converter explicitamente o valor `LENGTH` "float" para o tipo "int" dentro da chamada de [ta.sma()](https://br.tradingview.com/pine-script-reference/v5/#fun_ta.sma):
+
+```c
+//@version=5
+indicator("explicit casting demo")
+
+//@variable The length of the SMA calculation. Qualified as "const float".
+float LENGTH = 10.0
+
+float sma = ta.sma(close, int(LENGTH)) // Compiles successfully since we've converted the `LENGTH` to "int".
+
+plot(sma)
+```
+
+A conversão explícita de tipo também é útil ao declarar variáveis atribuídas a [na](https://br.tradingview.com/pine-script-reference/v5/#var_na), como explicado na [seção anterior](./04_09_tipagem_do_sistema.md#valor-na).
+
+Por exemplo, poderia-se declarar explicitamente uma variável com um valor de [na](https://br.tradingview.com/pine-script-reference/v5/#var_na) como tipo "label" de qualquer uma das seguintes maneiras, equivalentes:
+
+```c
+// Explicitly specify that the variable references "label" objects:
+label myLabel = na
+
+// Explicitly cast the `na` value to the "label" type:
+myLabel = label(na)
+```
 
 # Tuples
