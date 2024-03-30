@@ -1,4 +1,2 @@
 
-# TO DO
-
--- Estados da Barra ...
+# Estados da Barra
