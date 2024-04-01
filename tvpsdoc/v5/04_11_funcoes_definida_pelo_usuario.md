@@ -20,3 +20,43 @@ Sejam de uma linha ou várias, as funções definidas pelo usuário possui as se
 - O tipo do valor retornado por uma função é determinado automaticamente e depende do tipo dos argumentos usados em cada chamada de função específica.
 - O valor retornado por uma função é o último valor no corpo da função.
 - Cada instância da chamada de função em um script mantém seu próprio histórico independente.
+
+
+# Funções de uma Única Linha
+
+Funções simples muitas vezes podem ser criadas em uma _única linha_.
+
+Esta é a definição formal de funções de uma linha:
+
+```c
+<function_declaration>
+    <identifier>(<parameter_list>) => <return_value>
+
+<parameter_list>
+    {<parameter_definition>{, <parameter_definition>}}
+
+<parameter_definition>
+    [<identifier> = <default_value>]
+
+<return_value>
+    <statement> | <expression> | <tuple>
+```
+
+Por exemplo:
+
+```c
+f(x, y) => x + y
+```
+
+Após a declaração da função `f()`, é possível chamá-la utilizando diferentes tipos de argumentos:
+
+```c
+a = f(open, close)
+b = f(2, 2)
+c = f(open, 2)
+```
+
+No exemplo acima, o tipo da variável `a` é "_series_" porque ambos os argumentos são _series_. O tipo da variável `b` é "_integer_" (_inteiro_) porque os argumentos são ambos "_literal integers_" (_inteiros literais_). O tipo da variável `c` é _series_ porque a adição de uma _series_ e um _literal integers_ produz um resultado _series_.
+
+
+
