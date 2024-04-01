@@ -130,3 +130,8 @@ fun(x, y) =>
 plot(res0)
 plot(res1)
 ```
+
+
+# Limitações
+
+Funções definidas pelo usuário podem usar qualquer um dos recursos incorporados do Pine Script, exceto: [barcolor()](https://br.tradingview.com/pine-script-reference/v5/#fun_barcolor), [fill()](https://br.tradingview.com/pine-script-reference/v5/#fun_fill), [hline()](https://br.tradingview.com/pine-script-reference/v5/#fun_hline), [indicator()](https://br.tradingview.com/pine-script-reference/v5/#fun_indicator), [library()](https://br.tradingview.com/pine-script-reference/v5/#fun_library), [plot()](https://br.tradingview.com/pine-script-reference/v5/#fun_plot), [plotbar()](https://br.tradingview.com/pine-script-reference/v5/#fun_plotbar), [plotcandle()](https://br.tradingview.com/pine-script-reference/v5/#fun_plotcandle), [plotchar()](https://br.tradingview.com/pine-script-reference/v5/#fun_plotchar), [plotshape()](https://br.tradingview.com/pine-script-reference/v5/#fun_plotshape) e [strategy()](https://br.tradingview.com/pine-script-reference/v5/#fun_strategy).
