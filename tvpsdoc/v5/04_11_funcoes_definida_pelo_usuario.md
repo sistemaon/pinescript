@@ -110,5 +110,23 @@ Por outro lado, como é possível referenciar qualquer variável ou função dec
 No Pine Script, funções aninhadas não são permitidas, ou seja, não se pode declarar uma função dentro de outra. Todas as funções do usuário são declaradas no escopo global. Os escopos locais não podem se intersectar entre si.
 
 
-<!-- # Funções que Retornam Múltiplos Resultados -->
+# Funções que Retornam Múltiplos Resultados
 
+Na maioria dos casos, uma função retorna apenas um resultado, mas é possível retornar uma lista de resultados (um resultado semelhante a uma _tupla_).
+
+Por exemplo:
+
+```c
+fun(x, y) =>
+    a = x+y
+    b = x-y
+    [a, b]
+```
+
+É necessária uma sintaxe especial para chamar tais funções:
+
+```c
+[res0, res1] = fun(open, close)
+plot(res0)
+plot(res1)
+```
