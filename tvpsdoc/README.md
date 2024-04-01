@@ -17,3 +17,6 @@ antes(https://www.tradingview.com/pine-script-reference/v5/#var_color{dot}green)
 In LANGUAGE > TYPE SYSTEM > Collections = but the more generic `array.new<type>` form is preferred,
 O `array.new<type>` tá referenciando type_array, deveria ser array.new_type.
 antes (https://www.tradingview.com/pine-script-reference/v5/#type_array) depois (https://www.tradingview.com/pine-script-reference/v5/#fun_array.new%3Ctype%3E)
+
+In LANGUAGE > BUILT-INS > BUILT-IN FUNCTIONS = Functions used to manipulate colors in the color namespace: color.from_gradient(), color.new(), color.rgb(), etc.
+O color.new() tá referenciando .rgb, e o color.rgb() tá referenciando .new, ou seja, estão com links invertidos.
