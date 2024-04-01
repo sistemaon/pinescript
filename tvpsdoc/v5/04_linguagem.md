@@ -21,4 +21,6 @@
 
 ## 09 [Tipagem do Sistema](./04_09_tipagem_do_sistema.md)
 
-## 10 [Built-ins (_Incorporados_)](./04_10.incorporados.md)
+## 10 [Built-ins (_Incorporados_)](./04_10_incorporados.md)
+
+## 11 [Funções Definida pelo Usuário](./04_11_funcoes_definida_pelo_usuario.md)

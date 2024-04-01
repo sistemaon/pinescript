@@ -52,7 +52,7 @@ Linhas em um script que não são [comentários](./04_03_estrutura_do_script.md#
 - Declaração de variável.
 - Reatribuição de variável.
 - Declaração de função.
-- Chamada de função interna, chamada de [função definida pelo usuário](./000_user_defined_functions.md) ou chamada de [função de biblioteca](./000_library.md#usando-uma-biblioteca).
+- Chamada de função interna, chamada de [função definida pelo usuário](./04_11_funcoes_definida_pelo_usuario.md) ou chamada de [função de biblioteca](./000_library.md#usando-uma-biblioteca).
 - _Estrutura_ [if](https://br.tradingview.com/pine-script-reference/v5/#op_if), [for](https://br.tradingview.com/pine-script-reference/v5/#op_for), [while](https://br.tradingview.com/pine-script-reference/v5/#op_while), [switch](https://br.tradingview.com/pine-script-reference/v5/#op_switch) ou [type](https://br.tradingview.com/pine-script-reference/v5/#op_type).
 
 As instruções podem ser organizadas em várias maneiras:

@@ -1,2 +1,0 @@
-
-# Funções Definida pelo Usuário
