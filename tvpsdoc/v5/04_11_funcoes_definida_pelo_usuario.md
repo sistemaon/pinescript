@@ -99,7 +99,7 @@ geom_average(x, y) =>
 A função `geom_average` tem dois argumentos e cria duas variáveis no corpo: `a` e `b`. A última instrução chama a função `math.sqrt` (uma extração da raiz quadrada). A chamada de `geom_average` retornará o valor da última expressão: `(math.sqrt(a + b))`.
 
 
-<!-- # Escopos no Script
+# Escopos no Script
 
 Variáveis declaradas fora do corpo de uma função ou de outros blocos locais pertencem ao escopo _global_. Funções declaradas pelo usuário e funções embutidas, assim como variáveis incorporadas, também pertencem ao escopo global.
 
@@ -109,5 +109,6 @@ Por outro lado, como é possível referenciar qualquer variável ou função dec
 
 No Pine Script, funções aninhadas não são permitidas, ou seja, não se pode declarar uma função dentro de outra. Todas as funções do usuário são declaradas no escopo global. Os escopos locais não podem se intersectar entre si.
 
-# Funções que Retornam Múltiplos Resultados -->
+
+<!-- # Funções que Retornam Múltiplos Resultados -->
 
