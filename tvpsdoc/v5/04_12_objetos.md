@@ -166,3 +166,72 @@ foundPoint = pivotPoint.new()
 foundPoint.x := time[legsInput]
 foundPoint.y := pivotHighPrice
 ```
+
+
+# Coletando Objetos
+
+As coleções do Pine Script ([arrays](./000_arrays.md), [matrices](./000_matrices.md), e [maps](./000_maps.md)) (_arrays_, _matrizes_ e _mapas_) podem conter objetos, permitindo aos usuários adicionar dimensões virtuais às suas estruturas de dados. Para declarar uma coleção de objetos, passe o nome de um _UDT_ em seu [Template de Tipo](./04_09_tipagem_do_sistema.md#templates-de-tipo).
+
+O exemplo a seguir declara um [array](https://br.tradingview.com/pine-script-reference/v5/#type_array) vazio que conterá objetos de um tipo definido pelo usuário chamado `pivotPoint`:
+
+```c
+pivotHighArray = array.new<pivotPoint>()
+```
+
+Para declarar explicitamente o tipo de uma variável como um [array](https://br.tradingview.com/pine-script-reference/v5/#type_array), [matrices](https://br.tradingview.com/pine-script-reference/v5/#type_matrix) ou [maps](https://br.tradingview.com/pine-script-reference/v5/#type_map) de um [tipo definido pelo usuário](./04_09_tipagem_do_sistema.md#tipos-definidos-pelo-usuário), use a palavra-chave de tipo da coleção seguida pelo seu [modelo de tipo](./04_09_tipagem_do_sistema.md#templates-de-tipo).
+
+Por exemplo:
+
+```c
+var array<pivotPoint> pivotHighArray = na
+pivotHighArray := array.new<pivotPoint>()
+```
+
+Usando o que foi aprendido para criar um script que detecta pontos de pivot altos. O script primeiro coleta informações de pivot históricas em um [array](https://br.tradingview.com/pine-script-reference/v5/#type_array). Em seguida, ele percorre o array na última barra histórica, criando um _label_ para cada pivot e conectando os pivots com linhas:
+
+![Coletando objetos](./imgs/Objects-CollectingObjects-1.png)
+
+```c
+//@version=5
+indicator("Pivot Points High", overlay = true)
+
+int legsInput = input(10)
+
+// Define the `pivotPoint` UDT containing the time and price of pivots.
+type pivotPoint
+    int openTime
+    float level
+
+// Create an empty `pivotPoint` array.
+var pivotHighArray = array.new<pivotPoint>()
+
+// Detect new pivots (`na` is returned when no pivot is found).
+pivotHighPrice = ta.pivothigh(legsInput, legsInput)
+
+// Add a new `pivotPoint` object to the end of the array for each detected pivot.
+if not na(pivotHighPrice)
+    // A new pivot is found; create a new object of `pivotPoint` type, setting its `openTime` and `level` fields.
+    newPivot = pivotPoint.new(time[legsInput], pivotHighPrice)
+    // Add the new pivot object to the array.
+    array.push(pivotHighArray, newPivot)
+
+// On the last historical bar, draw pivot labels and connecting lines.
+if barstate.islastconfirmedhistory
+    var pivotPoint previousPoint = na
+    for eachPivot in pivotHighArray
+        // Display a label at the pivot point.
+        label.new(eachPivot.openTime, eachPivot.level, str.tostring(eachPivot.level, format.mintick), xloc.bar_time, textcolor = color.white)
+        // Create a line between pivots.
+        if not na(previousPoint)
+            // Only create a line starting at the loop's second iteration because lines connect two pivots.
+            line.new(previousPoint.openTime, previousPoint.level, eachPivot.openTime, eachPivot.level, xloc = xloc.bar_time)
+        // Save the pivot for use in the next iteration.
+        previousPoint := eachPivot
+```
+
+
+<!-- # Copiando Objetos
+
+No Pine, objetos são atribuídos por referência. Quando um objeto existente é atribuído a uma nova variável, ambas apontam para o mesmo objeto.
+
+No exemplo abaixo, criamos um objeto pivot1 e definimos seu campo x como 1000. Em seguida, declaramos uma variável pivot2 contendo a referência ao objeto pivot1, então ambas apontam para a mesma instância. Alterar pivot2.x também alterará pivot1.x, pois ambas se referem ao campo x do mesmo objeto: -->

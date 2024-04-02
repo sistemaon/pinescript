@@ -616,7 +616,7 @@ plot(allTimeHigh)
 
 # Templates de Tipo
 
-Os modelos de tipo especificam os tipos de dados que as coleções ([arrays](./000_arrays.md), [matrices](./000_matrices.md), e [maps](./000_maps.md)) (_arrays, matrizes e mapas_) podem conter.
+Os _modelos de tipo_ especificam os tipos de dados que as coleções ([arrays](./000_arrays.md), [matrices](./000_matrices.md), e [maps](./000_maps.md)) (_arrays, matrizes e mapas_) podem conter.
 
 Modelos para [arrays](./000_arrays.md) e [matrices](./000_matrices.md) consistem de _um único_ tipo de identificador especificado entre os símbolos `<` e `>`, por exemplo, `<int>`, `<label>` e `<PivotPoint>` (onde `PivotPoint` é um [tipo definido pelo usuário (UDT)](./04_09_tipagem_do_sistema.md#tipos-definidos-pelo-usuário)).
 
