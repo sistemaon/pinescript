@@ -147,3 +147,22 @@ Observe que:
 
 - Utiliza-se a palavra-chave [var](https://br.tradingview.com/pine-script-reference/v5/#kw_var) para especificar que o objeto `Counter` atribuído à variável `counter` persiste durante a execução do script.
 - O campo `bars` reverte em barras em tempo real, enquanto o campo `ticks` não reverte, pois foi incluído [varip](https://br.tradingview.com/pine-script-reference/v5/#kw_varip) na declaração.
+
+
+# Alterando Valores dos Campos
+
+O valor dos campos de um objeto pode ser alterado usando o operador de reatribuição [:=](./000_operators.md#operador-de-reatribuição).
+
+Olhe esta linha do exemplo anterior:
+
+```c
+foundPoint = pivotPoint.new(time[legsInput], pivotHighPrice)
+```
+
+Pode ser escrita da seguinte maneira:
+
+```c
+foundPoint = pivotPoint.new()
+foundPoint.x := time[legsInput]
+foundPoint.y := pivotHighPrice
+```
