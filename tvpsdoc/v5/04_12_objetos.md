@@ -230,8 +230,108 @@ if barstate.islastconfirmedhistory
 ```
 
 
-<!-- # Copiando Objetos
+# Copiando Objetos
 
 No Pine, objetos são atribuídos por referência. Quando um objeto existente é atribuído a uma nova variável, ambas apontam para o mesmo objeto.
 
-No exemplo abaixo, criamos um objeto pivot1 e definimos seu campo x como 1000. Em seguida, declaramos uma variável pivot2 contendo a referência ao objeto pivot1, então ambas apontam para a mesma instância. Alterar pivot2.x também alterará pivot1.x, pois ambas se referem ao campo x do mesmo objeto: -->
+No exemplo abaixo, foi criado um objeto `pivot1` e definido seu campo `x` como _1000_. Em seguida, declarado uma variável `pivot2` contendo a referência ao objeto `pivot1`, então ambas apontam para a mesma instância. Alterar `pivot2.x` também alterará `pivot1.x`, pois ambas se referem ao campo `x` do mesmo objeto:
+
+```c
+//@version=5
+indicator("")
+type pivotPoint
+    int x
+    float y
+pivot1 = pivotPoint.new()
+pivot1.x := 1000
+pivot2 = pivot1
+pivot2.x := 2000
+// Both plot the value 2000.
+plot(pivot1.x)
+plot(pivot2.x)
+```
+
+Para criar uma cópia de um objeto que seja independente do original, neste caso deve-se usar o método embutido `copy()`.
+
+No exemplo seguinte, foi declarado a variável `pivot2` referindo-se a uma instância copiada do objeto `pivot1`. Agora, alterar `pivot2.x` não alterará `pivot1.x`, pois se refere ao campo `x` de um objeto separado:
+
+```c
+//@version=5
+indicator("")
+type pivotPoint
+    int x
+    float y
+pivot1 = pivotPoint.new()
+pivot1.x := 1000
+pivot2 = pivotPoint.copy(pivot1)
+pivot2.x := 2000
+// Plots 1000 and 2000.
+plot(pivot1.x)
+plot(pivot2.x)
+```
+
+É importante observar que o método embutido `copy()` produz uma _shallow copy_ (_cópia rasa_) de um objeto. Se um objeto tiver campos com _tipos especiais_ ([array](https://br.tradingview.com/pine-script-reference/v5/#type_array), [matrix](https://br.tradingview.com/pine-script-reference/v5/#type_matrix), [map](https://br.tradingview.com/pine-script-reference/v5/#type_map), [line](https://br.tradingview.com/pine-script-reference/v5/#type_line), [linefill](https://br.tradingview.com/pine-script-reference/v5/#type_linefill), [box](https://br.tradingview.com/pine-script-reference/v5/#type_box), [polyline](https://br.tradingview.com/pine-script-reference/v5/#type_polyline), [label](https://br.tradingview.com/pine-script-reference/v5/#type_label), [table](https://br.tradingview.com/pine-script-reference/v5/#type_table), ou [chart.point](https://br.tradingview.com/pine-script-reference/v5/#type_chart.point)), esses campos em uma _cópia rasa_ do objeto apontarão para as mesmas instâncias que o original.
+
+No exemplo a seguir, foi definido um tipo `InfoLabel` com um _label_ como um de seus campos. O script instancia uma _`shallow` copy_ do _objeto `parent`_, em seguida, chama um [método](./04_13_metodos.md) `set()` definido pelo usuário para atualizar os campos `info` e `lbl` de cada objeto. Como o campo `lbl` de ambos os objetos aponta para a mesma instância de _label_, alterações neste campo em qualquer objeto afetam o outro:
+
+```c
+//@version=5
+indicator("Shallow Copy")
+
+type InfoLabel
+    string info
+    label  lbl
+
+method set(InfoLabel this, int x = na, int y = na, string info = na) =>
+    if not na(x)
+        this.lbl.set_x(x)
+    if not na(y)
+        this.lbl.set_y(y)
+    if not na(info)
+        this.info := info
+        this.lbl.set_text(this.info)
+
+var parent  = InfoLabel.new("", label.new(0, 0))
+var shallow = parent.copy()
+
+parent.set(bar_index, 0, "Parent")
+shallow.set(bar_index, 1, "Shallow Copy")
+```
+
+Para produzir uma _deep copy_ (_cópia profunda_) de um objeto com todos os seus campos de tipo especial apontando para instâncias independentes, deve-se copiar explicitamente esses campos também.
+
+No exemplo seguinte, foi definido um método `deepCopy()` que instancia um novo objeto `InfoLabel` com seu campo `lbl` apontando para uma cópia do campo original. Alterações no campo `lbl` da cópia `deep` não afetarão o objeto `parent`, pois aponta para uma instância separada:
+
+```c
+//@version=5
+indicator("Deep Copy")
+
+type InfoLabel
+    string info
+    label  lbl
+
+method set(InfoLabel this, int x = na, int y = na, string info = na) =>
+    if not na(x)
+        this.lbl.set_x(x)
+    if not na(y)
+        this.lbl.set_y(y)
+    if not na(info)
+        this.info := info
+        this.lbl.set_text(this.info)
+
+method deepCopy(InfoLabel this) =>
+    InfoLabel.new(this.info, this.lbl.copy())
+
+var parent = InfoLabel.new("", label.new(0, 0))
+var deep   = parent.deepCopy()
+
+parent.set(bar_index, 0, "Parent")
+deep.set(bar_index, 1, "Deep Copy")
+```
+
+
+<!-- # Shadowing (_Sombreamento_)
+
+Para evitar possíveis conflitos futuros no caso de _namespaces_ adicionados ao Pine Script se colidirem com _UDTs_ ou nomes de objetos em scripts existentes; como regra, _UDTs_ e nomes de objetos "sobream" os _namespaces_ da linguagem. Por exemplo, um _UDT_ ou objeto pode usar o nome de tipos integrados, como [line](https://br.tradingview.com/pine-script-reference/v5/#type_line) ou [table](https://br.tradingview.com/pine-script-reference/v5/#type_table).
+
+Apenas os cinco tipos primitivos da linguagem não podem ser usados para nomear _UDTs_ ou objetos: [int](https://br.tradingview.com/pine-script-reference/v5/#type_int), [float](https://br.tradingview.com/pine-script-reference/v5/#type_float), [string](https://br.tradingview.com/pine-script-reference/v5/#type_string), [bool](https://br.tradingview.com/pine-script-reference/v5/#type_bool) e [color](https://br.tradingview.com/pine-script-reference/v5/#type_color). -->
