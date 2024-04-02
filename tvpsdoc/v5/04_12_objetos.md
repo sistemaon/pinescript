@@ -330,8 +330,8 @@ deep.set(bar_index, 1, "Deep Copy")
 ```
 
 
-<!-- # Shadowing (_Sombreamento_)
+# Shadowing (_Sombreamento_)
 
-Para evitar possíveis conflitos futuros no caso de _namespaces_ adicionados ao Pine Script se colidirem com _UDTs_ ou nomes de objetos em scripts existentes; como regra, _UDTs_ e nomes de objetos "sobream" os _namespaces_ da linguagem. Por exemplo, um _UDT_ ou objeto pode usar o nome de tipos integrados, como [line](https://br.tradingview.com/pine-script-reference/v5/#type_line) ou [table](https://br.tradingview.com/pine-script-reference/v5/#type_table).
+Para evitar possíveis conflitos futuros no caso de _namespaces_ adicionados ao Pine Script se colidirem com _UDTs_ ou nomes de objetos em scripts existentes; como regra, _UDTs_ e nomes de objetos "_sobream_" os _namespaces_ da linguagem. Por exemplo, um _UDT_ ou objeto pode usar o nome de tipos integrados, como [line](https://br.tradingview.com/pine-script-reference/v5/#type_line) ou [table](https://br.tradingview.com/pine-script-reference/v5/#type_table).
 
-Apenas os cinco tipos primitivos da linguagem não podem ser usados para nomear _UDTs_ ou objetos: [int](https://br.tradingview.com/pine-script-reference/v5/#type_int), [float](https://br.tradingview.com/pine-script-reference/v5/#type_float), [string](https://br.tradingview.com/pine-script-reference/v5/#type_string), [bool](https://br.tradingview.com/pine-script-reference/v5/#type_bool) e [color](https://br.tradingview.com/pine-script-reference/v5/#type_color). -->
+Apenas os cinco tipos primitivos da linguagem não podem ser usados para nomear _UDTs_ ou objetos: [int](https://br.tradingview.com/pine-script-reference/v5/#type_int), [float](https://br.tradingview.com/pine-script-reference/v5/#type_float), [string](https://br.tradingview.com/pine-script-reference/v5/#type_string), [bool](https://br.tradingview.com/pine-script-reference/v5/#type_bool) e [color](https://br.tradingview.com/pine-script-reference/v5/#type_color).
