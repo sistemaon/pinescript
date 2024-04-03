@@ -26,3 +26,5 @@
 ## 11 [Funções Definida pelo Usuário](./04_11_funcoes_definida_pelo_usuario.md)
 
 ## 12 [Objetos](./04_12_objetos.md)
+
+## 13 [Métodos](./04_13_metodos.md)
