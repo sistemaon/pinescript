@@ -300,7 +300,7 @@ method getType(string this) =>
 
 Agora é possível utilizar essas sobrecargas para inspecionar algumas variáveis. Este script usa [str.format()](https://br.tradingview.com/pine-script-reference/v5/#fun_str{dot}format) para formatar os resultados obtidos ao chamar o método `getType()` em cinco variáveis diferentes em uma única string de `results` (_resultados_), e então exibe a string no label `lbl` usando o método integrado [set_text()](https://br.tradingview.com/pine-script-reference/v5/#fun_label{dot}set_text):
 
-![Sobrecarga de Métodos](./imgs/Methods_overloads_type_inspection.png)
+![Sobrecarga de métodos](./imgs/Methods_overloads_type_inspection.png)
 
 ```c
 //@version=5
@@ -347,4 +347,184 @@ Note que:
 - O método irá juntar “(na)” à string de saída quando uma variável estiver como `na` para demarcar que está vazia.
 
 
-<!-- # Exemplo Avançado -->
+# Exemplo Avançado
+
+Aplicando o conhecimento adquirido, é possível construir um script que estima a distribuição cumulativa dos elementos em um array, isto é, a fração dos elementos no array que são menores ou iguais a um determinado valor.
+
+Existem várias maneiras de abordar esse objetivo. Neste exemplo, inicia-se definindo um método para substituir elementos de um array, o que facilitará a contagem das ocorrências de elementos dentro de um intervalo de valores.
+
+O script a seguir, está apresentada uma sobrecarga do método integrado [fill()](https://br.tradingview.com/pine-script-reference/v5/#fun_array{dot}fill) para instâncias de `array<float>`. Essa sobrecarga substitui elementos em `srcArray` dentro do intervalo entre `lowerBound` e `upperBound` com um `innerValue` e substitui todos os elementos fora do intervalo com `outerValue`:
+
+```c
+// @function          Replaces elements in a `srcArray` between `lowerBound` and `upperBound` with an `innerValue`,
+//                    and replaces elements outside the range with an `outerValue`.
+// @param srcArray    (array<float>) Array to modify.
+// @param innerValue  (float) Value to replace elements within the range with.
+// @param outerValue  (float) Value to replace elements outside the range with.
+// @param lowerBound  (float) Lowest value to replace with `innerValue`.
+// @param upperBound  (float) Highest value to replace with `innerValue`.
+// @returns           (array<float>) `srcArray` object.
+method fill(array<float> srcArray, float innerValue, float outerValue, float lowerBound, float upperBound) =>
+    for [i, element] in srcArray
+        if (element >= lowerBound or na(lowerBound)) and (element <= upperBound or na(upperBound))
+            srcArray.set(i, innerValue)
+        else
+            srcArray.set(i, outerValue)
+    srcArray
+```
+
+Com este método, é possível filtrar um array por intervalos de valores para produzir um array de ocorrências.
+
+Por exemplo, a expressão:
+
+```c
+srcArray.copy().fill(1.0, 0.0, min, val)
+```
+
+Copia o objeto `srcArray`, substitui todos os elementos entre `min` e `val` por _1.0_ e, em seguida, substitui todos os elementos acima de `val` por _0.0_. A partir daqui, é fácil estimar o resultado da função de distribuição cumulativa no `val`, já que é simplesmente a média do array resultante:
+
+```c
+srcArray.copy().fill(1.0, 0.0, min, val).avg()
+```
+
+Perceba que:
+
+- O compilador só usará essa sobrecarga de `fill()` em vez da incorporada quando o usuário fornecer argumentos para `innerValue`, `outerValue`, `lowerBound` e `upperBound` na chamada.
+- Se `lowerBound` ou `upperBound` for `na`, o valor é ignorado ao filtrar o intervalo de preenchimento.
+- É possível chamar `copy(),` `fill()` e `avg()` sucessivamente na mesma linha de código porque os dois primeiros métodos retornam uma instância de `array<float>`.
+
+Agora é possível utilizar isso para definir um método que calculará os valores de distribuição empírica. O método `eCDF()` a seguir estima um número de etapas ascendentes igualmente `steps` (_espaçadas_) a partir da função de distribuição cumulativa de `srcArray` e insere os resultados em `cdfArray`:
+
+```c
+// @function       Estimates the empirical CDF of a `srcArray`.
+// @param srcArray (array<float>) Array to calculate on.
+// @param steps    (int) Number of steps in the estimation.
+// @returns        (array<float>) Array of estimated CDF ratios.
+method eCDF(array<float> srcArray, int steps) =>
+    float min = srcArray.min()
+    float rng = srcArray.range() / steps
+    array<float> cdfArray = array.new<float>()
+    // Add averages of `srcArray` filtered by value region to the `cdfArray`.
+    float val = min
+    for i = 1 to steps
+        val += rng
+        cdfArray.push(srcArray.copy().fill(1.0, 0.0, min, val).avg())
+    cdfArray
+```
+
+Por fim, para garantir que o método `eCDF()` funcione adequadamente para arrays contendo valores pequenos e grandes, é definido um método para normalizar os arrays.
+
+O método `featureScale()` utiliza os métodos [min()](https://br.tradingview.com/pine-script-reference/v5/#fun_array{dot}min) e [range()](https://br.tradingview.com/pine-script-reference/v5/#fun_array{dot}range) do array para produzir uma cópia redimensionada de `srcArray`. Utiliza-se isso para normalizar os arrays antes de invocar o método `eCDF()`:
+
+```c
+// @function        Rescales the elements within a `srcArray` to the interval [0, 1].
+// @param srcArray  (array<float>) Array to normalize.
+// @returns         (array<float>) Normalized copy of the `srcArray`.
+method featureScale(array<float> srcArray) =>
+    float min = srcArray.min()
+    float rng = srcArray.range()
+    array<float> scaledArray = array.new<float>()
+    // Push normalized `element` values into the `scaledArray`.
+    for element in srcArray
+        scaledArray.push((element - min) / rng)
+    scaledArray
+```
+
+Observe que:
+- Este método não possui tratamento específico para situações de divisão por zero. Se `rng` for 0, o valor do elemento do array será considerado como _não disponível_ `na`.
+
+No exemplo completo a seguir, o `sourceArray` de `length` (_tamanho_) especificado é preenchido com valores de `sourceInput` utilizando o método `maintainQueue()` mencionado anteriormente. Em seguida, os elementos do array são normalizados por meio do método `featureScale()`, e o método `eCDF()` é invocado para buscar um array de estimativas para `n` _um número definido_ de etapas distribuídas uniformemente pela distribuição. Por fim, uma função `makeLabel()`, definida pelo usuário, é empregada para apresentar as estimativas e preços em num label posicionado no lado direito do gráfico:
+
+![Exemplo avançado](./imgs/Methods_empirical_distribution.png)
+
+```c
+//@version=5
+indicator("Empirical Distribution", overlay = true)
+
+float sourceInput = input.source(close, "Source")
+int length        = input.int(20, "Length")
+int n             = input.int(20, "Steps")
+
+// @function         Maintains a queue of the size of `srcArray`.
+//                   It appends a `value` to the array and removes its oldest element at position zero.
+// @param srcArray   (array<float>) The array where the queue is maintained.
+// @param value      (float) The new value to be added to the queue.
+//                   The queue's oldest value is also removed, so its size is constant.
+// @param takeSample (bool) A new `value` is only pushed into the queue if this is true.
+// @returns          (array<float>) `srcArray` object.
+method maintainQueue(array<float> srcArray, float value, bool takeSample = true) =>
+    if takeSample
+        srcArray.push(value)
+        srcArray.shift()
+    srcArray
+
+// @function          Replaces elements in a `srcArray` between `lowerBound` and `upperBound` with an `innerValue`,
+//                    and replaces elements outside the range with an `outerValue`.
+// @param srcArray    (array<float>) Array to modify.
+// @param innerValue  (float) Value to replace elements within the range with.
+// @param outerValue  (float) Value to replace elements outside the range with.
+// @param lowerBound  (float) Lowest value to replace with `innerValue`.
+// @param upperBound  (float) Highest value to replace with `innerValue`.
+// @returns           (array<float>) `srcArray` object.
+method fill(array<float> srcArray, float innerValue, float outerValue, float lowerBound, float upperBound) =>
+    for [i, element] in srcArray
+        if (element >= lowerBound or na(lowerBound)) and (element <= upperBound or na(upperBound))
+            srcArray.set(i, innerValue)
+        else
+            srcArray.set(i, outerValue)
+    srcArray
+
+// @function       Estimates the empirical CDF of a `srcArray`.
+// @param srcArray (array<float>) Array to calculate on.
+// @param steps    (int) Number of steps in the estimation.
+// @returns        (array<float>) Array of estimated CDF ratios.
+method eCDF(array<float> srcArray, int steps) =>
+    float min = srcArray.min()
+    float rng = srcArray.range() / steps
+    array<float> cdfArray = array.new<float>()
+    // Add averages of `srcArray` filtered by value region to the `cdfArray`.
+    float val = min
+    for i = 1 to steps
+        val += rng
+        cdfArray.push(srcArray.copy().fill(1.0, 0.0, min, val).avg())
+    cdfArray
+
+// @function        Rescales the elements within a `srcArray` to the interval [0, 1].
+// @param srcArray  (array<float>) Array to normalize.
+// @returns         (array<float>) Normalized copy of the `srcArray`.
+method featureScale(array<float> srcArray) =>
+    float min = srcArray.min()
+    float rng = srcArray.range()
+    array<float> scaledArray = array.new<float>()
+    // Push normalized `element` values into the `scaledArray`.
+    for element in srcArray
+        scaledArray.push((element - min) / rng)
+    scaledArray
+
+// @function        Draws a label containing eCDF estimates in the format "{price}: {percent}%"
+// @param srcArray  (array<float>) Array of source values.
+// @param cdfArray  (array<float>) Array of CDF estimates.
+// @returns         (void)
+makeLabel(array<float> srcArray, array<float> cdfArray) =>
+    float max      = srcArray.max()
+    float rng      = srcArray.range() / cdfArray.size()
+    string results = ""
+    var label lbl  = label.new(0, 0, "", style = label.style_label_left, text_font_family = font.family_monospace)
+    // Add percentage strings to `results` starting from the `max`.
+    cdfArray.reverse()
+    for [i, element] in cdfArray
+        results += str.format("{0}: {1}%\n", max - i * rng, element * 100)
+    // Update `lbl` attributes.
+    lbl.set_xy(bar_index + 1, srcArray.avg())
+    lbl.set_text(results)
+
+var array<float> sourceArray = array.new<float>(length)
+
+// Add background color for the last `length` bars.
+bgcolor(bar_index > last_bar_index - length ? color.new(color.orange, 80) : na)
+
+// Queue `sourceArray`, feature scale, then estimate the distribution over `n` steps.
+array<float> distArray = sourceArray.maintainQueue(sourceInput).featureScale().eCDF(n)
+// Draw label.
+makeLabel(sourceArray, distArray)
+```
