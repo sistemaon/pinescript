@@ -268,3 +268,83 @@ plot(sampleMean, "Basis", color.orange)
 plot(highBand, "Upper", color.lime)
 plot(lowBand, "Lower", color.red)
 ```
+
+
+# Sobrecarga de Métodos
+
+Métodos definidos pelo usuário podem sobrescrever e sobrecarregar métodos integrados e definidos pelo usuário já existentes com o mesmo identificador. Essa capacidade permite aos usuários definir múltiplas rotinas associadas a diferentes assinaturas de parâmetros sob o mesmo nome de método.
+
+Como um exemplo simples, suponha a definição de um método para identificar o tipo de uma variável. Uma vez que é necessário especificar explicitamente o tipo de objeto associado a um método definido pelo usuário, será preciso definir sobrecargas para cada tipo que se deseja reconhecer.
+
+Abaixo, é definido um método `getType()` que retorna uma representação em string do tipo de uma variável, com sobrecargas para os cinco tipos primitivos:
+
+```c
+// @function   Identifies an object's type.
+// @param this Object to inspect.
+// @returns    (string) A string representation of the type.
+method getType(int this) =>
+    na(this) ? "int(na)" : "int"
+
+method getType(float this) =>
+    na(this) ? "float(na)" : "float"
+
+method getType(bool this) =>
+    na(this) ? "bool(na)" : "bool"
+
+method getType(color this) =>
+    na(this) ? "color(na)" : "color"
+
+method getType(string this) =>
+    na(this) ? "string(na)" : "string"
+```
+
+Agora é possível utilizar essas sobrecargas para inspecionar algumas variáveis. Este script usa [str.format()](https://br.tradingview.com/pine-script-reference/v5/#fun_str{dot}format) para formatar os resultados obtidos ao chamar o método `getType()` em cinco variáveis diferentes em uma única string de `results` (_resultados_), e então exibe a string no label `lbl` usando o método integrado [set_text()](https://br.tradingview.com/pine-script-reference/v5/#fun_label{dot}set_text):
+
+![Sobrecarga de Métodos](./imgs/Methods_overloads_type_inspection.png)
+
+```c
+//@version=5
+indicator("Type Inspection")
+
+// @function   Identifies an object's type.
+// @param this Object to inspect.
+// @returns    (string) A string representation of the type.
+method getType(int this) =>
+    na(this) ? "int(na)" : "int"
+
+method getType(float this) =>
+    na(this) ? "float(na)" : "float"
+
+method getType(bool this) =>
+    na(this) ? "bool(na)" : "bool"
+
+method getType(color this) =>
+    na(this) ? "color(na)" : "color"
+
+method getType(string this) =>
+    na(this) ? "string(na)" : "string"
+
+a = 1
+b = 1.0
+c = true
+d = color.white
+e = "1"
+
+// Inspect variables and format results.
+results = str.format(
+ "a: {0}\nb: {1}\nc: {2}\nd: {3}\ne: {4}",
+ a.getType(), b.getType(), c.getType(), d.getType(), e.getType()
+ )
+
+var label lbl = label.new(0, 0)
+lbl.set_x(bar_index)
+lbl.set_text(results)
+```
+
+Note que:
+
+- O tipo subjacente de cada variável determina qual sobrecarga do `getType()` o compilador utilizará.
+- O método irá juntar “(na)” à string de saída quando uma variável estiver como `na` para demarcar que está vazia.
+
+
+<!-- # Exemplo Avançado -->
