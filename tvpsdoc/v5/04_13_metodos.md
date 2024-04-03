@@ -111,3 +111,160 @@ Observe que:
 
 - Chama-se os métodos do array usando `sourceArray.*` em vez de referenciar o _namespace_ do [array](https://br.tradingview.com/pine-script-reference/v5/#type_array).
 - Não é incluído `sourceArray` como um parâmetro quando chama-se os métodos, uma vez que já fazem referência ao objeto.
+
+
+# Métodos Definidos pelo Usuário
+
+O Pine Script permite que os usuários definam métodos personalizados para uso com objetos de qualquer tipo embutido ou definido pelo usuário.
+Definir um método é essencialmente o mesmo que definir uma função, mas com duas principais diferenças:
+
+- A palavra-chave [method](https://br.tradingview.com/pine-script-reference/v5/#kw_method) deve ser incluída antes do nome da função.
+- O tipo do primeiro parâmetro na assinatura deve ser explicitamente declarado, pois representa o tipo de objeto ao qual o método será associado.
+
+```c
+[export] method <functionName>(<paramType> <paramName> [= <defaultValue>], …) =>
+    <functionBlock>
+```
+
+Aplicando métodos definidos pelo usuário ao exemplo anterior de _Bandas de Bollinger_ para encapsular operações do escopo global, na qual simplificará o código e promoverá a reutilização.
+
+Veja esta parte do exemplo:
+
+```c
+// Identify if `n` bars have passed.
+if bar_index % n == 0
+    // Update the queue.
+    sourceArray.push(sourceInput)
+    sourceArray.shift()
+    // Update the mean and standard deviaiton values.
+    sampleMean := sourceArray.avg()
+    sampleDev  := sourceArray.stdev() * multiplier
+
+// Calculate band values.
+float highBand = sampleMean + sampleDev
+float lowBand  = sampleMean - sampleDev
+```
+
+Definindo um método simples para enfileirar valores através de um array em uma única chamada.
+Este método `maintainQueue()` invoca os métodos [push()](https://br.tradingview.com/pine-script-reference/v5/#fun_array{dot}push) e [shift()](https://br.tradingview.com/pine-script-reference/v5/#fun_array{dot}shift) no `srcArray` quando `takeSample` é `true` e retorna o objeto:
+
+```c
+// @function         Maintains a queue of the size of `srcArray`.
+//                   It appends a `value` to the array and removes its oldest element at position zero.
+// @param srcArray   (array<float>) The array where the queue is maintained.
+// @param value      (float) The new value to be added to the queue.
+//                   The queue's oldest value is also removed, so its size is constant.
+// @param takeSample (bool) A new `value` is only pushed into the queue if this is true.
+// @returns          (array<float>) `srcArray` object.
+method maintainQueue(array<float> srcArray, float value, bool takeSample = true) =>
+    if takeSample
+        srcArray.push(value)
+        srcArray.shift()
+    srcArray
+```
+
+Note que:
+
+- Assim como com funções definidas pelo usuário, usa-se a [anotação de compilador](./04_03_estrutura_do_script.md#anotações-do-compilador) `@function` para documentar descrições de métodos.
+
+Agora pode substituir `sourceArray.push()` e `sourceArray.shift()` por `sourceArray.maintainQueue()` no seguinte exemplo:
+
+```c
+// Identify if `n` bars have passed.
+if bar_index % n == 0
+    // Update the queue.
+    sourceArray.maintainQueue(sourceInput)
+    // Update the mean and standard deviaiton values.
+    sampleMean  := sourceArray.avg()
+    sampleDev   := sourceArray.stdev() * multiplier
+
+// Calculate band values.
+float highBand  = sampleMean + sampleDev
+float lowBand   = sampleMean - sampleDev
+```
+
+A partir daqui, é possível simplificar ainda mais o código definindo um método que lida com todos os cálculos das _Bandas de Bollinger_ dentro do próprio escopo.
+
+O método `calcBB()` aciona os métodos [avg()](https://br.tradingview.com/pine-script-reference/v5/#fun_array{dot}avg) e [stdev()](https://br.tradingview.com/pine-script-reference/v5/#fun_array{dot}stdev) no `srcArray` para atualizar os valores de `mean` e `dev` quando `calculate` for `true`. O método utiliza esses valores para retornar uma tupla contendo os valores de _basis_, _upper band_, e _lower band_ (_base_, _banda superior_ e _banda inferior_), respectivamente:
+
+```c
+// @function         Computes Bollinger Band values from an array of data.
+// @param srcArray   (array<float>) The array where the queue is maintained.
+// @param multiplier (float) Standard deviaiton multiplier.
+// @param calcuate   (bool) The method will only calculate new values when this is true.
+// @returns          A tuple containing the basis, upper band, and lower band respectively.
+method calcBB(array<float> srcArray, float mult, bool calculate = true) =>
+    var float mean = na
+    var float dev  = na
+    if calculate
+        // Compute the mean and standard deviation of the array.
+        mean := srcArray.avg()
+        dev  := srcArray.stdev() * mult
+    [mean, mean + dev, mean - dev]
+```
+
+Com este método, agora é possível remover os cálculos das _Bandas de Bollinger_ do escopo global e melhorar a legibilidade do código:
+
+```c
+// Identify if `n` bars have passed.
+bool newSample = bar_index % n == 0
+
+// Update the queue and compute new BB values on each new sample.
+[sampleMean, highBand, lowBand] = sourceArray.maintainQueue(sourceInput, newSample).calcBB(multiplier, newSample)
+```
+
+Perceba que:
+
+- Em vez de usar um bloco `if` no escopo global, foi definido uma variável `newSample` que é `true` apenas uma vez a cada `n` barras. Os métodos `maintainQueue()` e `calcBB()` utilizam esse valor para seus respectivos parâmetros `takeSample` e `calculate`.
+- Uma vez que o método `maintainQueue()` retorna o objeto ao qual se refere, é possível invocar `calcBB()` na mesma linha de código, já que ambos os métodos se aplicam a instâncias de `array<float>`.
+
+Eis como o script completo se apresenta após a aplicação dos métodos definidos pelo usuário:
+
+```c
+//@version=5
+indicator("Custom Sample BB", overlay = true)
+
+float sourceInput  = input.source(close, "Source")
+int   samplesInput = input.int(20, "Samples")
+int   n            = input.int(10, "Bars")
+float multiplier   = input.float(2.0, "StdDev")
+
+var array<float> sourceArray = array.new<float>(samplesInput)
+
+// @function         Maintains a queue of the size of `srcArray`.
+//                   It appends a `value` to the array and removes its oldest element at position zero.
+// @param srcArray   (array<float>) The array where the queue is maintained.
+// @param value      (float) The new value to be added to the queue.
+//                   The queue's oldest value is also removed, so its size is constant.
+// @param takeSample (bool) A new `value` is only pushed into the queue if this is true.
+// @returns          (array<float>) `srcArray` object.
+method maintainQueue(array<float> srcArray, float value, bool takeSample = true) =>
+    if takeSample
+        srcArray.push(value)
+        srcArray.shift()
+    srcArray
+
+// @function         Computes Bollinger Band values from an array of data.
+// @param srcArray   (array<float>) The array where the queue is maintained.
+// @param multiplier (float) Standard deviaiton multiplier.
+// @param calcuate   (bool) The method will only calculate new values when this is true.
+// @returns          A tuple containing the basis, upper band, and lower band respectively.
+method calcBB(array<float> srcArray, float mult, bool calculate = true) =>
+    var float mean = na
+    var float dev  = na
+    if calculate
+        // Compute the mean and standard deviation of the array.
+        mean := srcArray.avg()
+        dev  := srcArray.stdev() * mult
+    [mean, mean + dev, mean - dev]
+
+// Identify if `n` bars have passed.
+bool newSample = bar_index % n == 0
+
+// Update the queue and compute new BB values on each new sample.
+[sampleMean, highBand, lowBand] = sourceArray.maintainQueue(sourceInput, newSample).calcBB(multiplier, newSample)
+
+plot(sampleMean, "Basis", color.orange)
+plot(highBand, "Upper", color.lime)
+plot(lowBand, "Lower", color.red)
+```
