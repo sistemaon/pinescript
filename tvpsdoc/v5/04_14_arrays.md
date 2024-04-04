@@ -93,3 +93,113 @@ O mesmo código sem a palavra-chave [var](https://br.tradingview.com/pine-script
 
 > __Observação__\
 > Variáveis de array declaradas usando [varip](https://br.tradingview.com/pine-script-reference/v5/#kw_varip) comportam-se como as que utilizam [var](https://br.tradingview.com/pine-script-reference/v5/#kw_var) em _dados históricos_, mas atualizam seus valores para barras em tempo real (ou seja, as barras desde a última compilação do script) a cada novo tick de preço. Arrays atribuídos a variáveis [varip](https://br.tradingview.com/pine-script-reference/v5/#kw_varip) podem conter apenas tipos [int](https://br.tradingview.com/pine-script-reference/v5/#type_int), [float](https://br.tradingview.com/pine-script-reference/v5/#type_float), [bool](https://br.tradingview.com/pine-script-reference/v5/#type_bool), [color](https://br.tradingview.com/pine-script-reference/v5/#type_color) ou [string](https://br.tradingview.com/pine-script-reference/v5/#type_string) ou [tipos definidos pelo usuário](./04_09_tipagem_do_sistema.md#tipos-definidos-pelo-usuário) que contenham exclusivamente em seus campos esses tipos ou coleções ([arrays](./04_14_arrays.md), [matrices](./000_matrices.md) ou [maps](./000_maps.md)) desses tipos.
+
+
+# Leitura e Escrita de Elementos de Array
+
+Scripts podem escrever valores em elementos individuais existentes de um array usando [array.set(id, index, value)](https://br.tradingview.com/pine-script-reference/v5/#fun_array{dot}set) e ler usando [array.get(id, index)](https://br.tradingview.com/pine-script-reference/v5/#fun_array{dot}get). Ao usar essas funções, é crucial que o `index` na chamada da função seja sempre menor ou igual ao tamanho do array (porque os _índices_ de array começam em _zero_). Para obter o tamanho de um array, utiliza-se a função [array.size(id)](https://br.tradingview.com/pine-script-reference/v5/#fun_array{dot}size).
+
+O exemplo a seguir utiliza o método [array.set()](https://br.tradingview.com/pine-script-reference/v5/#fun_array{dot}set) para preencher um array `fillColors` com instâncias de uma cor base usando diferentes níveis de transparência. Em seguida, usa [array.get()](https://br.tradingview.com/pine-script-reference/v5/#fun_array{dot}get) para buscar uma das cores do array com base na localização da barra com o preço mais alto dentro das últimas barras `lookbackInput`:
+
+![Leitura e escrita de elementos de array](./imgs/Arrays-ReadingAndWriting-DistanceFromHigh.png)
+
+```c
+//@version=5
+indicator("Distance from high", "", true)
+lookbackInput = input.int(100)
+FILL_COLOR = color.green
+// Declare array and set its values on the first bar only.
+var fillColors = array.new<color>(5)
+if barstate.isfirst
+    // Initialize the array elements with progressively lighter shades of the fill color.
+    fillColors.set(0, color.new(FILL_COLOR, 70))
+    fillColors.set(1, color.new(FILL_COLOR, 75))
+    fillColors.set(2, color.new(FILL_COLOR, 80))
+    fillColors.set(3, color.new(FILL_COLOR, 85))
+    fillColors.set(4, color.new(FILL_COLOR, 90))
+
+// Find the offset to highest high. Change its sign because the function returns a negative value.
+lastHiBar = - ta.highestbars(high, lookbackInput)
+// Convert the offset to an array index, capping it to 4 to avoid a runtime error.
+// The index used by `array.get()` will be the equivalent of `floor(fillNo)`.
+fillNo = math.min(lastHiBar / (lookbackInput / 5), 4)
+// Set background to a progressively lighter fill with increasing distance from location of highest high.
+bgcolor(array.get(fillColors, fillNo))
+// Plot key values to the Data Window for debugging.
+plotchar(lastHiBar, "lastHiBar", "", location.top, size = size.tiny)
+plotchar(fillNo, "fillNo", "", location.top, size = size.tiny)
+```
+
+Outra técnica para inicializar os elementos em um array é criar um _array vazio_ (um array sem elementos) e, em seguida, utilizar [array.push()](https://br.tradingview.com/pine-script-reference/v5/#fun_array{dot}push) para adicionar __novos__ elementos ao _final_ do array, aumentando o tamanho do array em um a cada chamada.
+
+O código a seguir tem a mesma funcionalidade que a seção de inicialização do script anterior:
+
+```c
+// Declare array and set its values on the first bar only.
+var fillColors = array.new<color>(0)
+if barstate.isfirst
+    // Initialize the array elements with progressively lighter shades of the fill color.
+    array.push(fillColors, color.new(FILL_COLOR, 70))
+    array.push(fillColors, color.new(FILL_COLOR, 75))
+    array.push(fillColors, color.new(FILL_COLOR, 80))
+    array.push(fillColors, color.new(FILL_COLOR, 85))
+    array.push(fillColors, color.new(FILL_COLOR, 90))
+```
+
+O código abaixo é equivalente ao anterior, mas utiliza [array.unshift()](https://br.tradingview.com/pine-script-reference/v5/#fun_array{dot}unshift) para inserir novos elementos no _início_ do array `fillColors`:
+
+```c
+// Declare array and set its values on the first bar only.
+var fillColors = array.new<color>(0)
+if barstate.isfirst
+    // Initialize the array elements with progressively lighter shades of the fill color.
+    array.unshift(fillColors, color.new(FILL_COLOR, 90))
+    array.unshift(fillColors, color.new(FILL_COLOR, 85))
+    array.unshift(fillColors, color.new(FILL_COLOR, 80))
+    array.unshift(fillColors, color.new(FILL_COLOR, 75))
+    array.unshift(fillColors, color.new(FILL_COLOR, 70))
+```
+
+Também é possível utilizar [array.from()](https://br.tradingview.com/pine-script-reference/v5/#fun_array{dot}from) para criar o mesmo array `fillColors` com uma única chamada de função:
+
+```c
+//@version=5
+indicator("Using `var`")
+FILL_COLOR = color.green
+var array<color> fillColors = array.from(
+     color.new(FILL_COLOR, 70),
+     color.new(FILL_COLOR, 75),
+     color.new(FILL_COLOR, 80),
+     color.new(FILL_COLOR, 85),
+     color.new(FILL_COLOR, 90)
+ )
+// Cycle background through the array's colors.
+bgcolor(array.get(fillColors, bar_index % (fillColors.size())))
+```
+
+A função [array.fill(id, value, index_from, index_to)](https://br.tradingview.com/pine-script-reference/v5/#fun_array{dot}fill) direciona todos os elementos do array, ou os elementos dentro do intervalo de `index_from` a `index_to`, para um `value` especificado. Sem os dois últimos parâmetros opcionais, a função preenche todo o array, então:
+
+```c
+a = array.new<float>(10, close)
+```
+
+E:
+
+```c
+a = array.new<float>(10)
+a.fill(close)
+```
+
+São equivalentes, porém:
+
+```c
+a = array.new<float>(10)
+a.fill(close, 1, 3)
+```
+
+Preenche apenas o segundo e o terceiro elementos (nos _index_ 1 e 2) do array com `close`. Note como o último parâmetro de [array.fill()](https://br.tradingview.com/pine-script-reference/v5/#fun_array{dot}fill), `index_to`, deve ser um a mais que o último _index_ que a função preencherá. Os elementos restantes conterão valores `na`, pois a chamada da função [array.new()](https://br.tradingview.com/pine-script-reference/v5/#fun_array.new%3Ctype%3E) não contém um argumento `initial_value`.
+
+
+<!-- # Percorrendo Elementos de um Array
+
+Ao percorrer os índices dos elementos de um array e o tamanho do array é desconhecido, pode-se usar a função array.size() para obter o valor máximo do índice. Por exemplo: -->
