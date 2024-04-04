@@ -3,8 +3,6 @@
 
 ## [TradingView PineScript Documentação Versão 5](./v5/README.md)
 
-
-
 ---
 
 NOTES:
@@ -20,3 +18,9 @@ antes (https://www.tradingview.com/pine-script-reference/v5/#type_array) depois 
 
 In LANGUAGE > BUILT-INS > BUILT-IN FUNCTIONS = Functions used to manipulate colors in the color namespace: color.from_gradient(), color.new(), color.rgb(), etc.
 O color.new() tá referenciando .rgb, e o color.rgb() tá referenciando .new, ou seja, estão com links invertidos.
+
+In ARRAYS > Looping through array elements = An alternative method to loop through an array is to use a for…in loop.
+O "for…in" tá referenciando o link (https://www.tradingview.com/pine-script-reference/v5/#op_for{dot}{dot}{dot}in) sendo que deveria ser (https://www.tradingview.com/pine-script-reference/v5/#kw_for...in).
+
+In ARRAYS > Looping through array elements = for…in loops can return a tuple containing each index and corresponding element.
+O "for…in" tá referenciando o link (https://www.tradingview.com/pine-script-reference/v5/#op_for{dot}{dot}{dot}in) sendo que deveria ser (https://www.tradingview.com/pine-script-reference/v5/#kw_for...in).

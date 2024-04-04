@@ -200,6 +200,66 @@ a.fill(close, 1, 3)
 Preenche apenas o segundo e o terceiro elementos (nos _index_ 1 e 2) do array com `close`. Note como o último parâmetro de [array.fill()](https://br.tradingview.com/pine-script-reference/v5/#fun_array{dot}fill), `index_to`, deve ser um a mais que o último _index_ que a função preencherá. Os elementos restantes conterão valores `na`, pois a chamada da função [array.new()](https://br.tradingview.com/pine-script-reference/v5/#fun_array.new%3Ctype%3E) não contém um argumento `initial_value`.
 
 
-<!-- # Percorrendo Elementos de um Array
+# Percorrendo Elementos de um Array
 
-Ao percorrer os índices dos elementos de um array e o tamanho do array é desconhecido, pode-se usar a função array.size() para obter o valor máximo do índice. Por exemplo: -->
+Ao percorrer os _índices_ dos elementos de um array e o tamanho do array é desconhecido, pode-se usar a função [array.size()](https://br.tradingview.com/pine-script-reference/v5/#fun_array{dot}size) para obter o valor máximo do _index_.
+
+Por exemplo:
+
+```c
+//@version=5
+indicator("Protected `for` loop", overlay = true)
+//@variable An array of `close` prices from the 1-minute timeframe.
+array<float> a = request.security_lower_tf(syminfo.tickerid, "1", close)
+
+//@variable A string representation of the elements in `a`.
+string labelText = ""
+for i = 0 to (array.size(a) == 0 ? na : array.size(a) - 1)
+    labelText += str.tostring(array.get(a, i)) + "\n"
+
+label.new(bar_index, high, text = labelText)
+```
+
+Observe que:
+
+- Utiliza-se a função [request.security_lower_tf()](https://br.tradingview.com/pine-script-reference/v5/#fun_request{dot}security_lower_tf), que retorna um array de preços de [close](https://br.tradingview.com/pine-script-reference/v5/#var_close) no _timeframe_ de `1 minute`.
+- Este exemplo de código gerará um erro se utilizado em um intervalo de tempo do gráfico menor que `1 minute`.
+- _Loops_ [for](https://br.tradingview.com/pine-script-reference/v5/#kw_for) não são executados se a expressão `to` for [na](https://br.tradingview.com/pine-script-reference/v5/#var_na). Note que o valor de `to` é avaliado apenas uma vez ao entrar.
+
+Um método alternativo para percorrer um array é usar um _loop_ [for…in](https://br.tradingview.com/pine-script-reference/v5/#kw_for...in). Essa abordagem é uma variação do _loop_ [for](https://br.tradingview.com/pine-script-reference/v5/#kw_for) padrão que pode iterar sobre as referências de valores e _índices_ em um array.
+
+Aqui está um exemplo de como reescrever o código acima usando um _loop_ [`for...in`](https://br.tradingview.com/pine-script-reference/v5/#kw_for...in):
+
+```c
+//@version=5
+indicator("`for...in` loop", overlay = true)
+//@variable An array of `close` prices from the 1-minute timeframe.
+array<float> a = request.security_lower_tf(syminfo.tickerid, "1", close)
+
+//@variable A string representation of the elements in `a`.
+string labelText = ""
+for price in a
+    labelText += str.tostring(price) + "\n"
+
+label.new(bar_index, high, text = labelText)
+```
+
+Observe que:
+
+- Loops [for...in](https://br.tradingview.com/pine-script-reference/v5/#kw_for...in) podem retornar uma tupla contendo cada _index_ e o elemento correspondente. Por exemplo, `for [i, price] in a` retorna o _index_ `i` e o valor `price` para cada elemento em `a`.
+
+Um comando de [while](https://br.tradingview.com/pine-script-reference/v5/#kw_while) _loop_ também pode ser utilizado:
+
+```c
+//@version=5
+indicator("`while` loop", overlay = true)
+array<float> a = request.security_lower_tf(syminfo.tickerid, "1", close)
+
+string labelText = ""
+int i = 0
+while i < array.size(a)
+    labelText += str.tostring(array.get(a, i)) + "\n"
+    i += 1
+
+label.new(bar_index, high, text = labelText)
+```
