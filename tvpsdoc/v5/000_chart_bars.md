@@ -1,4 +1,2 @@
 
-# TO DO
-
--- Barras do Gráfico ...
+# Barras do Gráfico
