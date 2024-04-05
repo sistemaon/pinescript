@@ -487,3 +487,25 @@ if barstate.islast
     array.push(c, 4)
     label.new(bar_index, 0, "AFTER\na: " + str.tostring(a) + "\nb: " + str.tostring(b) + "\nc: " + str.tostring(c), style = label.style_label_up, size = size.large)
 ```
+
+## Copiando
+
+É possível copiar um array utilizando [array.copy()](https://br.tradingview.com/pine-script-reference/v5/#fun_array{dot}copy). Aqui, o array `a` é copiado para um novo array denominado `_b`:
+
+![Copiando](./imgs/Arrays-ManipulatingArrays-Copy.png)
+
+```c
+//@version=5
+indicator("`array.copy()`")
+a = array.new<float>(0)
+array.push(a, 0)
+array.push(a, 1)
+if barstate.islast
+    b = array.copy(a)
+    array.push(b, 2)
+    label.new(bar_index, 0, "a: " + str.tostring(a) + "\nb: " + str.tostring(b), size = size.large)
+```
+
+Observe que simplesmente usar `_b = a` no exemplo anterior não teria copiado o array, mas apenas seu ID. A partir daí, ambas as variáveis apontariam para o mesmo array, então usar qualquer uma delas afetaria o mesmo array.
+
+<!-- Joining -->
