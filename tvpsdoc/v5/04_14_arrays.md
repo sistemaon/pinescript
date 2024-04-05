@@ -321,8 +321,56 @@ plot(previousClose2, "previousClose2", color.white, 2)
 ```
 
 
+# Inserindo e Removendo Elementos do Array
 
+## Inserção
 
+As três funções a seguir podem inserir novos elementos em um array:
+
+- A função [array.unshift()](https://br.tradingview.com/pine-script-reference/v5/#fun_array{dot}unshift) insere um novo elemento no início de um array (_index_ 0) e aumenta os valores de _index_ de quaisquer elementos existentes em um.
+- A função [array.insert()](https://br.tradingview.com/pine-script-reference/v5/#fun_array{dot}insert) insere um novo elemento no _index_ especificado e aumenta o _index_ dos elementos existentes a partir desse _index_ em um.
+- A função [array.push()](https://br.tradingview.com/pine-script-reference/v5/#fun_array{dot}push) adiciona um novo elemento no final de um array.
+
+![Inserindo e removendo elementos do array](./imgs/Arrays-InsertingAndRemovingArrayElements-Insert.png)
+
+```c
+//@version=5
+indicator("`array.insert()`")
+a = array.new<float>(5, 0)
+for i = 0 to 4
+    array.set(a, i, i + 1)
+if barstate.islast
+    label.new(bar_index, 0, "BEFORE\na: " + str.tostring(a), size = size.large)
+    array.insert(a, 2, 999)
+    label.new(bar_index, 0, "AFTER\na: " + str.tostring(a), style = label.style_label_up, size = size.large)
+```
+
+## Remoção
+
+Estas quatro funções removem elementos de um array:
+
+- A função [array.remove()](https://br.tradingview.com/pine-script-reference/v5/#fun_array{dot}remove) remove o elemento no _index_ especificado e _retorna o valor desse elemento removido_.
+- A função [array.shift()](https://br.tradingview.com/pine-script-reference/v5/#fun_array{dot}shift) remove o primeiro elemento de um array e _retorna o valor desse elemento removido_.
+- A função [array.pop()](https://br.tradingview.com/pine-script-reference/v5/#fun_array{dot}pop) remove o último elemento de um array e _retorna o valor desse elemento removido_.
+- A função [array.clear()](https://br.tradingview.com/pine-script-reference/v5/#fun_array{dot}clear) remove todos os elementos de um array.
+
+Note-se que _clearing_ (_limpar_) um array não deleta quaisquer objetos aos quais seus elementos faziam referência. Veja o exemplo abaixo que ilustra como isso funciona:
+
+```c
+//@version=5
+indicator("`array.clear()` example", overlay = true)
+
+// Create a label array and add a label to the array on each new bar.
+var a = array.new<label>()
+label lbl = label.new(bar_index, high, "Text", color = color.red)
+array.push(a, lbl)
+
+var table t = table.new(position.top_right, 1, 1)
+// Clear the array on the last bar. This doesn't remove the labels from the chart.
+if barstate.islast
+    array.clear(a)
+    table.cell(t, 0, 0, "Array elements count: " + str.tostring(array.size(a)), bgcolor = color.yellow)
+```
 
 
 
