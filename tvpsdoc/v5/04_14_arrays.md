@@ -246,7 +246,7 @@ label.new(bar_index, high, text = labelText)
 
 Observe que:
 
-- Loops [for...in](https://br.tradingview.com/pine-script-reference/v5/#kw_for...in) podem retornar uma tupla contendo cada _index_ e o elemento correspondente. Por exemplo, `for [i, price] in a` retorna o _index_ `i` e o valor `price` para cada elemento em `a`.
+- _Loops_ [for...in](https://br.tradingview.com/pine-script-reference/v5/#kw_for...in) podem retornar uma tupla contendo cada _index_ e o elemento correspondente. Por exemplo, `for [i, price] in a` retorna o _index_ `i` e o valor `price` para cada elemento em `a`.
 
 Um comando de [while](https://br.tradingview.com/pine-script-reference/v5/#kw_while) _loop_ também pode ser utilizado:
 
@@ -262,4 +262,33 @@ while i < array.size(a)
     i += 1
 
 label.new(bar_index, high, text = labelText)
+```
+
+
+# Escopo
+
+É possível declarar arrays tanto no escopo global de um script quanto nos escopos locais de [functions](./04_11_funcoes_definida_pelo_usuario.md) ([@function](https://br.tradingview.com/pine-script-reference/v5/#an_@function)), [methods](./04_13_metodos.md) ([method](https://br.tradingview.com/pine-script-reference/v5/#kw_method)) e [conditional structures](./04_07_estruturas_condicionais.md). Diferentemente de alguns outros tipos incorporados, especificamente os tipos _fundamental_ (_fundamentais_), é possível modificar arrays atribuídos globalmente a partir de escopos locais, permitindo a implementação de variáveis globais com as quais qualquer função no script pode interagir diretamente.
+
+Essa funcionalidade é utilizada aqui para calcular níveis de preços progressivamente menores ou maiores:
+
+![Escopo array](./imgs/Arrays-Scope-Bands.png)
+
+```c
+//@version=5
+indicator("Bands", "", true)
+//@variable The distance ratio between plotted price levels.
+factorInput = 1 + (input.float(-2., "Step %") / 100)
+//@variable A single-value array holding the lowest `ohlc4` value within a 50 bar window from 10 bars back.
+level = array.new<float>(1, ta.lowest(ohlc4, 50)[10])
+
+nextLevel(val) =>
+    newLevel = level.get(0) * val
+    // Write new level to the global `level` array so we can use it as the base in the next function call.
+    level.set(0, newLevel)
+    newLevel
+
+plot(nextLevel(1))
+plot(nextLevel(factorInput))
+plot(nextLevel(factorInput))
+plot(nextLevel(factorInput))
 ```
