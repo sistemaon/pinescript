@@ -454,5 +454,12 @@ if not na(pHi)
 ```
 
 
+# Cálculos em Arrays
 
+Enquanto variáveis do tipo _series_ podem ser vistas como um conjunto horizontal de valores que se estendem no tempo, os arrays unidimensionais do Pine Script podem ser vistos como estruturas verticais presentes em cada barra. Como o conjunto de elementos de um array não constitui uma _series_ temporal, as funções matemáticas usuais do Pine Script não são permitidas para uso direto com eles. Funções de propósito específico devem ser utilizadas para operar sobre todos os valores de um array. As funções disponíveis incluem: [array.abs()](https://br.tradingview.com/pine-script-reference/v5/#fun_array{dot}abs), [array.avg()](https://br.tradingview.com/pine-script-reference/v5/#fun_array{dot}avg), [array.covariance()](https://br.tradingview.com/pine-script-reference/v5/#fun_array{dot}covariance), [array.min()](https://br.tradingview.com/pine-script-reference/v5/#fun_array{dot}min), [array.max()](https://br.tradingview.com/pine-script-reference/v5/#fun_array{dot}max), [array.median()](https://br.tradingview.com/pine-script-reference/v5/#fun_array{dot}median), [array.mode()](https://br.tradingview.com/pine-script-reference/v5/#fun_array{dot}mode), [array.percentile_linear_interpolation()](https://br.tradingview.com/pine-script-reference/v5/#fun_array{dot}percentile_linear_interpolation), [array.percentile_nearest_rank()](https://br.tradingview.com/pine-script-reference/v5/#fun_array{dot}percentile_nearest_rank), [array.percentrank()](https://br.tradingview.com/pine-script-reference/v5/#fun_array{dot}percentrank), [array.range()](https://br.tradingview.com/pine-script-reference/v5/#fun_array{dot}range), [array.standardize()](https://br.tradingview.com/pine-script-reference/v5/#fun_array{dot}standardize), [array.stdev()](https://br.tradingview.com/pine-script-reference/v5/#fun_array{dot}stdev), [array.sum()](https://br.tradingview.com/pine-script-reference/v5/#fun_array{dot}sum), [array.variance()](https://br.tradingview.com/pine-script-reference/v5/#fun_array{dot}variance).
+
+Observa-se que, ao contrário das funções matemáticas usuais no Pine Script, aquelas utilizadas em arrays não retornam `na` quando alguns dos valores nos quais calculam possuem valores `na`. Existem algumas exceções a esta regra:
+
+- Quando todos os elementos do array têm valor na ou o array não contém elementos, na é retornado. array.standardize(), no entanto, retornará um array vazio.
+- O array.mode() retornará na quando nenhum modo for encontrado.
 
