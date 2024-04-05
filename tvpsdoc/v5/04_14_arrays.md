@@ -372,6 +372,57 @@ if barstate.islast
     table.cell(t, 0, 0, "Array elements count: " + str.tostring(array.size(a)), bgcolor = color.yellow)
 ```
 
+## Utilizando um Array como uma Stack (_Pilha_)
 
+Stacks (_Pilhas_) são construções LIFO (Last In, First Out - (_último a entrar_, _primeiro a sair_)). Comportam-se de maneira similar a uma pilha vertical de livros na qual os livros podem ser adicionados ou removidos um de cada vez, sempre do topo. Arrays do Pine Script podem ser utilizados como uma pilha, caso em que as funções [array.push()](https://br.tradingview.com/pine-script-reference/v5/#fun_array{dot}push) e [array.pop()](https://br.tradingview.com/pine-script-reference/v5/#fun_array{dot}pop) são utilizadas para adicionar e remover elementos no final do array:
 
+- O `array.push(prices, close)` adicionará um novo elemento ao final do array `prices`, aumentando o tamanho do array em um.
+- O `array.pop(prices)` removerá o último elemento do array `prices`, retornará seu valor e diminuirá o tamanho do array em um.
 
+Veja como as funções são utilizadas aqui para rastrear mínimos sucessivos em _rallies_, ou seja, monitoramento de pontos de preço mais baixos durante períodos de _rally_:
+
+![Utilizando um array como uma pilha](./imgs/Arrays-InsertingAndRemovingArrayElements-LowsFromNewHighs.png)
+
+```c
+//@version=5
+indicator("Lows from new highs", "", true)
+var lows = array.new<float>(0)
+flushLows = false
+
+// Remove last element from the stack when `_cond` is true.
+array_pop(id, cond) => cond and array.size(id) > 0 ? array.pop(id) : float(na)
+
+if ta.rising(high, 1)
+    // Rising highs; push a new low on the stack.
+    lows.push(low)
+    // Force the return type of this `if` block to be the same as that of the next block.
+    bool(na)
+else if lows.size() >= 4 or low < array.min(lows)
+    // We have at least 4 lows or price has breached the lowest low;
+    // sort lows and set flag indicating we will plot and flush the levels.
+    array.sort(lows, order.ascending)
+    flushLows := true
+
+// If needed, plot and flush lows.
+lowLevel = array_pop(lows, flushLows)
+plot(lowLevel, "Low 1", low > lowLevel ? color.silver : color.purple, 2, plot.style_linebr)
+lowLevel := array_pop(lows, flushLows)
+plot(lowLevel, "Low 2", low > lowLevel ? color.silver : color.purple, 3, plot.style_linebr)
+lowLevel := array_pop(lows, flushLows)
+plot(lowLevel, "Low 3", low > lowLevel ? color.silver : color.purple, 4, plot.style_linebr)
+lowLevel := array_pop(lows, flushLows)
+plot(lowLevel, "Low 4", low > lowLevel ? color.silver : color.purple, 5, plot.style_linebr)
+
+if flushLows
+    // Clear remaining levels after the last 4 have been plotted.
+    lows.clear()
+```
+
+<!-- Utilizando um array como uma fila
+Filas são construções FIFO (first in, first out - primeiro a entrar, primeiro a sair). Comportam-se de forma similar a carros chegando em um semáforo vermelho. Novos carros são enfileirados no final da fila, e o primeiro carro a sair será o primeiro que chegou ao semáforo.
+
+No exemplo de código a seguir, permite-se que os usuários decidam por meio das entradas do script quantas etiquetas desejam ter em seu gráfico. Essa quantidade é utilizada para determinar o tamanho do array de etiquetas que será criado, inicializando os elementos do array como na.
+
+Quando um novo pivô é detectado, uma etiqueta é criada para ele, salvando o ID da etiqueta na variável pLabel. Em seguida, o ID dessa etiqueta é enfileirado usando array.push() para adicionar o ID da nova etiqueta ao final do array, aumentando o tamanho do array em um, além do número máximo de etiquetas a serem mantidas no gráfico.
+
+Por fim, a etiqueta mais antiga é desenfileirada removendo o primeiro elemento do array com array.shift() e deletando a etiqueta referenciada pelo valor desse elemento do array. Como agora um elemento foi desenfileirado da fila, o array contém elementos pivotCountInput mais uma vez. Note que nas primeiras barras do conjunto de dados serão deletados IDs de etiquetas na até que o número máximo de etiquetas seja criado, mas isso não causa erros de execução. Vamos analisar o código: -->
