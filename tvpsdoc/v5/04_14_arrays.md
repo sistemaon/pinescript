@@ -328,8 +328,8 @@ plot(previousClose2, "previousClose2", color.white, 2)
 As três funções a seguir podem inserir novos elementos em um array:
 
 - A função [array.unshift()](https://br.tradingview.com/pine-script-reference/v5/#fun_array{dot}unshift) insere um novo elemento no início de um array (_index_ 0) e aumenta os valores de _index_ de quaisquer elementos existentes em um.
-- A função [array.insert()](https://br.tradingview.com/pine-script-reference/v5/#fun_array{dot}insert) insere um novo elemento no _index_ especificado e aumenta o _index_ dos elementos existentes a partir desse _index_ em um.
 - A função [array.push()](https://br.tradingview.com/pine-script-reference/v5/#fun_array{dot}push) adiciona um novo elemento no final de um array.
+- A função [array.insert()](https://br.tradingview.com/pine-script-reference/v5/#fun_array{dot}insert) insere um novo elemento no _index_ especificado e aumenta o _index_ dos elementos existentes a partir desse _index_ em um.
 
 ![Inserindo e removendo elementos do array](./imgs/Arrays-InsertingAndRemovingArrayElements-Insert.png)
 
