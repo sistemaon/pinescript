@@ -292,3 +292,38 @@ plot(nextLevel(factorInput))
 plot(nextLevel(factorInput))
 plot(nextLevel(factorInput))
 ```
+
+
+# Referência Histórica
+O operador de referência histórica [[]](https://br.tradingview.com/pine-script-reference/v5/#op_[]) do Pine Script pode acessar o histórico de variáveis de array, permitindo que scripts interajam com instâncias passadas de arrays previamente atribuídas a uma variável.
+
+Para ilustrar, é apresentado um exemplo simples que demonstra como se pode obter o valor de `close` da barra anterior de duas maneiras equivalentes. Neste script, o operador [[]](https://br.tradingview.com/pine-script-reference/v5/#op_[]) é utilizado para acessar a instância do array atribuída a `a` na barra anterior, e em seguida, o método [get()](https://br.tradingview.com/pine-script-reference/v5/#fun_array.get) é utilizado para recuperar o valor do primeiro elemento (`previousClose1`). Para `previousClose2`, o operador de referência histórica é aplicado diretamente na variável `close` para obter o valor. Conforme indicado pelos gráficos, `previousClose1` e `previousClose2` retornam valores idênticos:
+
+![Referência histórica array](./imgs/Arrays-History-referencing.png)
+
+```c
+//@version=5
+indicator("History referencing")
+
+//@variable A single-value array declared on each bar.
+a = array.new<float>(1)
+// Set the value of the only element in `a` to `close`.
+array.set(a, 0, close)
+
+//@variable The array instance assigned to `a` on the previous bar.
+previous = a[1]
+
+previousClose1 = na(previous) ? na : previous.get(0)
+previousClose2 = close[1]
+
+plot(previousClose1, "previousClose1", color.gray, 6)
+plot(previousClose2, "previousClose2", color.white, 2)
+```
+
+
+
+
+
+
+
+
