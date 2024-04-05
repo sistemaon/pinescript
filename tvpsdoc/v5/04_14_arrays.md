@@ -460,6 +460,30 @@ Enquanto variáveis do tipo _series_ podem ser vistas como um conjunto horizonta
 
 Observa-se que, ao contrário das funções matemáticas usuais no Pine Script, aquelas utilizadas em arrays não retornam `na` quando alguns dos valores nos quais calculam possuem valores `na`. Existem algumas exceções a esta regra:
 
-- Quando todos os elementos do array têm valor na ou o array não contém elementos, na é retornado. array.standardize(), no entanto, retornará um array vazio.
-- O array.mode() retornará na quando nenhum modo for encontrado.
+- Quando todos os elementos do array têm valor `na` ou o array não contém elementos, `na` é retornado. `array.standardize()`, no entanto, retornará um array vazio.
+- O `array.mode()` retornará `na` quando nenhum modo for encontrado.
 
+
+# Manipulação de Arrays
+
+## Concatenação
+
+Dois arrays podem ser mesclados — ou concatenados — utilizando [array.concat()](https://br.tradingview.com/pine-script-reference/v5/#fun_array{dot}concat). Quando arrays são concatenados, o segundo array é anexado ao final do primeiro, de modo que o primeiro array é modificado enquanto o segundo permanece intacto. A função retorna o ID do array do primeiro array:
+
+![Manipulação de arrays](./imgs/Arrays-ManipulatingArrays-Concat.png)
+
+```c
+//@version=5
+indicator("`array.concat()`")
+a = array.new<float>(0)
+b = array.new<float>(0)
+array.push(a, 0)
+array.push(a, 1)
+array.push(b, 2)
+array.push(b, 3)
+if barstate.islast
+    label.new(bar_index, 0, "BEFORE\na: " + str.tostring(a) + "\nb: " + str.tostring(b), size = size.large)
+    c = array.concat(a, b)
+    array.push(c, 4)
+    label.new(bar_index, 0, "AFTER\na: " + str.tostring(a) + "\nb: " + str.tostring(b) + "\nc: " + str.tostring(c), style = label.style_label_up, size = size.large)
+```
