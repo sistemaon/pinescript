@@ -418,11 +418,41 @@ if flushLows
     lows.clear()
 ```
 
-<!-- Utilizando um array como uma fila
-Filas são construções FIFO (first in, first out - primeiro a entrar, primeiro a sair). Comportam-se de forma similar a carros chegando em um semáforo vermelho. Novos carros são enfileirados no final da fila, e o primeiro carro a sair será o primeiro que chegou ao semáforo.
+## Utilizando um Array como uma Fila
 
-No exemplo de código a seguir, permite-se que os usuários decidam por meio das entradas do script quantas etiquetas desejam ter em seu gráfico. Essa quantidade é utilizada para determinar o tamanho do array de etiquetas que será criado, inicializando os elementos do array como na.
+Filas são construções FIFO (first in, first out - (_primeiro a entrar_, _primeiro a sair_)). Comportam-se de forma similar a carros chegando em um semáforo vermelho. Novos carros são enfileirados no final da fila, e o primeiro carro a sair será o primeiro que chegou ao semáforo.
 
-Quando um novo pivô é detectado, uma etiqueta é criada para ele, salvando o ID da etiqueta na variável pLabel. Em seguida, o ID dessa etiqueta é enfileirado usando array.push() para adicionar o ID da nova etiqueta ao final do array, aumentando o tamanho do array em um, além do número máximo de etiquetas a serem mantidas no gráfico.
+No exemplo de código a seguir, permite-se que os usuários decidam por meio dos _inputs_ (_entradas_) do script quantos _labels_ desejam ter em seu gráfico. Essa quantidade é utilizada para determinar o tamanho do array de _labels_ que será criado, inicializando os elementos do array como `na`.
 
-Por fim, a etiqueta mais antiga é desenfileirada removendo o primeiro elemento do array com array.shift() e deletando a etiqueta referenciada pelo valor desse elemento do array. Como agora um elemento foi desenfileirado da fila, o array contém elementos pivotCountInput mais uma vez. Note que nas primeiras barras do conjunto de dados serão deletados IDs de etiquetas na até que o número máximo de etiquetas seja criado, mas isso não causa erros de execução. Vamos analisar o código: -->
+Quando um novo _pivot_ é detectado, um _label_ é criado para ele, salvando o ID do _label_ na variável `pLabel`. Em seguida, o ID desse _label_ é enfileirado usando [array.push()](https://br.tradingview.com/pine-script-reference/v5/#fun_array{dot}push) para adicionar o ID do novo _label_ ao final do array, aumentando o tamanho do array em um, além do número máximo de _labels_ a serem mantidas no gráfico.
+
+Por fim, o _label_ mais antigo é desenfileirado removendo o primeiro elemento do array com [array.shift()](https://br.tradingview.com/pine-script-reference/v5/#fun_array{dot}shift) e deletando o _label_ referenciado pelo valor desse elemento do array. Como agora um elemento foi desenfileirado da fila, o array contém elementos `pivotCountInput` mais uma vez. Note que nas primeiras barras do conjunto de dados serão deletados IDs de _labels_ `na` até que o número máximo de _labels_ seja criado, mas isso não resulta em erros de execução.
+
+A análise do código é apresentada a seguir:
+
+![Utilizando um array como uma fila](./imgs/Arrays-InsertingAndRemovingArrayElements-ShowLastnHighPivots.png)
+
+```c
+//@version=5
+MAX_LABELS = 100
+indicator("Show Last n High Pivots", "", true, max_labels_count = MAX_LABELS)
+
+pivotCountInput = input.int(5, "How many pivots to show", minval = 0, maxval = MAX_LABELS)
+pivotLegsInput  = input.int(3, "Pivot legs", minval = 1, maxval = 5)
+
+// Create an array containing the user-selected max count of label IDs.
+var labelIds = array.new<label>(pivotCountInput)
+
+pHi = ta.pivothigh(pivotLegsInput, pivotLegsInput)
+if not na(pHi)
+    // New pivot found; plot its label `i_pivotLegs` bars back.
+    pLabel = label.new(bar_index[pivotLegsInput], pHi, str.tostring(pHi, format.mintick), textcolor = color.white)
+    // Queue the new label's ID by appending it to the end of the array.
+    array.push(labelIds, pLabel)
+    // De-queue the oldest label ID from the queue and delete the corresponding label.
+    label.delete(array.shift(labelIds))
+```
+
+
+
+
