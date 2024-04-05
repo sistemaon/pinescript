@@ -622,7 +622,7 @@ if barstate.islast
 Também é possível realizar uma busca binária em um array, mas é importante notar que realizar uma busca binária exige que o array esteja previamente ordenado em ordem ascendente. A função [array.binary_search()](https://br.tradingview.com/pine-script-reference/v5/#fun_array{dot}binary_search) retornará o _index_ do valor se ele for encontrado ou -1 se não for. Caso se deseje retornar sempre um _index_ existente do array mesmo que o valor escolhido não seja encontrado, então pode-se utilizar uma das outras funções de busca binária disponíveis. A função [array.binary_search_leftmost()](https://br.tradingview.com/pine-script-reference/v5/#fun_array{dot}binary_search_leftmost) retorna um _index_ se o valor for encontrado ou o primeiro _index_ à esquerda onde o valor seria encontrado. A função [array.binary_search_rightmost()](https://br.tradingview.com/pine-script-reference/v5/#fun_array{dot}binary_search_rightmost) é quase idêntica e retorna um _index_ se o valor for encontrado ou o primeiro _index_ à direita onde o valor seria encontrado.
 
 
-## Tratamento de Erros
+# Tratamento de Erros
 
 Sintaxe malformada em chamadas de `array.*()` em scripts Pine causará as usuais mensagens de erro do __compilador__ a aparecerem no console do Editor Pine, na parte inferior da janela, ao salvar um script. Consulte o [Manual de Referência](https://br.tradingview.com/pine-script-reference/v5/) do Pine Script v5 em caso de dúvidas sobre a sintaxe exata das chamadas de função.
 
@@ -708,16 +708,16 @@ Este erro aparecerá se o código tentar declarar um array com um tamanho superi
 ## Não é Possível Criar um Array com Tamanho Negativo
 Ainda não encontramos utilidade para arrays de tamanho negativo, mas se algum dia encontrarmos, possa ser permitidos ':)'
 
-## Não é Possível Usar shift() se o Array estiver Vazio.
+## Não é Possível Usar shift() se o Array estiver Vazio
 Este erro ocorrerá se [array.shift()](https://br.tradingview.com/pine-script-reference/v5/#fun_array{dot}shift) for chamado para remover o primeiro elemento de um array vazio.
 
-## Não é Possível Usar pop() se o Array estiver Vazio.
+## Não é Possível Usar pop() se o Array estiver Vazio
 Este erro ocorrerá se [array.pop()](https://br.tradingview.com/pine-script-reference/v5/#fun_array{dot}pop) for chamado para remover o último elemento de um array vazio.
 
-## Index 'de' deve ser Menor que o Index 'Para'
+## Index 'De' deve ser Menor que o Index 'Para'
 Quando dois _índices_ são utilizados em funções como [array.slice()](https://br.tradingview.com/pine-script-reference/v5/#fun_array{dot}slice), o primeiro _index_ deve sempre ser menor que o segundo.
 
-# Slice (_Fatiamento_) está Fora dos Limites do Array Pai
+## Slice (_Fatiamento_) está Fora dos Limites do Array Pai
 
 Esta mensagem ocorre sempre que o tamanho do array pai é modificado de tal maneira que faz a cópia superficial criada por um _slice_ apontar para fora dos limites do array pai. Este código reproduzirá esse erro porque, após criar um _slice_ do _index_ 3 ao 4 (os dois últimos elementos do array pai de cinco elementos), remove-se o primeiro elemento do pai, fazendo com que seu tamanho seja reduzido para quatro e seu último _index_ para 3. A partir desse momento, a cópia superficial, que ainda está apontando para "_window_" "_janela_" nos _índices_ 3 a 4 do array pai, está apontando para fora dos limites do array pai:
 
