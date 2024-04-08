@@ -34,3 +34,31 @@ Aqui, declara-se uma variável `myMatrix` referenciando uma nova instância de `
 ```c
 myMatrix = matrix.new<float>(2, 2, 0.0)
 ```
+
+## Utilizando as Palavras-Chave `var` e `varip`
+
+Assim como com as outras variáveis, pode-se incluir as palavras-chave [var](https://br.tradingview.com/pine-script-reference/v5/#kw_var) ou [varip](https://br.tradingview.com/pine-script-reference/v5/#kw_varip) para instruir um script a declarar uma variável de _matrix_ apenas uma vez, em vez de em cada barra. Uma variável de _matrix_ declarada com essa palavra-chave apontará para a mesma instância ao longo do período do gráfico, a menos que o script atribua explicitamente outra _matrix_ a ela, permitindo que uma _matrix_ e suas referências de elementos persistam entre as iterações do script.
+
+Este script declara uma variável `m` atribuída a uma _matrix_ que contém uma única linha de dois elementos [int](https://br.tradingview.com/pine-script-reference/v5/#type_int) usando a palavra-chave [var](https://br.tradingview.com/pine-script-reference/v5/#kw_var). A cada _20ª_ barra, o script adiciona 1 ao primeiro elemento na primeira linha da _matrix_ `m`. A chamada de [plot()](https://br.tradingview.com/pine-script-reference/v5/#fun_plot) exibe esse elemento no gráfico. Conforme observado a _plotagem_ no gráfico, o valor de [m.get(0, 0)](https://br.tradingview.com/pine-script-reference/v5/#fun_matrix.get) persiste entre as barras, nunca retornando ao valor inicial de _0_:
+
+![Declarando uma matrix](./imgs/Matrices-Declaring-a-matrix-Using-var-and-varip-keywords-1.png)
+
+```c
+//@version=5
+indicator("var matrix demo")
+
+//@variable A 1x2 rectangular matrix declared only at `bar_index == 0`, i.e., the first bar.
+var m = matrix.new<int>(1, 2, 0)
+
+//@variable Is `true` on every 20th bar.
+bool update = bar_index % 20 == 0
+
+if update
+    int currentValue = m.get(0, 0) // Get the current value of the first row and column.
+    m.set(0, 0, currentValue + 1)  // Set the first row and column element value to `currentValue + 1`.
+
+plot(m.get(0, 0), linewidth = 3) // Plot the value from the first row and column.
+```
+
+> __Observação__\
+> Variáveis de _matrix_ declaradas usando [varip](https://br.tradingview.com/pine-script-reference/v5/#kw_varip) comportam-se como as que utilizam [var](https://br.tradingview.com/pine-script-reference/v5/#kw_var) em dados históricos, mas atualizam seus valores para barras em tempo real (ou seja, as barras desde a última compilação do script) a cada novo tick de preço. _Matrices_ atribuídas a variáveis [varip](https://br.tradingview.com/pine-script-reference/v5/#kw_varip) podem conter apenas tipos [int](https://br.tradingview.com/pine-script-reference/v5/#type_int), [float](https://br.tradingview.com/pine-script-reference/v5/#type_float), [bool](https://br.tradingview.com/pine-script-reference/v5/#type_bool), [color](https://br.tradingview.com/pine-script-reference/v5/#type_color) ou [string](https://br.tradingview.com/pine-script-reference/v5/#type_string) ou [tipos definidos pelo usuário](./04_09_tipagem_do_sistema.md#tipos-definidos-pelo-usuário) que contenham exclusivamente em seus campos esses tipos ou coleções ([arrays](./04_14_arrays.md), [matrices](./04_15_matrices.md), ou [maps](000_maps.md)) (_arrays_, _matrizes_ ou _mapas_) desses tipos.
