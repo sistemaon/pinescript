@@ -97,7 +97,7 @@ O mesmo código sem a palavra-chave [var](https://br.tradingview.com/pine-script
 
 # Leitura e Escrita de Elementos de Array
 
-Scripts podem escrever valores em elementos individuais existentes de um array usando [array.set(id, index, value)](https://br.tradingview.com/pine-script-reference/v5/#fun_array{dot}set) e ler usando [array.get(id, index)](https://br.tradingview.com/pine-script-reference/v5/#fun_array{dot}get). Ao usar essas funções, é crucial que o `index` na chamada da função seja sempre menor ou igual ao tamanho do array (porque os _índices_ de array começam em _zero_). Para obter o tamanho de um array, utiliza-se a função [array.size(id)](https://br.tradingview.com/pine-script-reference/v5/#fun_array{dot}size).
+Scripts podem escrever valores em elementos individuais existentes de um array usando [array.set(id, index, value)](https://br.tradingview.com/pine-script-reference/v5/#fun_array{dot}set) e ler usando [array.get(id, index)](https://br.tradingview.com/pine-script-reference/v5/#fun_array{dot}get). Ao usar essas funções, é crucial que o `index` na chamada da função seja sempre menor ou igual ao tamanho do array (porque os _indices_ de array começam em _zero_). Para obter o tamanho de um array, utiliza-se a função [array.size(id)](https://br.tradingview.com/pine-script-reference/v5/#fun_array{dot}size).
 
 O exemplo a seguir utiliza o método [array.set()](https://br.tradingview.com/pine-script-reference/v5/#fun_array{dot}set) para preencher um array `fillColors` com instâncias de uma cor base usando diferentes níveis de transparência. Em seguida, usa [array.get()](https://br.tradingview.com/pine-script-reference/v5/#fun_array{dot}get) para buscar uma das cores do array com base na localização da barra com o preço mais alto dentro das últimas barras `lookbackInput`:
 
@@ -202,7 +202,7 @@ Preenche apenas o segundo e o terceiro elementos (nos _index_ 1 e 2) do array co
 
 # Percorrendo Elementos de um Array
 
-Ao percorrer os _índices_ dos elementos de um array e o tamanho do array é desconhecido, pode-se usar a função [array.size()](https://br.tradingview.com/pine-script-reference/v5/#fun_array{dot}size) para obter o valor máximo do _index_.
+Ao percorrer os _indices_ dos elementos de um array e o tamanho do array é desconhecido, pode-se usar a função [array.size()](https://br.tradingview.com/pine-script-reference/v5/#fun_array{dot}size) para obter o valor máximo do _index_.
 
 Por exemplo:
 
@@ -226,7 +226,7 @@ Observe que:
 - Este exemplo de código gerará um erro se utilizado em um intervalo de tempo do gráfico menor que `1 minute`.
 - _Loops_ [for](https://br.tradingview.com/pine-script-reference/v5/#kw_for) não são executados se a expressão `to` for [na](https://br.tradingview.com/pine-script-reference/v5/#var_na). Note que o valor de `to` é avaliado apenas uma vez ao entrar.
 
-Um método alternativo para percorrer um array é usar um _loop_ [for…in](https://br.tradingview.com/pine-script-reference/v5/#kw_for...in). Essa abordagem é uma variação do _loop_ [for](https://br.tradingview.com/pine-script-reference/v5/#kw_for) padrão que pode iterar sobre as referências de valores e _índices_ em um array.
+Um método alternativo para percorrer um array é usar um _loop_ [for…in](https://br.tradingview.com/pine-script-reference/v5/#kw_for...in). Essa abordagem é uma variação do _loop_ [for](https://br.tradingview.com/pine-script-reference/v5/#kw_for) padrão que pode iterar sobre as referências de valores e _indices_ em um array.
 
 Aqui está um exemplo de como reescrever o código acima usando um _loop_ [`for...in`](https://br.tradingview.com/pine-script-reference/v5/#kw_for...in):
 
@@ -551,7 +551,7 @@ if barstate.islast
       "b " + (barUp ? "is not sorted: " : "is sorted ▼: ")   + str.tostring(b), size = size.large)
 ```
 
-Outra opção útil para ordenar arrays é o uso da função [array.sort_indices()](https://br.tradingview.com/pine-script-reference/v5/#fun_array{dot}sort_indices), que recebe uma referência ao array original e retorna um array contendo os _índices_ do array original. É importante notar que essa função não modifica o array original. O parâmetro `order` é opcional e o valor padrão é [order.ascending](https://br.tradingview.com/pine-script-reference/v5/#const_order{dot}ascending).
+Outra opção útil para ordenar arrays é o uso da função [array.sort_indices()](https://br.tradingview.com/pine-script-reference/v5/#fun_array{dot}sort_indices), que recebe uma referência ao array original e retorna um array contendo os _indices_ do array original. É importante notar que essa função não modifica o array original. O parâmetro `order` é opcional e o valor padrão é [order.ascending](https://br.tradingview.com/pine-script-reference/v5/#const_order{dot}ascending).
 
 ## Inversão
 
@@ -572,7 +572,7 @@ if barstate.islast
 ## Fatiamento
 Fatiar um array usando [array.slice()](https://br.tradingview.com/pine-script-reference/v5/#fun_array{dot}slice) cria uma cópia superficial de um subconjunto do array pai. O tamanho do subconjunto a ser fatiado é determinado pelos parâmetros `index_from` e `index_to`. O argumento `index_to` deve ser um a mais que o final do subconjunto que se deseja fatiar.
 
-A cópia superficial criada pelo fatiamento funciona como uma janela para o conteúdo do array pai. Os _índices_ usados para o fatiamento definem a posição e o tamanho da janela sobre o array pai. Se, como no exemplo abaixo, um fatiamento é criado a partir dos três primeiros elementos de um array (_índices_ 0 a 2), então, independentemente das alterações feitas no array pai, e contanto que contenha pelo menos três elementos, a cópia superficial sempre conterá os três primeiros elementos do array pai.
+A cópia superficial criada pelo fatiamento funciona como uma janela para o conteúdo do array pai. Os _indices_ usados para o fatiamento definem a posição e o tamanho da janela sobre o array pai. Se, como no exemplo abaixo, um fatiamento é criado a partir dos três primeiros elementos de um array (_indices_ 0 a 2), então, independentemente das alterações feitas no array pai, e contanto que contenha pelo menos três elementos, a cópia superficial sempre conterá os três primeiros elementos do array pai.
 
 Além disso, uma vez que a cópia superficial é criada, operações na cópia são refletidas no array pai. Adicionar um elemento ao final da cópia superficial, como é feito no exemplo a seguir, ampliará a janela em um elemento e também inserirá esse elemento no array pai no _index_ 3. Neste exemplo, para fatiar o subconjunto do _index_ 0 ao _index_ 2 do array `a`, deve-se usar `_sliceOfA = array.slice(a, 0, 3)`:
 
@@ -630,9 +630,9 @@ Scripts que utilizam arrays também podem gerar erros de __execução__, que apa
 
 ## Index xx Está Fora dos Limites. Tamanho do Array é yy
 
-Este provavelmente será o erro mais frequente que encontrará. Ocorrerá quando referenciar um _index_ de array inexistente. O valor "xx" será o valor do _index_ problemático que tentou usar, e "yy" será o tamanho do array. Lembre-se de que os _índices_ de array começam em zero — não em um — e terminam no tamanho do array menos um. Portanto, o último _index_ válido de um array de tamanho 3 é 2.
+Este provavelmente será o erro mais frequente que encontrará. Ocorrerá quando referenciar um _index_ de array inexistente. O valor "xx" será o valor do _index_ problemático que tentou usar, e "yy" será o tamanho do array. Lembre-se de que os _indices_ de array começam em zero — não em um — e terminam no tamanho do array menos um. Portanto, o último _index_ válido de um array de tamanho 3 é 2.
 
-Para evitar esse erro, é necessário fazer previsões na lógica do código para evitar o uso de um _index_ que esteja fora dos limites de _index_ do array. Este código gerará o erro porque o último _index_ usado no loop está fora do intervalo de _índices_ válidos para o array:
+Para evitar esse erro, é necessário fazer previsões na lógica do código para evitar o uso de um _index_ que esteja fora dos limites de _index_ do array. Este código gerará o erro porque o último _index_ usado no loop está fora do intervalo de _indices_ válidos para o array:
 
 ```c
 //@version=5
@@ -715,11 +715,11 @@ Este erro ocorrerá se [array.shift()](https://br.tradingview.com/pine-script-re
 Este erro ocorrerá se [array.pop()](https://br.tradingview.com/pine-script-reference/v5/#fun_array{dot}pop) for chamado para remover o último elemento de um array vazio.
 
 ## Index 'De' deve ser Menor que o Index 'Para'
-Quando dois _índices_ são utilizados em funções como [array.slice()](https://br.tradingview.com/pine-script-reference/v5/#fun_array{dot}slice), o primeiro _index_ deve sempre ser menor que o segundo.
+Quando dois _indices_ são utilizados em funções como [array.slice()](https://br.tradingview.com/pine-script-reference/v5/#fun_array{dot}slice), o primeiro _index_ deve sempre ser menor que o segundo.
 
 ## Slice (_Fatiamento_) está Fora dos Limites do Array Pai
 
-Esta mensagem ocorre sempre que o tamanho do array pai é modificado de tal maneira que faz a cópia superficial criada por um _slice_ apontar para fora dos limites do array pai. Este código reproduzirá esse erro porque, após criar um _slice_ do _index_ 3 ao 4 (os dois últimos elementos do array pai de cinco elementos), remove-se o primeiro elemento do pai, fazendo com que seu tamanho seja reduzido para quatro e seu último _index_ para 3. A partir desse momento, a cópia superficial, que ainda está apontando para "_window_" "_janela_" nos _índices_ 3 a 4 do array pai, está apontando para fora dos limites do array pai:
+Esta mensagem ocorre sempre que o tamanho do array pai é modificado de tal maneira que faz a cópia superficial criada por um _slice_ apontar para fora dos limites do array pai. Este código reproduzirá esse erro porque, após criar um _slice_ do _index_ 3 ao 4 (os dois últimos elementos do array pai de cinco elementos), remove-se o primeiro elemento do pai, fazendo com que seu tamanho seja reduzido para quatro e seu último _index_ para 3. A partir desse momento, a cópia superficial, que ainda está apontando para "_window_" "_janela_" nos _indices_ 3 a 4 do array pai, está apontando para fora dos limites do array pai:
 
 ```c
 //@version=5

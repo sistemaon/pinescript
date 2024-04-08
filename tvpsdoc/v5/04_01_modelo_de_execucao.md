@@ -129,7 +129,7 @@ plot(customIndex, "Custom index", color = color.red, style = plot.style_cross)
 
 __Note que:__
 
-- A função [nz()](https://br.tradingview.com/pine-script-reference/v5/#fun_nz) substitui os valores [na](https://br.tradingview.com/pine-script-reference/v5/#var_na) "não disponível" por um valor de substituição (`replacement`) especificado (0 por padrão (_default_)). Na primeira barra do script, quando a série de índices (`index`) não tem histórico, o valor [na](https://br.tradingview.com/pine-script-reference/v5/#var_na) é substituído por -1 antes de adicionar 1 para retornar um valor inicial de 0.
+- A função [nz()](https://br.tradingview.com/pine-script-reference/v5/#fun_nz) substitui os valores [na](https://br.tradingview.com/pine-script-reference/v5/#var_na) "não disponível" por um valor de substituição (`replacement`) especificado (0 por padrão (_default_)). Na primeira barra do script, quando a série de _indices_ (`index`) não tem histórico, o valor [na](https://br.tradingview.com/pine-script-reference/v5/#var_na) é substituído por -1 antes de adicionar 1 para retornar um valor inicial de 0.
 
 Ao inspecionar o gráfico, observamos que os dois plots diferem drasticamente. A razão para este comportamento é que o script chamou a função `calcBarIndex()` dentro do escopo de uma estrutura [if](https://br.tradingview.com/pine-script-reference/v5/#op_if) em cada outra barra, resultando em uma saída histórica inconsistente com a série `bar_index`. Ao chamar a função uma vez a cada duas barras, referenciar internamente o valor anterior do `index` obtém o valor de duas barras atrás, ou seja, a última barra em que a função foi executada. Esse comportamento resulta em um valor `customIndex` equivalente à metade do `bar_index` integrado.
 

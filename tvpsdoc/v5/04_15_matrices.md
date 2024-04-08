@@ -74,7 +74,7 @@ O exemplo abaixo define uma _matrix_ quadrada `m` com duas linhas e colunas e um
 
 O script _plota_ o valor de cada elemento no gráfico:
 
-![Leitura e escrita de elementos de matrix](./imgs/Matrices-Reading-and-writing-matrix-elements-1.png)
+![Leitura e escrita de elementos de matrix 01](./imgs/Matrices-Reading-and-writing-matrix-elements-1.png)
 
 ```c
 //@version=5
@@ -95,8 +95,39 @@ plot(m.get(1, 0), "Row 1, Column 0 Value", color.green, 2)
 plot(m.get(1, 1), "Row 1, Column 1 Value", color.blue, 2)
 ```
 
-<!-- ## `matrix.fill()` -->
+## `matrix.fill()`
 
+Para sobrescrever todos os elementos da _matrix_ com um valor específico, utiliza-se [matrix.fill()](https://br.tradingview.com/pine-script-reference/v5/#fun_matrix.fill). Essa função direciona todos os itens na _matrix_ inteira ou dentro do intervalo de _indices_ `from_row/column` a `to_row/column` para o `value` especificado na chamada.
 
+Por exemplo, este exemplo declara uma _matrix_ quadrada 4x4 e, em seguida, preenche seus elementos com um valor [random](https://br.tradingview.com/pine-script-reference/v5/#fun_math.random) (_aleatório_):
 
+```c
+myMatrix = matrix.new<float>(4, 4)
+myMatrix.fill(math.random())
+```
 
+Observe que, ao usar [matrix.fill()](https://br.tradingview.com/pine-script-reference/v5/#fun_matrix.fill) com _matrices_ contendo tipos especiais ([line](https://br.tradingview.com/pine-script-reference/v5/#type_line), [linefill](https://br.tradingview.com/pine-script-reference/v5/#type_linefill), [box](https://br.tradingview.com/pine-script-reference/v5/#type_box), [polyline](https://br.tradingview.com/pine-script-reference/v5/#type_polyline), [label](https://br.tradingview.com/pine-script-reference/v5/#type_label), [table](https://br.tradingview.com/pine-script-reference/v5/#type_table) ou [chart.point](https://br.tradingview.com/pine-script-reference/v5/#type_chart.point)) ou [UDTs](./04_09_tipagem_do_sistema.md#tipos-definidos-pelo-usuário), todos os elementos substituídos apontarão para o mesmo objeto passado na chamada da função.
+
+Este script declara uma _matrix_ com quatro linhas e colunas de referências de [_label_](https://br.tradingview.com/pine-script-reference/v5/#type_label), que são preenchidas com um novo objeto de[ _label_](https://br.tradingview.com/pine-script-reference/v5/#type_label) na primeira barra. Em cada barra, o script define o atributo `x` da _label_ referenciada na linha 0, coluna 0 para [bar_index](https://br.tradingview.com/pine-script-reference/v5/#var_bar_index), e o atributo `text` daquela referenciada na linha 3, coluna 3 para o número de _labels_ no gráfico. Embora a _matrix_ possa referenciar 16 (4x4) _labels_, cada elemento aponta para a _mesma_ instância, resultando em apenas uma _label_ no gráfico que atualiza seus atributos `x` e `text` a cada barra:
+
+![Leitura e escrita de elementos de matrix 02](./imgs/Matrices-Reading-and-writing-matrix-elements-2.png)
+
+```c
+//@version=5
+indicator("Object matrix fill demo")
+
+//@variable A 4x4 label matrix.
+var matrix<label> m = matrix.new<label>(4, 4)
+
+// Fill `m` with a new label object on the first bar.
+if bar_index == 0
+    m.fill(label.new(0, 0, textcolor = color.white, size = size.huge))
+
+//@variable The number of label objects on the chart.
+int numLabels = label.all.size()
+
+// Set the `x` of the label from the first row and column to `bar_index`.
+m.get(0, 0).set_x(bar_index)
+// Set the `text` of the label at the last row and column to the number of labels.
+m.get(3, 3).set_text(str.format("Total labels on the chart: {0}", numLabels))
+```
