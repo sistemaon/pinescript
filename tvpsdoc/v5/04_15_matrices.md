@@ -131,3 +131,109 @@ m.get(0, 0).set_x(bar_index)
 // Set the `text` of the label at the last row and column to the number of labels.
 m.get(3, 3).set_text(str.format("Total labels on the chart: {0}", numLabels))
 ```
+
+
+# Linhas e Colunas
+
+## Resgatando
+
+_Matrices_ facilitam recuperar todos os valores de uma linha ou coluna específica por meio das funções [matrix.row()](https://br.tradingview.com/pine-script-reference/v5/#fun_matrix.row) e [matrix.col()](https://br.tradingview.com/pine-script-reference/v5/#fun_matrix.col). Essas funções retornam os valores como um objeto [array](https://br.tradingview.com/pine-script-reference/v5/#type_array) dimensionado de acordo com a outra dimensão da _matrix_, isto é, o tamanho de um array [matrix.row()](https://br.tradingview.com/pine-script-reference/v5/#fun_matrix.row) é igual ao [número de colunas](https://br.tradingview.com/pine-script-reference/v5/#fun_matrix.columns) e o tamanho de um array [matrix.col()](https://br.tradingview.com/pine-script-reference/v5/#fun_matrix.col) é igual ao [número de linhas](https://br.tradingview.com/pine-script-reference/v5/#fun_matrix.rows).
+
+O script abaixo preenche uma _matrix_ `m` 3x2 com os valores de 1 a 6 na primeira barra do gráfico. Ele chama os métodos [m.row()](https://br.tradingview.com/pine-script-reference/v5/#fun_matrix.row) e [m.col()](https://br.tradingview.com/pine-script-reference/v5/#fun_matrix.col) para acessar os arrays da primeira linha e coluna da _matrix_ e os exibe no gráfico em uma _label_ junto com os tamanhos dos arrays:
+
+![Linhas e colunas resgatando 01](./imgs/Matrices-Rows-and-columns-Retrieving-1.png)
+
+```c
+//@version=5
+indicator("Retrieving rows and columns demo")
+
+//@variable A 3x2 rectangular matrix.
+var matrix<float> m = matrix.new<float>(3, 2)
+
+if bar_index == 0
+    m.set(0, 0, 1.0) // Set row 0, column 0 value to 1.
+    m.set(0, 1, 2.0) // Set row 0, column 1 value to 2.
+    m.set(1, 0, 3.0) // Set row 1, column 0 value to 3.
+    m.set(1, 1, 4.0) // Set row 1, column 1 value to 4.
+    m.set(2, 0, 5.0) // Set row 1, column 0 value to 5.
+    m.set(2, 1, 6.0) // Set row 1, column 1 value to 6.
+
+//@variable The first row of the matrix.
+array<float> row0 = m.row(0)
+//@variable The first column of the matrix.
+array<float> column0 = m.col(0)
+
+//@variable Displays the first row and column of the matrix and their sizes in a label.
+var label debugLabel = label.new(0, 0, color = color.blue, textcolor = color.white, size = size.huge)
+debugLabel.set_x(bar_index)
+debugLabel.set_text(str.format("Row 0: {0}, Size: {1}\nCol 0: {2}, Size: {3}", row0, m.columns(), column0, m.rows()))
+```
+
+Observa-se que:
+
+- Para obter os tamanhos dos arrays exibidos no _label_, empregaram-se os métodos [rows()](https://br.tradingview.com/pine-script-reference/v5/#fun_matrix.rows) e [columns()](https://br.tradingview.com/pine-script-reference/v5/#fun_matrix.columns) em vez de [array.size()](https://br.tradingview.com/pine-script-reference/v5/#fun_array.size), para demonstrar que o tamanho do array `row0` é igual ao número de colunas e o tamanho do array `column0` é igual ao número de linhas.
+
+As funções [matrix.row()](https://br.tradingview.com/pine-script-reference/v5/#fun_matrix.row) e [matrix.col()](https://br.tradingview.com/pine-script-reference/v5/#fun_matrix.col) copiam as referências em uma linha/coluna para um novo [array](https://br.tradingview.com/pine-script-reference/v5/#type_array). Modificações nos [arrays](./04_14_arrays.md) retornados por essas funções não afetam diretamente os elementos ou a estrutura de uma _matrix_.
+
+Aqui, o script anterior foi modificado para definir o primeiro elemento de `row0` como 10 por meio do método [array.set()](https://br.tradingview.com/pine-script-reference/v5/#fun_array.set) antes de exibir o _label_. Este script também _plota_ o valor da linha 0, coluna 0. Observa-se que o _label_ indica que o primeiro elemento do array `row0` é 10. No entanto, o [_plot_](https://br.tradingview.com/pine-script-reference/v5/#fun_plot) mostra que o elemento correspondente na _matrix_ ainda tem um valor de 1:
+
+![Linhas e colunas resgatando 02](./imgs/Matrices-Rows-and-columns-Retrieving-2.png)
+
+```c
+//@version=5
+indicator("Retrieving rows and columns demo")
+
+//@variable A 3x2 rectangular matrix.
+var matrix<float> m = matrix.new<float>(3, 2)
+
+if bar_index == 0
+    m.set(0, 0, 1.0) // Set row 0, column 0 value to 1.
+    m.set(0, 1, 2.0) // Set row 0, column 1 value to 2.
+    m.set(1, 0, 3.0) // Set row 1, column 0 value to 3.
+    m.set(1, 1, 4.0) // Set row 1, column 1 value to 4.
+    m.set(2, 0, 5.0) // Set row 1, column 0 value to 5.
+    m.set(2, 1, 6.0) // Set row 1, column 1 value to 6.
+
+//@variable The first row of the matrix.
+array<float> row0 = m.row(0)
+//@variable The first column of the matrix.
+array<float> column0 = m.col(0)
+
+// Set the first `row` element to 10.
+row0.set(0, 10)
+
+//@variable Displays the first row and column of the matrix and their sizes in a label.
+var label debugLabel = label.new(0, m.get(0, 0), color = color.blue, textcolor = color.white, size = size.huge)
+debugLabel.set_x(bar_index)
+debugLabel.set_text(str.format("Row 0: {0}, Size: {1}\nCol 0: {2}, Size: {3}", row0, m.columns(), column0, m.rows()))
+
+// Plot the first element of `m`.
+plot(m.get(0, 0), linewidth = 3)
+```
+
+Embora as alterações em um [array](https://br.tradingview.com/pine-script-reference/v5/#type_array) retornado por [matrix.row()](https://br.tradingview.com/pine-script-reference/v5/#fun_matrix.row) ou [matrix.col()](https://br.tradingview.com/pine-script-reference/v5/#fun_matrix.col) não afetem diretamente uma _matrix_ pai, é importante notar que o array resultante de uma _matrix_ contendo [UDTs](./04_09_tipagem_do_sistema.md#tipos-definidos-pelo-usuário) ou tipos especiais, incluindo [line](https://br.tradingview.com/pine-script-reference/v5/#type_line), [linefill](https://br.tradingview.com/pine-script-reference/v5/#type_linefill), [box](https://br.tradingview.com/pine-script-reference/v5/#type_box), [polyline](https://br.tradingview.com/pine-script-reference/v5/#type_polyline), [label](https://br.tradingview.com/pine-script-reference/v5/#type_label), [table](https://br.tradingview.com/pine-script-reference/v5/#type_table) ou [chart.point](https://br.tradingview.com/pine-script-reference/v5/#type_chart.point), comporta-se como uma _shallow copy_ (_cópia superficial_) de uma linha/coluna, ou seja, os elementos dentro de um array retornado dessas funções apontam para os mesmos objetos que os elementos correspondentes na _matrix_.
+
+Este script contém um tipo personalizado `myUDT` que inclui um campo de `value` com um valor inicial de 0. Ele declara uma _matrix_ `m` 1x1 para conter uma única instância de `myUDT` na primeira barra, depois chama `m.row(0)` para copiar a primeira linha da _matrix_ como um [array](https://br.tradingview.com/pine-script-reference/v5/#type_array). Em cada barra do gráfico, o script adiciona 1 ao campo `value` do primeiro elemento do array da `row` (_linha_). Neste caso, o campo `value` do elemento da _matrix_ também aumenta a cada barra, pois ambos os elementos referenciam o mesmo objeto:
+
+```c
+//@version=5
+indicator("Row with reference types demo")
+
+//@type A custom type that holds a float value.
+type myUDT
+    float value = 0.0
+
+//@variable A 1x1 matrix of `myUDT` type.
+var matrix<myUDT> m = matrix.new<myUDT>(1, 1, myUDT.new())
+//@variable A shallow copy of the first row of `m`.
+array<myUDT> row = m.row(0)
+//@variable The first element of the `row`.
+myUDT firstElement = row.get(0)
+
+firstElement.value += 1.0 // Add 1 to the `value` field of `firstElement`. Also affects the element in the matrix.
+
+plot(m.get(0, 0).value, linewidth = 3) // Plot the `value` of the `myUDT` object from the first row and column of `m`.
+```
+
+
+
