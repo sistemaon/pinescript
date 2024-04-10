@@ -235,5 +235,64 @@ firstElement.value += 1.0 // Add 1 to the `value` field of `firstElement`. Also 
 plot(m.get(0, 0).value, linewidth = 3) // Plot the `value` of the `myUDT` object from the first row and column of `m`.
 ```
 
+## Inserindo
 
+Scripts podem adicionar novas linhas e colunas a uma _matrix_ por meio de [matrix.add_row()](https://br.tradingview.com/pine-script-reference/v5/#fun_matrix.add_row) e [matrix.add_col()](https://br.tradingview.com/pine-script-reference/v5/#fun_matrix.add_col). Essas funções inserem as referências de valor de um [array](https://br.tradingview.com/pine-script-reference/v5/#type_array) em uma _matrix_ no _index_ de `row/column` (_linha/coluna_) especificado. Se a _matrix_ `id` estiver vazia (sem linhas ou colunas), o `array_id` na chamada pode ser de qualquer tamanho. Se uma linha/coluna existir no _index_ especificado, a _matrix_ aumenta o valor do _index_ para a linha/coluna existente e todas as subsequentes em 1.
 
+O script abaixo declara uma _matrix_ `m` vazia e insere linhas e colunas usando os métodos [m.add_row()](https://br.tradingview.com/pine-script-reference/v5/#fun_matrix.add_row) e [m.add_col()](https://br.tradingview.com/pine-script-reference/v5/#fun_matrix.add_col). Primeiro, insere um array com três elementos na linha 0, transformando `m` em uma _matrix_ 1x3, depois outro na linha 1, alterando a forma para 2x3. Em seguida, o script insere outro array na linha 0, o que muda a forma de `m` para 3x3 e desloca o _index_ de todas as linhas anteriormente no _index_ 0 ou mais. Insere outro array no último _index_ de coluna, mudando a forma para 3x4. Por fim, adiciona um array com quatro valores no _index_ da última linha.
+
+A _matrix_ resultante tem quatro linhas e colunas e contém valores de 1 a 16 em ordem ascendente. O script exibe as linhas de `m` após cada inserção de linha/coluna com uma função `debugLabel()` definida pelo usuário para visualizar o processo:
+
+![Linhas e colunas inserindo](./imgs/Matrices-Rows-and-columns-Inserting-1.png)
+
+```c
+//@version=5
+indicator("Rows and columns demo")
+
+//@function Displays the rows of a matrix in a label with a note.
+//@param    this The matrix to display.
+//@param    barIndex The `bar_index` to display the label at.
+//@param    bgColor The background color of the label.
+//@param    textColor The color of the label's text.
+//@param    note The text to display above the rows.
+method debugLabel(
+     matrix<float> this, int barIndex = bar_index, color bgColor = color.blue,
+     color textColor = color.white, string note = ""
+ ) =>
+    labelText = note + "\n" + str.tostring(this)
+    if barstate.ishistory
+        label.new(
+             barIndex, 0, labelText, color = bgColor, style = label.style_label_center,
+             textcolor = textColor, size = size.huge
+         )
+
+//Create an empty matrix.
+var m = matrix.new<float>()
+
+if bar_index == last_bar_index - 1
+    debugLabel(m, bar_index - 30, note = "Empty matrix")
+
+    // Insert an array at row 0. `m` will now have 1 row and 3 columns.
+    m.add_row(0, array.from(5, 6, 7))
+    debugLabel(m, bar_index - 20, note = "New row at\nindex 0")
+
+    // Insert an array at row 1. `m` will now have 2 rows and 3 columns.
+    m.add_row(1, array.from(9, 10, 11))
+    debugLabel(m, bar_index - 10, note = "New row at\nindex 1")
+
+    // Insert another array at row 0. `m` will now have 3 rows and 3 columns.
+    // The values previously on row 0 will now be on row 1, and the values from row 1 will be on row 2.
+    m.add_row(0, array.from(1, 2, 3))
+    debugLabel(m, bar_index, note = "New row at\nindex 0")
+
+    // Insert an array at column 3. `m` will now have 3 rows and 4 columns.
+    m.add_col(3, array.from(4, 8, 12))
+    debugLabel(m, bar_index + 10, note = "New column at\nindex 3")
+
+    // Insert an array at row 3. `m` will now have 4 rows and 4 columns.
+    m.add_row(3, array.from(13, 14, 15, 16))
+    debugLabel(m, bar_index + 20, note = "New row at\nindex 3")
+```
+
+> __Observação__\
+> Assim como as _matrices_ de linhas ou colunas [resgatados](./04_15_matrices.md#resgatando) de uma _matrix_ de instâncias do tipo [line](https://br.tradingview.com/pine-script-reference/v5/#type_line), [linefill](https://br.tradingview.com/pine-script-reference/v5/#type_linefill), [box](https://br.tradingview.com/pine-script-reference/v5/#type_box), [polyline](https://br.tradingview.com/pine-script-reference/v5/#type_polyline), [label](https://br.tradingview.com/pine-script-reference/v5/#type_label), [table](https://br.tradingview.com/pine-script-reference/v5/#type_table), [chart.point](https://br.tradingview.com/pine-script-reference/v5/#type_chart.point) ou [UDTs](./04_09_tipagem_do_sistema.md#tipos-definidos-pelo-usuário) comportam-se como cópias superficiais, os elementos de _matrices_ contendo tais tipos referenciam os mesmos objetos que os [arrays](./04_14_arrays.md) inseridos nelas. Modificações nos valores dos elementos em qualquer um dos objetos afetam o outro nesses casos.
