@@ -296,3 +296,23 @@ if bar_index == last_bar_index - 1
 
 > __Observação__\
 > Assim como as _matrices_ de linhas ou colunas [resgatados](./04_15_matrices.md#resgatando) de uma _matrix_ de instâncias do tipo [line](https://br.tradingview.com/pine-script-reference/v5/#type_line), [linefill](https://br.tradingview.com/pine-script-reference/v5/#type_linefill), [box](https://br.tradingview.com/pine-script-reference/v5/#type_box), [polyline](https://br.tradingview.com/pine-script-reference/v5/#type_polyline), [label](https://br.tradingview.com/pine-script-reference/v5/#type_label), [table](https://br.tradingview.com/pine-script-reference/v5/#type_table), [chart.point](https://br.tradingview.com/pine-script-reference/v5/#type_chart.point) ou [UDTs](./04_09_tipagem_do_sistema.md#tipos-definidos-pelo-usuário) comportam-se como cópias superficiais, os elementos de _matrices_ contendo tais tipos referenciam os mesmos objetos que os [arrays](./04_14_arrays.md) inseridos nelas. Modificações nos valores dos elementos em qualquer um dos objetos afetam o outro nesses casos.
+
+## Removendo
+
+Para remover uma linha ou coluna específica de uma _matrix_, utiliza-se [matrix.remove_row()](https://br.tradingview.com/pine-script-reference/v5/#fun_matrix.remove_row) e [matrix.remove_col()](https://br.tradingview.com/pine-script-reference/v5/#fun_matrix.remove_col). Essas funções removem a linha/coluna especificada e diminuem os valores dos _indices_ de todas as linhas/colunas subsequentes em 1.
+
+Para este exemplo, adicionaram-se estas linhas de código ao script de demonstração "_Rows and columns demo_" da [seção anterior](./04_15_matrices.md#inserindo):
+
+```c
+// Removing example
+
+    // Remove the first row and last column from the matrix. `m` will now have 3 rows and 3 columns.
+    m.remove_row(0)
+    m.remove_col(3)
+    debugLabel(m, bar_index + 30, color.red, note = "Removed row 0\nand column 3")
+```
+
+Este código elimina a primeira linha e a última coluna da _matrix_ `m` utilizando os métodos [m.remove_row()](https://br.tradingview.com/pine-script-reference/v5/#fun_matrix.remove_row) e [m.remove_col()](https://br.tradingview.com/pine-script-reference/v5/#fun_matrix.remove_col), e exibe as linhas em uma _label_ em `bar_index + 30`. Como pode-se observar, `m` assume a forma 3x3 após a execução deste bloco, e os valores dos _indices_ para todas as linhas existentes são reduzidos em 1:
+
+![Linhas e colunas removendo](./imgs/Matrices-Rows-and-columns-Removing-1.png)
+
