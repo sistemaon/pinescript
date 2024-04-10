@@ -717,9 +717,9 @@ Este erro ocorrerá se [array.pop()](https://br.tradingview.com/pine-script-refe
 ## Index 'De' deve ser Menor que o Index 'Para'
 Quando dois _indices_ são utilizados em funções como [array.slice()](https://br.tradingview.com/pine-script-reference/v5/#fun_array{dot}slice), o primeiro _index_ deve sempre ser menor que o segundo.
 
-## Slice (_Fatiamento_) está Fora dos Limites do Array Pai
+## Fatiamento (_Slice_) está Fora dos Limites do Array Pai
 
-Esta mensagem ocorre sempre que o tamanho do array pai é modificado de tal maneira que faz a cópia superficial criada por um _slice_ apontar para fora dos limites do array pai. Este código reproduzirá esse erro porque, após criar um _slice_ do _index_ 3 ao 4 (os dois últimos elementos do array pai de cinco elementos), remove-se o primeiro elemento do pai, fazendo com que seu tamanho seja reduzido para quatro e seu último _index_ para 3. A partir desse momento, a cópia superficial, que ainda está apontando para "_window_" "_janela_" nos _indices_ 3 a 4 do array pai, está apontando para fora dos limites do array pai:
+Esta mensagem ocorre sempre que o tamanho do array pai é modificado de tal maneira que faz a cópia superficial criada por um _slice_ apontar para fora dos limites do array pai. Este código reproduzirá esse erro porque, após criar um _slice_ do _index_ 3 ao 4 (os dois últimos elementos do array pai de cinco elementos), remove-se o primeiro elemento do pai, fazendo com que seu tamanho seja reduzido para quatro e seu último _index_ para 3. A partir desse momento, a cópia superficial, que ainda está apontando para "janela" ("_window_") nos _indices_ 3 a 4 do array pai, está apontando para fora dos limites do array pai:
 
 ```c
 //@version=5

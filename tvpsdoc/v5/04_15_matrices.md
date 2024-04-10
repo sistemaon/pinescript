@@ -316,3 +316,20 @@ Este código elimina a primeira linha e a última coluna da _matrix_ `m` utiliza
 
 ![Linhas e colunas removendo](./imgs/Matrices-Rows-and-columns-Removing-1.png)
 
+## Trocando (_Swapping_)
+
+Para trocar as linhas e colunas de uma _matrix_ sem alterar suas dimensões, utiliza-se [matrix.swap_rows()](https://br.tradingview.com/pine-script-reference/v5/#fun_matrix.swap_rows) e [matrix.swap_columns()](https://br.tradingview.com/pine-script-reference/v5/#fun_matrix.swap_columns). Essas funções trocam as posições dos elementos nos _indices_ `row1/column1` e `row2/column2`.
+
+Adicionam-se as seguintes linhas ao [exemplo anterior](./04_15_matrices.md#removendo), que trocam a primeira e a última linhas de `m` e exibem as alterações no _label_ em `bar_index + 40`:
+
+```c
+// Swapping example
+
+    // Swap the first and last row. `m` retains the same dimensions.
+    m.swap_rows(0, 2)
+    debugLabel(m, bar_index + 40, color.purple, note = "Swapped rows 0\nand 2")
+```
+
+No novo _label_, observa-se que a _matrix_ mantém o mesmo número de linhas que antes, e as primeiras e últimas linhas trocaram de posições:
+
+![Linhas e colunas trocando](./imgs/Matrices-Rows-and-columns-Swapping-1.png)
