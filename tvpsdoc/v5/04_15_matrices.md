@@ -333,3 +333,51 @@ Adicionam-se as seguintes linhas ao [exemplo anterior](./04_15_matrices.md#remov
 No novo _label_, observa-se que a _matrix_ mantém o mesmo número de linhas que antes, e as primeiras e últimas linhas trocaram de posições:
 
 ![Linhas e colunas trocando](./imgs/Matrices-Rows-and-columns-Swapping-1.png)
+
+## Substituindo
+
+Em alguns casos, pode ser desejável _substituir_ completamente uma linha ou coluna em uma _matrix_. Para fazer isso, [insere](./04_15_matrices.md#inserindo)-se o novo array no _index_ da `row/column` (_linha/coluna_) desejada e [remove](./04_15_matrices.md#removendo)-se os elementos antigos que estavam anteriormente naquele _index_.
+
+No código a seguir, definiu-se um método `replaceRow()` que utiliza o método [add_row()](https://br.tradingview.com/pine-script-reference/v5/#fun_matrix.add_row) para inserir os novos `values` (_valores_) no index da `row` (_linha_) e o método [remove_row()](https://br.tradingview.com/pine-script-reference/v5/#fun_matrix.remove_row) para eliminar a linha antiga que foi deslocada para o _index_ `row + 1`. Este script utiliza o método `replaceRow()` para preencher as linhas de uma matriz 3x3 com os números de 1 a 9. Ele desenha um _label_ no gráfico antes e depois de substituir as linhas usando o método customizado `debugLabel()`:
+
+![Linhas e colunas substituindo](./imgs/Matrices-Rows-and-columns-Replacing-1.png)
+
+```c
+//@version=5
+indicator("Replacing rows demo")
+
+//@function Displays the rows of a matrix in a label with a note.
+//@param    this The matrix to display.
+//@param    barIndex The `bar_index` to display the label at.
+//@param    bgColor The background color of the label.
+//@param    textColor The color of the label's text.
+//@param    note The text to display above the rows.
+method debugLabel(
+     matrix<float> this, int barIndex = bar_index, color bgColor = color.blue,
+     color textColor = color.white, string note = ""
+ ) =>
+    labelText = note + "\n" + str.tostring(this)
+    if barstate.ishistory
+        label.new(
+             barIndex, 0, labelText, color = bgColor, style = label.style_label_center,
+             textcolor = textColor, size = size.huge
+         )
+
+//@function Replaces the `row` of `this` matrix with a new array of `values`.
+//@param    row The row index to replace.
+//@param    values The array of values to insert.
+method replaceRow(matrix<float> this, int row, array<float> values) =>
+    this.add_row(row, values) // Inserts a copy of the `values` array at the `row`.
+    this.remove_row(row + 1)  // Removes the old elements previously at the `row`.
+
+//@variable A 3x3 matrix.
+var matrix<float> m = matrix.new<float>(3, 3, 0.0)
+
+if bar_index == last_bar_index - 1
+    m.debugLabel(note = "Original")
+    // Replace each row of `m`.
+    m.replaceRow(0, array.from(1.0, 2.0, 3.0))
+    m.replaceRow(1, array.from(4.0, 5.0, 6.0))
+    m.replaceRow(2, array.from(7.0, 8.0, 9.0))
+    m.debugLabel(bar_index + 10, note = "Replaced rows")
+```
