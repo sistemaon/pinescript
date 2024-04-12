@@ -106,7 +106,7 @@ myMatrix = matrix.new<float>(4, 4)
 myMatrix.fill(math.random())
 ```
 
-Observe que, ao usar [matrix.fill()](https://br.tradingview.com/pine-script-reference/v5/#fun_matrix.fill) com _matrices_ contendo tipos especiais ([line](https://br.tradingview.com/pine-script-reference/v5/#type_line), [linefill](https://br.tradingview.com/pine-script-reference/v5/#type_linefill), [box](https://br.tradingview.com/pine-script-reference/v5/#type_box), [polyline](https://br.tradingview.com/pine-script-reference/v5/#type_polyline), [label](https://br.tradingview.com/pine-script-reference/v5/#type_label), [table](https://br.tradingview.com/pine-script-reference/v5/#type_table) ou [chart.point](https://br.tradingview.com/pine-script-reference/v5/#type_chart.point)) ou [UDTs](./04_09_tipagem_do_sistema.md#tipos-definidos-pelo-usuário), todos os elementos substituídos apontarão para o mesmo objeto passado na chamada da função.
+Observe que, ao usar [matrix.fill()](https://br.tradingview.com/pine-script-reference/v5/#fun_matrix.fill) com _matrices_ contendo tipos especiais ([line](https://br.tradingview.com/pine-script-reference/v5/#type_line), [linefill](https://br.tradingview.com/pine-script-reference/v5/#type_linefill), [box](https://br.tradingview.com/pine-script-reference/v5/#type_box), [polyline](https://br.tradingview.com/pine-script-reference/v5/#type_polyline), [label](https://br.tradingview.com/pine-script-reference/v5/#type_label), [table](https://br.tradingview.com/pine-script-reference/v5/#type_table) ou [chart.point](https://br.tradingview.com/pine-script-reference/v5/#type_chart.point)) ou [_UDTs_](./04_09_tipagem_do_sistema.md#tipos-definidos-pelo-usuário), todos os elementos substituídos apontarão para o mesmo objeto passado na chamada da função.
 
 Este script declara uma _matrix_ com quatro linhas e colunas de referências de [_label_](https://br.tradingview.com/pine-script-reference/v5/#type_label), que são preenchidas com um novo objeto de[ _label_](https://br.tradingview.com/pine-script-reference/v5/#type_label) na primeira barra. Em cada barra, o script define o atributo `x` da _label_ referenciada na linha 0, coluna 0 para [bar_index](https://br.tradingview.com/pine-script-reference/v5/#var_bar_index), e o atributo `text` daquela referenciada na linha 3, coluna 3 para o número de _labels_ no gráfico. Embora a _matrix_ possa referenciar 16 (4x4) _labels_, cada elemento aponta para a _mesma_ instância, resultando em apenas uma _label_ no gráfico que atualiza seus atributos `x` e `text` a cada barra:
 
@@ -211,7 +211,7 @@ debugLabel.set_text(str.format("Row 0: {0}, Size: {1}\nCol 0: {2}, Size: {3}", r
 plot(m.get(0, 0), linewidth = 3)
 ```
 
-Embora as alterações em um [array](https://br.tradingview.com/pine-script-reference/v5/#type_array) retornado por [matrix.row()](https://br.tradingview.com/pine-script-reference/v5/#fun_matrix.row) ou [matrix.col()](https://br.tradingview.com/pine-script-reference/v5/#fun_matrix.col) não afetem diretamente uma _matrix_ pai, é importante notar que o array resultante de uma _matrix_ contendo [UDTs](./04_09_tipagem_do_sistema.md#tipos-definidos-pelo-usuário) ou tipos especiais, incluindo [line](https://br.tradingview.com/pine-script-reference/v5/#type_line), [linefill](https://br.tradingview.com/pine-script-reference/v5/#type_linefill), [box](https://br.tradingview.com/pine-script-reference/v5/#type_box), [polyline](https://br.tradingview.com/pine-script-reference/v5/#type_polyline), [label](https://br.tradingview.com/pine-script-reference/v5/#type_label), [table](https://br.tradingview.com/pine-script-reference/v5/#type_table) ou [chart.point](https://br.tradingview.com/pine-script-reference/v5/#type_chart.point), comporta-se como uma _shallow copy_ (_cópia superficial_) de uma linha/coluna, ou seja, os elementos dentro de um array retornado dessas funções apontam para os mesmos objetos que os elementos correspondentes na _matrix_.
+Embora as alterações em um [array](https://br.tradingview.com/pine-script-reference/v5/#type_array) retornado por [matrix.row()](https://br.tradingview.com/pine-script-reference/v5/#fun_matrix.row) ou [matrix.col()](https://br.tradingview.com/pine-script-reference/v5/#fun_matrix.col) não afetem diretamente uma _matrix_ pai, é importante notar que o array resultante de uma _matrix_ contendo [_UDTs_](./04_09_tipagem_do_sistema.md#tipos-definidos-pelo-usuário) ou tipos especiais, incluindo [line](https://br.tradingview.com/pine-script-reference/v5/#type_line), [linefill](https://br.tradingview.com/pine-script-reference/v5/#type_linefill), [box](https://br.tradingview.com/pine-script-reference/v5/#type_box), [polyline](https://br.tradingview.com/pine-script-reference/v5/#type_polyline), [label](https://br.tradingview.com/pine-script-reference/v5/#type_label), [table](https://br.tradingview.com/pine-script-reference/v5/#type_table) ou [chart.point](https://br.tradingview.com/pine-script-reference/v5/#type_chart.point), comporta-se como uma _shallow copy_ (_cópia superficial_) de uma linha/coluna, ou seja, os elementos dentro de um array retornado dessas funções apontam para os mesmos objetos que os elementos correspondentes na _matrix_.
 
 Este script contém um tipo personalizado `myUDT` que inclui um campo de `value` com um valor inicial de 0. Ele declara uma _matrix_ `m` 1x1 para conter uma única instância de `myUDT` na primeira barra, depois chama `m.row(0)` para copiar a primeira linha da _matrix_ como um [array](https://br.tradingview.com/pine-script-reference/v5/#type_array). Em cada barra do gráfico, o script adiciona 1 ao campo `value` do primeiro elemento do array da `row` (_linha_). Neste caso, o campo `value` do elemento da _matrix_ também aumenta a cada barra, pois ambos os elementos referenciam o mesmo objeto:
 
@@ -295,7 +295,7 @@ if bar_index == last_bar_index - 1
 ```
 
 > __Observação__\
-> Assim como as _matrices_ de linhas ou colunas [resgatados](./04_15_matrices.md#resgatando) de uma _matrix_ de instâncias do tipo [line](https://br.tradingview.com/pine-script-reference/v5/#type_line), [linefill](https://br.tradingview.com/pine-script-reference/v5/#type_linefill), [box](https://br.tradingview.com/pine-script-reference/v5/#type_box), [polyline](https://br.tradingview.com/pine-script-reference/v5/#type_polyline), [label](https://br.tradingview.com/pine-script-reference/v5/#type_label), [table](https://br.tradingview.com/pine-script-reference/v5/#type_table), [chart.point](https://br.tradingview.com/pine-script-reference/v5/#type_chart.point) ou [UDTs](./04_09_tipagem_do_sistema.md#tipos-definidos-pelo-usuário) comportam-se como cópias superficiais, os elementos de _matrices_ contendo tais tipos referenciam os mesmos objetos que os [arrays](./04_14_arrays.md) inseridos nelas. Modificações nos valores dos elementos em qualquer um dos objetos afetam o outro nesses casos.
+> Assim como as _matrices_ de linhas ou colunas [resgatados](./04_15_matrices.md#resgatando) de uma _matrix_ de instâncias do tipo [line](https://br.tradingview.com/pine-script-reference/v5/#type_line), [linefill](https://br.tradingview.com/pine-script-reference/v5/#type_linefill), [box](https://br.tradingview.com/pine-script-reference/v5/#type_box), [polyline](https://br.tradingview.com/pine-script-reference/v5/#type_polyline), [label](https://br.tradingview.com/pine-script-reference/v5/#type_label), [table](https://br.tradingview.com/pine-script-reference/v5/#type_table), [chart.point](https://br.tradingview.com/pine-script-reference/v5/#type_chart.point) ou [_UDTs_](./04_09_tipagem_do_sistema.md#tipos-definidos-pelo-usuário) comportam-se como cópias superficiais, os elementos de _matrices_ contendo tais tipos referenciam os mesmos objetos que os [arrays](./04_14_arrays.md) inseridos nelas. Modificações nos valores dos elementos em qualquer um dos objetos afetam o outro nesses casos.
 
 ## Removendo
 
@@ -512,4 +512,81 @@ Observação:
 - _Loops_ `for...in` também podem referenciar o valor do _index_ de cada linha. Por exemplo, `for [i, row] in m` cria uma tupla contendo o _index_ `i` da linha e o array de `row` (_linha_) correspondente da _matrix_ `m` a cada iteração do _loop_.
 
 
+# Copiando _Matrix_
 
+## Cópias Superficiais
+
+Scripts Pine podem copiar _matrices_ através de [matrix.copy()](https://br.tradingview.com/pine-script-reference/v5/#fun_matrix.copy). Esta função retorna uma _cópia superficial_ de uma _matrix_ que não afeta a forma da _matrix_ original nem suas referências.
+
+Por exemplo, este script atribui uma nova _matrix_ à variável `myMatrix` e adiciona duas colunas. Ele cria uma nova _matrix_ `myCopy` a partir de `myMatrix` usando o método [myMatrix.copy()](https://br.tradingview.com/pine-script-reference/v5/#fun_matrix.copy), em seguida, adiciona uma nova linha. Exibe as linhas de ambas as _matrices_ em _labels_ por meio da função definida pelo usuário `debugLabel()`:
+
+![Copiando matrix cópias superficiais 01](./imgs/Matrices-Copying-a-matrix-Shallow-copies-1.png)
+
+```c
+//@version=5
+indicator("Shallow copy demo")
+
+//@function Displays the rows of a matrix in a label with a note.
+//@param    this The matrix to display.
+//@param    barIndex The `bar_index` to display the label at.
+//@param    bgColor The background color of the label.
+//@param    textColor The color of the label's text.
+//@param    note The text to display above the rows.
+method debugLabel(
+     matrix<float> this, int barIndex = bar_index, color bgColor = color.blue,
+     color textColor = color.white, string note = ""
+ ) =>
+    labelText = note + "\n" + str.tostring(this)
+    if barstate.ishistory
+        label.new(
+             barIndex, 0, labelText, color = bgColor, style = label.style_label_center,
+             textcolor = textColor, size = size.huge
+         )
+
+//@variable A 2x2 `float` matrix.
+matrix<float> myMatrix = matrix.new<float>()
+myMatrix.add_col(0, array.from(1.0, 3.0))
+myMatrix.add_col(1, array.from(2.0, 4.0))
+
+//@variable A shallow copy of `myMatrix`.
+matrix<float> myCopy = myMatrix.copy()
+// Add a row to the last index of `myCopy`.
+myCopy.add_row(myCopy.rows(), array.from(5.0, 6.0))
+
+if bar_index == last_bar_index - 1
+    // Display the rows of both matrices in separate labels.
+    myMatrix.debugLabel(note = "Original")
+    myCopy.debugLabel(bar_index + 10, color.green, note = "Shallow Copy")
+```
+
+É importante notar que os elementos dentro de cópias superficiais de uma _matrix_ apontam para os mesmos valores que a _matrix_ original. Quando as _matrices_ contêm tipos especiais ([line](https://br.tradingview.com/pine-script-reference/v5/#type_line), [linefill](https://br.tradingview.com/pine-script-reference/v5/#type_linefill), [box](https://br.tradingview.com/pine-script-reference/v5/#type_box), [polyline](https://br.tradingview.com/pine-script-reference/v5/#type_polyline), [label](https://br.tradingview.com/pine-script-reference/v5/#type_label), [table](https://br.tradingview.com/pine-script-reference/v5/#type_table) ou [chart.point](https://br.tradingview.com/pine-script-reference/v5/#type_chart.point)) ou [tipos definidos pelo usuário](./04_09_tipagem_do_sistema.md#tipos-definidos-pelo-usuário), os elementos de uma cópia superficial referenciam os mesmos objetos que o original.
+
+Este script declara uma variável `myMatrix` com `newLabel` como valor inicial. Em seguida, copia `myMatrix` para uma variável `myCopy` via [myMatrix.copy()](https://br.tradingview.com/pine-script-reference/v5/#fun_matrix.copy) e plota o número de _labels_. Pode-se observar abaixo, há apenas um _label_ no gráfico, pois o elemento em `myCopy` referencia o mesmo objeto que o elemento em `myMatrix`. Consequentemente, mudanças nos valores dos elementos em `myCopy` afetam os valores em ambas as _matrices_:
+
+![Copiando matrix cópias superficiais 02](./imgs/Matrices-Copying-a-matrix-Shallow-copies-2.png)
+
+```c
+//@version=5
+indicator("Shallow copy demo")
+
+//@variable Initial value of the original matrix elements.
+var label newLabel = label.new(
+     bar_index, 1, "Original", color = color.blue, textcolor = color.white, size = size.huge
+ )
+
+//@variable A 1x1 matrix containing a new `label` instance.
+var matrix<label> myMatrix = matrix.new<label>(1, 1, newLabel)
+//@variable A shallow copy of `myMatrix`.
+var matrix<label> myCopy = myMatrix.copy()
+
+//@variable The first label from the `myCopy` matrix.
+label testLabel = myCopy.get(0, 0)
+
+// Change the `text`, `style`, and `x` values of `testLabel`. Also affects the `newLabel`.
+testLabel.set_text("Copy")
+testLabel.set_style(label.style_label_up)
+testLabel.set_x(bar_index)
+
+// Plot the total number of labels.
+plot(label.all.size(), linewidth = 3)
+```
