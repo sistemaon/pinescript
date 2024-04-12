@@ -381,3 +381,82 @@ if bar_index == last_bar_index - 1
     m.replaceRow(2, array.from(7.0, 8.0, 9.0))
     m.debugLabel(bar_index + 10, note = "Replaced rows")
 ```
+
+
+# Percorrendo uma _Matrix_
+
+## `for`
+
+Quando um script precisa apenas iterar sobre os _indices_ de linha/coluna em uma _matrix_, o método mais comum é usar [for](https://br.tradingview.com/pine-script-reference/v5/#kw_for) _loop_. Por exemplo, esta linha cria um _loop_ com um valor de `row` (_linha_) que começa em _0_ e aumenta em _um_ até alcançar um a menos que o número de linhas na _matrix_ `m` (ou seja, o último _index_ de linha):
+
+```c
+for row = 0 to m.rows() - 1
+```
+
+Para iterar sobre todos os valores de _index_ na _matrix_ `m`, pode-se criar um _loop aninhado_ que itera sobre cada _index_ de `column` (_coluna_) em cada valor de `row` (_linha_):
+
+```c
+for row = 0 to m.rows() - 1
+    for column = 0 to m.columns() - 1
+```
+
+Utiliza-se essa estrutura aninhada para criar um [método](./04_13_metodos.md) que visualiza os elementos da _matrix_. No script abaixo, definiu-se um método `toTable()` que exibe os elementos de uma _matrix_ dentro de um objeto de [table](https://br.tradingview.com/pine-script-reference/v5/#type_table) (_tabela_). Ele itera sobre cada _index_ de `row` (_linha_) e sobre cada _index_ de `column` (_coluna_) em cada linha. Dentro do _loop_, converte cada elemento para [string](https://br.tradingview.com/pine-script-reference/v5/#type_string) para exibir na célula da tabela correspondente.
+
+Na primeira barra, o script cria uma _matrix_ `m` vazia, a preenche com linhas e invoca `m.toTable()` para exibir seus elementos:
+
+![Percorrendo uma matrix for](./imgs/Matrices-Looping-through-a-matrix-For-1.png)
+
+```c
+//@version=5
+indicator("for loop demo", "Matrix to table")
+
+//@function Displays the elements of `this` matrix in a table.
+//@param    this The matrix to display.
+//@param    position The position of the table on the chart.
+//@param    bgColor The background color of the table.
+//@param    textColor The color of the text in each cell.
+//@param    note A note string to display on the bottom row of the table.
+//@returns  A new `table` object with cells corresponding to each element of `this` matrix.
+method toTable(
+     matrix<float> this, string position = position.middle_center,
+     color bgColor = color.blue, color textColor = color.white,
+     string note = na
+ ) =>
+    //@variable The number of rows in `this` matrix.
+    int rows = this.rows()
+    //@variable The number of columns in `this` matrix.
+    int columns = this.columns()
+    //@variable A table that displays the elements of `this` matrix with an optional `note` cell.
+    table result = table.new(position, columns, rows + 1, bgColor)
+
+    // Iterate over each row index of `this` matrix.
+    for row = 0 to rows - 1
+        // Iterate over each column index of `this` matrix on each `row`.
+        for col = 0 to columns - 1
+            //@variable The element from `this` matrix at the `row` and `col` index.
+            float element = this.get(row, col)
+            // Initialize the corresponding `result` cell with the `element` value.
+            result.cell(col, row, str.tostring(element), text_color = textColor, text_size = size.huge)
+
+    // Initialize a merged cell on the bottom row if a `note` is provided.
+    if not na(note)
+        result.cell(0, rows, note, text_color = textColor, text_size = size.huge)
+        result.merge_cells(0, rows, columns - 1, rows)
+
+    result // Return the `result` table.
+
+//@variable A 3x4 matrix of values.
+var m = matrix.new<float>()
+
+if bar_index == 0
+    // Add rows to `m`.
+    m.add_row(0, array.from(1, 2, 3))
+    m.add_row(1, array.from(5, 6, 7))
+    m.add_row(2, array.from(9, 10, 11))
+    // Add a column to `m`.
+    m.add_col(3, array.from(4, 8, 12))
+    // Display the elements of `m` in a table.
+    m.toTable()
+```
+
+
