@@ -24,3 +24,6 @@ O "for…in" tá referenciando o link (https://www.tradingview.com/pine-script-r
 
 In ARRAYS > Looping through array elements = for…in loops can return a tuple containing each index and corresponding element.
 O "for…in" tá referenciando o link (https://www.tradingview.com/pine-script-reference/v5/#op_for{dot}{dot}{dot}in) sendo que deveria ser (https://www.tradingview.com/pine-script-reference/v5/#kw_for...in).
+
+In MATRICES > FOR...IN = When a script needs to iterate over and retrieve the rows of a matrix, using the for…in structure is often preferred over the standard for loop.
+O "for…in" tá referenciando o link (https://www.tradingview.com/pine-script-reference/v5/#op_for{dot}{dot}{dot}in) sendo que deveria ser (https://www.tradingview.com/pine-script-reference/v5/#kw_for...in).

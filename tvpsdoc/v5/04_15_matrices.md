@@ -338,7 +338,7 @@ No novo _label_, observa-se que a _matrix_ mantém o mesmo número de linhas que
 
 Em alguns casos, pode ser desejável _substituir_ completamente uma linha ou coluna em uma _matrix_. Para fazer isso, [insere](./04_15_matrices.md#inserindo)-se o novo array no _index_ da `row/column` (_linha/coluna_) desejada e [remove](./04_15_matrices.md#removendo)-se os elementos antigos que estavam anteriormente naquele _index_.
 
-No código a seguir, definiu-se um método `replaceRow()` que utiliza o método [add_row()](https://br.tradingview.com/pine-script-reference/v5/#fun_matrix.add_row) para inserir os novos `values` (_valores_) no index da `row` (_linha_) e o método [remove_row()](https://br.tradingview.com/pine-script-reference/v5/#fun_matrix.remove_row) para eliminar a linha antiga que foi deslocada para o _index_ `row + 1`. Este script utiliza o método `replaceRow()` para preencher as linhas de uma matriz 3x3 com os números de 1 a 9. Ele desenha um _label_ no gráfico antes e depois de substituir as linhas usando o método customizado `debugLabel()`:
+No código a seguir, definiu-se um método `replaceRow()` que utiliza o método [add_row()](https://br.tradingview.com/pine-script-reference/v5/#fun_matrix.add_row) para inserir os novos `values` (_valores_) no index da `row` (_linha_) e o método [remove_row()](https://br.tradingview.com/pine-script-reference/v5/#fun_matrix.remove_row) para eliminar a linha antiga que foi deslocada para o _index_ `row + 1`. Este script utiliza o método `replaceRow()` para preencher as linhas de uma _matrix_ 3x3 com os números de 1 a 9. Ele desenha um _label_ no gráfico antes e depois de substituir as linhas usando o método customizado `debugLabel()`:
 
 ![Linhas e colunas substituindo](./imgs/Matrices-Rows-and-columns-Replacing-1.png)
 
@@ -458,5 +458,58 @@ if bar_index == 0
     // Display the elements of `m` in a table.
     m.toTable()
 ```
+
+## `for…in`
+
+Quando um script precisa iterar e recuperar as linhas de uma _matrix_, a estrutura [for…in](https://br.tradingview.com/pine-script-reference/v5/#kw_for...in) é preferível em relação ao _loop_ `for` padrão. Essa estrutura referencia diretamente os [arrays](./04_14_arrays.md) de linhas em uma _matrix_, tornando-a uma opção mais conveniente para tais casos de uso. Por exemplo, esta linha cria um _loop_ que retorna um array de `row` (_linha_) para cada linha na _matrix_ `m`:
+
+```c
+for row in m
+```
+
+O seguinte indicador calcula a média móvel dos dados __OHLC__ com um `length` de entrada e exibe os valores no gráfico. O método personalizado `rowWiseAvg()` percorre as linhas de uma _matrix_ usando uma estrutura `for...in` para produzir um array contendo o [array.avg()](https://br.tradingview.com/pine-script-reference/v5/#fun_array.avg) de cada `row` (_linha_).
+
+Na primeira barra do gráfico, o script cria uma nova _matrix_ `m` com quatro linhas e colunas de `length`, na qual enfileira uma nova coluna de dados __OHLC__ por meio dos métodos [m.add_col()](https://br.tradingview.com/pine-script-reference/v5/#fun_matrix.add_col) e [m.remove_col()](https://br.tradingview.com/pine-script-reference/v5/#fun_matrix.remove_col) em cada barra subsequente. Utiliza `m.rowWiseAvg()` para calcular o array de `averages` (_médias_) por linha e, em seguida, plota os valores dos elementos no gráfico:
+
+![Percorrendo uma matrix for...in](./imgs/Matrices-Looping-through-a-matrix-For-in-1.png)
+
+```c
+//@version=5
+indicator("for...in loop demo", "Average OHLC", overlay = true)
+
+//@variable The number of terms in the average.
+int length = input.int(20, "Length", minval = 1)
+
+//@function Calculates the average of each matrix row.
+method rowWiseAvg(matrix<float> this) =>
+    //@variable An array with elements corresponding to each row's average.
+    array<float> result = array.new<float>()
+    // Iterate over each `row` of `this` matrix.
+    for row in this
+        // Push the average of each `row` into the `result`.
+        result.push(row.avg())
+    result // Return the resulting array.
+
+//@variable A 4x`length` matrix of values.
+var matrix<float> m = matrix.new<float>(4, length)
+
+// Add a new column containing OHLC values to the matrix.
+m.add_col(m.columns(), array.from(open, high, low, close))
+// Remove the first column.
+m.remove_col(0)
+
+//@variable An array containing averages of `open`, `high`, `low`, and `close` over `length` bars.
+array<float> averages = m.rowWiseAvg()
+
+plot(averages.get(0), "Average Open",  color.blue,   2)
+plot(averages.get(1), "Average High",  color.green,  2)
+plot(averages.get(2), "Average Low",   color.red,    2)
+plot(averages.get(3), "Average Close", color.orange, 2)
+```
+
+Observação:
+
+- _Loops_ `for...in` também podem referenciar o valor do _index_ de cada linha. Por exemplo, `for [i, row] in m` cria uma tupla contendo o _index_ `i` da linha e o array de `row` (_linha_) correspondente da _matrix_ `m` a cada iteração do _loop_.
+
 
 
