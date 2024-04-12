@@ -590,3 +590,50 @@ testLabel.set_x(bar_index)
 // Plot the total number of labels.
 plot(label.all.size(), linewidth = 3)
 ```
+
+## Cópias Profundas (_Deep Copies_)
+
+É possível produzir uma _cópia profunda_ de uma _matrix_ (ou seja, uma _matrix_ cujos elementos apontam para cópias dos valores originais) copiando explicitamente cada objeto que a _matrix_ referencia.
+
+Aqui, um método definido pelo usuário chamado `deepCopy()` foi adicionado ao script anterior. O método cria uma nova _matrix_ e usa [_loops_ for aninhados](./04_15_matrices.md#for) para atribuir todos os elementos a cópias dos originais. Quando o script chama este método em vez do [copy()](https://br.tradingview.com/pine-script-reference/v5/#fun_matrix.copy) integrado, observa-se que agora há duas _labels_ no gráfico, e quaisquer alterações no _label_ de `myCopy` não afetam a de `myMatrix`:
+
+![Copiando matrix cópias profundas](./imgs/Matrices-Copying-a-matrix-Deep-copies-1.png)
+
+```c
+//@version=5
+indicator("Deep copy demo")
+
+//@function Returns a deep copy of a label matrix.
+method deepCopy(matrix<label> this) =>
+    //@variable A deep copy of `this` matrix.
+    matrix<label> that = this.copy()
+    for row = 0 to that.rows() - 1
+        for column = 0 to that.columns() - 1
+            // Assign the element at each `row` and `column` of `that` matrix to a copy of the retrieved label.
+            that.set(row, column, that.get(row, column).copy())
+    that
+
+//@variable Initial value of the original matrix.
+var label newLabel = label.new(
+     bar_index, 2, "Original", color = color.blue, textcolor = color.white, size = size.huge
+ )
+
+//@variable A 1x1 matrix containing a new `label` instance.
+var matrix<label> myMatrix = matrix.new<label>(1, 1, newLabel)
+//@variable A deep copy of `myMatrix`.
+var matrix<label> myCopy = myMatrix.deepCopy()
+
+//@variable The first label from the `myCopy` matrix.
+label testLabel = myCopy.get(0, 0)
+
+// Change the `text`, `style`, and `x` values of `testLabel`. Does not affect the `newLabel`.
+testLabel.set_text("Copy")
+testLabel.set_style(label.style_label_up)
+testLabel.set_x(bar_index)
+
+// Change the `x` value of `newLabel`.
+newLabel.set_x(bar_index)
+
+// Plot the total number of labels.
+plot(label.all.size(), linewidth = 3)
+```
