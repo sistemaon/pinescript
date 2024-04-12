@@ -637,3 +637,50 @@ newLabel.set_x(bar_index)
 // Plot the total number of labels.
 plot(label.all.size(), linewidth = 3)
 ```
+
+
+# Submatrizes (_Submatrices_)
+
+No Pine, uma _submatrix_ é uma [cópia superficial](./04_15_matrices.md#cópias-superficiais) de uma _matrix_ existente que inclui apenas as linhas e colunas especificadas pelos parâmetros `from_row/column` e `to_row/column`. Essencialmente, é uma cópia fatiada de uma _matrix_.
+
+Por exemplo, o script abaixo cria uma _matrix_ `mSub` a partir da _matrix_ `m` por meio do método [m.submatrix()](https://br.tradingview.com/pine-script-reference/v5/#fun_matrix.submatrix), e então chama a função `debugLabel()` definida pelo usuário para exibir as linhas de ambas as _matrices_ em _labels_:
+
+![Submatrizes](./imgs/Matrices-Copying-a-matrix-Submatrices-1.png)
+
+```c
+//@version=5
+indicator("Submatrix demo")
+
+//@function Displays the rows of a matrix in a label with a note.
+//@param    this The matrix to display.
+//@param    barIndex The `bar_index` to display the label at.
+//@param    bgColor The background color of the label.
+//@param    textColor The color of the label's text.
+//@param    note The text to display above the rows.
+method debugLabel(
+     matrix<float> this, int barIndex = bar_index, color bgColor = color.blue,
+     color textColor = color.white, string note = ""
+ ) =>
+    labelText = note + "\n" + str.tostring(this)
+    if barstate.ishistory
+        label.new(
+             barIndex, 0, labelText, color = bgColor, style = label.style_label_center,
+             textcolor = textColor, size = size.huge
+         )
+
+//@variable A 3x3 matrix of values.
+var m = matrix.new<float>()
+
+if bar_index == last_bar_index - 1
+    // Add columns to `m`.
+    m.add_col(0, array.from(9, 6, 3))
+    m.add_col(1, array.from(8, 5, 2))
+    m.add_col(2, array.from(7, 4, 1))
+    // Display the rows of `m`.
+    m.debugLabel(note = "Original Matrix")
+
+    //@variable A 2x2 submatrix of `m` containing the first two rows and columns.
+    matrix<float> mSub = m.submatrix(from_row = 0, to_row = 2, from_column = 0, to_column = 2)
+    // Display the rows of `mSub`
+    debugLabel(mSub, bar_index + 10, bgColor = color.green, note = "Submatrix")
+```
