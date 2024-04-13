@@ -91,7 +91,7 @@ plot(macdLine, color = color.blue)
 plot(signalLine, color = color.orange)
 ```
 
-Perceba que:
+Note que:
 
 - Foi adicionado entradas (_input_) para que possa alterar os comprimentos das EMAs.
 - Foi adicionado a função embutida [ta.macd()](https://br.tradingview.com/pine-script-reference/v5/#fun_ta{dot}macd) para calcular o MACD, na qual poupa algumas linhas no código e torna-o mais fácil de ler.

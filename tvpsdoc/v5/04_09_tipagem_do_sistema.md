@@ -459,7 +459,7 @@ a3 = array.from(10)
 array<int> a4 = array.from(10)
 ```
 
-Observe que:
+Note que:
 
 - A sintaxe `int[]` também pode especificar um array de elementos "int", mas seu uso é desencorajado. Não existe equivalente para especificar os tipos de _matrix_ ou mapas dessa maneira.
 - Existe tipo específico integrado para [arrays](https://br.tradingview.com/pine-script-reference/v5/#type_array), como [array.new_int()](https://br.tradingview.com/pine-script-reference/v5/#fun_array{dot}new_int), mas a forma mais genérica [array.new<type>](https://br.tradingview.com/pine-script-reference/v5/#fun_array.new%3Ctype%3E) é preferível, o que seria `array.new<int>()` para criar um array de elementos "int".

@@ -210,7 +210,7 @@ if barstate.islast
     label.set_text(lbl, str.tostring(higherBars, "# higher bars\n") + str.tostring(lowerBars, "# lower bars"))
 ```
 
-Perceba que:
+Note que:
 
 - O contador `i` deve ser incrementado explicitamente em um dentro do bloco local do [while](https://br.tradingview.com/pine-script-reference/v5/#op_while).
 - Usa-se o operador [+=](https://br.tradingview.com/pine-script-reference/v5/#op_{plus}=) para adicionar um ao contador. `lowerBars += 1` é equivalente a `lowerBars := lowerBars + 1`.
@@ -235,7 +235,7 @@ var answer = factorial(n)
 plot(answer)
 ```
 
-Repare que:
+Note que:
 
 - Utiliza-se [input.int()](https://br.tradingview.com/pine-script-reference/v5/#fun_input{dot}int) para a entrada porque precisa especificar um valor `minval` para proteger o código. Embora [input()](https://br.tradingview.com/pine-script-reference/v5/#fun_input) também suporta a entrada de valores do tipo "int", ele não suporta o parâmetro `minval`.
 - Encapsulando a funcionalidade do script em uma função `factorial()` que aceita como argumento o valor cujo fatorial deve calcular. Usando `int val = na` para declarar o parâmetro da função, o que significa que se a função for chamada sem um argumento, como em `factorial()`, então o parâmetro `val` será inicializado como [na](https://br.tradingview.com/pine-script-reference/v5/#var_na), o que impedirá a execução do loop [while](https://br.tradingview.com/pine-script-reference/v5/#op_while) porque sua expressão `counter > 0` retornará [na](https://br.tradingview.com/pine-script-reference/v5/#var_na). A estrutura [while](https://br.tradingview.com/pine-script-reference/v5/#op_while) inicializará a variável de `result` como [na](https://br.tradingview.com/pine-script-reference/v5/#var_na). Por sua vez, como a inicialização do `result` é o valor de retorno do bloco local da função, a função retornará [na](https://br.tradingview.com/pine-script-reference/v5/#var_na).

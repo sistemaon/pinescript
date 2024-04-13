@@ -220,7 +220,7 @@ for i = 0 to (array.size(a) == 0 ? na : array.size(a) - 1)
 label.new(bar_index, high, text = labelText)
 ```
 
-Observe que:
+Note que:
 
 - Utiliza-se a função [request.security_lower_tf()](https://br.tradingview.com/pine-script-reference/v5/#fun_request{dot}security_lower_tf), que retorna um array de preços de [close](https://br.tradingview.com/pine-script-reference/v5/#var_close) no _timeframe_ de `1 minute`.
 - Este exemplo de código gerará um erro se utilizado em um intervalo de tempo do gráfico menor que `1 minute`.
@@ -244,7 +244,7 @@ for price in a
 label.new(bar_index, high, text = labelText)
 ```
 
-Observe que:
+Note que:
 
 - _Loops_ [for...in](https://br.tradingview.com/pine-script-reference/v5/#kw_for...in) podem retornar uma tupla contendo cada _index_ e o elemento correspondente. Por exemplo, `for [i, price] in a` retorna o _index_ `i` e o valor `price` para cada elemento em `a`.
 

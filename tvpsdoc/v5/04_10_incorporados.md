@@ -87,7 +87,7 @@ Este é um chamado à função em uma linha de código que declara uma variável
 myVwma = ta.vwma(close, 20)
 ```
 
-Observe que:
+Note que:
 
 - Usa-se a variável incorporada [close](https://br.tradingview.com/pine-script-reference/v5/#var_close) como argumento para o parâmetro `source`.
 - Usa-se `20` como argumento para o parâmetro `length`.

@@ -169,7 +169,7 @@ debugLabel.set_x(bar_index)
 debugLabel.set_text(str.format("Row 0: {0}, Size: {1}\nCol 0: {2}, Size: {3}", row0, m.columns(), column0, m.rows()))
 ```
 
-Observa-se que:
+Note que:
 
 - Para obter os tamanhos dos arrays exibidos no _label_, empregaram-se os métodos [rows()](https://br.tradingview.com/pine-script-reference/v5/#fun_matrix.rows) e [columns()](https://br.tradingview.com/pine-script-reference/v5/#fun_matrix.columns) em vez de [array.size()](https://br.tradingview.com/pine-script-reference/v5/#fun_array.size), para demonstrar que o tamanho do array `row0` é igual ao número de colunas e o tamanho do array `column0` é igual ao número de linhas.
 
@@ -507,7 +507,7 @@ plot(averages.get(2), "Average Low",   color.red,    2)
 plot(averages.get(3), "Average Close", color.orange, 2)
 ```
 
-Observação:
+Note que:
 
 - _Loops_ `for...in` também podem referenciar o valor do _index_ de cada linha. Por exemplo, `for [i, row] in m` cria uma tupla contendo o _index_ `i` da linha e o array de `row` (_linha_) correspondente da _matrix_ `m` a cada iteração do _loop_.
 
@@ -684,3 +684,93 @@ if bar_index == last_bar_index - 1
     // Display the rows of `mSub`
     debugLabel(mSub, bar_index + 10, bgColor = color.green, note = "Submatrix")
 ```
+
+
+# Escopo e Histórico
+
+Variáveis de _matrix_ registram trilhas históricas em cada barra, permitindo que scripts utilizem o operador de referência histórica [[]](https://br.tradingview.com/pine-script-reference/v5/#op_[]) para interagir com instâncias passadas das _matrices_ previamente atribuídas a uma variável. Adicionalmente, é possível modificar _matrices_ atribuídas a variáveis globais dentro dos escopos de [funções](./04_11_funcoes_definida_pelo_usuario.md), [métodos](./04_13_metodos.md) e [estruturas condicionais](./04_07_estruturas_condicionais.md).
+
+Este script calcula as _médias das proporções_ (_average ratios_) entre as distâncias dos corpos e dos pavios em relação ao alcanve/intervalo da barra ao longo de `length` barras. Os dados são exibidos junto com valores `length` das barras anteriores em uma tabela. A função definida pelo usuário `addData()` adiciona colunas de proporções atuais e históricas à `globalMatrix`, e a função `calcAvg()` referencia à _matrices_ anteriores `previous` atribuídas à `globalMatrix` usando o operador [[]](https://br.tradingview.com/pine-script-reference/v5/#op_[]) para calcular uma _matrix_ de médias:
+
+![Escopo e histórico](./imgs/Matrices-Scope-and-history-1.png)
+
+```c
+//@version=5
+indicator("Scope and history demo", "Bar ratio comparison")
+
+int length = input.int(10, "Length", 1)
+
+//@variable A global matrix.
+matrix<float> globalMatrix = matrix.new<float>()
+
+//@function Calculates the ratio of body range to candle range.
+bodyRatio() =>
+    math.abs(close - open) / (high - low)
+
+//@function Calculates the ratio of upper wick range to candle range.
+upperWickRatio() =>
+    (high - math.max(open, close)) / (high - low)
+
+//@function Calculates the ratio of lower wick range to candle range.
+lowerWickRatio() =>
+    (math.min(open, close) - low) / (high - low)
+
+//@function Adds data to the `globalMatrix`.
+addData() =>
+    // Add a new column of data at `column` 0.
+    globalMatrix.add_col(0, array.from(bodyRatio(), upperWickRatio(), lowerWickRatio()))
+    //@variable The column of `globalMatrix` from index 0 `length` bars ago.
+    array<float> pastValues = globalMatrix.col(0)[length]
+    // Add `pastValues` to the `globalMatrix`, or an array of `na` if `pastValues` is `na`.
+    if na(pastValues)
+        globalMatrix.add_col(1, array.new<float>(3))
+    else
+        globalMatrix.add_col(1, pastValues)
+
+//@function Returns the `length`-bar average of matrices assigned to `globalMatrix` on historical bars.
+calcAvg() =>
+    //@variable The sum historical `globalMatrix` matrices.
+    matrix<float> sums = matrix.new<float>(globalMatrix.rows(), globalMatrix.columns(), 0.0)
+    for i = 0 to length - 1
+        //@variable The `globalMatrix` matrix `i` bars before the current bar.
+        matrix<float> previous = globalMatrix[i]
+        // Break the loop if `previous` is `na`.
+        if na(previous)
+            sums.fill(na)
+            break
+        // Assign the sum of `sums` and `previous` to `sums`.
+        sums := matrix.sum(sums, previous)
+    // Divide the `sums` matrix by the `length`.
+    result = sums.mult(1.0 / length)
+
+// Add data to the `globalMatrix`.
+addData()
+
+//@variable The historical average of the `globalMatrix` matrices.
+globalAvg = calcAvg()
+
+//@variable A `table` displaying information from the `globalMatrix`.
+var table infoTable = table.new(
+     position.middle_center, globalMatrix.columns() + 1, globalMatrix.rows() + 1, bgcolor = color.navy
+ )
+
+// Define value cells.
+for [i, row] in globalAvg
+    for [j, value] in row
+        color textColor = value > 0.333 ? color.orange : color.gray
+        infoTable.cell(j + 1, i + 1, str.tostring(value), text_color = textColor, text_size = size.huge)
+
+// Define header cells.
+infoTable.cell(0, 1, "Body ratio", text_color = color.white, text_size = size.huge)
+infoTable.cell(0, 2, "Upper wick ratio", text_color = color.white, text_size = size.huge)
+infoTable.cell(0, 3, "Lower wick ratio", text_color = color.white, text_size = size.huge)
+infoTable.cell(1, 0, "Current average", text_color = color.white, text_size = size.huge)
+infoTable.cell(2, 0, str.format("{0} bars ago", length), text_color = color.white, text_size = size.huge)
+```
+
+Note que:
+
+- As funções `addData()` e `calcAvg()` não possuem parâmetros, pois interagem diretamente com as variáveis `globalMatrix` e `length` declaradas no escopo externo.
+- A função `calcAvg()` calcula a média somando _matrices_ anteriores `previous` usando [matrix.sum()](https://br.tradingview.com/pine-script-reference/v5/#fun_matrix.sum) e multiplicando todos os elementos por `1 / length` usando [matrix.mult()](https://br.tradingview.com/pine-script-reference/v5/#fun_matrix.mult). Essas e outras funções especializadas são discutidas na seção abaixo sobre [Cálculos com Matrizes](./04_15_matrices.md#cálculos-com-matrizes).
+
+# Cálculos com Matrizes

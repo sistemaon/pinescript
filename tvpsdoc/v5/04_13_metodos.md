@@ -107,7 +107,7 @@ plot(highBand, "Upper", color.lime)
 plot(lowBand, "Lower", color.red)
 ```
 
-Observe que:
+Note que:
 
 - Chama-se os métodos do array usando `sourceArray.*` em vez de referenciar o _namespace_ do [array](https://br.tradingview.com/pine-script-reference/v5/#type_array).
 - Não é incluído `sourceArray` como um parâmetro quando chama-se os métodos, uma vez que já fazem referência ao objeto.
@@ -213,7 +213,7 @@ bool newSample = bar_index % n == 0
 [sampleMean, highBand, lowBand] = sourceArray.maintainQueue(sourceInput, newSample).calcBB(multiplier, newSample)
 ```
 
-Perceba que:
+Note que:
 
 - Em vez de usar um bloco `if` no escopo global, foi definido uma variável `newSample` que é `true` apenas uma vez a cada `n` barras. Os métodos `maintainQueue()` e `calcBB()` utilizam esse valor para seus respectivos parâmetros `takeSample` e `calculate`.
 - Uma vez que o método `maintainQueue()` retorna o objeto ao qual se refere, é possível invocar `calcBB()` na mesma linha de código, já que ambos os métodos se aplicam a instâncias de `array<float>`.
@@ -387,7 +387,7 @@ Copia o objeto `srcArray`, substitui todos os elementos entre `min` e `val` por 
 srcArray.copy().fill(1.0, 0.0, min, val).avg()
 ```
 
-Perceba que:
+Note que:
 
 - O compilador só usará essa sobrecarga de `fill()` em vez da incorporada quando o usuário fornecer argumentos para `innerValue`, `outerValue`, `lowerBound` e `upperBound` na chamada.
 - Se `lowerBound` ou `upperBound` for `na`, o valor é ignorado ao filtrar o intervalo de preenchimento.
@@ -430,7 +430,8 @@ method featureScale(array<float> srcArray) =>
     scaledArray
 ```
 
-Observe que:
+Note que:
+
 - Este método não possui tratamento específico para situações de divisão por zero. Se `rng` for 0, o valor do elemento do array será considerado como _não disponível_ `na`.
 
 No exemplo completo a seguir, o `sourceArray` de `length` (_tamanho_) especificado é preenchido com valores de `sourceInput` utilizando o método `maintainQueue()` mencionado anteriormente. Em seguida, os elementos do array são normalizados por meio do método `featureScale()`, e o método `eCDF()` é invocado para buscar um array de estimativas para `n` _um número definido_ de etapas distribuídas uniformemente pela distribuição. Por fim, uma função `makeLabel()`, definida pelo usuário, é empregada para apresentar as estimativas e preços em num label posicionado no lado direito do gráfico:
