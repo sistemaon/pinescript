@@ -9,7 +9,7 @@ _Matrices_ no Pine Script são coleções que armazenam referências de valores 
 _Matrices_ referenciam seus elementos usando dois _indices_: um _index_ para suas linhas e outro para suas colunas. Cada _index_ começa em _0_ e se estende até o _número de linhas/colunas na matrix_ menos um_. _Matrices_ no Pine podem ter números dinâmicos de linhas e colunas que variam ao longo das barras. O [número total de elementos](https://br.tradingview.com/pine-script-reference/v5/#fun_matrix.elements_count) dentro de uma _matrix_ é o produto do número de [rows](https://br.tradingview.com/pine-script-reference/v5/#fun_matrix.rows) (_linhas_) e [columns](https://br.tradingview.com/pine-script-reference/v5/#fun_matrix.columns) (_colunas_) (por exemplo, uma _matrix_ 5x5 tem um total de 25). Como os [arrays](./04_14_arrays.md), o número total de elementos em uma _matrix_ não pode exceder _100.000_.
 
 
-# Declarando uma Matrix
+# Declarando _Matrix_
 
 O Pine Script utiliza a seguinte sintaxe para a declaração de _matrix_:
 
@@ -833,4 +833,63 @@ if bar_index == last_bar_index - 1
 ```
 
 
-# Cálculos com Matrizes
+# Manipulando _Matrix_
+
+## Remodelando
+
+A forma de uma _matrix_ pode determinar sua compatibilidade com várias _matrix operations_ (_operações matriciais_). Em alguns casos, é necessário alterar as dimensões de uma _matrix_ sem afetar o número de elementos ou os valores a que se referem, o que é conhecido como _remodelando_. Para remodelar uma _matrix_ no Pine, utiliza-se a função [matrix.reshape()](https://br.tradingview.com/pine-script-reference/v5/#fun_matrix.reshape).
+
+Este exemplo demonstra os resultados de múltiplas operações de remodelação em uma _matrix_. A _matrix_ `m` inicial tem uma forma de 1x8 (uma linha e oito colunas). Por meio de chamadas sucessivas ao método [m.reshape()](https://br.tradingview.com/pine-script-reference/v5/#fun_matrix.reshape), o script altera a forma de `m` para 2x4, 4x2 e 8x1. Ele exibe cada _matrix_ remodelada em uma _label_ no gráfico usando o método personalizado `debugLabel()`:
+
+![Manipulando matrix](./imgs/Matrices-Manipulating-a-matrix-Reshaping-1.png)
+
+```c
+//@version=5
+indicator("Reshaping example")
+
+//@function Displays the rows of a matrix in a label with a note.
+//@param    this The matrix to display.
+//@param    barIndex The `bar_index` to display the label at.
+//@param    bgColor The background color of the label.
+//@param    textColor The color of the label's text.
+//@param    note The text to display above the rows.
+method debugLabel(
+     matrix<float> this, int barIndex = bar_index, color bgColor = color.blue,
+     color textColor = color.white, string note = ""
+ ) =>
+    labelText = note + "\n" + str.tostring(this)
+    if barstate.ishistory
+        label.new(
+             barIndex, 0, labelText, color = bgColor, style = label.style_label_center,
+             textcolor = textColor, size = size.huge
+         )
+
+//@variable A matrix containing the values 1-8.
+matrix<int> m = matrix.new<int>()
+
+if bar_index == last_bar_index - 1
+    // Add the initial vector of values.
+    m.add_row(0, array.from(1, 2, 3, 4, 5, 6, 7, 8))
+    m.debugLabel(note = "Initial 1x8 matrix")
+
+    // Reshape. `m` now has 2 rows and 4 columns.
+    m.reshape(2, 4)
+    m.debugLabel(bar_index + 10, note = "Reshaped to 2x4")
+
+    // Reshape. `m` now has 4 rows and 2 columns.
+    m.reshape(4, 2)
+    m.debugLabel(bar_index + 20, note = "Reshaped to 4x2")
+
+    // Reshape. `m` now has 8 rows and 1 column.
+    m.reshape(8, 1)
+    m.debugLabel(bar_index + 30, note = "Reshaped to 8x1")
+```
+
+Note que:
+
+- A ordem dos elementos em `m` não muda a cada invocação de `m.reshape()`.
+- Ao remodelar uma _matrix_, o produto dos argumentos de `rows` (_linhas_) e `columns` (_colunas_) deve igualar o valor de [matrix.elements_count()](https://br.tradingview.com/pine-script-reference/v5/#fun_matrix.elements_count), pois [matrix.reshape()](https://br.tradingview.com/pine-script-reference/v5/#fun_matrix.reshape) não pode alterar o número de elementos na _matrix_.
+
+
+
+# Cálculos com _Matrix_
