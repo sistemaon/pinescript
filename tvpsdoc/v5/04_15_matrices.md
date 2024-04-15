@@ -936,7 +936,4 @@ if bar_index == last_bar_index - 1
 ```
 
 
-
-
-
 # Cálculos com _Matrix_
