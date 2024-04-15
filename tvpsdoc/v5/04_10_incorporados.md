@@ -115,4 +115,4 @@ indicator(precision = 3, "Example") // Compilation error!
 
 __Ao chamar funções incorporadas, é crucial garantir que os argumentos utilizados sejam do tipo qualificado necessário, que variará para cada parâmetro.__
 
-Para aprender a fazer isso, é necessário entender o [Sistema de Tipos](./04_09_tipagem_do_sistema.md) do Pine Script. A entrada no Manual de Referência para cada função integrada inclui uma seção "ARGUMENTS" que lista o tipo qualificado necessário para o argumento fornecido a cada um dos parâmetros da função.
+Para aprender a fazer isso, é necessário entender o [Sistema de Tipos](./04_09_tipagem_do_sistema.md) do Pine Script. A entrada no Manual de Referência para cada função integrada inclui uma seção "ARGUMENTS" ("_ARGUMENTOS_") que lista o tipo qualificado necessário para o argumento fornecido a cada um dos parâmetros da função.

@@ -773,4 +773,64 @@ Note que:
 - As funções `addData()` e `calcAvg()` não possuem parâmetros, pois interagem diretamente com as variáveis `globalMatrix` e `length` declaradas no escopo externo.
 - A função `calcAvg()` calcula a média somando _matrices_ anteriores `previous` usando [matrix.sum()](https://br.tradingview.com/pine-script-reference/v5/#fun_matrix.sum) e multiplicando todos os elementos por `1 / length` usando [matrix.mult()](https://br.tradingview.com/pine-script-reference/v5/#fun_matrix.mult). Essas e outras funções especializadas são discutidas na seção abaixo sobre [Cálculos com Matrizes](./04_15_matrices.md#cálculos-com-matrizes).
 
+
+# Inspecionando _Matrix_
+
+A capacidade de inspecionar a forma de uma _matrix_ e os padrões dentro de seus elementos é crucial, pois ajuda a revelar informações importantes sobre uma _matrix_ e sua compatibilidade com vários cálculos e transformações. O Pine Script inclui várias funções [incorporadas](./04_10_incorporados.md) para inspeção de _matrices_, incluindo [matrix.is_square()](https://br.tradingview.com/pine-script-reference/v5/#fun_matrix.is_square), [matrix.is_identity()](https://br.tradingview.com/pine-script-reference/v5/#fun_matrix.is_identity), [matrix.is_diagonal()](https://br.tradingview.com/pine-script-reference/v5/#fun_matrix.is_diagonal), [matrix.is_antidiagonal()](https://br.tradingview.com/pine-script-reference/v5/#fun_matrix.is_antidiagonal), [matrix.is_symmetric()](https://br.tradingview.com/pine-script-reference/v5/#fun_matrix.is_symmetric), [matrix.is_antisymmetric()](https://br.tradingview.com/pine-script-reference/v5/#fun_matrix.is_antisymmetric), [matrix.is_triangular()](https://br.tradingview.com/pine-script-reference/v5/#fun_matrix.is_triangular), [matrix.is_stochastic()](https://br.tradingview.com/pine-script-reference/v5/#fun_matrix.is_stochastic), [matrix.is_binary()](https://br.tradingview.com/pine-script-reference/v5/#fun_matrix.is_binary) e [matrix.is_zero()](https://br.tradingview.com/pine-script-reference/v5/#fun_matrix.is_zero).
+
+Para demonstrar esses recursos, este exemplo contém um método personalizado `inspect()` que utiliza blocos condicionais com funções `matrix.is_*()` para retornar informações sobre uma _matrix_. Ele exibe uma representação em string de uma _matrix_ `m` e a descrição retornada de `m.inspect()` em _labels_ no gráfico:
+
+![Inspecionando matrix](./imgs/Matrices-Inspecting-a-matrix-1.png)
+
+```c
+//@version=5
+indicator("Matrix inspection demo")
+
+//@function Inspects a matrix using `matrix.is_*()` functions and returns a `string` describing some of its features.
+method inspect(matrix<int> this)=>
+    //@variable A string describing `this` matrix.
+    string result = "This matrix:\n"
+    if this.is_square()
+        result += "- Has an equal number of rows and columns.\n"
+    if this.is_binary()
+        result += "- Contains only 1s and 0s.\n"
+    if this.is_zero()
+        result += "- Is filled with 0s.\n"
+    if this.is_triangular()
+        result += "- Contains only 0s above and/or below its main diagonal.\n"
+    if this.is_diagonal()
+        result += "- Only has nonzero values in its main diagonal.\n"
+    if this.is_antidiagonal()
+        result += "- Only has nonzero values in its main antidiagonal.\n"
+    if this.is_symmetric()
+        result += "- Equals its transpose.\n"
+    if this.is_antisymmetric()
+        result += "- Equals the negative of its transpose.\n"
+    if this.is_identity()
+        result += "- Is the identity matrix.\n"
+    result
+
+//@variable A 4x4 identity matrix.
+matrix<int> m = matrix.new<int>()
+
+// Add rows to the matrix.
+m.add_row(0, array.from(1, 0, 0, 0))
+m.add_row(1, array.from(0, 1, 0, 0))
+m.add_row(2, array.from(0, 0, 1, 0))
+m.add_row(3, array.from(0, 0, 0, 1))
+
+if bar_index == last_bar_index - 1
+    // Display the `m` matrix in a blue label.
+    label.new(
+         bar_index, 0, str.tostring(m), color = color.blue, style = label.style_label_right,
+         textcolor = color.white, size = size.huge
+     )
+    // Display the result of `m.inspect()` in a purple label.
+    label.new(
+         bar_index, 0, m.inspect(), color = color.purple, style = label.style_label_left,
+         textcolor = color.white, size = size.huge
+     )
+```
+
+
 # Cálculos com Matrizes
