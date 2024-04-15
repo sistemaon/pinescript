@@ -841,7 +841,7 @@ A forma de uma _matrix_ pode determinar sua compatibilidade com várias _matrix 
 
 Este exemplo demonstra os resultados de múltiplas operações de remodelação em uma _matrix_. A _matrix_ `m` inicial tem uma forma de 1x8 (uma linha e oito colunas). Por meio de chamadas sucessivas ao método [m.reshape()](https://br.tradingview.com/pine-script-reference/v5/#fun_matrix.reshape), o script altera a forma de `m` para 2x4, 4x2 e 8x1. Ele exibe cada _matrix_ remodelada em uma _label_ no gráfico usando o método personalizado `debugLabel()`:
 
-![Manipulando matrix](./imgs/Matrices-Manipulating-a-matrix-Reshaping-1.png)
+![Manipulando matrix remodelando](./imgs/Matrices-Manipulating-a-matrix-Reshaping-1.png)
 
 ```c
 //@version=5
@@ -889,6 +889,53 @@ Note que:
 
 - A ordem dos elementos em `m` não muda a cada invocação de `m.reshape()`.
 - Ao remodelar uma _matrix_, o produto dos argumentos de `rows` (_linhas_) e `columns` (_colunas_) deve igualar o valor de [matrix.elements_count()](https://br.tradingview.com/pine-script-reference/v5/#fun_matrix.elements_count), pois [matrix.reshape()](https://br.tradingview.com/pine-script-reference/v5/#fun_matrix.reshape) não pode alterar o número de elementos na _matrix_.
+
+## Invertendo
+
+Pode-se reverter a ordem de todos os elementos em uma _matrix_ usando [matrix.reverse()](https://br.tradingview.com/pine-script-reference/v5/#fun_matrix.reverse). Esta função move as referências de uma _matrix_ __m-por-n__ no `id` da __i-th__ (_i-ésima_) linha e __j-th__ (_j-ésima_) coluna para a linha __m - 1 - i__ e coluna __n - 1 - j__.
+
+Por exemplo, este script cria uma _matrix_ 3x3 contendo os valores de 1 a 9 em ordem ascendente, em seguida, utiliza o método [reverse()](https://br.tradingview.com/pine-script-reference/v5/#fun_matrix.reverse) para reverter seu conteúdo. Ele exibe as versões original e modificada da _matrix_ em _labels_ no gráfico por meio de `m.debugLabel()`:
+
+![Manipulando matrix invertendo](./imgs/Matrices-Manipulating-a-matrix-Reversing-1.png)
+
+```c
+//@version=5
+indicator("Reversing demo")
+
+//@function Displays the rows of a matrix in a label with a note.
+//@param    this The matrix to display.
+//@param    barIndex The `bar_index` to display the label at.
+//@param    bgColor The background color of the label.
+//@param    textColor The color of the label's text.
+//@param    note The text to display above the rows.
+method debugLabel(
+     matrix<float> this, int barIndex = bar_index, color bgColor = color.blue,
+     color textColor = color.white, string note = ""
+ ) =>
+    labelText = note + "\n" + str.tostring(this)
+    if barstate.ishistory
+        label.new(
+             barIndex, 0, labelText, color = bgColor, style = label.style_label_center,
+             textcolor = textColor, size = size.huge
+         )
+
+//@variable A 3x3 matrix.
+matrix<float> m = matrix.new<float>()
+
+// Add rows to `m`.
+m.add_row(0, array.from(1, 2, 3))
+m.add_row(1, array.from(4, 5, 6))
+m.add_row(2, array.from(7, 8, 9))
+
+if bar_index == last_bar_index - 1
+    // Display the contents of `m`.
+    m.debugLabel(note = "Original")
+    // Reverse `m`, then display its contents.
+    m.reverse()
+    m.debugLabel(bar_index + 10, color.red, note = "Reversed")
+```
+
+
 
 
 
