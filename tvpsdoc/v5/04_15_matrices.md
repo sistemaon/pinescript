@@ -935,8 +935,7 @@ if bar_index == last_bar_index - 1
     m.debugLabel(bar_index + 10, color.red, note = "Reversed")
 ```
 
-
-# Transpondo
+## Transpondo
 
 Transpor uma _matrix_ é uma operação fundamental que inverte todas as linhas e colunas de uma _matrix_ em relação à sua _diagonal principal_ (a diagonal formada pelos valores nos quais o _index_ da linha é igual ao _index_ da coluna). Esse processo gera uma nova _matrix_ com as dimensões de linha e coluna invertidas, conhecida como _transpose_ (_transpor_). Scripts podem calcular a transposta de uma _matrix_ usando [matrix.transpose()](https://br.tradingview.com/pine-script-reference/v5/#fun_matrix.transpose).
 
@@ -984,12 +983,11 @@ if bar_index == last_bar_index - 1
     mt.debugLabel(bar_index + 10, note = "Transpose")
 ```
 
-
-# Ordenando
+## Ordenando
 
 Scripts podem ordenar o conteúdo de uma _matrix_ por meio de [matrix.sort()](https://br.tradingview.com/pine-script-reference/v5/#fun_matrix.sort). Diferente de [array.sort()](https://br.tradingview.com/pine-script-reference/v5/#fun_array.sort), que ordena _elementos_, esta função organiza todas as _linhas_ de uma _matrix_ em uma `order` (_ordem_) especificada ([order.ascending](https://br.tradingview.com/pine-script-reference/v5/#var_order.ascending) por padrão) baseada nos valores de uma `column` (_coluna_) especificada.
 
-Este script declara uma matriz `m` de 3x3, organiza as linhas da cópia `m1` em ordem ascendente com base na primeira coluna e as linhas da cópia `m2` em ordem descendente com base na segunda coluna. A matriz original e as cópias ordenadas são exibidas em _labels_ utilizando o método `debugLabel()`:
+Este script declara uma _matrix_ `m` de 3x3, organiza as linhas da cópia `m1` em ordem ascendente com base na primeira coluna e as linhas da cópia `m2` em ordem descendente com base na segunda coluna. A _matrix_ original e as cópias ordenadas são exibidas em _labels_ utilizando o método `debugLabel()`:
 
 ![Manipulando matrix ordenando 01](./imgs/Matrices-Manipulating-a-matrix-Sorting-1.png)
 
@@ -1039,7 +1037,7 @@ if bar_index == last_bar_index - 1
 
 Como exemplo, este script contém um método `sortColumns()` que utiliza o método [sort()](https://br.tradingview.com/pine-script-reference/v5/#fun_matrix.sort) para ordenar a [transposta](https://br.tradingview.com/pine-script-reference/v5/#fun_matrix.transpose) de uma _matrix_ usando a coluna correspondente à `row` (_linha_) da _matrix_ original. O script utiliza esse método para ordenar a _matrix_ `m` com base no conteúdo de sua primeira linha:
 
-[Manipulando matrix ordenando 01](./imgs/Matrices-Manipulating-a-matrix-Sorting-2.png)
+![Manipulando matrix ordenando 01](./imgs/Matrices-Manipulating-a-matrix-Sorting-2.png)
 
 ```c
 //@version=5
@@ -1087,6 +1085,58 @@ if bar_index == last_bar_index - 1
     m.sortColumns(0).debugLabel(bar_index + 10, note = "Sorted using row 0\n(Ascending)")
 ```
 
+## Concatenando
+
+Scripts podem _concatenar_ duas _matrices_ usando [matrix.concat()](https://br.tradingview.com/pine-script-reference/v5/#fun_matrix.concat). Esta função anexa as linhas da _matrix_ `id2` ao final da _matrix_ `id1`, que deve ter o mesmo número de colunas, ou seja, o número de colunas em ambas as _matrices_ deve ser idêntico.
+
+Para criar uma _matrix_ cujos elementos representam as _colunas_ de uma _matrix_ concatenada a outra, [transponha](./04_15_matrices.md#transpondo) ambas as _matrices_, utilize [matrix.concat()](https://br.tradingview.com/pine-script-reference/v5/#fun_matrix.concat) nas _matrices_ transpostas e, em seguida, aplique [transpose()](https://br.tradingview.com/pine-script-reference/v5/#fun_matrix.transpose) no resultado.
+
+Por exemplo, este script anexa as linhas da _matrix_ `m2` à _matrix_ `m1` e anexa suas colunas usando cópias _transpostas_ das _matrices_. Ele exibe as _matrices_ `m1` e `m2` e os resultados após concatenar suas linhas e colunas em _labels_ utilizando o método personalizado `debugLabel()`:
+
+![Manipulando matrix concatenando](./imgs/Matrices-Manipulating-a-matrix-Concatenating-1.png)
+
+```c
+//@version=5
+indicator("Concatenation demo")
+
+//@function Displays the rows of a matrix in a label with a note.
+//@param    this The matrix to display.
+//@param    barIndex The `bar_index` to display the label at.
+//@param    bgColor The background color of the label.
+//@param    textColor The color of the label's text.
+//@param    note The text to display above the rows.
+method debugLabel(
+     matrix<float> this, int barIndex = bar_index, color bgColor = color.blue,
+     color textColor = color.white, string note = ""
+ ) =>
+    labelText = note + "\n" + str.tostring(this)
+    if barstate.ishistory
+        label.new(
+             barIndex, 0, labelText, color = bgColor, style = label.style_label_center,
+             textcolor = textColor, size = size.huge
+         )
+
+//@variable A 2x3 matrix filled with 1s.
+matrix<int> m1 = matrix.new<int>(2, 3, 1)
+//@variable A 2x3 matrix filled with 2s.
+matrix<int> m2 = matrix.new<int>(2, 3, 2)
+
+//@variable The transpose of `m1`.
+t1 = m1.transpose()
+//@variable The transpose of `m2`.
+t2 = m2.transpose()
+
+if bar_index == last_bar_index - 1
+    // Display the original matrices.
+    m1.debugLabel(note = "Matrix 1")
+    m2.debugLabel(bar_index + 10, note = "Matrix 2")
+    // Append the rows of `m2` to the end of `m1` and display `m1`.
+    m1.concat(m2)
+    m1.debugLabel(bar_index + 20, color.blue, note = "Appended rows")
+    // Append the rows of `t2` to the end of `t1`, then display the transpose of `t1.
+    t1.concat(t2)
+    t1.transpose().debugLabel(bar_index + 30, color.purple, note = "Appended columns")
+```
 
 
 # Cálculos com _Matrix_
