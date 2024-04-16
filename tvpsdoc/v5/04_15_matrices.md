@@ -936,4 +936,54 @@ if bar_index == last_bar_index - 1
 ```
 
 
+# Transpondo
+
+Transpor uma _matrix_ é uma operação fundamental que inverte todas as linhas e colunas de uma _matrix_ em relação à sua _diagonal principal_ (a diagonal formada pelos valores nos quais o _index_ da linha é igual ao _index_ da coluna). Esse processo gera uma nova _matrix_ com as dimensões de linha e coluna invertidas, conhecida como _transpose_ (_transpor_). Scripts podem calcular a transposta de uma _matrix_ usando [matrix.transpose()](https://br.tradingview.com/pine-script-reference/v5/#fun_matrix.transpose).
+
+Para qualquer _matrix_ de _m-row_ (_m-linhas_) e _n-column_ (_n-colunas_), a _matrix_ retornada de [matrix.transpose()](https://br.tradingview.com/pine-script-reference/v5/#fun_matrix.transpose) terá _n row_ (_n linhas_) e _m columns_ (_m colunas_). Todos os elementos em uma _matrix_ na _i-th row_ (_i-ésima linha_) e _j-th column_ (_j-ésima_) coluna correspondem aos elementos em sua transposta na _j-th row_ (_j-ésima linha_) e _i-th column_ (_i-ésima coluna_).
+
+Este exemplo declara uma _matrix_ `m` de 2x4, calcula sua transposta usando o método [m.transpose()](https://br.tradingview.com/pine-script-reference/v5/#fun_matrix.transpose) e exibe ambas as _matrices_ no gráfico utilizando o método personalizado `debugLabel()`. Como pode-se observar abaixo, a _matrix_ transposta tem uma forma de 4x2, e as linhas da transposta correspondem às colunas da original:
+
+![Manipulando matrix transpondo](./imgs/Matrices-Manipulating-a-matrix-Transposing-1.png)
+
+```c
+//@version=5
+indicator("Transpose example")
+
+//@function Displays the rows of a matrix in a label with a note.
+//@param    this The matrix to display.
+//@param    barIndex The `bar_index` to display the label at.
+//@param    bgColor The background color of the label.
+//@param    textColor The color of the label's text.
+//@param    note The text to display above the rows.
+method debugLabel(
+     matrix<float> this, int barIndex = bar_index, color bgColor = color.blue,
+     color textColor = color.white, string note = ""
+ ) =>
+    labelText = note + "\n" + str.tostring(this)
+    if barstate.ishistory
+        label.new(
+             barIndex, 0, labelText, color = bgColor, style = label.style_label_center,
+             textcolor = textColor, size = size.huge
+         )
+
+//@variable A 2x4 matrix.
+matrix<int> m = matrix.new<int>()
+
+// Add columns to `m`.
+m.add_col(0, array.from(1, 5))
+m.add_col(1, array.from(2, 6))
+m.add_col(2, array.from(3, 7))
+m.add_col(3, array.from(4, 8))
+
+//@variable The transpose of `m`. Has a 4x2 shape.
+matrix<int> mt = m.transpose()
+
+if bar_index == last_bar_index - 1
+    m.debugLabel(note = "Original")
+    mt.debugLabel(bar_index + 10, note = "Transpose")
+```
+
+
+
 # Cálculos com _Matrix_
