@@ -985,5 +985,108 @@ if bar_index == last_bar_index - 1
 ```
 
 
+# Ordenando
+
+Scripts podem ordenar o conteúdo de uma _matrix_ por meio de [matrix.sort()](https://br.tradingview.com/pine-script-reference/v5/#fun_matrix.sort). Diferente de [array.sort()](https://br.tradingview.com/pine-script-reference/v5/#fun_array.sort), que ordena _elementos_, esta função organiza todas as _linhas_ de uma _matrix_ em uma `order` (_ordem_) especificada ([order.ascending](https://br.tradingview.com/pine-script-reference/v5/#var_order.ascending) por padrão) baseada nos valores de uma `column` (_coluna_) especificada.
+
+Este script declara uma matriz `m` de 3x3, organiza as linhas da cópia `m1` em ordem ascendente com base na primeira coluna e as linhas da cópia `m2` em ordem descendente com base na segunda coluna. A matriz original e as cópias ordenadas são exibidas em _labels_ utilizando o método `debugLabel()`:
+
+![Manipulando matrix ordenando 01](./imgs/Matrices-Manipulating-a-matrix-Sorting-1.png)
+
+```c
+//@version=5
+indicator("Sorting rows example")
+
+//@function Displays the rows of a matrix in a label with a note.
+//@param    this The matrix to display.
+//@param    barIndex The `bar_index` to display the label at.
+//@param    bgColor The background color of the label.
+//@param    textColor The color of the label's text.
+//@param    note The text to display above the rows.
+method debugLabel(
+     matrix<float> this, int barIndex = bar_index, color bgColor = color.blue,
+     color textColor = color.white, string note = ""
+ ) =>
+    labelText = note + "\n" + str.tostring(this)
+    if barstate.ishistory
+        label.new(
+             barIndex, 0, labelText, color = bgColor, style = label.style_label_center,
+             textcolor = textColor, size = size.huge
+         )
+
+//@variable A 3x3 matrix.
+matrix<int> m = matrix.new<int>()
+
+if bar_index == last_bar_index - 1
+    // Add rows to `m`.
+    m.add_row(0, array.from(3, 2, 4))
+    m.add_row(1, array.from(1, 9, 6))
+    m.add_row(2, array.from(7, 8, 9))
+    m.debugLabel(note = "Original")
+
+    // Copy `m` and sort rows in ascending order based on the first column (default).
+    matrix<int> m1 = m.copy()
+    m1.sort()
+    m1.debugLabel(bar_index + 10, color.green, note = "Sorted using col 0\n(Ascending)")
+
+    // Copy `m` and sort rows in descending order based on the second column.
+    matrix<int> m2 = m.copy()
+    m2.sort(1, order.descending)
+    m2.debugLabel(bar_index + 20, color.red, note = "Sorted using col 1\n(Descending)")
+```
+
+É importante observar que [matrix.sort()](https://br.tradingview.com/pine-script-reference/v5/#fun_matrix.sort) não ordena as colunas de uma _matrix_. No entanto, _pode-se_ utilizar essa função para ordenar as colunas de uma _matrix_ com a ajuda de [matrix.transpose()](https://br.tradingview.com/pine-script-reference/v5/#fun_matrix.transpose).
+
+Como exemplo, este script contém um método `sortColumns()` que utiliza o método [sort()](https://br.tradingview.com/pine-script-reference/v5/#fun_matrix.sort) para ordenar a [transposta](https://br.tradingview.com/pine-script-reference/v5/#fun_matrix.transpose) de uma _matrix_ usando a coluna correspondente à `row` (_linha_) da _matrix_ original. O script utiliza esse método para ordenar a _matrix_ `m` com base no conteúdo de sua primeira linha:
+
+[Manipulando matrix ordenando 01](./imgs/Matrices-Manipulating-a-matrix-Sorting-2.png)
+
+```c
+//@version=5
+indicator("Sorting columns example")
+
+//@function Displays the rows of a matrix in a label with a note.
+//@param    this The matrix to display.
+//@param    barIndex The `bar_index` to display the label at.
+//@param    bgColor The background color of the label.
+//@param    textColor The color of the label's text.
+//@param    note The text to display above the rows.
+method debugLabel(
+     matrix<float> this, int barIndex = bar_index, color bgColor = color.blue,
+     color textColor = color.white, string note = ""
+ ) =>
+    labelText = note + "\n" + str.tostring(this)
+    if barstate.ishistory
+        label.new(
+             barIndex, 0, labelText, color = bgColor, style = label.style_label_center,
+             textcolor = textColor, size = size.huge
+         )
+
+//@function Sorts the columns of `this` matrix based on the values in the specified `row`.
+method sortColumns(matrix<int> this, int row = 0, bool ascending = true) =>
+    //@variable The transpose of `this` matrix.
+    matrix<int> thisT = this.transpose()
+    //@variable Is `order.ascending` when `ascending` is `true`, `order.descending` otherwise.
+    order = ascending ? order.ascending : order.descending
+    // Sort the rows of `thisT` using the `row` column.
+    thisT.sort(row, order)
+    //@variable A copy of `this` matrix with sorted columns.
+    result = thisT.transpose()
+
+//@variable A 3x3 matrix.
+matrix<int> m = matrix.new<int>()
+
+if bar_index == last_bar_index - 1
+    // Add rows to `m`.
+    m.add_row(0, array.from(3, 2, 4))
+    m.add_row(1, array.from(1, 9, 6))
+    m.add_row(2, array.from(7, 8, 9))
+    m.debugLabel(note = "Original")
+
+    // Sort the columns of `m` based on the first row and display the result.
+    m.sortColumns(0).debugLabel(bar_index + 10, note = "Sorted using row 0\n(Ascending)")
+```
+
+
 
 # Cálculos com _Matrix_
