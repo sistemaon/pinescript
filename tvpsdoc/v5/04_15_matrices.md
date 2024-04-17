@@ -1262,4 +1262,60 @@ Note que:
 - Neste exemplo, rotulou-se a _matrix_ original como "A" e a transposta como "AT".
 - Ao adicionar "A" e "AT" produz uma _matrix_ [simétrica](https://br.tradingview.com/pine-script-reference/v5/#fun_matrix.is_symmetric), e ao subtrair uma da outra produz uma _matrix_ [antissimétrica](https://br.tradingview.com/pine-script-reference/v5/#fun_matrix.is_antisymmetric).
 
+### `matrix.mult()`
 
+Scripts podem multiplicar duas _matrices_ por meio da função [matrix.mult()](https://br.tradingview.com/pine-script-reference/v5/#fun_matrix.mult). Esta função também facilita a multiplicação de uma _matrix_ por um [array](https://br.tradingview.com/pine-script-reference/v5/#type_array) ou um valor escalar.
+
+No caso da multiplicação de duas _matrices_, ao contrário da adição e subtração, a multiplicação de _matrices_ não exige que as duas _matrices_ compartilhem a mesma forma. No entanto, o número de colunas na primeira _matrix_ deve ser igual ao número de linhas na segunda. A _matrix_ resultante retornada por [matrix.mult()](https://br.tradingview.com/pine-script-reference/v5/#fun_matrix.mult) conterá o mesmo número de linhas que `id1` e o mesmo número de colunas que `id2`. Por exemplo, uma _matrix_ 2x3 multiplicada por uma _matrix_ 3x4 produzirá uma _matrix_ com duas linhas e quatro colunas, conforme mostrado abaixo. Cada valor na _matrix_ resultante é o [produto escalar](https://pt.wikipedia.org/wiki/Produto_escalar) da linha correspondente em `id1` e coluna em `id2`:
+
+![Cálculos especiais matrix.mult()](./imgs/Matrices-Matrix-calculations-Special-calculations-2.png)
+
+```c
+//@version=5
+indicator("Matrix mult example")
+
+//@function Displays the rows of a matrix in a label with a note.
+//@param    this The matrix to display.
+//@param    barIndex The `bar_index` to display the label at.
+//@param    bgColor The background color of the label.
+//@param    textColor The color of the label's text.
+//@param    note The text to display above the rows.
+method debugLabel(
+     matrix<float> this, int barIndex = bar_index, color bgColor = color.blue,
+     color textColor = color.white, string note = ""
+ ) =>
+    labelText = note + "\n" + str.tostring(this)
+    if barstate.ishistory
+        label.new(
+             barIndex, 0, labelText, color = bgColor, style = label.style_label_center,
+             textcolor = textColor, size = size.huge
+         )
+
+//@variable A 2x3 matrix.
+a = matrix.new<float>()
+//@variable A 3x4 matrix.
+b = matrix.new<float>()
+
+// Add rows to `a`.
+a.add_row(0, array.from(1, 2, 3))
+a.add_row(1, array.from(4, 5, 6))
+
+// Add rows to `b`.
+b.add_row(0, array.from(0.5, 1.0, 1.5, 2.0))
+b.add_row(1, array.from(2.5, 3.0, 3.5, 4.0))
+b.add_row(0, array.from(4.5, 5.0, 5.5, 6.0))
+
+if bar_index == last_bar_index - 1
+    //@variable The result of `a` * `b`.
+    matrix<float> ab = a.mult(b)
+    // Display `a`, `b`, and `ab` matrices.
+    debugLabel(a, note = "A")
+    debugLabel(b, bar_index + 10, note = "B")
+    debugLabel(ab, bar_index + 20, color.green, note = "A * B")
+```
+
+Note que:
+
+- Em contraste com a multiplicação de escalares, a multiplicação de matrizes _não é comutativa_, ou seja, `matrix.mult(a, b)` não necessariamente produz o mesmo resultado que `matrix.mult(b, a)`. No contexto do exemplo acima , o último causará um erro de execução porque o número de colunas em `b` não é igual ao número de linhas em `a`.
+
+Ao multiplicar uma _matrix_ e um [array](https://br.tradingview.com/pine-script-reference/v5/#type_array), esta função trata a operação da mesma maneira que multiplicar `id1` por uma _matrix_ de uma única coluna, mas retorna um [array](https://br.tradingview.com/pine-script-reference/v5/#type_array) com o mesmo número de elementos que o número de linhas em `id1`. Quando [matrix.mult()](https://br.tradingview.com/pine-script-reference/v5/#fun_matrix.mult) recebe um valor escalar como seu `id2`, a função retorna uma nova _matrix_ cujos elementos são os elementos em `id1` multiplicados pelo valor `id2`.
