@@ -1140,3 +1140,64 @@ if bar_index == last_bar_index - 1
 
 
 # Cálculos com _Matrix_
+
+## Cálculos Elemento a Elemento
+
+Os scripts Pine podem calcular o _average_, _minimum_, _maximum_, e o _mode_ (_média_, o _mínimo_, o _máximo_ e a _moda_) de todos os elementos dentro de uma _matrix_ por meio das funções [matrix.avg()](https://br.tradingview.com/pine-script-reference/v5/#fun_matrix.avg), [matrix.min()](https://br.tradingview.com/pine-script-reference/v5/#fun_matrix.min), [matrix.max()](https://br.tradingview.com/pine-script-reference/v5/#fun_matrix.max) e [matrix.mode()](https://br.tradingview.com/pine-script-reference/v5/#fun_matrix.mode). Essas funções operam da mesma maneira que seus equivalentes em `array.*`, permitindo aos usuários realizar cálculos elemento a elemento em uma _matrix_, suas [_submatrices_](./04_15_matrices.md#submatrizes-submatrices), e suas [linhas e colunas](./04_15_matrices.md#linhas-e-colunas) usando a mesma sintaxe. Por exemplo, as funções incorporadas `*.avg()` chamadas em uma _matrix_ 3x3 com valores de 1 a 9 e um [array](https://br.tradingview.com/pine-script-reference/v5/#type_array) com os mesmos nove elementos retornarão ambos um valor de 5.
+
+O script abaixo utiliza os métodos `*.avg()`, `*.max()` e `*.min()` para calcular as médias em desenvolvimento e os extremos dos dados __OHLC__ em um período. Ele adiciona uma nova coluna de valores de [open](https://br.tradingview.com/pine-script-reference/v5/#var_open), [high](https://br.tradingview.com/pine-script-reference/v5/#var_high), [low](https://br.tradingview.com/pine-script-reference/v5/#var_low) e [close](https://br.tradingview.com/pine-script-reference/v5/#var_close) (_abertura_, _máxima_, _mínima_ e _fechamento_) ao final da _matrix_ `ohlcData` sempre que `queueColumn` é `true`. Quando `false`, o script usa os métodos [get()](https://br.tradingview.com/pine-script-reference/v5/#fun_matrix.get) e [set()](https://br.tradingview.com/pine-script-reference/v5/#fun_matrix.set) da _matrix_ para ajustar os elementos na última coluna para os valores __HLC__ em desenvolvimento no período atual. Ele utiliza a _matrix_ `ohlcData`, uma [_submatrix_()](https://br.tradingview.com/pine-script-reference/v5/#fun_matrix.submatrix), e arrays [row()](https://br.tradingview.com/pine-script-reference/v5/#fun_matrix.row) e [col()](https://br.tradingview.com/pine-script-reference/v5/#fun_matrix.col) para calcular as médias desenvolventes __OHLC4__ e __HL2__ ao longo dos períodos de `length`, a máxima alta e a mínima baixa ao longo dos períodos de `length`, e o preço __OHLC4__ em desenvolvimento do período atual:
+
+![Cálculos com matrix cálculos elemento a elemento](./imgs/Matrices-Matrix-calculations-Element-wise-calculations-1.png)
+
+```c
+//@version=5
+indicator("Element-wise calculations example", "Developing values", overlay = true)
+
+//@variable The number of data points in the averages.
+int length = input.int(3, "Length", 1)
+//@variable The timeframe of each reset period.
+string timeframe = input.timeframe("D", "Reset Timeframe")
+
+//@variable A 4x`length` matrix of OHLC values.
+var matrix<float> ohlcData = matrix.new<float>(4, length)
+
+//@variable Is `true` at the start of a new bar at the `timeframe`.
+bool queueColumn = timeframe.change(timeframe)
+
+if queueColumn
+    // Add new values to the end column of `ohlcData`.
+    ohlcData.add_col(length, array.from(open, high, low, close))
+    // Remove the oldest column from `ohlcData`.
+    ohlcData.remove_col(0)
+else
+    // Adjust the last element of column 1 for new highs.
+    if high > ohlcData.get(1, length - 1)
+        ohlcData.set(1, length - 1, high)
+    // Adjust the last element of column 2 for new lows.
+    if low < ohlcData.get(2, length - 1)
+        ohlcData.set(2, length - 1, low)
+    // Adjust the last element of column 3 for the new closing price.
+    ohlcData.set(3, length - 1, close)
+
+//@variable The `matrix.avg()` of all elements in `ohlcData`.
+avgOHLC4 = ohlcData.avg()
+//@variable The `matrix.avg()` of all elements in rows 1 and 2, i.e., the average of all `high` and `low` values.
+avgHL2   = ohlcData.submatrix(from_row = 1, to_row = 3).avg()
+//@variable The `matrix.max()` of all values in `ohlcData`. Equivalent to `ohlcData.row(1).max()`.
+maxHigh = ohlcData.max()
+//@variable The `array.min()` of all `low` values in `ohlcData`. Equivalent to `ohlcData.min()`.
+minLow = ohlcData.row(2).min()
+//@variable The `array.avg()` of the last column in `ohlcData`, i.e., the current OHLC4.
+ohlc4Value = ohlcData.col(length - 1).avg()
+
+plot(avgOHLC4, "Average OHLC4", color.purple, 2)
+plot(avgHL2, "Average HL2", color.navy, 2)
+plot(maxHigh, "Max High", color.green)
+plot(minLow, "Min Low", color.red)
+plot(ohlc4Value, "Current OHLC4", color.blue)
+```
+
+Note que:
+
+- Neste exemplo, utilizaram-se métodos [array.*()](https://br.tradingview.com/pine-script-reference/v5/#type_array) e [matrix.*()](https://br.tradingview.com/pine-script-reference/v5/#type_matrix) de forma intercambiável para demonstrar suas semelhanças em sintaxe e comportamento.
+- Usuários podem calcular o equivalente em _matrix_ de [array.sum()](https://br.tradingview.com/pine-script-reference/v5/#fun_array.sum) multiplicando [matrix.avg()](https://br.tradingview.com/pine-script-reference/v5/#fun_matrix.avg) pelo [matrix.elements_count()](https://br.tradingview.com/pine-script-reference/v5/#fun_matrix.elements_count).
