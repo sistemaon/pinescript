@@ -1201,3 +1201,65 @@ Note que:
 
 - Neste exemplo, utilizaram-se métodos [array.*()](https://br.tradingview.com/pine-script-reference/v5/#type_array) e [matrix.*()](https://br.tradingview.com/pine-script-reference/v5/#type_matrix) de forma intercambiável para demonstrar suas semelhanças em sintaxe e comportamento.
 - Usuários podem calcular o equivalente em _matrix_ de [array.sum()](https://br.tradingview.com/pine-script-reference/v5/#fun_array.sum) multiplicando [matrix.avg()](https://br.tradingview.com/pine-script-reference/v5/#fun_matrix.avg) pelo [matrix.elements_count()](https://br.tradingview.com/pine-script-reference/v5/#fun_matrix.elements_count).
+
+## Cálculos Especiais
+
+O Pine Script possui várias funções incorporadas para realizar cálculos aritméticos essenciais de _matrices_ e operações de álgebra linear, incluindo [matrix.sum()](https://br.tradingview.com/pine-script-reference/v5/#fun_matrix.sum), [matrix.diff()](https://br.tradingview.com/pine-script-reference/v5/#fun_matrix.diff), [matrix.mult()](https://br.tradingview.com/pine-script-reference/v5/#fun_matrix.mult), [matrix.pow()](https://br.tradingview.com/pine-script-reference/v5/#fun_matrix.pow), [matrix.det()](https://br.tradingview.com/pine-script-reference/v5/#fun_matrix.det), [matrix.inv()](https://br.tradingview.com/pine-script-reference/v5/#fun_matrix.inv), [matrix.pinv()](https://br.tradingview.com/pine-script-reference/v5/#fun_matrix.pinv), [matrix.rank()](https://br.tradingview.com/pine-script-reference/v5/#fun_matrix.rank), [matrix.trace()](https://br.tradingview.com/pine-script-reference/v5/#fun_matrix.trace), [matrix.eigenvalues()](https://br.tradingview.com/pine-script-reference/v5/#fun_matrix.eigenvalues), [matrix.eigenvectors()](https://br.tradingview.com/pine-script-reference/v5/#fun_matrix.eigenvectors) e [matrix.kron()](https://br.tradingview.com/pine-script-reference/v5/#fun_matrix.kron). Essas funções são recursos avançados que facilitam uma variedade de cálculos e transformações com _matrices_.
+
+A seguir abaixo, abordam-se algumas funções fundamentais com exemplos básicos.
+
+### `matrix.sum()` e `matrix.diff()`
+
+Scripts podem realizar adição e subtração de duas _matrices_ com a mesma forma ou de uma _matrix_ e um valor escalar usando as funções [matrix.sum()](https://br.tradingview.com/pine-script-reference/v5/#fun_matrix.sum) e [matrix.diff()](https://br.tradingview.com/pine-script-reference/v5/#fun_matrix.diff). Essas funções utilizam os valores da _matrix_ `id2` ou escalar para adicionar ou subtrair dos elementos em `id1`.
+
+Este script demonstra um exemplo simples de adição e subtração de _matrices_ no Pine. Ele cria uma _matrix_ 3x3, calcula sua [transposta](./04_15_matrices.md#transpondo), em seguida, calcula a [matrix.sum()](https://br.tradingview.com/pine-script-reference/v5/#fun_matrix.sum) e [matrix.diff()](https://br.tradingview.com/pine-script-reference/v5/#fun_matrix.diff) das duas _matrices_. Este exemplo exibe a _matrix_ original, sua [transposta](https://br.tradingview.com/pine-script-reference/v5/#fun_matrix.transpose) e as _matrices_ resultantes da soma e diferença em _labels_ no gráfico:
+
+![Cálculos especiais matrix.sum() e matrix.diff()](./imgs/Matrices-Matrix-calculations-Special-calculations-1.png)
+
+```c
+//@version=5
+indicator("Matrix sum and diff example")
+
+//@function Displays the rows of a matrix in a label with a note.
+//@param    this The matrix to display.
+//@param    barIndex The `bar_index` to display the label at.
+//@param    bgColor The background color of the label.
+//@param    textColor The color of the label's text.
+//@param    note The text to display above the rows.
+method debugLabel(
+     matrix<float> this, int barIndex = bar_index, color bgColor = color.blue,
+     color textColor = color.white, string note = ""
+ ) =>
+    labelText = note + "\n" + str.tostring(this)
+    if barstate.ishistory
+        label.new(
+             barIndex, 0, labelText, color = bgColor, style = label.style_label_center,
+             textcolor = textColor, size = size.huge
+         )
+
+//@variable A 3x3 matrix.
+m = matrix.new<float>()
+
+// Add rows to `m`.
+m.add_row(0, array.from(0.5, 1.0, 1.5))
+m.add_row(1, array.from(2.0, 2.5, 3.0))
+m.add_row(2, array.from(3.5, 4.0, 4.5))
+
+if bar_index == last_bar_index - 1
+    // Display `m`.
+    m.debugLabel(note = "A")
+    // Get and display the transpose of `m`.
+    matrix<float> t = m.transpose()
+    t.debugLabel(bar_index + 10, note = "Aᵀ")
+    // Calculate the sum of the two matrices. The resulting matrix is symmetric.
+    matrix.sum(m, t).debugLabel(bar_index + 20, color.green, note = "A + Aᵀ")
+    // Calculate the difference between the two matrices. The resulting matrix is antisymmetric.
+    matrix.diff(m, t).debugLabel(bar_index + 30, color.red, note = "A - Aᵀ")
+```
+
+Note que:
+
+- Neste exemplo, rotulou-se a _matrix_ original como "A" e a transposta como "AT".
+- Ao adicionar "A" e "AT" produz uma _matrix_ [simétrica](https://br.tradingview.com/pine-script-reference/v5/#fun_matrix.is_symmetric), e ao subtrair uma da outra produz uma _matrix_ [antissimétrica](https://br.tradingview.com/pine-script-reference/v5/#fun_matrix.is_antisymmetric).
+
+
