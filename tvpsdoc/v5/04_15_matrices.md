@@ -1316,7 +1316,7 @@ if bar_index == last_bar_index - 1
 
 Note que:
 
-- Em contraste com a multiplicação de escalares, a multiplicação de matrizes _não é comutativa_, ou seja, `matrix.mult(a, b)` não necessariamente produz o mesmo resultado que `matrix.mult(b, a)`. No contexto do exemplo acima , o último causará um erro de execução porque o número de colunas em `b` não é igual ao número de linhas em `a`.
+- Em contraste com a multiplicação de escalares, a multiplicação de _matrices_ _não é comutativa_, ou seja, `matrix.mult(a, b)` não necessariamente produz o mesmo resultado que `matrix.mult(b, a)`. No contexto do exemplo acima , o último causará um erro de execução porque o número de colunas em `b` não é igual ao número de linhas em `a`.
 
 Ao multiplicar uma _matrix_ e um [array](https://br.tradingview.com/pine-script-reference/v5/#type_array), esta função trata a operação da mesma maneira que multiplicar `id1` por uma _matrix_ de uma única coluna, mas retorna um [array](https://br.tradingview.com/pine-script-reference/v5/#type_array) com o mesmo número de elementos que o número de linhas em `id1`. Quando [matrix.mult()](https://br.tradingview.com/pine-script-reference/v5/#fun_matrix.mult) recebe um valor escalar como seu `id2`, a função retorna uma nova _matrix_ cujos elementos são os elementos em `id1` multiplicados pelo valor `id2`.
 
@@ -1400,7 +1400,7 @@ Para qualquer _matrix_ [quadrada](https://br.tradingview.com/pine-script-referen
 
 Para _matrices_ singulares (não-invertíveis), pode-se calcular uma inversa generalizada ([pseudoinversa](https://pt.wikipedia.org/wiki/Inversa_de_Moore-Penrose)), independentemente de a _matrix_ ser quadrada ou ter um determinante não nulo, por meio da função [matrix.pinv()](https://br.tradingview.com/pine-script-reference/v5/#fun_matrix.pinv). É importante lembrar que, ao contrário de uma verdadeira inversa, o produto de uma pseudoinversa e a _matrix_ original não necessariamente resulta na _matrix_ identidade, a menos que a _matrix_ original _seja invertível_.
 
-O exemplo a seguir forma uma _matrix_ `m` de 2x2 a partir de entradas do usuário, em seguida, utiliza os métodos [m.inv()](https://br.tradingview.com/pine-script-reference/v5/#fun_matrix.inv) e [m.pinv()](https://br.tradingview.com/pine-script-reference/v5/#fun_matrix.pinv) para calcular a inversa ou pseudoinversa de `m`. O script exibe a _matrix_ original, sua inversa ou pseudoinversa, e o produto delas em _labels_ no gráfico.
+O exemplo a seguir forma uma _matrix_ `m` de 2x2 a partir de entradas do usuário, em seguida, utiliza os métodos [m.inv()](https://br.tradingview.com/pine-script-reference/v5/#fun_matrix.inv) e [m.pinv()](https://br.tradingview.com/pine-script-reference/v5/#fun_matrix.pinv) para calcular a inversa ou pseudoinversa de `m`. O script exibe a _matrix_ original, sua inversa ou pseudoinversa, e o produto delas em _labels_ no gráfico:
 
 ![Cálculos especiais matrix.inv() e matrix.pinv()](./imgs/Matrices-Matrix-calculations-Special-calculations-4.png)
 
@@ -1458,5 +1458,40 @@ Note que:
 
 - Este script invoca somente a função [m.inv()](https://br.tradingview.com/pine-script-reference/v5/#fun_matrix.inv) quando `isInvertible` é `true`, ou seja, quando `m` é [quadrada](https://br.tradingview.com/pine-script-reference/v5/#fun_matrix.is_square) e possui um [determinante](https://br.tradingview.com/pine-script-reference/v5/#fun_matrix.det) não nulo. Caso contrário, utiliza [m.pinv()](https://br.tradingview.com/pine-script-reference/v5/#fun_matrix.pinv) para calcular a inversa generalizada.
 
+### `matrix.rank()`
 
+O _posto_ de uma _matrix_ representa o número de vetores linearmente independentes (linhas ou colunas) que ela contém. Em essência, o posto da _matrix_ mede o número de vetores que não podem ser expressos como uma combinação linear de outros, ou, em outras palavras, o número de vetores que contêm informações __únicas__. Scripts podem calcular o posto de uma _matrix_ por meio de [matrix.rank()](https://br.tradingview.com/pine-script-reference/v5/#fun_matrix.rank).
 
+Este script identifica o número de vetores linearmente independentes em duas _matrices_ 3x3 (`m1` e `m2`) e exibe os valores em um painel separado. Como pode ser visto no gráfico, o valor de [m1.rank()](https://br.tradingview.com/pine-script-reference/v5/#fun_matrix.rank) é 3 porque cada vetor é único. Por outro lado, o valor de [m2.rank()](https://br.tradingview.com/pine-script-reference/v5/#fun_matrix.rank) é 1 porque possui apenas um vetor único:
+
+![Cálculos especiais matrix.rank()](./imgs/Matrices-Matrix-calculations-Special-calculations-5.png)
+
+```c
+//@version=5
+indicator("Matrix rank example")
+
+//@variable A 3x3 full-rank matrix.
+m1 = matrix.new<float>()
+//@variable A 3x3 rank-deficient matrix.
+m2 = matrix.new<float>()
+
+// Add linearly independent vectors to `m1`.
+m1.add_row(0, array.from(3, 2, 3))
+m1.add_row(1, array.from(4, 6, 6))
+m1.add_row(2, array.from(7, 4, 9))
+
+// Add linearly dependent vectors to `m2`.
+m2.add_row(0, array.from(1, 2, 3))
+m2.add_row(1, array.from(2, 4, 6))
+m2.add_row(2, array.from(3, 6, 9))
+
+// Plot `matrix.rank()` values.
+plot(m1.rank(), color = color.green, linewidth = 3)
+plot(m2.rank(), color = color.red, linewidth = 3)
+```
+
+Note que:
+
+- O maior valor de posto que uma _matrix_ pode ter é o mínimo entre o número de suas linhas e colunas. Uma _matrix_ com o posto máximo possível é conhecida como uma _matrix_ de posto completo, e qualquer _matrix_ sem posto completo é conhecida como uma _matrix_ com deficiência de posto.
+- Os [determinantes](./04_15_matrices.md#matrixdet) de _matrices_ quadradas de posto completo são não-nulos, e tais _matrices_ possuem [inversas](./04_15_matrices.md#matrixinv-e-matrixpinv). Por outro lado, o [determinante](https://br.tradingview.com/pine-script-reference/v5/#fun_matrix.det) de uma _matrix_ com deficiência de posto é sempre 0.
+- Para qualquer _matrix_ que contenha apenas o mesmo valor em cada um de seus elementos (por exemplo, uma _matrix_ preenchida com 0), o posto é sempre 0, já que nenhum dos vetores contém informações únicas. Para qualquer outra _matrix_ com valores distintos, o posto mínimo possível é 1.
