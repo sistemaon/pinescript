@@ -1319,3 +1319,81 @@ Note que:
 - Em contraste com a multiplicação de escalares, a multiplicação de matrizes _não é comutativa_, ou seja, `matrix.mult(a, b)` não necessariamente produz o mesmo resultado que `matrix.mult(b, a)`. No contexto do exemplo acima , o último causará um erro de execução porque o número de colunas em `b` não é igual ao número de linhas em `a`.
 
 Ao multiplicar uma _matrix_ e um [array](https://br.tradingview.com/pine-script-reference/v5/#type_array), esta função trata a operação da mesma maneira que multiplicar `id1` por uma _matrix_ de uma única coluna, mas retorna um [array](https://br.tradingview.com/pine-script-reference/v5/#type_array) com o mesmo número de elementos que o número de linhas em `id1`. Quando [matrix.mult()](https://br.tradingview.com/pine-script-reference/v5/#fun_matrix.mult) recebe um valor escalar como seu `id2`, a função retorna uma nova _matrix_ cujos elementos são os elementos em `id1` multiplicados pelo valor `id2`.
+
+### `matrix.det()`
+
+O [_determinante_](https://pt.wikipedia.org/wiki/Determinante) é um valor escalar associado a uma _matrix_ [quadrada](https://br.tradingview.com/pine-script-reference/v5/#fun_matrix.is_square) que descreve algumas de suas características, principalmente sua [invertibilidade](https://pt.wikipedia.org/wiki/Matriz_inversa). Se uma _matrix_ possui uma [inversa](https://br.tradingview.com/pine-script-reference/v5/#fun_matrix.inv), seu determinante não é zero. Caso contrário, a _matrix_ é _singular_ (não-invertível). Scripts podem calcular o determinante de uma _matrix_ por meio de [matrix.det()](https://br.tradingview.com/pine-script-reference/v5/#fun_matrix.det).
+
+Programadores podem usar determinantes para detectar semelhanças entre _matrices_, identificar _matrices_ de [_posto completo_](https://pt.wikipedia.org/wiki/Posto_matricial) e _matrices_ com [_deficiência de posto_](https://pt.wikipedia.org/wiki/Posto_matricial), e resolver sistemas de equações lineares, entre outras aplicações.
+
+Por exemplo, este script utiliza determinantes para resolver um sistema de equações lineares com um número correspondente de valores desconhecidos usando a [regra de Cramer](https://pt.wikipedia.org/wiki/Regra_de_Cramer). A função definida pelo usuário, `solve()`, retorna um [array](https://br.tradingview.com/pine-script-reference/v5/#type_array) contendo soluções para cada valor desconhecido no sistema, onde o _n-th_ (_n-ésimo_) elemento do array é o determinante da _matrix_ de coeficientes com a _n-th_ (_n-ésima_) coluna substituída pela coluna de constantes, dividido pelo determinante dos coeficientes originais.
+
+Neste script, foi definida a _matrix_ `m` que contém coeficientes e constantes para essas três equações:
+
+```c
+3 * x0 + 4 * x1 - 1 * x2 = 8
+5 * x0 - 2 * x1 + 1 * x2 = 4
+2 * x0 - 2 * x1 + 1 * x2 = 1
+```
+
+A solução para este sistema é `(x0 = 1, x1 = 2, x2 = 3)`. O script calcula esses valores a partir de `m` por meio de `m.solve()` e os exibe no gráfico:
+
+![Cálculos especiais matrix.det()](./imgs/Matrices-Matrix-calculations-Special-calculations-3.png)
+
+```c
+//@version=5
+indicator("Determinants example", "Cramer's Rule")
+
+//@function Solves a system of linear equations with a matching number of unknowns using Cramer's rule.
+//@param    this An augmented matrix containing the coefficients for each unknown and the results of
+//          the equations. For example, a row containing the values 2, -1, and 3 represents the equation
+//          `2 * x0 + (-1) * x1 = 3`, where `x0` and `x1` are the unknown values in the system.
+//@returns  An array containing solutions for each variable in the system.
+solve(matrix<float> this) =>
+    //@variable The coefficient matrix for the system of equations.
+    matrix<float> coefficients = this.submatrix(from_column = 0, to_column = this.columns() - 1)
+    //@variable The array of resulting constants for each equation.
+    array<float> constants = this.col(this.columns() - 1)
+    //@variable An array containing solutions for each unknown in the system.
+    array<float> result = array.new<float>()
+
+    //@variable The determinant value of the coefficient matrix.
+    float baseDet = coefficients.det()
+    matrix<float> modified = na
+    for col = 0 to coefficients.columns() - 1
+        modified := coefficients.copy()
+        modified.add_col(col, constants)
+        modified.remove_col(col + 1)
+
+        // Calculate the solution for the column's unknown by dividing the determinant of `modified` by the `baseDet`.
+        result.push(modified.det() / baseDet)
+
+    result
+
+//@variable A 3x4 matrix containing coefficients and results for a system of three equations.
+m = matrix.new<float>()
+
+// Add rows for the following equations:
+// Equation 1: 3 * x0 + 4 * x1 - 1 * x2 = 8
+// Equation 2: 5 * x0 - 2 * x1 + 1 * x2 = 4
+// Equation 3: 2 * x0 - 2 * x1 + 1 * x2 = 1
+m.add_row(0, array.from(3.0, 4.0, -1.0, 8.0))
+m.add_row(1, array.from(5.0, -2.0, 1.0, 4.0))
+m.add_row(2, array.from(2.0, -2.0, 1.0, 1.0))
+
+//@variable An array of solutions to the unknowns in the system of equations represented by `m`.
+solutions = solve(m)
+
+plot(solutions.get(0), "x0", color.red, 3)   // Plots 1.
+plot(solutions.get(1), "x1", color.green, 3) // Plots 2.
+plot(solutions.get(2), "x2", color.blue, 3)  // Plots 3.
+```
+
+Note que:
+
+- Resolver sistemas de equações é particularmente útil para _análise de regressão_, por exemplo, regressão linear e polinomial.
+- A regra de Cramer funciona bem para sistemas pequenos de equações. No entanto, é computacionalmente ineficiente em sistemas maiores. Outros métodos, como a [eliminação de Gauss](https://pt.wikipedia.org/wiki/Elimina%C3%A7%C3%A3o_de_Gauss), são frequentemente preferidos para esses casos.
+
+
+
+
