@@ -1394,6 +1394,69 @@ Note que:
 - Resolver sistemas de equações é particularmente útil para _análise de regressão_, por exemplo, regressão linear e polinomial.
 - A regra de Cramer funciona bem para sistemas pequenos de equações. No entanto, é computacionalmente ineficiente em sistemas maiores. Outros métodos, como a [eliminação de Gauss](https://pt.wikipedia.org/wiki/Elimina%C3%A7%C3%A3o_de_Gauss), são frequentemente preferidos para esses casos.
 
+### `matrix.inv()` e `matrix.pinv()`
+
+Para qualquer _matrix_ [quadrada](https://br.tradingview.com/pine-script-reference/v5/#fun_matrix.is_square) não singular, existe uma _matrix_ inversa que produz a _matrix_ [identidade](https://br.tradingview.com/pine-script-reference/v5/#fun_matrix.is_identity) quando [multiplicada](./04_15_matrices.md#matrixmult) pela _matrix_ original. As inversas são úteis em várias transformações de _matrices_ e na solução de sistemas de equações. Scripts podem calcular a inversa de uma _matrix_ __quando ela existe__ por meio da função [matrix.inv()](https://br.tradingview.com/pine-script-reference/v5/#fun_matrix.inv).
+
+Para _matrices_ singulares (não-invertíveis), pode-se calcular uma inversa generalizada ([pseudoinversa](https://pt.wikipedia.org/wiki/Inversa_de_Moore-Penrose)), independentemente de a _matrix_ ser quadrada ou ter um determinante não nulo, por meio da função [matrix.pinv()](https://br.tradingview.com/pine-script-reference/v5/#fun_matrix.pinv). É importante lembrar que, ao contrário de uma verdadeira inversa, o produto de uma pseudoinversa e a _matrix_ original não necessariamente resulta na _matrix_ identidade, a menos que a _matrix_ original _seja invertível_.
+
+O exemplo a seguir forma uma _matrix_ `m` de 2x2 a partir de entradas do usuário, em seguida, utiliza os métodos [m.inv()](https://br.tradingview.com/pine-script-reference/v5/#fun_matrix.inv) e [m.pinv()](https://br.tradingview.com/pine-script-reference/v5/#fun_matrix.pinv) para calcular a inversa ou pseudoinversa de `m`. O script exibe a _matrix_ original, sua inversa ou pseudoinversa, e o produto delas em _labels_ no gráfico.
+
+![Cálculos especiais matrix.inv() e matrix.pinv()](./imgs/Matrices-Matrix-calculations-Special-calculations-4.png)
+
+```c
+//@version=5
+indicator("Inverse example")
+
+// Element inputs for the 2x2 matrix.
+float r0c0 = input.float(4.0, "Row 0, Col 0")
+float r0c1 = input.float(3.0, "Row 0, Col 1")
+float r1c0 = input.float(2.0, "Row 1, Col 0")
+float r1c1 = input.float(1.0, "Row 1, Col 1")
+
+//@function Displays the rows of a matrix in a label with a note.
+//@param    this The matrix to display.
+//@param    barIndex The `bar_index` to display the label at.
+//@param    bgColor The background color of the label.
+//@param    textColor The color of the label's text.
+//@param    note The text to display above the rows.
+method debugLabel(
+     matrix<float> this, int barIndex = bar_index, color bgColor = color.blue,
+     color textColor = color.white, string note = ""
+ ) =>
+    labelText = note + "\n" + str.tostring(this)
+    if barstate.ishistory
+        label.new(
+             barIndex, 0, labelText, color = bgColor, style = label.style_label_center,
+             textcolor = textColor, size = size.huge
+         )
+
+//@variable A 2x2 matrix of input values.
+m = matrix.new<float>()
+
+// Add input values to `m`.
+m.add_row(0, array.from(r0c0, r0c1))
+m.add_row(1, array.from(r1c0, r1c1))
+
+//@variable Is `true` if `m` is square with a nonzero determinant, indicating invertibility.
+bool isInvertible = m.is_square() and m.det()
+
+//@variable The inverse or pseudoinverse of `m`.
+mInverse = isInvertible ? m.inv() : m.pinv()
+
+//@variable The product of `m` and `mInverse`. Returns the identity matrix when `isInvertible` is `true`.
+matrix<float> product = m.mult(mInverse)
+
+if bar_index == last_bar_index - 1
+    // Display `m`, `mInverse`, and their `product`.
+    m.debugLabel(note = "Original")
+    mInverse.debugLabel(bar_index + 10, color.purple, note = isInvertible ? "Inverse" : "Pseudoinverse")
+    product.debugLabel(bar_index + 20, color.green, note = "Product")
+```
+
+Note que:
+
+- Este script invoca somente a função [m.inv()](https://br.tradingview.com/pine-script-reference/v5/#fun_matrix.inv) quando `isInvertible` é `true`, ou seja, quando `m` é [quadrada](https://br.tradingview.com/pine-script-reference/v5/#fun_matrix.is_square) e possui um [determinante](https://br.tradingview.com/pine-script-reference/v5/#fun_matrix.det) não nulo. Caso contrário, utiliza [m.pinv()](https://br.tradingview.com/pine-script-reference/v5/#fun_matrix.pinv) para calcular a inversa generalizada.
 
 
 
