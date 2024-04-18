@@ -1495,3 +1495,9 @@ Note que:
 - O maior valor de posto que uma _matrix_ pode ter é o mínimo entre o número de suas linhas e colunas. Uma _matrix_ com o posto máximo possível é conhecida como uma _matrix_ de posto completo, e qualquer _matrix_ sem posto completo é conhecida como uma _matrix_ com deficiência de posto.
 - Os [determinantes](./04_15_matrices.md#matrixdet) de _matrices_ quadradas de posto completo são não-nulos, e tais _matrices_ possuem [inversas](./04_15_matrices.md#matrixinv-e-matrixpinv). Por outro lado, o [determinante](https://br.tradingview.com/pine-script-reference/v5/#fun_matrix.det) de uma _matrix_ com deficiência de posto é sempre 0.
 - Para qualquer _matrix_ que contenha apenas o mesmo valor em cada um de seus elementos (por exemplo, uma _matrix_ preenchida com 0), o posto é sempre 0, já que nenhum dos vetores contém informações únicas. Para qualquer outra _matrix_ com valores distintos, o posto mínimo possível é 1.
+
+## Tratamento de Erros
+
+Além dos erros de __compilação__ usuais, na qual ocorrem durante a compilação de um script devido à sintaxe imprópria, scripts que utilizam _matrices_ podem gerar erros específicos de __execução__ durante sua operação. Quando um script gera um erro de execução, ele exibe um ponto de exclamação vermelho ao lado do título do script. Os usuários podem visualizar a mensagem de erro clicando neste ícone.
+
+Nesta seção, são abordados os erros de execução que os usuários podem encontrar ao utilizar _matrices_ em seus scripts.
