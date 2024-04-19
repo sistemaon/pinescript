@@ -1525,7 +1525,7 @@ if bar_index == last_bar_index - 1
 
 Usuários podem evitar esse erro em seus scripts garantindo que suas chamadas de função não referenciem _indices_ maiores ou iguais ao número de linhas/colunas.
 
-<!-- ## O Tamanho do Array não Corresponde ao Número de Linhas/Colunas na _Matrix_.
+## O Tamanho do Array não Corresponde ao Número de Linhas/Colunas na _Matrix_.
 
 Ao usar as funções [matrix.add_row()](https://br.tradingview.com/pine-script-reference/v5/#fun_matrix.add_row) e [matrix.add_col()](https://br.tradingview.com/pine-script-reference/v5/#fun_matrix.add_col) para [inserir](./04_15_matrices.md#inserindo) linhas e colunas em uma _matrix_ não-vazia, o tamanho do array inserido deve estar alinhado com as dimensões da _matrix_. O tamanho de uma linha inserida deve corresponder ao número de colunas, e o tamanho de uma coluna inserida deve corresponder ao número de linhas. Caso contrário, o script gerará este erro de execução.
 
@@ -1548,7 +1548,7 @@ Note que:
 
 - Quando `m` está vazia, pode-se inserir uma linha ou coluna de array de _qualquer_ tamanho, conforme mostrado na primeira linha de `m.add_col()`.
 
-## Não é Possível Chamar Métodos de _Matrix_ quando o ID da _Matrix_ é 'na'.
+<!-- ## Não é Possível Chamar Métodos de _Matrix_ quando o ID da _Matrix_ é 'na'.
 
 Quando uma variável de _matrix_ é atribuída a `na`, significa que a variável não referencia um objeto existente. Consequentemente, não se pode usar funções e métodos incorporados `matrix.*()` com ela.
 
