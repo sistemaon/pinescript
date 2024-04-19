@@ -1569,7 +1569,7 @@ if bar_index == last_bar_index - 1
 
 Para resolver este erro, atribua `m` a uma instância válida de _matrix_ antes de usar funções `matrix.*()`.
 
-<!-- ## A _Matrix_ é Muito Grande. O Tamanho Máximo da _Matrix_ é de 100.000 Elementos.
+## A _Matrix_ é Muito Grande. O Tamanho Máximo da _Matrix_ é de 100.000 Elementos.
 
 O número total de elementos em uma _matrix_ ([matrix.elements_count()](https://br.tradingview.com/pine-script-reference/v5/#fun_matrix.elements_count)) não pode exceder __100.000__, independentemente de sua forma.
 
@@ -1590,7 +1590,7 @@ if bar_index == 0
 plot(m.get(0, 0))
 ```
 
-## O _Index_ de Linha/Coluna Deve Ser 0 <= `from_row/column` < `to_row/column`.
+<!-- ## O _Index_ de Linha/Coluna Deve Ser 0 <= `from_row/column` < `to_row/column`.
 
 Ao usar funções `matrix.*()` com _indices_ `from_row/column` e `to_row/column`, os valores `from_*` devem ser menores que os valores `to_*`, sendo o valor mínimo possível 0. Caso contrário, o script gerará um erro de execução.
 
