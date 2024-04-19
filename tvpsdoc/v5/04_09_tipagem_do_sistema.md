@@ -440,7 +440,7 @@ label.new(
 
 ## Coleções
 
-Coleções no Pine Script ([arrays](./04_14_arrays.md), [matrices](./04_15_matrices.md), e [maps](./000_maps.md)) (_arrays, matrizes e mapas_) utilizam IDs de referência, assim como outros tipos especiais (por exemplo, labels). O tipo do ID define o tipo de _elementos_ que a coleção conterá. No Pine, especifica-se os tipos de array, matrix, e map (_array, matriz e mapa_) acrescentando um [modelo de tipo](./04_09_tipagem_do_sistema.md#templates-de-tipo) às palavras-chave [array](https://br.tradingview.com/pine-script-reference/v5/#type_array), [matrix](https://br.tradingview.com/pine-script-reference/v5/#type_matrix) ou [map](https://br.tradingview.com/pine-script-reference/v5/#type_map):
+Coleções no Pine Script ([arrays](./04_14_arrays.md), [matrices](./04_15_matrices.md), e [maps](./04_16_mapas.md)) (_arrays, matrizes e mapas_) utilizam IDs de referência, assim como outros tipos especiais (por exemplo, labels). O tipo do ID define o tipo de _elementos_ que a coleção conterá. No Pine, especifica-se os tipos de array, matrix, e map (_array, matriz e mapa_) acrescentando um [modelo de tipo](./04_09_tipagem_do_sistema.md#templates-de-tipo) às palavras-chave [array](https://br.tradingview.com/pine-script-reference/v5/#type_array), [matrix](https://br.tradingview.com/pine-script-reference/v5/#type_matrix) ou [map](https://br.tradingview.com/pine-script-reference/v5/#type_map):
 
 - `array<int>` define um array contendo elementos do tipo “int”.
 - `array<label>` define um array contendo IDs de “label”.
@@ -616,11 +616,11 @@ plot(allTimeHigh)
 
 # Templates de Tipo
 
-Os _modelos de tipo_ especificam os tipos de dados que as coleções ([arrays](./04_14_arrays.md), [matrices](./04_15_matrices.md), e [maps](./000_maps.md)) (_arrays, matrizes e mapas_) podem conter.
+Os _modelos de tipo_ especificam os tipos de dados que as coleções ([arrays](./04_14_arrays.md), [matrices](./04_15_matrices.md), e [maps](./04_16_mapas.md)) (_arrays, matrizes e mapas_) podem conter.
 
 Modelos para [arrays](./04_14_arrays.md) e [matrices](./04_15_matrices.md) consistem de _um único_ tipo de identificador especificado entre os símbolos `<` e `>`, por exemplo, `<int>`, `<label>` e `<PivotPoint>` (onde `PivotPoint` é um [tipo definido pelo usuário (UDT)](./04_09_tipagem_do_sistema.md#tipos-definidos-pelo-usuário)).
 
-Templates para [maps](./000_maps.md) consistem em _dois_ tipos de identificadores de especificado entre os símbolos `<` e `>`, onde o primeiro especifica o tipo das _chaves_ em cada par de chave-valor, e o segundo especifica o tipo do _valor_. Por exemplo, `<string, float>` é um modelo de tipo para um mapa que contém chaves de `string` e valores `float`.
+Templates para [maps](./04_16_mapas.md) consistem em _dois_ tipos de identificadores de especificado entre os símbolos `<` e `>`, onde o primeiro especifica o tipo das _chaves_ em cada par de chave-valor, e o segundo especifica o tipo do _valor_. Por exemplo, `<string, float>` é um modelo de tipo para um mapa que contém chaves de `string` e valores `float`.
 
 Os usuários podem construir templates de tipo a partir de:
 
@@ -630,7 +630,7 @@ Os usuários podem construir templates de tipo a partir de:
 
 Note que:
 
-- [Maps](./000_maps.md) podem usar qualquer um desses tipos como _valores_, mas só podem aceitar tipos fundamentais como _chaves_.
+- [Maps](./04_16_mapas.md) podem usar qualquer um desses tipos como _valores_, mas só podem aceitar tipos fundamentais como _chaves_.
 
 Os scripts usam templates de tipo para declarar variáveis que apontam para coleções, e ao criar novas instâncias de coleções.
 

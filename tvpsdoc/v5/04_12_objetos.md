@@ -170,7 +170,7 @@ foundPoint.y := pivotHighPrice
 
 # Coletando Objetos
 
-As coleções do Pine Script ([arrays](./04_14_arrays.md), [matrices](./04_15_matrices.md), e [maps](./000_maps.md)) (_arrays_, _matrizes_ e _mapas_) podem conter objetos, permitindo aos usuários adicionar dimensões virtuais às suas estruturas de dados. Para declarar uma coleção de objetos, passe o nome de um _UDT_ em seu [Template de Tipo](./04_09_tipagem_do_sistema.md#templates-de-tipo).
+As coleções do Pine Script ([arrays](./04_14_arrays.md), [matrices](./04_15_matrices.md), e [maps](./04_16_mapas.md)) (_arrays_, _matrizes_ e _mapas_) podem conter objetos, permitindo aos usuários adicionar dimensões virtuais às suas estruturas de dados. Para declarar uma coleção de objetos, passe o nome de um _UDT_ em seu [Template de Tipo](./04_09_tipagem_do_sistema.md#templates-de-tipo).
 
 O exemplo a seguir declara um [array](https://br.tradingview.com/pine-script-reference/v5/#type_array) vazio que conterá objetos de um tipo definido pelo usuário chamado `pivotPoint`:
 

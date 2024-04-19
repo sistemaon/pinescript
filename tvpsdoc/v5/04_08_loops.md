@@ -58,7 +58,7 @@ O que passa no código é:
 
 Os loops existem por uma boa razão, pois mesmo no Pine Script, são necessários em alguns casos. Esses casos geralmente incluem:
 
-- Manipulação de coleções ([arrays](./04_14_arrays.md), [matrizes](./04_15_matrices.md) e [mapas](./000_maps.md)).
+- Manipulação de coleções ([arrays](./04_14_arrays.md), [matrizes](./04_15_matrices.md) e [mapas](./04_16_mapas.md)).
 - Analisar históricamente barras anteriores usando um valor de referência que só pode ser conhecido na barra atual, por exemplo, para descobrir quantos highs anteriores são maiores do que o [high](https://br.tradingview.com/pine-script-reference/v5/#var_high) da barra atual. Como o [high](https://br.tradingview.com/pine-script-reference/v5/#var_high) da barra atual só é conhecido na barra em que o script está sendo executado, um loop é necessário para voltar no tempo e analisar barras anteriores.
 - Realizar cálculos em barras anteriores que não podem ser realizados usando funções integradas.
 
