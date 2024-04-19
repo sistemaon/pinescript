@@ -1496,8 +1496,168 @@ Note que:
 - Os [determinantes](./04_15_matrices.md#matrixdet) de _matrices_ quadradas de posto completo são não-nulos, e tais _matrices_ possuem [inversas](./04_15_matrices.md#matrixinv-e-matrixpinv). Por outro lado, o [determinante](https://br.tradingview.com/pine-script-reference/v5/#fun_matrix.det) de uma _matrix_ com deficiência de posto é sempre 0.
 - Para qualquer _matrix_ que contenha apenas o mesmo valor em cada um de seus elementos (por exemplo, uma _matrix_ preenchida com 0), o posto é sempre 0, já que nenhum dos vetores contém informações únicas. Para qualquer outra _matrix_ com valores distintos, o posto mínimo possível é 1.
 
-## Tratamento de Erros
+
+# Tratamento de Erros
 
 Além dos erros de __compilação__ usuais, na qual ocorrem durante a compilação de um script devido à sintaxe imprópria, scripts que utilizam _matrices_ podem gerar erros específicos de __execução__ durante sua operação. Quando um script gera um erro de execução, ele exibe um ponto de exclamação vermelho ao lado do título do script. Os usuários podem visualizar a mensagem de erro clicando neste ícone.
 
 Nesta seção, são abordados os erros de execução que os usuários podem encontrar ao utilizar _matrices_ em seus scripts.
+
+## O _Index_ da Linha/Coluna (xx) Está Fora dos Limites, o Tamanho da Linha/Coluna é (yy).
+
+Este erro de execução ocorre ao tentar acessar _indices_ fora das dimensões da _matrix_ com funções incluindo [matrix.get()](https://br.tradingview.com/pine-script-reference/v5/#fun_matrix.get), [matrix.set()](https://br.tradingview.com/pine-script-reference/v5/#fun_matrix.set), [matrix.fill()](https://br.tradingview.com/pine-script-reference/v5/#fun_matrix.fill) e [matrix.submatrix()](https://br.tradingview.com/pine-script-reference/v5/#fun_matrix.submatrix), bem como algumas das funções relacionadas às [linhas e colunas](./04_15_matrices.md#linhas-e-colunas) de uma _matrix_.
+
+Por exemplo, este código contém duas linhas que produzirão esse erro de execução. O método [m.set()](https://br.tradingview.com/pine-script-reference/v5/#fun_matrix.set) referencia um _index_ de `row` (_linha_) que não existe (2). O método [m.submatrix()](https://br.tradingview.com/pine-script-reference/v5/#fun_matrix.submatrix) referencia todos os _indices_ de coluna até `to_column - 1`. Um valor de `to_column` igual a 4 resulta em um erro de execução porque o último _index_ de coluna referenciado (3) não existe em `m`:
+
+```c
+//@version=5
+indicator("Out of bounds demo")
+
+//@variable A 2x3 matrix with a max row index of 1 and max column index of 2.
+matrix<float> m = matrix.new<float>(2, 3, 0.0)
+
+m.set(row = 2, column = 0, value = 1.0)     // The `row` index is out of bounds on this line. The max value is 1.
+m.submatrix(from_column = 1, to_column = 4) // The `to_column` index is invalid on this line. The max value is 3.
+
+if bar_index == last_bar_index - 1
+    label.new(bar_index, 0, str.tostring(m), color = color.navy, textcolor = color.white, size = size.huge)
+```
+
+Usuários podem evitar esse erro em seus scripts garantindo que suas chamadas de função não referenciem _indices_ maiores ou iguais ao número de linhas/colunas.
+
+<!-- ## O Tamanho do Array não Corresponde ao Número de Linhas/Colunas na _Matrix_.
+
+Ao usar as funções [matrix.add_row()](https://br.tradingview.com/pine-script-reference/v5/#fun_matrix.add_row) e [matrix.add_col()](https://br.tradingview.com/pine-script-reference/v5/#fun_matrix.add_col) para [inserir](./04_15_matrices.md#inserindo) linhas e colunas em uma _matrix_ não-vazia, o tamanho do array inserido deve estar alinhado com as dimensões da _matrix_. O tamanho de uma linha inserida deve corresponder ao número de colunas, e o tamanho de uma coluna inserida deve corresponder ao número de linhas. Caso contrário, o script gerará este erro de execução.
+
+Por exemplo:
+
+```c
+//@version=5
+indicator("Invalid array size demo")
+
+// Declare an empty matrix.
+m = matrix.new<float>()
+
+m.add_col(0, array.from(1, 2))    // Add a column. Changes the shape of `m` to 2x1.
+m.add_col(1, array.from(1, 2, 3)) // Raises a runtime error because `m` has 2 rows, not 3.
+
+plot(m.col(0).get(1))
+```
+
+Note que:
+
+- Quando `m` está vazia, pode-se inserir uma linha ou coluna de array de _qualquer_ tamanho, conforme mostrado na primeira linha de `m.add_col()`.
+
+## Não é Possível Chamar Métodos de _Matrix_ quando o ID da _Matrix_ é 'na'.
+
+Quando uma variável de _matrix_ é atribuída a `na`, significa que a variável não referencia um objeto existente. Consequentemente, não se pode usar funções e métodos incorporados `matrix.*()` com ela.
+
+Por exemplo:
+
+```c
+//@version=5
+indicator("na matrix methods demo")
+
+//@variable A `matrix` variable assigned to `na`.
+matrix<float> m = na
+
+mCopy = m.copy() // Raises a runtime error. You can't copy a matrix that doesn't exist.
+
+if bar_index == last_bar_index - 1
+    label.new(bar_index, 0, str.tostring(mCopy), color = color.navy, textcolor = color.white, size = size.huge)
+```
+
+Para resolver este erro, atribua `m` a uma instância válida de _matrix_ antes de usar funções `matrix.*()`.
+
+## A _Matrix_ é Muito Grande. O Tamanho Máximo da _Matrix_ é de 100.000 Elementos.
+
+O número total de elementos em uma _matrix_ ([matrix.elements_count()](https://br.tradingview.com/pine-script-reference/v5/#fun_matrix.elements_count)) não pode exceder __100.000__, independentemente de sua forma.
+
+Por exemplo, este script gerará um erro porque [insere](./04_15_matrices.md#inserindo) 1000 linhas com 101 elementos na _matrix_ `m`:
+
+```c
+//@version=5
+indicator("Matrix too large demo")
+
+var matrix<float> m = matrix.new<float>()
+
+if bar_index == 0
+    for i = 1 to 1000
+        // This raises an error because the script adds 101 elements on each iteration.
+        // 1000 rows * 101 elements per row = 101000 total elements. This is too large.
+        m.add_row(m.rows(), array.new<float>(101, i))
+
+plot(m.get(0, 0))
+```
+
+## O _Index_ de Linha/Coluna Deve Ser 0 <= `from_row/column` < `to_row/column`.
+
+Ao usar funções `matrix.*()` com _indices_ `from_row/column` e `to_row/column`, os valores `from_*` devem ser menores que os valores `to_*`, sendo o valor mínimo possível 0. Caso contrário, o script gerará um erro de execução.
+
+Por exemplo, este script mostra uma tentativa de declarar uma [submatrix](./04_15_matrices.md#submatrizes-submatrices) de uma _matrix_ `m` 4x4 com um valor `from_row` de 2 e um valor `to_row` de 2, o que resultará em um erro:
+
+```c
+//@version=5
+indicator("Invalid from_row, to_row demo")
+
+//@variable A 4x4 matrix filled with a random value.
+matrix<float> m = matrix.new<float>(4, 4, math.random())
+
+matrix<float> mSub = m.submatrix(from_row = 2, to_row = 2) // Raises an error. `from_row` can't equal `to_row`.
+
+plot(mSub.get(0, 0))
+```
+
+## Matrizes 'id1' e 'id2' Devem ter um Número Igual de Linhas e Colunas para Serem Adicionadas.
+
+Ao usar as funções [matrix.sum() e matrix.diff()](./04_15_matrices.md#matrixsum-e-matrixdiff), as _matrices_ `id1` e `id2` devem ter o mesmo número de linhas e o mesmo número de colunas. Tentar adicionar ou subtrair duas _matrices_ com dimensões incompatíveis gerará um erro, conforme demonstrado por este código:
+
+```c
+//@version=5
+indicator("Invalid sum dimensions demo")
+
+//@variable A 2x3 matrix.
+matrix<float> m1 = matrix.new<float>(2, 3, 1)
+//@variable A 3x4 matrix.
+matrix<float> m2 = matrix.new<float>(3, 4, 2)
+
+mSum = matrix.sum(m1, m2) // Raises an error. `m1` and `m2` don't have matching dimensions.
+
+plot(mSum.get(0, 0))
+```
+
+## O Número de Colunas na _Matrix_ 'id1' deve ser Igual ao Número de Linhas na _Matrix_ (ou ao Número de Elementos no Array) 'id2'.
+
+Ao usar [matrix.mult()](./04_15_matrices.md#matrixmult) para multiplicar uma _matrix_ `id1` por uma _matrix_ `id2` ou array, [matrix.rows()](https://br.tradingview.com/pine-script-reference/v5/#fun_matrix.rows) ou [array.size()](https://br.tradingview.com/pine-script-reference/v5/#fun_array.size) de `id2` deve ser igual a [matrix.columns()](https://br.tradingview.com/pine-script-reference/v5/#fun_matrix.columns) em `id1`. Se eles não estiverem alinhados, o script gerará este erro.
+
+Por exemplo, este script tenta multiplicar duas _matrices_ 2x3. Embora seja possível _adicionar_ essas _matrices_, _multiplicá-las_ não é possível:
+
+```c
+//@version=5
+indicator("Invalid mult dimensions demo")
+
+//@variable A 2x3 matrix.
+matrix<float> m1 = matrix.new<float>(2, 3, 1)
+//@variable A 2x3 matrix.
+matrix<float> m2 = matrix.new<float>(2, 3, 2)
+
+mSum = matrix.mult(m1, m2) // Raises an error. The number of columns in `m1` and rows in `m2` aren't equal.
+
+plot(mSum.get(0, 0))
+```
+
+## Operação não Disponível para _Matrices_ não Quadradas.
+
+Algumas operações de _matrix_, incluindo [matrix.inv()](https://br.tradingview.com/pine-script-reference/v5/#fun_matrix.inv), [matrix.det()](https://br.tradingview.com/pine-script-reference/v5/#fun_matrix.det), [matrix.eigenvalues()](https://br.tradingview.com/pine-script-reference/v5/#fun_matrix.eigenvalues) e [matrix.eigenvectors()](https://br.tradingview.com/pine-script-reference/v5/#fun_matrix.eigenvectors), funcionam apenas com _matrices_ __quadradas__, ou seja, _matrices_ com o mesmo número de linhas e colunas. Ao tentar executar tais funções em _matrices_ não quadradas, o script gerará um erro indicando que a operação não está disponível ou que não é possível calcular o resultado para o `id` da _matrix_.
+
+Por exemplo:
+
+```c
+//@version=5
+indicator("Non-square demo")
+
+//@variable A 3x5 matrix.
+matrix<float> m = matrix.new<float>(3, 5, 1)
+
+plot(m.det()) // Raises a runtime error. You can't calculate the determinant of a 3x5 matrix.
+``` -->

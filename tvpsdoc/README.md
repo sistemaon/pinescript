@@ -27,3 +27,6 @@ O "for…in" tá referenciando o link (https://www.tradingview.com/pine-script-r
 
 In MATRICES > FOR...IN = When a script needs to iterate over and retrieve the rows of a matrix, using the for…in structure is often preferred over the standard for loop.
 O "for…in" tá referenciando o link (https://www.tradingview.com/pine-script-reference/v5/#op_for{dot}{dot}{dot}in) sendo que deveria ser (https://www.tradingview.com/pine-script-reference/v5/#kw_for...in).
+
+In MATRICES > Operation not available for non-square matrices. = matrix.inv(), matrix.det(), matrix.eigenvalues(), and matrix.eigenvectors().
+matrix.eigenvectors() tá referenciando o link (https://www.tradingview.com/pine-script-reference/v5/#fun_matrix.inv) sendo que deveria ser (https://www.tradingview.com/pine-script-reference/v5/#fun_matrix.eigenvectors).
