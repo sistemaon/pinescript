@@ -1646,7 +1646,7 @@ mSum = matrix.mult(m1, m2) // Raises an error. The number of columns in `m1` and
 plot(mSum.get(0, 0))
 ```
 
-## Operação não Disponível para _Matrices_ não Quadradas.
+<!-- ## Operação não Disponível para _Matrices_ não Quadradas.
 
 Algumas operações de _matrix_, incluindo [matrix.inv()](https://br.tradingview.com/pine-script-reference/v5/#fun_matrix.inv), [matrix.det()](https://br.tradingview.com/pine-script-reference/v5/#fun_matrix.det), [matrix.eigenvalues()](https://br.tradingview.com/pine-script-reference/v5/#fun_matrix.eigenvalues) e [matrix.eigenvectors()](https://br.tradingview.com/pine-script-reference/v5/#fun_matrix.eigenvectors), funcionam apenas com _matrices_ __quadradas__, ou seja, _matrices_ com o mesmo número de linhas e colunas. Ao tentar executar tais funções em _matrices_ não quadradas, o script gerará um erro indicando que a operação não está disponível ou que não é possível calcular o resultado para o `id` da _matrix_.
 
@@ -1660,4 +1660,4 @@ indicator("Non-square demo")
 matrix<float> m = matrix.new<float>(3, 5, 1)
 
 plot(m.det()) // Raises a runtime error. You can't calculate the determinant of a 3x5 matrix.
-```
+``` -->
