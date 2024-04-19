@@ -13,3 +13,4 @@ As chaves de um mapa podem ser de qualquer _tipo fundamental_, e seus valores po
 Assim como outras coleções, os mapas podem conter até 100.000 elementos no total. Uma vez que cada par chave-valor em um mapa consiste em dois elementos (uma chave _única_ e seu _valor_ associado), o número máximo de pares chave-valor que um mapa pode conter é 50.000.
 
 # Mapas de Outras Coleções
+
