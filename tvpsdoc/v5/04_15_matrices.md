@@ -1590,7 +1590,7 @@ if bar_index == 0
 plot(m.get(0, 0))
 ```
 
-<!-- ## O _Index_ de Linha/Coluna Deve Ser 0 <= `from_row/column` < `to_row/column`.
+## O _Index_ de Linha/Coluna Deve Ser 0 <= `from_row/column` < `to_row/column`.
 
 Ao usar funções `matrix.*()` com _indices_ `from_row/column` e `to_row/column`, os valores `from_*` devem ser menores que os valores `to_*`, sendo o valor mínimo possível 0. Caso contrário, o script gerará um erro de execução.
 
@@ -1608,7 +1608,7 @@ matrix<float> mSub = m.submatrix(from_row = 2, to_row = 2) // Raises an error. `
 plot(mSub.get(0, 0))
 ```
 
-## Matrizes 'id1' e 'id2' Devem ter um Número Igual de Linhas e Colunas para Serem Adicionadas.
+<!-- ## Matrizes 'id1' e 'id2' Devem ter um Número Igual de Linhas e Colunas para Serem Adicionadas.
 
 Ao usar as funções [matrix.sum() e matrix.diff()](./04_15_matrices.md#matrixsum-e-matrixdiff), as _matrices_ `id1` e `id2` devem ter o mesmo número de linhas e o mesmo número de colunas. Tentar adicionar ou subtrair duas _matrices_ com dimensões incompatíveis gerará um erro, conforme demonstrado por este código:
 
