@@ -1548,7 +1548,7 @@ Note que:
 
 - Quando `m` está vazia, pode-se inserir uma linha ou coluna de array de _qualquer_ tamanho, conforme mostrado na primeira linha de `m.add_col()`.
 
-<!-- ## Não é Possível Chamar Métodos de _Matrix_ quando o ID da _Matrix_ é 'na'.
+## Não é Possível Chamar Métodos de _Matrix_ quando o ID da _Matrix_ é 'na'.
 
 Quando uma variável de _matrix_ é atribuída a `na`, significa que a variável não referencia um objeto existente. Consequentemente, não se pode usar funções e métodos incorporados `matrix.*()` com ela.
 
@@ -1569,7 +1569,7 @@ if bar_index == last_bar_index - 1
 
 Para resolver este erro, atribua `m` a uma instância válida de _matrix_ antes de usar funções `matrix.*()`.
 
-## A _Matrix_ é Muito Grande. O Tamanho Máximo da _Matrix_ é de 100.000 Elementos.
+<!-- ## A _Matrix_ é Muito Grande. O Tamanho Máximo da _Matrix_ é de 100.000 Elementos.
 
 O número total de elementos em uma _matrix_ ([matrix.elements_count()](https://br.tradingview.com/pine-script-reference/v5/#fun_matrix.elements_count)) não pode exceder __100.000__, independentemente de sua forma.
 
