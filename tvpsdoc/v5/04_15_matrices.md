@@ -1608,7 +1608,7 @@ matrix<float> mSub = m.submatrix(from_row = 2, to_row = 2) // Raises an error. `
 plot(mSub.get(0, 0))
 ```
 
-<!-- ## Matrizes 'id1' e 'id2' Devem ter um Número Igual de Linhas e Colunas para Serem Adicionadas.
+## Matrizes 'id1' e 'id2' Devem ter um Número Igual de Linhas e Colunas para Serem Adicionadas.
 
 Ao usar as funções [matrix.sum() e matrix.diff()](./04_15_matrices.md#matrixsum-e-matrixdiff), as _matrices_ `id1` e `id2` devem ter o mesmo número de linhas e o mesmo número de colunas. Tentar adicionar ou subtrair duas _matrices_ com dimensões incompatíveis gerará um erro, conforme demonstrado por este código:
 
@@ -1660,4 +1660,4 @@ indicator("Non-square demo")
 matrix<float> m = matrix.new<float>(3, 5, 1)
 
 plot(m.det()) // Raises a runtime error. You can't calculate the determinant of a 3x5 matrix.
-``` -->
+```
