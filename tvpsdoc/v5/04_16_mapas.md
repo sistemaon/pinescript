@@ -12,5 +12,30 @@ As chaves de um mapa podem ser de qualquer _tipo fundamental_, e seus valores po
 
 Assim como outras coleções, os mapas podem conter até 100.000 elementos no total. Uma vez que cada par chave-valor em um mapa consiste em dois elementos (uma chave _única_ e seu _valor_ associado), o número máximo de pares chave-valor que um mapa pode conter é 50.000.
 
-# Mapas de Outras Coleções
 
+# Declarando Mapa
+
+Pine Script utiliza a seguinte sintaxe para declarar mapas:
+
+```c
+[var/varip ][map<keyType, valueType> ]<identifier> = <expression>
+```
+
+Onde `<keyType, valueType>` é o [modelo de tipo](./04_09_tipagem_do_sistema.md#templates-de-tipo) do mapa que declara os tipos de chaves e valores que ele conterá, e a `<expression>` retorna uma instância de mapa ou `na`.
+
+Ao declarar uma variável de mapa atribuída a `na`, os usuários devem incluir a palavra-chave [map](https://br.tradingview.com/pine-script-reference/v5/#type_map) seguida de um [modelo de tipo](./04_09_tipagem_do_sistema.md#templates-de-tipo) para informar ao compilador que a variável pode aceitar mapas com chaves do tipo `keyType` e valores do tipo `valueType`.
+
+Por exemplo, esta linha de código declara uma nova variável `myMap` que pode aceitar instâncias de mapa contendo pares de chaves do tipo [string](https://br.tradingview.com/pine-script-reference/v5/#type_string) e valores do tipo [float](https://br.tradingview.com/pine-script-reference/v5/#type_float):
+
+```c
+map<string, float> myMap = na
+```
+
+
+
+
+
+
+
+
+# Mapas de Outras Coleções
