@@ -69,10 +69,112 @@ plot(oscillator, "Line", oscColor, 3)
 > __Observação__\
 > Variáveis de mapa declaradas usando [varip](https://br.tradingview.com/pine-script-reference/v5/#kw_varip) comportam-se como aquelas usando [var](https://br.tradingview.com/pine-script-reference/v5/#kw_var) em dados históricos, mas atualizam seus pares chave-valor para barras em tempo real (ou seja, as barras desde a última compilação do script) a cada novo tick de preço. Mapas atribuídos a variáveis [varip](https://br.tradingview.com/pine-script-reference/v5/#kw_varip) só podem conter valores dos tipos [int](https://br.tradingview.com/pine-script-reference/v5/#type_int), [float](https://br.tradingview.com/pine-script-reference/v5/#type_float), [bool](https://br.tradingview.com/pine-script-reference/v5/#type_bool), [color](https://br.tradingview.com/pine-script-reference/v5/#type_color) ou [string](https://br.tradingview.com/pine-script-reference/v5/#type_string) ou [tipos definidos pelo usuário](./04_09_tipagem_do_sistema.md#tipos-definidos-pelo-usuário) que contenham exclusivamente dentro de seus campos esses tipos ou coleções ([arrays](./04_14_arrays.md), [matrizes](./04_15_matrices.md) ou [mapas](./04_16_mapas.md)) desses tipos.
 
-<!-- # Lendo e Escrevendo
 
-## Inserindo e Obtendo Pares Chave-Valor -->
+# Lendo e Escrevendo
 
+## Inserindo e Obtendo Pares Chave-Valor
+
+A função [map.put()](https://br.tradingview.com/pine-script-reference/v5/#fun_map.put) é uma que os usuários de mapas utilizarão frequentemente, pois é o método principal para inserir um novo par chave-valor em um mapa. Ela associa o argumento `key` (_chave_) ao argumento `value` (_valor_) na chamada e adiciona o par ao id do mapa.
+
+Se o argumento `key` (_chave_) na chamada de [map.put()](https://br.tradingview.com/pine-script-reference/v5/#fun_map.put) já existir nas [chaves](https://br.tradingview.com/pine-script-reference/v5/#fun_map.keys) do mapa, o novo par passado para a função __substituirá__ o existente.
+
+Para recuperar o valor de um `id` de mapa associado a uma `key` (_chave_) específica, use [map.get()](https://br.tradingview.com/pine-script-reference/v5/#fun_map.get). Esta função retorna o valor se o mapa `id` [contiver](https://br.tradingview.com/pine-script-reference/v5/#fun_map.contains) a `key` (_chave_). Caso contrário, retorna [na](https://br.tradingview.com/pine-script-reference/v5/#var_na).
+
+O exemplo a seguir calcula a diferença entre os valores de [bar_index](https://br.tradingview.com/pine-script-reference/v5/#var_bar_index) de quando o [fechamento](https://br.tradingview.com/pine-script-reference/v5/#var_close) estava [subindo](https://br.tradingview.com/pine-script-reference/v5/#fun_ta.rising) e [caindo](https://br.tradingview.com/pine-script-reference/v5/#fun_ta.falling) ao longo de um determinado `length`, com a ajuda dos métodos [map.put()](https://br.tradingview.com/pine-script-reference/v5/#fun_map.put) e [map.get()](https://br.tradingview.com/pine-script-reference/v5/#fun_map.get). O script insere um par `("Rising", bar_index)` no mapa de `data` (_dados_) quando o preço está subindo e insere um par `("Falling", bar_index)` no mapa quando o preço está caindo. Em seguida, insere no mapa um par contendo a "Difference" ("_Diferença_") entre os valores "Rising" ("_Subindo_") e "Falling" ("_Caindo_") e plota seu valor no gráfico:
+
+![Lendo e escrevendo inserindo e obtendo pares chave-valor 01](./imgs/Maps-Reading-and-writing-Putting-and-getting-key-value-pairs-1.png)
+
+```c
+//@version=5
+indicator("Putting and getting demo")
+
+//@variable The length of the `ta.rising()` and `ta.falling()` calculation.
+int length = input.int(2, "Length")
+
+//@variable A map associating `string` keys with `int` values.
+var data = map.new<string, int>()
+
+// Put a new ("Rising", `bar_index`) pair into the `data` map when `close` is rising.
+if ta.rising(close, length)
+    data.put("Rising", bar_index)
+// Put a new ("Falling", `bar_index`) pair into the `data` map when `close` is falling.
+if ta.falling(close, length)
+    data.put("Falling", bar_index)
+
+// Put the "Difference" between current "Rising" and "Falling" values into the `data` map.
+data.put("Difference", data.get("Rising") - data.get("Falling"))
+
+//@variable The difference between the last "Rising" and "Falling" `bar_index`.
+int index = data.get("Difference")
+
+//@variable Returns `color.green` when `index` is positive, `color.red` when negative, and `color.gray` otherwise.
+color indexColor = index > 0 ? color.green : index < 0 ? color.red : color.gray
+
+plot(index, color = indexColor, style = plot.style_columns)
+```
+
+__Note que:__
+
+- Este script substitui os valores associados às chaves "Rising" ("_Subindo_"), "Falling" ("_Caindo_") e "Difference" ("_Diferença_") em chamadas sucessivas de [data.put()](https://br.tradingview.com/pine-script-reference/v5/#fun_map.put), já que cada uma dessas chaves é única e só pode aparecer uma vez no mapa de `data` (_dados_).
+- Substituir os pares em um mapa não altera a _ordem_ interna de _inserção_ de suas chaves. Isso é discutido mais detalhadamente na [próxima seção](./04_16_mapas.md#inspecionando-chaves-e-valores).
+
+Semelhante ao trabalho com outras coleções, ao inserir um valor de um tipo especial ([line](https://br.tradingview.com/pine-script-reference/v5/#type_line), [linefill](https://br.tradingview.com/pine-script-reference/v5/#type_linefill), [box](https://br.tradingview.com/pine-script-reference/v5/#type_box), [polyline](https://br.tradingview.com/pine-script-reference/v5/#type_polyline), [label](https://br.tradingview.com/pine-script-reference/v5/#type_label), [table](https://br.tradingview.com/pine-script-reference/v5/#type_table) ou [chart.point](https://br.tradingview.com/pine-script-reference/v5/#type_chart.point)) ou [tipos definidos pelo usuário](./04_09_tipagem_do_sistema.md#tipos-definidos-pelo-usuário) em um mapa, é importante notar que o `value` (_valor_) do par inserido aponta para o mesmo objeto sem copiá-lo. Modificar o valor referenciado por um par chave-valor também afetará o objeto original.
+
+Por exemplo, este script contém um tipo personalizado `ChartData` com os campos `o`, `h`, `l` e `c`. Na primeira barra do gráfico, o script declara uma variável `myMap` e adiciona o par `("A", myData)`, onde `myData` é uma instância de `ChartData` com valores iniciais de campo `na`. Ele adiciona o par `("B", myData)` ao `myMap` e atualiza o objeto deste par em cada barra por meio do método `update()` definido pelo usuário.
+
+A cada alteração no objeto com a chave "B" afeta o objeto referenciado pela chave "A", como mostrado pelo gráfico de velas dos campos do objeto "A":
+
+![Lendo e escrevendo inserindo e obtendo pares chave-valor 02](./imgs/Maps-Reading-and-writing-Putting-and-getting-key-value-pairs-2.png)
+
+```c
+//@version=5
+indicator("Putting and getting objects demo")
+
+//@type A custom type to hold OHLC data.
+type ChartData
+    float o
+    float h
+    float l
+    float c
+
+//@function Updates the fields of a `ChartData` object.
+method update(ChartData this) =>
+    this.o := open
+    this.h := high
+    this.l := low
+    this.c := close
+
+//@variable A new `ChartData` instance declared on the first bar.
+var myData = ChartData.new()
+//@variable A map associating `string` keys with `ChartData` instances.
+var myMap = map.new<string, ChartData>()
+
+// Put a new pair with the "A" key into `myMap` only on the first bar.
+if bar_index == 0
+    myMap.put("A", myData)
+
+// Put a pair with the "B" key into `myMap` on every bar.
+myMap.put("B", myData)
+
+//@variable The `ChartData` value associated with the "A" key in `myMap`.
+ChartData oldest = myMap.get("A")
+//@variable The `ChartData` value associated with the "B" key in `myMap`.
+ChartData newest = myMap.get("B")
+
+// Update `newest`. Also affects `oldest` and `myData` since they all reference the same `ChartData` object.
+newest.update()
+
+// Plot the fields of `oldest` as candles.
+plotcandle(oldest.o, oldest.h, oldest.l, oldest.c)
+```
+
+__Note que:__
+
+- Este script se comportaria de maneira diferente se passasse uma cópia de `myData` em cada chamada de [myMap.put()](https://br.tradingview.com/pine-script-reference/v5/#fun_map.put). Para mais informações, consulte [esta seção](./04_12_objetos.md#copiando-objetos) da página do Manual do Usuário sobre [objetos](./04_12_objetos.md).
+
+## Inspecionando Chaves e Valores
+
+### `map.keys()` e `map.values()`
 
 
 # Mapas de Outras Coleções

@@ -22,7 +22,7 @@ type pivotPoint
     string xloc = xloc.bar_time
 ```
 
-Note que:
+__Note que:__
 
 - Usa-se a palavra-chave [type](https://br.tradingview.com/pine-script-reference/v5/#kw_type) para declarar a criação de um _UDT_.
 - Nomea-se o _UDT_ como `pivotPoint`.
@@ -143,7 +143,7 @@ plot(counter.bars, "Bar counter", color.blue, 3)
 plot(counter.ticks, "Tick counter", color.purple, 3)
 ```
 
-Note que:
+__Note que:__
 
 - Utiliza-se a palavra-chave [var](https://br.tradingview.com/pine-script-reference/v5/#kw_var) para especificar que o objeto `Counter` atribuído à variável `counter` persiste durante a execução do script.
 - O campo `bars` reverte em barras em tempo real, enquanto o campo `ticks` não reverte, pois foi incluído [varip](https://br.tradingview.com/pine-script-reference/v5/#kw_varip) na declaração.

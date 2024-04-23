@@ -459,7 +459,7 @@ a3 = array.from(10)
 array<int> a4 = array.from(10)
 ```
 
-Note que:
+__Note que:__
 
 - A sintaxe `int[]` também pode especificar um array de elementos "int", mas seu uso é desencorajado. Não existe equivalente para especificar os tipos de _matrix_ ou mapas dessa maneira.
 - Existe tipo específico integrado para [arrays](https://br.tradingview.com/pine-script-reference/v5/#type_array), como [array.new_int()](https://br.tradingview.com/pine-script-reference/v5/#fun_array{dot}new_int), mas a forma mais genérica [array.new<type>](https://br.tradingview.com/pine-script-reference/v5/#fun_array.new%3Ctype%3E) é preferível, o que seria `array.new<int>()` para criar um array de elementos "int".
@@ -628,7 +628,7 @@ Os usuários podem construir templates de tipo a partir de:
 - Os seguintes tipos especiais: [line](./04_09_tipagem_do_sistema.md#tipos-de-desenho), [linefill](./04_09_tipagem_do_sistema.md#tipos-de-desenho), [box](./04_09_tipagem_do_sistema.md#tipos-de-desenho), [polyline](./04_09_tipagem_do_sistema.md#tipos-de-desenho), [label](./04_09_tipagem_do_sistema.md#tipos-de-desenho), [table](./04_09_tipagem_do_sistema.md#tipos-de-desenho) e [chart.point](./04_09_tipagem_do_sistema.md#pontos-do-gráfico).
 - [Tipos definidos pelo usuário (UDTs)](./04_09_tipagem_do_sistema.md#tipos-definidos-pelo-usuário).
 
-Note que:
+__Note que:__
 
 - [Maps](./04_16_mapas.md) podem usar qualquer um desses tipos como _valores_, mas só podem aceitar tipos fundamentais como _chaves_.
 

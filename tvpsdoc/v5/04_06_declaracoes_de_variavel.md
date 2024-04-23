@@ -115,7 +115,7 @@ else if maDn
 plot(ma, "MA", maColor, 2)
 ```
 
-Note que:
+__Note que:__
 
 - A variável `maColor` foi inicializada apenas na primeira barra, para que preserve seu valor através das barras subsequentes.
 - A cada barra, a instrução [if](https://br.tradingview.com/pine-script-reference/v5/#op_if) verifica se a média móvel tem aumentado ou diminuído pelo número especificado de barras pelo usuário (o padrão é 2). Quando isso acontece, o valor de `maColor` precisa ser reatribuído a um novo valor de dentro dos blocos locais [if](https://br.tradingview.com/pine-script-reference/v5/#op_if). Para fazer isso, utilize-se o operador de reatribuição [:=](./04_05_operadores.md#operador-de-reatribuição).
@@ -200,7 +200,7 @@ if barstate.islast
     line.set_xy2(closeLine, bar_index, close)
 ```
 
-Note que:
+__Note que:__
 
 - O `closeLine` foi inicializado apenas na primeira barra, usando o modo de declaração [var](https://br.tradingview.com/pine-script-reference/v5/#op_var).
 - Foi restringido a execução do restante do código à última barra do gráfico ao incluir o código que atualiza a linha em uma estrutura [if](https://br.tradingview.com/pine-script-reference/v5/#op_if) [barstate.islast](https://br.tradingview.com/pine-script-reference/v5/#var_barstate{dot}islast).

@@ -72,7 +72,7 @@ if barstate.islast
     label.set_text(ourLabel, str.tostring(bar_index + 1, "# bars in chart"))
 ```
 
-Note que:
+__Note que:__
 
 - Inicializado a variável `ourLabel` apenas na primeira barra do script, usando o modo de declaração [var](https://br.tradingview.com/pine-script-reference/v5/#op_var). O valor usado para inicializar a variável é fornecido pela chamada da função [label.new()](https://br.tradingview.com/pine-script-reference/v5/#fun_label{dot}new), que retorna um ID do _label_ apontando para o _label_ que ela cria. Utiliza-se essa chamada para definir as propriedades do _label_, pois uma vez definidas, elas persistirão até que as altere.
 - O que acontece em seguida é que em cada barra sucessiva, o tempo de execução do Pine Script irá pular a inicialização de `ourLabel`, e a condição da estrutura [if](https://br.tradingview.com/pine-script-reference/v5/#op_if) ([barstate.islast](https://br.tradingview.com/pine-script-reference/v5/#var_barstate{dot}islast)) é avaliada. Ela retorna `false` em todas as barras até a última, então o script nada faz na maioria das barras históricas após a barra zero.
@@ -210,7 +210,7 @@ float ma = switch maType
 plot(ma)
 ```
 
-Note que:
+__Note que:__
 
 - A expressão pela qual está alternando é a variável `maType`, que é do tipo "input int" (veja mais sobre o qualificador ["input"](./04_09_tipagem_do_sistema.md#input)). Como ela não pode ser alterada durante a execução do script, isso garante que qualquer tipo de _MA_ que o usuário selecione será executado em cada barra, o que é um requisito para funções como [ta.ema()](https://br.tradingview.com/pine-script-reference/v5/#fun_ta{dot}ema), que exigem um argumento "int simples" ("_simple int_") para seu parâmetro de `length`.
 - Se nenhum valor correspondente for encontrado para `maType`, o [switch](https://br.tradingview.com/pine-script-reference/v5/#op_switch) executa o último bloco local introduzido por` =>`, que age como um _capturador geral_. Gerado um erro em tempo de execução nesse bloco. Também encerrado-o com `float(na)` para que o bloco local retorne um valor cujo tipo seja compatível com o dos outros blocos locais na estrutura, evitando um erro de compilação.

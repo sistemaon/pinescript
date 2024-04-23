@@ -107,7 +107,7 @@ plot(highBand, "Upper", color.lime)
 plot(lowBand, "Lower", color.red)
 ```
 
-Note que:
+__Note que:__
 
 - Chama-se os métodos do array usando `sourceArray.*` em vez de referenciar o _namespace_ do [array](https://br.tradingview.com/pine-script-reference/v5/#type_array).
 - Não é incluído `sourceArray` como um parâmetro quando chama-se os métodos, uma vez que já fazem referência ao objeto.
@@ -163,7 +163,7 @@ method maintainQueue(array<float> srcArray, float value, bool takeSample = true)
     srcArray
 ```
 
-Note que:
+__Note que:__
 
 - Assim como com funções definidas pelo usuário, usa-se a [anotação de compilador](./04_03_estrutura_do_script.md#anotações-do-compilador) `@function` para documentar descrições de métodos.
 
@@ -213,7 +213,7 @@ bool newSample = bar_index % n == 0
 [sampleMean, highBand, lowBand] = sourceArray.maintainQueue(sourceInput, newSample).calcBB(multiplier, newSample)
 ```
 
-Note que:
+__Note que:__
 
 - Em vez de usar um bloco `if` no escopo global, foi definido uma variável `newSample` que é `true` apenas uma vez a cada `n` barras. Os métodos `maintainQueue()` e `calcBB()` utilizam esse valor para seus respectivos parâmetros `takeSample` e `calculate`.
 - Uma vez que o método `maintainQueue()` retorna o objeto ao qual se refere, é possível invocar `calcBB()` na mesma linha de código, já que ambos os métodos se aplicam a instâncias de `array<float>`.
@@ -341,7 +341,7 @@ lbl.set_x(bar_index)
 lbl.set_text(results)
 ```
 
-Note que:
+__Note que:__
 
 - O tipo subjacente de cada variável determina qual sobrecarga do `getType()` o compilador utilizará.
 - O método irá juntar “(na)” à string de saída quando uma variável estiver como `na` para demarcar que está vazia.
@@ -387,7 +387,7 @@ Copia o objeto `srcArray`, substitui todos os elementos entre `min` e `val` por 
 srcArray.copy().fill(1.0, 0.0, min, val).avg()
 ```
 
-Note que:
+__Note que:__
 
 - O compilador só usará essa sobrecarga de `fill()` em vez da incorporada quando o usuário fornecer argumentos para `innerValue`, `outerValue`, `lowerBound` e `upperBound` na chamada.
 - Se `lowerBound` ou `upperBound` for `na`, o valor é ignorado ao filtrar o intervalo de preenchimento.
@@ -430,7 +430,7 @@ method featureScale(array<float> srcArray) =>
     scaledArray
 ```
 
-Note que:
+__Note que:__
 
 - Este método não possui tratamento específico para situações de divisão por zero. Se `rng` for 0, o valor do elemento do array será considerado como _não disponível_ `na`.
 

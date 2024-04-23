@@ -169,7 +169,7 @@ debugLabel.set_x(bar_index)
 debugLabel.set_text(str.format("Row 0: {0}, Size: {1}\nCol 0: {2}, Size: {3}", row0, m.columns(), column0, m.rows()))
 ```
 
-Note que:
+__Note que:__
 
 - Para obter os tamanhos dos arrays exibidos no _label_, empregaram-se os métodos [rows()](https://br.tradingview.com/pine-script-reference/v5/#fun_matrix.rows) e [columns()](https://br.tradingview.com/pine-script-reference/v5/#fun_matrix.columns) em vez de [array.size()](https://br.tradingview.com/pine-script-reference/v5/#fun_array.size), para demonstrar que o tamanho do array `row0` é igual ao número de colunas e o tamanho do array `column0` é igual ao número de linhas.
 
@@ -507,7 +507,7 @@ plot(averages.get(2), "Average Low",   color.red,    2)
 plot(averages.get(3), "Average Close", color.orange, 2)
 ```
 
-Note que:
+__Note que:__
 
 - _Loops_ `for...in` também podem referenciar o valor do _index_ de cada linha. Por exemplo, `for [i, row] in m` cria uma tupla contendo o _index_ `i` da linha e o array de `row` (_linha_) correspondente da _matrix_ `m` a cada iteração do _loop_.
 
@@ -768,7 +768,7 @@ infoTable.cell(1, 0, "Current average", text_color = color.white, text_size = si
 infoTable.cell(2, 0, str.format("{0} bars ago", length), text_color = color.white, text_size = size.huge)
 ```
 
-Note que:
+__Note que:__
 
 - As funções `addData()` e `calcAvg()` não possuem parâmetros, pois interagem diretamente com as variáveis `globalMatrix` e `length` declaradas no escopo externo.
 - A função `calcAvg()` calcula a média somando _matrices_ anteriores `previous` usando [matrix.sum()](https://br.tradingview.com/pine-script-reference/v5/#fun_matrix.sum) e multiplicando todos os elementos por `1 / length` usando [matrix.mult()](https://br.tradingview.com/pine-script-reference/v5/#fun_matrix.mult). Essas e outras funções especializadas são discutidas na seção abaixo sobre [Cálculos com Matrizes](./04_15_matrices.md#cálculos-com-matrizes).
@@ -885,7 +885,7 @@ if bar_index == last_bar_index - 1
     m.debugLabel(bar_index + 30, note = "Reshaped to 8x1")
 ```
 
-Note que:
+__Note que:__
 
 - A ordem dos elementos em `m` não muda a cada invocação de `m.reshape()`.
 - Ao remodelar uma _matrix_, o produto dos argumentos de `rows` (_linhas_) e `columns` (_colunas_) deve igualar o valor de [matrix.elements_count()](https://br.tradingview.com/pine-script-reference/v5/#fun_matrix.elements_count), pois [matrix.reshape()](https://br.tradingview.com/pine-script-reference/v5/#fun_matrix.reshape) não pode alterar o número de elementos na _matrix_.
@@ -1197,7 +1197,7 @@ plot(minLow, "Min Low", color.red)
 plot(ohlc4Value, "Current OHLC4", color.blue)
 ```
 
-Note que:
+__Note que:__
 
 - Neste exemplo, utilizaram-se métodos [array.*()](https://br.tradingview.com/pine-script-reference/v5/#type_array) e [matrix.*()](https://br.tradingview.com/pine-script-reference/v5/#type_matrix) de forma intercambiável para demonstrar suas semelhanças em sintaxe e comportamento.
 - Usuários podem calcular o equivalente em _matrix_ de [array.sum()](https://br.tradingview.com/pine-script-reference/v5/#fun_array.sum) multiplicando [matrix.avg()](https://br.tradingview.com/pine-script-reference/v5/#fun_matrix.avg) pelo [matrix.elements_count()](https://br.tradingview.com/pine-script-reference/v5/#fun_matrix.elements_count).
@@ -1257,7 +1257,7 @@ if bar_index == last_bar_index - 1
     matrix.diff(m, t).debugLabel(bar_index + 30, color.red, note = "A - Aᵀ")
 ```
 
-Note que:
+__Note que:__
 
 - Neste exemplo, rotulou-se a _matrix_ original como "A" e a transposta como "AT".
 - Ao adicionar "A" e "AT" produz uma _matrix_ [simétrica](https://br.tradingview.com/pine-script-reference/v5/#fun_matrix.is_symmetric), e ao subtrair uma da outra produz uma _matrix_ [antissimétrica](https://br.tradingview.com/pine-script-reference/v5/#fun_matrix.is_antisymmetric).
@@ -1314,7 +1314,7 @@ if bar_index == last_bar_index - 1
     debugLabel(ab, bar_index + 20, color.green, note = "A * B")
 ```
 
-Note que:
+__Note que:__
 
 - Em contraste com a multiplicação de escalares, a multiplicação de _matrices_ _não é comutativa_, ou seja, `matrix.mult(a, b)` não necessariamente produz o mesmo resultado que `matrix.mult(b, a)`. No contexto do exemplo acima , o último causará um erro de execução porque o número de colunas em `b` não é igual ao número de linhas em `a`.
 
@@ -1389,7 +1389,7 @@ plot(solutions.get(1), "x1", color.green, 3) // Plots 2.
 plot(solutions.get(2), "x2", color.blue, 3)  // Plots 3.
 ```
 
-Note que:
+__Note que:__
 
 - Resolver sistemas de equações é particularmente útil para _análise de regressão_, por exemplo, regressão linear e polinomial.
 - A regra de Cramer funciona bem para sistemas pequenos de equações. No entanto, é computacionalmente ineficiente em sistemas maiores. Outros métodos, como a [eliminação de Gauss](https://pt.wikipedia.org/wiki/Elimina%C3%A7%C3%A3o_de_Gauss), são frequentemente preferidos para esses casos.
@@ -1454,7 +1454,7 @@ if bar_index == last_bar_index - 1
     product.debugLabel(bar_index + 20, color.green, note = "Product")
 ```
 
-Note que:
+__Note que:__
 
 - Este script invoca somente a função [m.inv()](https://br.tradingview.com/pine-script-reference/v5/#fun_matrix.inv) quando `isInvertible` é `true`, ou seja, quando `m` é [quadrada](https://br.tradingview.com/pine-script-reference/v5/#fun_matrix.is_square) e possui um [determinante](https://br.tradingview.com/pine-script-reference/v5/#fun_matrix.det) não nulo. Caso contrário, utiliza [m.pinv()](https://br.tradingview.com/pine-script-reference/v5/#fun_matrix.pinv) para calcular a inversa generalizada.
 
@@ -1490,7 +1490,7 @@ plot(m1.rank(), color = color.green, linewidth = 3)
 plot(m2.rank(), color = color.red, linewidth = 3)
 ```
 
-Note que:
+__Note que:__
 
 - O maior valor de posto que uma _matrix_ pode ter é o mínimo entre o número de suas linhas e colunas. Uma _matrix_ com o posto máximo possível é conhecida como uma _matrix_ de posto completo, e qualquer _matrix_ sem posto completo é conhecida como uma _matrix_ com deficiência de posto.
 - Os [determinantes](./04_15_matrices.md#matrixdet) de _matrices_ quadradas de posto completo são não-nulos, e tais _matrices_ possuem [inversas](./04_15_matrices.md#matrixinv-e-matrixpinv). Por outro lado, o [determinante](https://br.tradingview.com/pine-script-reference/v5/#fun_matrix.det) de uma _matrix_ com deficiência de posto é sempre 0.
@@ -1544,7 +1544,7 @@ m.add_col(1, array.from(1, 2, 3)) // Raises a runtime error because `m` has 2 ro
 plot(m.col(0).get(1))
 ```
 
-Note que:
+__Note que:__
 
 - Quando `m` está vazia, pode-se inserir uma linha ou coluna de array de _qualquer_ tamanho, conforme mostrado na primeira linha de `m.add_col()`.
 
