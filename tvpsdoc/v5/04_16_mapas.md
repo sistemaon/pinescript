@@ -31,10 +31,47 @@ Por exemplo, esta linha de código declara uma nova variável `myMap` que pode a
 map<string, float> myMap = na
 ```
 
+## Utilizando as Palavras-Chave `var` e `varip`
 
+Usuários podem incluir as palavras-chave [var](https://br.tradingview.com/pine-script-reference/v5/#kw_var) ou [varip](https://br.tradingview.com/pine-script-reference/v5/#kw_varip) para instruir seus scripts a declarar variáveis de mapa apenas na primeira barra do gráfico. Variáveis que usam essas palavras-chave apontam para as mesmas instâncias de mapa em cada iteração do script até serem explicitamente reatribuídas.
 
+Por exemplo, este script declara uma variável `colorMap` atribuída a um mapa que contém pares de chaves do tipo [string](https://br.tradingview.com/pine-script-reference/v5/#type_string) e valores do tipo [color](https://br.tradingview.com/pine-script-reference/v5/#type_color) (_cor_) na primeira barra do gráfico. O script exibe um `oscilador` no gráfico e usa os valores [put](https://br.tradingview.com/pine-script-reference/v5/#fun_map.put) (_inseridos_) no `colorMap` na _primeira_ barra para colorir os plots em _todas_ as barras:
 
+![Declarando mapa utilizando as palavras-chave var e varip](./imgs/Maps-Declaring-a-map-Using-var-and-varip-keywords-1.png)
 
+```c
+//@version=5
+indicator("var map demo")
+
+//@variable A map associating color values with string keys.
+var colorMap = map.new<string, color>()
+
+// Put `<string, color>` pairs into `colorMap` on the first bar.
+if bar_index == 0
+    colorMap.put("Bull", color.green)
+    colorMap.put("Bear", color.red)
+    colorMap.put("Neutral", color.gray)
+
+//@variable The 14-bar RSI of `close`.
+float oscillator = ta.rsi(close, 14)
+
+//@variable The color of the `oscillator`.
+color oscColor = switch
+    oscillator > 50 => colorMap.get("Bull")
+    oscillator < 50 => colorMap.get("Bear")
+    =>                 colorMap.get("Neutral")
+
+// Plot the `oscillator` using the `oscColor` from our `colorMap`.
+plot(oscillator, "Histogram", oscColor, 2, plot.style_histogram, histbase = 50)
+plot(oscillator, "Line", oscColor, 3)
+```
+
+> __Observação__\
+> Variáveis de mapa declaradas usando [varip](https://br.tradingview.com/pine-script-reference/v5/#kw_varip) comportam-se como aquelas usando [var](https://br.tradingview.com/pine-script-reference/v5/#kw_var) em dados históricos, mas atualizam seus pares chave-valor para barras em tempo real (ou seja, as barras desde a última compilação do script) a cada novo tick de preço. Mapas atribuídos a variáveis [varip](https://br.tradingview.com/pine-script-reference/v5/#kw_varip) só podem conter valores dos tipos [int](https://br.tradingview.com/pine-script-reference/v5/#type_int), [float](https://br.tradingview.com/pine-script-reference/v5/#type_float), [bool](https://br.tradingview.com/pine-script-reference/v5/#type_bool), [color](https://br.tradingview.com/pine-script-reference/v5/#type_color) ou [string](https://br.tradingview.com/pine-script-reference/v5/#type_string) ou [tipos definidos pelo usuário](./04_09_tipagem_do_sistema.md#tipos-definidos-pelo-usuário) que contenham exclusivamente dentro de seus campos esses tipos ou coleções ([arrays](./04_14_arrays.md), [matrizes](./04_15_matrices.md) ou [mapas](./04_16_mapas.md)) desses tipos.
+
+<!-- # Lendo e Escrevendo
+
+## Inserindo e Obtendo Pares Chave-Valor -->
 
 
 
