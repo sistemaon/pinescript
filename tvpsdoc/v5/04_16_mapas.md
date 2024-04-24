@@ -170,11 +170,92 @@ plotcandle(oldest.o, oldest.h, oldest.l, oldest.c)
 
 __Note que:__
 
-- Este script se comportaria de maneira diferente se passasse uma cópia de `myData` em cada chamada de [myMap.put()](https://br.tradingview.com/pine-script-reference/v5/#fun_map.put). Para mais informações, consulte [esta seção](./04_12_objetos.md#copiando-objetos) da página do Manual do Usuário sobre [objetos](./04_12_objetos.md).
+- Este script se comportaria de maneira diferente se passasse uma cópia de `myData` em cada chamada de [myMap.put()](https://br.tradingview.com/pine-script-reference/v5/#fun_map.put). Para mais informações, consulte [esta seção](./04_12_objetos.md#copiando-objetos) sobre [objetos](./04_12_objetos.md).
 
 ## Inspecionando Chaves e Valores
 
 ### `map.keys()` e `map.values()`
+
+Para recuperar todas as chaves e valores inseridos em um mapa, use [map.keys()](https://br.tradingview.com/pine-script-reference/v5/#fun_map.keys) e [map.values()](https://br.tradingview.com/pine-script-reference/v5/#fun_map.values). Essas funções copiam todas as referências de chave/valor dentro de um `id` de mapa para um novo objeto de [array](https://br.tradingview.com/pine-script-reference/v5/#type_array). Modificar o array retornado por qualquer uma dessas funções não afeta o mapa `id`.
+
+Embora os mapas sejam coleções _não ordenadas_, o Pine Script mantém internamente a _ordem_ de _inserção_ dos pares chave-valor de um mapa. Como resultado, as funções [map.keys()](https://br.tradingview.com/pine-script-reference/v5/#fun_map.keys) e [map.values()](https://br.tradingview.com/pine-script-reference/v5/#fun_map.values) sempre retornam [arrays](./04_14_arrays.md) com seus elementos ordenados com base na ordem de inserção do mapa `id`.
+
+O script abaixo demonstra isso exibindo os arrays de chave e valor de um mapa `m` em [_label_](https://br.tradingview.com/pine-script-reference/v5/#type_label) a cada 50 barras. Conforme mostrado no gráfico, a ordem dos elementos em cada array retornado por `m.keys()` e `m.values()` corresponde à ordem de inserção dos pares chave-valor em `m`:
+
+![Lendo e escrevendo inspecionando chaves e valores map.keys() e map.values() 01](./imgs/Maps-Reading-and-writing-Inspecting-keys-and-values-1.png)
+
+```c
+//@version=5
+indicator("Keys and values demo")
+
+if bar_index % 50 == 0
+    //@variable A map containing pairs of `string` keys and `float` values.
+    m = map.new<string, float>()
+
+    // Put pairs into `m`. The map will maintain this insertion order.
+    m.put("First", math.round(math.random(0, 100)))
+    m.put("Second", m.get("First") + 1)
+    m.put("Third", m.get("Second") + 1)
+
+    //@variable An array containing the keys of `m` in their insertion order.
+    array<string> keys = m.keys()
+    //@variable An array containing the values of `m` in their insertion order.
+    array<float> values = m.values()
+
+    //@variable A label displaying the `size` of `m` and the `keys` and `values` arrays.
+    label debugLabel = label.new(
+         bar_index, 0,
+         str.format("Pairs: {0}\nKeys: {1}\nValues: {2}", m.size(), keys, values),
+         color = color.navy, style = label.style_label_center,
+         textcolor = color.white, size = size.huge
+     )
+```
+
+__Note que:__
+
+- O valor com a chave "First" é um número inteiro [aleatório](https://br.tradingview.com/pine-script-reference/v5/#fun_math.random) entre 0 e 100. O valor "Second" é um maior que o "First", e o valor "Third" é um maior que o "Second".
+
+É importante notar que a ordem de inserção interna de um mapa __não__ muda ao substituir seus pares chave-valor. As posições dos novos elementos nos arrays [keys()](https://br.tradingview.com/pine-script-reference/v5/#fun_map.keys) e [values()](https://br.tradingview.com/pine-script-reference/v5/#fun_map.values) serão as mesmas dos elementos antigos nesses casos. A única exceção ocorre se o script [remover](./04_16_mapas.md#removendo-pares-chave-valor) completamente a chave anteriormente.
+
+Abaixo, adicionou-se uma linha de código para [inserir](https://br.tradingview.com/pine-script-reference/v5/#fun_map.put) um novo valor com a chave "Second" no mapa `m`, substituindo o valor anterior associado a essa chave. Embora o script insira esse novo par no mapa _após_ o par com a chave "Third", a chave e o valor do par ainda estão em segundo lugar nos arrays de `keys` e `values` (_chaves_ e _valores_), pois a chave já estava presente em `m` _antes_ da mudança:
+
+![Lendo e escrevendo inspecionando chaves e valores map.keys() e map.values() 02](./imgs/Maps-Reading-and-writing-Inspecting-keys-and-values-2.png)
+
+```c
+//@version=5
+indicator("Keys and values demo")
+
+if bar_index % 50 == 0
+    //@variable A map containing pairs of `string` keys and `float` values.
+    m = map.new<string, float>()
+
+    // Put pairs into `m`. The map will maintain this insertion order.
+    m.put("First", math.round(math.random(0, 100)))
+    m.put("Second", m.get("First") + 1)
+    m.put("Third", m.get("Second") + 1)
+
+    // Overwrite the "Second" pair in `m`. This will NOT affect the insertion order.
+    // The key and value will still appear second in the `keys` and `values` arrays.
+    m.put("Second", -2)
+
+    //@variable An array containing the keys of `m` in their insertion order.
+    array<string> keys = m.keys()
+    //@variable An array containing the values of `m` in their insertion order.
+    array<float> values = m.values()
+
+    //@variable A label displaying the `size` of `m` and the `keys` and `values` arrays.
+    label debugLabel = label.new(
+         bar_index, 0,
+         str.format("Pairs: {0}\nKeys: {1}\nValues: {2}", m.size(), keys, values),
+         color = color.navy, style = label.style_label_center,
+         textcolor = color.white, size = size.huge
+     )
+```
+
+> __Observação__\
+> Os elementos em um array [map.values()](https://br.tradingview.com/pine-script-reference/v5/#fun_map.values) apontam para os mesmos valores que o `id` do mapa. Consequentemente, quando os valores do mapa são de _tipos de referência_, incluindo [line](https://br.tradingview.com/pine-script-reference/v5/#type_line), [linefill](https://br.tradingview.com/pine-script-reference/v5/#type_linefill), [box](https://br.tradingview.com/pine-script-reference/v5/#type_box), [polyline](https://br.tradingview.com/pine-script-reference/v5/#type_polyline), [label](https://br.tradingview.com/pine-script-reference/v5/#type_label), [table](https://br.tradingview.com/pine-script-reference/v5/#type_table), [chart.point](https://br.tradingview.com/pine-script-reference/v5/#type_chart.point) ou [tipos definidos pelo usuário (UDTs)](./04_09_tipagem_do_sistema.md#tipos-definidos-pelo-usuário), modificar as instâncias referenciadas pelo array [map.values()](https://br.tradingview.com/pine-script-reference/v5/#fun_map.values) também afetará aquelas referenciadas pelo `id` do mapa, já que os conteúdos de ambas as coleções apontam para objetos idênticos.
+
+## Removendo Pares Chave-Valor
 
 
 # Mapas de Outras Coleções

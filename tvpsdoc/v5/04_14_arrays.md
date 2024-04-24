@@ -624,7 +624,7 @@ Também é possível realizar uma busca binária em um array, mas é importante 
 
 # Tratamento de Erros
 
-Sintaxe malformada em chamadas de `array.*()` em scripts Pine causará as usuais mensagens de erro do __compilador__ a aparecerem no console do Editor Pine, na parte inferior da janela, ao salvar um script. Consulte o [Manual de Referência](https://br.tradingview.com/pine-script-reference/v5/) do Pine Script v5 em caso de dúvidas sobre a sintaxe exata das chamadas de função.
+Sintaxe malformada em chamadas de `array.*()` em scripts Pine causará as usuais mensagens de erro do __compilador__ a aparecerem no console do Editor Pine, na parte inferior da janela, ao salvar um script. Consulte o [Manual de Referência](https://br.tradingview.com/pine-script-reference/v5) do Pine Script v5 em caso de dúvidas sobre a sintaxe exata das chamadas de função.
 
 Scripts que utilizam arrays também podem gerar erros de __execução__, que aparecem como um ponto de exclamação ao lado do nome do indicador no gráfico. Esses erros de execução são discutidos nesta seção.
 
