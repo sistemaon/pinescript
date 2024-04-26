@@ -255,6 +255,48 @@ if bar_index % 50 == 0
 > __Observação__\
 > Os elementos em um array [map.values()](https://br.tradingview.com/pine-script-reference/v5/#fun_map.values) apontam para os mesmos valores que o `id` do mapa. Consequentemente, quando os valores do mapa são de _tipos de referência_, incluindo [line](https://br.tradingview.com/pine-script-reference/v5/#type_line), [linefill](https://br.tradingview.com/pine-script-reference/v5/#type_linefill), [box](https://br.tradingview.com/pine-script-reference/v5/#type_box), [polyline](https://br.tradingview.com/pine-script-reference/v5/#type_polyline), [label](https://br.tradingview.com/pine-script-reference/v5/#type_label), [table](https://br.tradingview.com/pine-script-reference/v5/#type_table), [chart.point](https://br.tradingview.com/pine-script-reference/v5/#type_chart.point) ou [tipos definidos pelo usuário (UDTs)](./04_09_tipagem_do_sistema.md#tipos-definidos-pelo-usuário), modificar as instâncias referenciadas pelo array [map.values()](https://br.tradingview.com/pine-script-reference/v5/#fun_map.values) também afetará aquelas referenciadas pelo `id` do mapa, já que os conteúdos de ambas as coleções apontam para objetos idênticos.
 
+### `map.contains()`
+
+Para verificar se uma `key` (_chave_) específica existe dentro de um `id` de mapa, use [map.contains()](https://br.tradingview.com/pine-script-reference/v5/#fun_map.contains). Esta função é uma alternativa conveniente para invocar [array.includes()](https://br.tradingview.com/pine-script-reference/v5/#fun_array.includes) no [array](https://br.tradingview.com/pine-script-reference/v5/#type_array) retornado por [map.keys()](https://br.tradingview.com/pine-script-reference/v5/#fun_map.keys).
+
+Por exemplo, este script verifica se várias chaves existem dentro de um mapa `m`, e em seguida exibe os resultados em uma [_label_](https://br.tradingview.com/pine-script-reference/v5/#type_label):
+
+![Lendo e escrevendo inspecionando chaves e valores map.contains()](./imgs/Maps-Reading-and-writing-Inspecting-keys-and-values-3.png)
+
+```c
+//@version=5
+indicator("Inspecting keys demo")
+
+//@variable A map containing `string` keys and `string` values.
+m = map.new<string, string>()
+
+// Put key-value pairs into the map.
+m.put("A", "B")
+m.put("C", "D")
+m.put("E", "F")
+
+//@variable An array of keys to check for in `m`.
+array<string> testKeys = array.from("A", "B", "C", "D", "E", "F")
+
+//@variable An array containing all elements from `testKeys` found in the keys of `m`.
+array<string> mappedKeys = array.new<string>()
+
+for key in testKeys
+    // Add the `key` to `mappedKeys` if `m` contains it.
+    if m.contains(key)
+        mappedKeys.push(key)
+
+//@variable A string representing the `testKeys` array and the elements found within the keys of `m`.
+string testText = str.format("Tested keys: {0}\nKeys found: {1}", testKeys, mappedKeys)
+
+if bar_index == last_bar_index - 1
+    //@variable Displays the `testText` in a label at the `bar_index` before the last.
+    label debugLabel = label.new(
+         bar_index, 0, testText, style = label.style_label_center,
+         textcolor = color.white, size = size.huge
+     )
+```
+
 ## Removendo Pares Chave-Valor
 
 
