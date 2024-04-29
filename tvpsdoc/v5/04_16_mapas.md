@@ -299,5 +299,58 @@ if bar_index == last_bar_index - 1
 
 ## Removendo Pares Chave-Valor
 
+Para remover um par chave-valor específico de um `id` de mapa, use-se [map.remove()](https://br.tradingview.com/pine-script-reference/v5/#fun_map.remove). Esta função elimina a `key` (_chave_) e seu valor associado do mapa, preservando a ordem de inserção dos outros pares chave-valor. Retorna o valor removido se o mapa [contiver](./04_16_mapas.md#mapcontains) a chave. Caso contrário, retorna [na](https://br.tradingview.com/pine-script-reference/v5/#var_na).
+
+Para remover todos os pares chave-valor de um `id` de mapa de uma só vez, use [map.clear()](https://br.tradingview.com/pine-script-reference/v5/#fun_map.clear).
+
+O script a seguir cria um novo mapa `m`, [insere](./04_16_mapas.md#inserindo-e-obtendo-pares-chave-valor) pares chave-valor no mapa, utiliza [m.remove()](https://br.tradingview.com/pine-script-reference/v5/#fun_map.remove) dentro de um loop para remover cada `key` (_chave_) válida listada no array `removeKeys`, e então chama [m.clear()](https://br.tradingview.com/pine-script-reference/v5/#fun_map.clear) para remover todos os pares chave-valor restantes. Utiliza um método personalizado `debugLabel()` para exibir o [_size_](https://br.tradingview.com/pine-script-reference/v5/#fun_map.size) (_tamanho_), as [_keys_](https://br.tradingview.com/pine-script-reference/v5/#fun_map.keys) (_chaves_) e os [_values_](https://br.tradingview.com/pine-script-reference/v5/#fun_map.values) (_valores_) de `m` após cada mudança:
+
+![Lendo e escrevendo removendo pares chave-valor](./imgs/Maps-Reading-and-writing-Removing-key-value-pairs-1.png)
+
+```c
+//@version=5
+indicator("Removing key-value pairs demo")
+
+//@function Returns a label to display the keys and values from a map.
+method debugLabel(
+     map<string, int> this, int barIndex = bar_index,
+     color bgColor = color.blue, string note = ""
+ ) =>
+    //@variable A string representing the size, keys, and values in `this` map.
+    string repr = str.format(
+         "{0}\nSize: {1}\nKeys: {2}\nValues: {3}",
+         note, this.size(), str.tostring(this.keys()), str.tostring(this.values())
+     )
+    label.new(
+         barIndex, 0, repr, color = bgColor, style = label.style_label_center,
+         textcolor = color.white, size = size.huge
+     )
+
+if bar_index == last_bar_index - 1
+    //@variable A map containing `string` keys and `int` values.
+    m = map.new<string, int>()
+
+    // Put key-value pairs into `m`.
+    for [i, key] in array.from("A", "B", "C", "D", "E")
+        m.put(key, i)
+    m.debugLabel(bar_index, color.green, "Added pairs")
+
+    //@variable An array of keys to remove from `m`.
+    array<string> removeKeys = array.from("B", "B", "D", "F", "a")
+
+    // Remove each `key` in `removeKeys` from `m`.
+    for key in removeKeys
+        m.remove(key)
+    m.debugLabel(bar_index + 10, color.red, "Removed pairs")
+
+    // Remove all remaining keys from `m`.
+    m.clear()
+    m.debugLabel(bar_index + 20, color.purple, "Cleared the map")
+```
+
+__Note que:__
+
+- Nem todas as strings no array `removeKeys` estavam presentes nas chaves de `m`. Tentar remover chaves inexistentes ("F", "a" e o segundo "B" neste exemplo) não tem efeito sobre o conteúdo do mapa.
+
 
 # Mapas de Outras Coleções
