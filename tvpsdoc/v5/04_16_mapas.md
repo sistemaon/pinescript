@@ -422,4 +422,105 @@ if bar_index == last_bar_index - 1
 ```
 
 
+# Percorrendo um Mapa
+
+Existem várias maneiras pelas quais os scripts podem acessar iterativamente as chaves e valores em um mapa. Por exemplo, pode-se iterar através do array [keys()](https://br.tradingview.com/pine-script-reference/v5/#fun_map.keys) de um mapa e [get()](https://br.tradingview.com/pine-script-reference/v5/#fun_map.get) o valor para cada chave, assim:
+
+```c
+for key in thisMap.keys()
+    value = thisMap.get(key)
+```
+
+No entanto, recomenda-se usar um _loop_ `for...in` diretamente em um mapa, pois ele itera sobre os pares chave-valor do mapa na ordem de inserção, retornando uma tupla contendo a chave e o valor do próximo par a cada iteração.
+
+Por exemplo, esta linha de código percorre cada `key` (_chave_) e `value` (_valor_) em `thisMap`, começando pelo primeiro par chave-valor inserido nele:
+
+```c
+for [key, value] in thisMap
+```
+
+Utiliza-se essa estrutura para desenvolver um script que apresente os pares chave-valor de um mapa em uma [tabela](https://br.tradingview.com/pine-script-reference/v5/#type_table). No exemplo a seguir, foi definido um método personalizado `toTable()` que cria uma [tabela](https://br.tradingview.com/pine-script-reference/v5/#type_table), depois emprega um _loop_ `for...in` para percorrer os pares chave-valor do mapa e preencher as células da tabela. O script utiliza esse método para visualizar um mapa contendo as `length`-bar `averages` (_médias_ de barras de _comprimento_) dos dados de preço e volume:
+
+![Percorrendo um mapa](./imgs/Maps-Looping-through-a-map-1.png)
+
+```c
+//@version=5
+indicator("Looping through a map demo", "Table of averages")
+
+//@variable The length of the moving average.
+int length = input.int(20, "Length")
+//@variable The size of the table text.
+string txtSize = input.string(
+     size.huge, "Text size",
+     options = [size.auto, size.tiny, size.small, size.normal, size.large, size.huge]
+ )
+
+//@function Displays the pairs of `this` map within a table.
+//@param    this A map with `string` keys and `float` values.
+//@param    position The position of the table on the chart.
+//@param    header The string to display on the top row of the table.
+//@param    textSize The size of the text in the table.
+//@returns  A new `table` object with cells displaying each pair in `this`.
+method toTable(
+     map<string, float> this, string position = position.middle_center, string header = na,
+     string textSize = size.huge
+ ) =>
+    // Color variables
+    borderColor = #000000
+    headerColor = color.rgb(1, 88, 80)
+    pairColor   = color.maroon
+    textColor   = color.white
+
+    //@variable A table that displays the key-value pairs of `this` map.
+    table result = table.new(
+         position, this.size() + 1, 3, border_width = 2, border_color = borderColor
+     )
+    // Initialize top and side header cells.
+    result.cell(1, 0, header, bgcolor = headerColor, text_color = textColor, text_size = textSize)
+    result.merge_cells(1, 0, this.size(), 0)
+    result.cell(0, 1, "Key", bgcolor = headerColor, text_color = textColor, text_size = textSize)
+    result.cell(0, 2, "Value", bgcolor = headerColor, text_color = textColor, text_size = textSize)
+
+    //@variable The column index of the table. Updates on each loop iteration.
+    int col = 1
+
+    // Loop over each `key` and `value` from `this` map in the insertion order.
+    for [key, value] in this
+        // Initialize a `key` cell in the `result` table on row 1.
+        result.cell(
+             col, 1, str.tostring(key), bgcolor = color.maroon,
+             text_color = color.white, text_size = textSize
+         )
+        // Initialize a `value` cell in the `result` table on row 2.
+        result.cell(
+             col, 2, str.tostring(value), bgcolor = color.maroon,
+             text_color = color.white, text_size = textSize
+         )
+        // Move to the next column index.
+        col += 1
+    result // Return the `result` table.
+
+//@variable A map with `string` keys and `float` values to hold `length`-bar averages.
+averages = map.new<string, float>()
+
+// Put key-value pairs into the `averages` map.
+averages.put("Open", ta.sma(open, length))
+averages.put("High", ta.sma(high, length))
+averages.put("Low", ta.sma(low, length))
+averages.put("Close", ta.sma(close, length))
+averages.put("Volume", ta.sma(volume, length))
+
+//@variable The text to display at the top of the table.
+string headerText = str.format("{0} {1}-bar averages", "'" + syminfo.tickerid + "'", length)
+// Display the `averages` map in a `table` with the `headerText`.
+averages.toTable(header = headerText, textSize = txtSize)
+```
+
+
+# Copiando um Mapa
+
+
+
+
+
 # Mapas de Outras Coleções
