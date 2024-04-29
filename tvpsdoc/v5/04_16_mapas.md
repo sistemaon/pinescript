@@ -352,5 +352,74 @@ __Note que:__
 
 - Nem todas as strings no array `removeKeys` estavam presentes nas chaves de `m`. Tentar remover chaves inexistentes ("F", "a" e o segundo "B" neste exemplo) não tem efeito sobre o conteúdo do mapa.
 
+## Combinando Mapas
+
+Scripts podem combinar dois mapas por meio de [map.put_all()](https://br.tradingview.com/pine-script-reference/v5/#fun_map.put_all). Esta função insere _todos_ os pares chave-valor do mapa `id2`, na ordem de inserção, no mapa `id1`. Assim como em [map.put()](https://br.tradingview.com/pine-script-reference/v5/#fun_map.put), se alguma chave em `id2` também estiver presente em `id1`, essa função __substitui__ os pares chave-valor que contêm essas chaves, sem afetar sua ordem de inserção inicial.
+
+Este exemplo contém uma função definida pelo usuário, `hexMap()`, que mapeia chaves [int](https://br.tradingview.com/pine-script-reference/v5/#type_int) decimais para representações em [string](https://br.tradingview.com/pine-script-reference/v5/#type_string) de sua forma [hexadecimal](https://pt.wikipedia.org/wiki/Sistema_de_numera%C3%A7%C3%A3o_hexadecimal). O script utiliza essa função para criar dois mapas, `mapA` e `mapB`, e depois usa [mapA.put_all(mapB)](https://br.tradingview.com/pine-script-reference/v5/#fun_map.put_all) para inserir todos os pares chave-valor de `mapB` em `mapA`.
+
+O script utiliza uma função personalizada, `debugLabel()`, para exibir _labels_ mostrando as [chaves](https://br.tradingview.com/pine-script-reference/v5/#fun_map.keys) e [valores](https://br.tradingview.com/pine-script-reference/v5/#fun_map.values) de `mapA` e `mapB`, e então outra _label_ exibindo o conteúdo de `mapA` após a inserção de todos os pares chave-valor de `mapB` nele:
+
+![Lendo e escrevendo combinando mapas](./imgs/Maps-Reading-and-writing-Combining-maps-1.png)
+
+```c
+//@version=5
+indicator("Combining maps demo", "Hex map")
+
+//@variable An array of string hex digits.
+var array<string> hexDigits = str.split("0123456789ABCDEF", "")
+
+//@function Returns a hexadecimal string for the specified `value`.
+hex(int value) =>
+    //@variable A string representing the hex form of the `value`.
+    string result = ""
+    //@variable A temporary value for digit calculation.
+    int tempValue = value
+    while tempValue > 0
+        //@variable The next integer digit.
+        int digit = tempValue % 16
+        // Add the hex form of the `digit` to the `result`.
+        result := hexDigits.get(digit) + result
+        // Divide the `tempValue` by the base.
+        tempValue := int(tempValue / 16)
+    result
+
+//@function Returns a map holding the `numbers` as keys and their `hex` strings as values.
+hexMap(array<int> numbers) =>
+    //@variable A map associating `int` keys with `string` values.
+    result = map.new<int, string>()
+    for number in numbers
+        // Put a pair containing the `number` and its `hex()` representation into the `result`.
+        result.put(number, hex(number))
+    result
+
+//@function Returns a label to display the keys and values of a hex map.
+debugLabel(
+     map<int, string> this, int barIndex = bar_index, color bgColor = color.blue,
+     string style = label.style_label_center, string note = ""
+ ) =>
+    string repr = str.format(
+         "{0}\nDecimal: {1}\nHex: {2}",
+         note, str.tostring(this.keys()), str.tostring(this.values())
+     )
+    label.new(
+         barIndex, 0, repr, color = bgColor, style = style,
+         textcolor = color.white, size = size.huge
+     )
+
+if bar_index == last_bar_index - 1
+    //@variable A map with decimal `int` keys and hexadecimal `string` values.
+    map<int, string> mapA = hexMap(array.from(101, 202, 303, 404))
+    debugLabel(mapA, bar_index, color.navy, label.style_label_down, "A")
+
+    //@variable A map containing key-value pairs to add to `mapA`.
+    map<int, string> mapB = hexMap(array.from(303, 404, 505, 606, 707, 808))
+    debugLabel(mapB, bar_index, color.maroon, label.style_label_up, "B")
+
+    // Put all pairs from `mapB` into `mapA`.
+    mapA.put_all(mapB)
+    debugLabel(mapA, bar_index + 10, color.purple, note = "Merge B into A")
+```
+
 
 # Mapas de Outras Coleções
