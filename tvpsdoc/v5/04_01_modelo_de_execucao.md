@@ -75,7 +75,7 @@ Resumindo o processo da barra em tempo real:
 O script é executado em todas as barras disponíveis no gráfico quando um dos seguintes eventos ocorre:
 
 - Um novo símbolo ou período de tempo é carregado no gráfico.
-- Um script é salvo ou adicionado ao gráfico, pelo Editor Pine Script ou da caixa de diálogo "Indicadores e estratégias" (_“Indicators & strategies”_) do gráfico.
+- Um script é salvo ou adicionado ao gráfico, pelo Editor Pine Script ou da caixa de diálogo "Indicadores e estratégias" (_"Indicators & strategies"_) do gráfico.
 - Um valor é modificado na caixa de diálogo "Configurações/Entradas" ("_Settings/Inputs_") do script.
 - Um valor é modificado na caixa de diálogo "Configurações/Propriedades" ("_Settings/Properties_") de uma estratégia.
 - O navegador é atualizado (_refresh_).

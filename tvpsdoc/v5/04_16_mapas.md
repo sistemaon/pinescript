@@ -568,7 +568,6 @@ if bar_index == last_bar_index - 1
     mCopy.debugLabel(bar_index + 10, color.purple, note = "Copied and changed")
 ```
 
-
 ## Cópias Profundas (_Deep Copies_)
 
 Embora uma [cópia superficial](./04_16_mapas.md#cópias-superficiais-shallow-copies) seja suficiente ao copiar mapas que possuem valores de um _tipo fundamental_, é importante lembrar que _cópias superficiais_ de um mapa que contém valores de um _tipo de referência_ ([line](https://br.tradingview.com/pine-script-reference/v5/#type_line), [linefill](https://br.tradingview.com/pine-script-reference/v5/#type_linefill), [box](https://br.tradingview.com/pine-script-reference/v5/#type_box), [polyline](https://br.tradingview.com/pine-script-reference/v5/#type_polyline), [label](https://br.tradingview.com/pine-script-reference/v5/#type_label), [table](https://br.tradingview.com/pine-script-reference/v5/#type_table), [chart.point](https://br.tradingview.com/pine-script-reference/v5/#type_chart.point) ou [tipos definidos pelo usuário (UDTs)](./04_09_tipagem_do_sistema.md#tipos-definidos-pelo-usuário)) apontam para os mesmos objetos que o original. Modificar os objetos referenciados por uma cópia superficial afetará as instâncias referenciadas pelo mapa original e vice-versa.
@@ -633,6 +632,58 @@ if bar_index == last_bar_index - 1
 __Note que:__
 
 - O método `deepCopy()` percorre o mapa `original`, copiando cada `value` (_valor_) e [inserindo](./04_16_mapas.md#inserindo-e-obtendo-pares-chave-valor) pares de chave-valor contendo as cópias em uma [nova](https://br.tradingview.com/pine-script-reference/v5/#fun_map.new%3Ctype,type%3E) instância de mapa.
+
+
+# Escopo e Histórico
+
+Assim como outras coleções em Pine, as variáveis de mapa deixam vestígios históricos em cada barra, permitindo que um script acesse instâncias passadas de mapas atribuídas a uma variável usando o operador de referência histórica [[]](https://br.tradingview.com/pine-script-reference/v5/#op_[]). Scripts também podem atribuir mapas a variáveis globais e interagir com eles a partir dos escopos de [funções](./04_11_funcoes_definida_pelo_usuario.md), [métodos](./04_13_metodos.md) e [estruturas condicionais](./04_07_estruturas_condicionais.md).
+
+Como exemplo, este script usa um mapa global e seu histórico para calcular um conjunto agregado de [EMAs](https://br.tradingview.com/support/solutions/43000592270/). Declara um mapa `globalData` de chaves [int](https://br.tradingview.com/pine-script-reference/v5/#type_int) e valores [float](https://br.tradingview.com/pine-script-reference/v5/#type_float), onde cada chave no mapa corresponde ao _length_ (_comprimento_) de cada cálculo da EMA. A função definida pelo usuário `update()` calcula cada EMA de _`key`-length_ (_comprimento-chave_) mesclando os valores do mapa `previous` (_anterior_) atribuído a `globalData` com o valor da `source` (_fonte_) atual.
+
+O script plota os valores [máximos](https://br.tradingview.com/pine-script-reference/v5/#fun_array.max) e [mínimos](https://br.tradingview.com/pine-script-reference/v5/#fun_array.min) no array [values()](https://br.tradingview.com/pine-script-reference/v5/#fun_map.values) do mapa global e o valor de `globalData.get(50)` (isto é, o EMA de 50 barras):
+
+![Escopo e histórico](./imgs/Maps-Scope-and-history-1.png)
+
+```c
+//@version=5
+indicator("Scope and history demo", overlay = true)
+
+//@variable The source value for EMA calculation.
+float source = input.source(close, "Source")
+
+//@variable A map containing global key-value pairs.
+globalData = map.new<int, float>()
+
+//@function Calculates a set of EMAs and updates the key-value pairs in `globalData`.
+update() =>
+    //@variable The previous map instance assigned to `globalData`.
+    map<int, float> previous = globalData[1]
+
+    // Put key-value pairs with keys 10-200 into `globalData` if `previous` is `na`.
+    if na(previous)
+        for i = 10 to 200
+            globalData.put(i, source)
+    else
+        // Iterate each `key` and `value` in the `previous` map.
+        for [key, value] in previous
+            //@variable The smoothing parameter for the `key`-length EMA.
+            float alpha = 2.0 / (key + 1.0)
+            //@variable The `key`-length EMA value.
+            float ema = (1.0 - alpha) * value + alpha * source
+            // Put the `key`-length `ema` into the `globalData` map.
+            globalData.put(key, ema)
+
+// Update the `globalData` map.
+update()
+
+//@variable The array of values from `globalData` in their insertion order.
+array<float> values = globalData.values()
+
+// Plot the max EMA, min EMA, and 50-bar EMA values.
+plot(values.max(), "Max EMA", color.green, 2)
+plot(values.min(), "Min EMA", color.red, 2)
+plot(globalData.get(50), "50-bar EMA", color.orange, 3)
+```
 
 
 # Mapas de Outras Coleções

@@ -344,7 +344,7 @@ lbl.set_text(results)
 __Note que:__
 
 - O tipo subjacente de cada variável determina qual sobrecarga do `getType()` o compilador utilizará.
-- O método irá juntar “(na)” à string de saída quando uma variável estiver como `na` para demarcar que está vazia.
+- O método irá juntar "(na)" à string de saída quando uma variável estiver como `na` para demarcar que está vazia.
 
 
 # Exemplo Avançado
