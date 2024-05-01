@@ -514,7 +514,7 @@ __Note que:__
 
 # Copiando _Matrix_
 
-## Cópias Superficiais
+## Cópias Superficiais (_Shallow Copies_)
 
 Scripts Pine podem copiar _matrices_ através de [matrix.copy()](https://br.tradingview.com/pine-script-reference/v5/#fun_matrix.copy). Esta função retorna uma _cópia superficial_ de uma _matrix_ que não afeta a forma da _matrix_ original nem suas referências.
 

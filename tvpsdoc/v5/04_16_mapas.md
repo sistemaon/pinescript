@@ -519,7 +519,7 @@ averages.toTable(header = headerText, textSize = txtSize)
 
 # Copiando um Mapa
 
-## Cópias Superficiais
+## Cópias Superficiais (_Shallow Copies_)
 
 Scripts podem criar uma _cópia superficial_ de um `id` de mapa usando a função [map.copy()](https://br.tradingview.com/pine-script-reference/v5/#fun_map.copy). Modificações em uma cópia superficial não afetam o mapa `id` original ou sua ordem de inserção interna.
 
@@ -569,8 +569,70 @@ if bar_index == last_bar_index - 1
 ```
 
 
+## Cópias Profundas (_Deep Copies_)
 
+Embora uma [cópia superficial](./04_16_mapas.md#cópias-superficiais-shallow-copies) seja suficiente ao copiar mapas que possuem valores de um _tipo fundamental_, é importante lembrar que _cópias superficiais_ de um mapa que contém valores de um _tipo de referência_ ([line](https://br.tradingview.com/pine-script-reference/v5/#type_line), [linefill](https://br.tradingview.com/pine-script-reference/v5/#type_linefill), [box](https://br.tradingview.com/pine-script-reference/v5/#type_box), [polyline](https://br.tradingview.com/pine-script-reference/v5/#type_polyline), [label](https://br.tradingview.com/pine-script-reference/v5/#type_label), [table](https://br.tradingview.com/pine-script-reference/v5/#type_table), [chart.point](https://br.tradingview.com/pine-script-reference/v5/#type_chart.point) ou [tipos definidos pelo usuário (UDTs)](./04_09_tipagem_do_sistema.md#tipos-definidos-pelo-usuário)) apontam para os mesmos objetos que o original. Modificar os objetos referenciados por uma cópia superficial afetará as instâncias referenciadas pelo mapa original e vice-versa.
 
+Para garantir que alterações em objetos referenciados por um mapa copiado não afetem instâncias referenciadas em outros locais, pode-se fazer uma _cópia profunda_ criando um novo mapa com pares de chave-valor contendo cópias de cada valor no mapa original.
+
+Este exemplo cria um mapa `original` com chaves de [string](https://br.tradingview.com/pine-script-reference/v5/#type_string) e valores de [_label_](https://br.tradingview.com/pine-script-reference/v5/#type_label) e [insere](https://br.tradingview.com/pine-script-reference/v5/#fun_map.put) um par de chave-valor nele. O script copia o mapa para uma variável `shallow` através do método incorporado [copy()](https://br.tradingview.com/pine-script-reference/v5/#fun_map.copy), e então para uma variável `deep` usando um método personalizado `deepCopy()`.
+
+Conforme observado no gráfico, mudanças na _label_ obtida da _cópia superficial_ `shallow` também impactam a instância referenciada pelo mapa `original`, porém as alterações naquela vindo da _cópia profunda_ `deep` não afetam:
+
+![Copiando um mapa cópias profundas](./imgs/Maps-Copying-a-map-Deep-copies-1.png)
+
+```c
+//@version=5
+indicator("Deep copy demo")
+
+//@function Returns a deep copy of `this` map.
+method deepCopy(map<string, label> this) =>
+    //@variable A deep copy of `this` map.
+    result = map.new<string, label>()
+    // Add key-value pairs with copies of each `value` to the `result`.
+    for [key, value] in this
+        result.put(key, value.copy())
+    result //Return the `result`.
+
+//@variable A map containing `string` keys and `label` values.
+var original = map.new<string, label>()
+
+if bar_index == last_bar_index - 1
+    // Put a new key-value pair into the `original` map.
+    map.put(
+         original, "Test",
+         label.new(bar_index, 0, "Original", textcolor = color.white, size = size.huge)
+     )
+
+    //@variable A shallow copy of the `original` map.
+    map<string, label> shallow = original.copy()
+    //@variable A deep copy of the `original` map.
+    map<string, label> deep = original.deepCopy()
+
+    //@variable The "Test" label from the `shallow` copy.
+    label shallowLabel = shallow.get("Test")
+    //@variable The "Test" label from the `deep` copy.
+    label deepLabel = deep.get("Test")
+
+    // Modify the "Test" label's `y` attribute in the `original` map.
+    // This also affects the `shallowLabel`.
+    original.get("Test").set_y(label.all.size())
+
+    // Modify the `shallowLabel`. Also modifies the "Test" label in the `original` map.
+    shallowLabel.set_text("Shallow copy")
+    shallowLabel.set_color(color.red)
+    shallowLabel.set_style(label.style_label_up)
+
+    // Modify the `deepLabel`. Does not modify any other label instance.
+    deepLabel.set_text("Deep copy")
+    deepLabel.set_color(color.navy)
+    deepLabel.set_style(label.style_label_left)
+    deepLabel.set_x(bar_index + 5)
+```
+
+__Note que:__
+
+- O método `deepCopy()` percorre o mapa `original`, copiando cada `value` (_valor_) e [inserindo](./04_16_mapas.md#inserindo-e-obtendo-pares-chave-valor) pares de chave-valor contendo as cópias em uma [nova](https://br.tradingview.com/pine-script-reference/v5/#fun_map.new%3Ctype,type%3E) instância de mapa.
 
 
 # Mapas de Outras Coleções
