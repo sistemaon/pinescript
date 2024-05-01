@@ -519,6 +519,56 @@ averages.toTable(header = headerText, textSize = txtSize)
 
 # Copiando um Mapa
 
+## Cópias Superficiais
+
+Scripts podem criar uma _cópia superficial_ de um `id` de mapa usando a função [map.copy()](https://br.tradingview.com/pine-script-reference/v5/#fun_map.copy). Modificações em uma cópia superficial não afetam o mapa `id` original ou sua ordem de inserção interna.
+
+Por exemplo, este script constrói um mapa `m` com as chaves "A", "B", "C" e "D" atribuídas a quatro valores [aleatórios](https://br.tradingview.com/pine-script-reference/v5/#fun_math.random) entre 0 e 10. Em seguida, cria um mapa `mCopy` como uma cópia superficial de `m` e atualiza os valores associados às suas chaves. O script exibe os pares chave-valor em `m` e `mCopy` no gráfico utilizando um método personalizado `debugLabel()`:
+
+![Copiando um mapa cópias superficiais](./imgs/Maps-Copying-a-map-Shallow-copies-1.png)
+
+```c
+//@version=5
+indicator("Shallow copy demo")
+
+//@function Displays the key-value pairs of `this` map in a label.
+method debugLabel(
+     map<string, float> this, int barIndex = bar_index, color bgColor = color.blue,
+     color textColor = color.white, string note = ""
+ ) =>
+    //@variable The text to display in the label.
+    labelText = note + "\n{"
+    for [key, value] in this
+        labelText += str.format("{0}: {1}, ", key, value)
+    labelText := str.replace(labelText, ", ", "}", this.size() - 1)
+
+    if barstate.ishistory
+        label result = label.new(
+             barIndex, 0, labelText, color = bgColor, style = label.style_label_center,
+             textcolor = textColor, size = size.huge
+         )
+
+if bar_index == last_bar_index - 1
+    //@variable A map of `string` keys and random `float` values.
+    m = map.new<string, float>()
+
+    // Assign random values to an array of keys in `m`.
+    for key in array.from("A", "B", "C", "D")
+        m.put(key, math.random(0, 10))
+
+    //@variable A shallow copy of `m`.
+    mCopy = m.copy()
+
+    // Assign the insertion order value `i` to each `key` in `mCopy`.
+    for [i, key] in mCopy.keys()
+        mCopy.put(key, i)
+
+    // Display the labels.
+    m.debugLabel(bar_index, note = "Original")
+    mCopy.debugLabel(bar_index + 10, color.purple, note = "Copied and changed")
+```
+
+
 
 
 
