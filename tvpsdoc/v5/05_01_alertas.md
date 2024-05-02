@@ -1,0 +1,22 @@
+
+# Alertas
+
+Os alertas do TradingView funcionam 24 horas por dia, 7 dias por semana, (_24x7_) em nossos servidores e não exigem que as pessoas estejam logadas para serem executados. Os alertas são criados a partir da _User Interface (UI)_/_interface de usuário_  dos gráficos. Todas as informações necessárias para entender como os alertas funcionam e como criá-los a partir da __UI__ dos gráficos podem ser encontradas na página [Sobre os alertas do TradingView](https://br.tradingview.com/support/solutions/43000520149/) no _Centro de Ajuda_.
+
+Os tipos de alerta disponíveis no TradingView (_generic alerts_, _drawing alerts_ e _script alerts on order fill events_)/(_alertas genéricos_, _alertas de desenho_ e _alertas de scripts em eventos de preenchimento de ordens_) são criados a partir de símbolos ou scripts carregados no gráfico e não exigem codificação específica. É possível criar esses tipos de alerta a partir da _UI_ interface do usuário dos gráficos.
+
+Outros tipos de alertas (_script alerts triggering on alert() function calls_, e _alertcondition() alerts_)/(_alertas de script acionando chamadas da função alert()_ e _alertas alertcondition()_) exigem que um código específico em Pine Script esteja presente em um script para criar um _evento de alerta_ antes que os usuários possam criar alertas a partir dele usando a interface do usuário dos gráficos. Além disso, enquanto os usuários de script podem criar _alertas de script_ acionados em _eventos de preenchimento de ordens_ a partir da interface do usuário dos gráficos em qualquer estratégia carregada no seu gráfico. Programadores podem especificar mensagens de alerta de preenchimento de ordem explícitas em seu script para cada tipo de ordem preenchida pelo _broker emulator_ (_emulador de corretora_).
+
+Esta página aborda as diferentes maneiras pelas quais os programadores em Pine Script podem codificar seus scripts para criar eventos de alerta, a partir dos quais os usuários do script, por sua vez, poderão criar alertas através da interface de usuário dos gráficos.
+
+Serão explorados:
+
+- Como utilizar a função [alert()](https://br.tradingview.com/pine-script-reference/v5/#fun_alert) para chamadas de _função alert()_ em indicadores ou estratégias, que podem então ser incluídas nos _alertas de script_ criados a partir da interface de usuário dos gráficos.
+- Como adicionar mensagens de alerta personalizadas para serem incluídas nos _alertas de script_ que são acionados pelos _eventos de preenchimento de ordens_ em estratégias.
+- Como utilizar a função [alertcondition()](https://br.tradingview.com/pine-script-reference/v5/#fun_alertcondition) para gerar, apenas em indicadores, _eventos de alertcondition()_ que podem, então, ser usados para criar _alertas de alertcondition()_ a partir da interface de usuário dos gráficos.
+
+Tenha em mente que:
+
+- Nenhum código relacionado a alertas no Pine Script pode criar um alerta em execução na interface de usuário dos gráficos; ele apenas cria eventos de alerta que podem então ser usados por usuários de script para criar alertas em execução a partir da interface de usuário dos gráficos.
+- Alertas só são acionados na barra em tempo real. O escopo operacional do código Pine Script que lida com qualquer tipo de alerta é, portanto, restrito apenas a barras em tempo real.
+- Quando um alerta é criado na interface de usuário dos gráficos, TradingView salva uma imagem espelho do script e suas entradas, junto com o símbolo principal do gráfico e o _timeframe_ para executar o alerta em seus servidores. Alterações subsequentes nas entradas do script ou no gráfico, portanto, não afetarão os alertas em execução previamente criados a partir deles. Se desejar que as alterações em seu contexto se reflitam no comportamento de um alerta em execução, será necessário excluir o alerta e criar um novo no novo contexto.
