@@ -687,3 +687,101 @@ plot(globalData.get(50), "50-bar EMA", color.orange, 3)
 
 
 # Mapas de Outras Coleções
+
+Mapas não podem utilizar diretamente outros mapas, [arrays](./04_14_arrays.md) ou [_matrices_](./04_15_matrices.md) como valores, mas podem conter valores de um [tipo definido pelo usuário](./04_09_tipagem_do_sistema.md#tipos-definidos-pelo-usuário) que inclua coleções em seus campos.
+
+Por exemplo, para criar um mapa "2D" que utiliza chaves [string](https://br.tradingview.com/pine-script-reference/v5/#type_string) para acessar _mapas aninhados_ que contêm pares de chaves [string](https://br.tradingview.com/pine-script-reference/v5/#type_string) e valores [float](https://br.tradingview.com/pine-script-reference/v5/#type_float). Como mapas não podem usar outras coleções como valores, é necessário primeiro criar um _tipo encapsulado_ com um campo para conter uma instância de `map<string, float>`, assim:
+
+```c
+//@type A wrapper type for maps with `string` keys and `float` values.
+type Wrapper
+    map<string, float> data
+```
+
+Com o tipo `Wrapper` definido, é possível criar mapas com chaves [string](https://br.tradingview.com/pine-script-reference/v5/#type_string) e valores `Wrapper`, onde o campo `data` de cada valor no mapa aponta para uma instância do `map<string, float>`:
+
+```c
+mapOfMaps = map.new<string, Wrapper>()
+```
+
+O script abaixo utiliza este conceito para construir um mapa que contém mapas com dados OHLCV solicitados de múltiplos tickers. A função definida pelo usuário, `requestData()`, solicita dados de preço e volume de um ticker, cria um mapa `<string, float>`, [insere](https://br.tradingview.com/pine-script-reference/v5/#fun_map.put) os dados nele e então retorna uma instância `Wrapper` contendo o novo mapa.
+
+O script [insere](https://br.tradingview.com/pine-script-reference/v5/#fun_map.put) os resultados de cada chamada à função `requestData()` no `mapOfMaps`, em seguida cria uma representação em [string](https://br.tradingview.com/pine-script-reference/v5/#type_string) dos mapas aninhados com um método definido pelo usuário `toString()`, que é exibido no gráfico em um [_label_](https://br.tradingview.com/pine-script-reference/v5/#type_label):
+
+![Mapas de outras coleções](./imgs/Maps-Maps-of-other-collections-1.png)
+
+```c
+//@version=5
+indicator("Nested map demo")
+
+//@variable The timeframe of the requested data.
+string tf = input.timeframe("D", "Timeframe")
+// Symbol inputs.
+string symbol1 = input.symbol("EURUSD", "Symbol 1")
+string symbol2 = input.symbol("GBPUSD", "Symbol 2")
+string symbol3 = input.symbol("EURGBP", "Symbol 3")
+
+//@type A wrapper type for maps with `string` keys and `float` values.
+type Wrapper
+    map<string, float> data
+
+//@function Returns a wrapped map containing OHLCV data from the `tickerID` at the `timeframe`.
+requestData(string tickerID, string timeframe) =>
+    // Request a tuple of OHLCV values from the specified ticker and timeframe.
+    [o, h, l, c, v] = request.security(
+         tickerID, timeframe,
+         [open, high, low, close, volume]
+     )
+    //@variable A map containing requested OHLCV data.
+    result = map.new<string, float>()
+    // Put key-value pairs into the `result`.
+    result.put("Open", o)
+    result.put("High", h)
+    result.put("Low", l)
+    result.put("Close", c)
+    result.put("Volume", v)
+    //Return the wrapped `result`.
+    Wrapper.new(result)
+
+//@function Returns a string representing `this` map of `string` keys and `Wrapper` values.
+method toString(map<string, Wrapper> this) =>
+    //@variable A string representation of `this` map.
+    string result = "{"
+
+    // Iterate over each `key1` and associated `wrapper` in `this`.
+    for [key1, wrapper] in this
+        // Add `key1` to the `result`.
+        result += key1
+
+        //@variable A string representation of the `wrapper.data` map.
+        string innerStr = ": {"
+        // Iterate over each `key2` and associated `value` in the wrapped map.
+        for [key2, value] in wrapper.data
+            // Add the key-value pair's representation to `innerStr`.
+            innerStr += str.format("{0}: {1}, ", key2, str.tostring(value))
+
+        // Replace the end of `innerStr` with "}" and add to `result`.
+        result += str.replace(innerStr, ", ", "},\n", wrapper.data.size() - 1)
+
+    // Replace the blank line at the end of `result` with "}".
+    result := str.replace(result, ",\n", "}", this.size() - 1)
+    result
+
+//@variable A map of wrapped maps containing OHLCV data from multiple tickers.
+var mapOfMaps = map.new<string, Wrapper>()
+
+//@variable A label showing the contents of the `mapOfMaps`.
+var debugLabel = label.new(
+     bar_index, 0, color = color.navy, textcolor = color.white, size = size.huge,
+     style = label.style_label_center, text_font_family = font.family_monospace
+ )
+
+// Put wrapped maps into `mapOfMaps`.
+mapOfMaps.put(symbol1, requestData(symbol1, tf))
+mapOfMaps.put(symbol2, requestData(symbol2, tf))
+mapOfMaps.put(symbol3, requestData(symbol3, tf))
+
+// Update the label.
+debugLabel.set_text(mapOfMaps.toString())
+debugLabel.set_x(bar_index)
+```
