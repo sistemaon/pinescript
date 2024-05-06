@@ -38,3 +38,19 @@ Enquanto as chamadas de [alert()](https://br.tradingview.com/pine-script-referen
 Quando um usuário de script deseja gerar um alerta sobre eventos de preenchimento de ordem de uma estratégia, ele deve incluir esses eventos ao criar um _alerta de script_ sobre a estratégia na caixa de diálogo "_Create Alert_" ("_Criar Alerta_"). Não é necessário um código especial nos scripts para que os usuários possam fazer isso. No entanto, a mensagem enviada com eventos de preenchimento de ordens pode ser personalizada pelos programadores por meio do uso do parâmetro `alert_message` nas chamadas de função de `strategy.*()` que gera ordens. A combinação de chamadas de [alert()](https://br.tradingview.com/pine-script-reference/v5/#fun_alert) e o uso de argumentos de `alert_message` personalizados nas chamadas de função de `strategy.*()` que gera ordens deve permitir que os programadores gerem eventos de alerta sobre a maioria das condições que ocorrem durante a execução de seus scripts.
 
 A função [alertcondition()](https://br.tradingview.com/pine-script-reference/v5/#fun_alertcondition) permanece no Pine Script por compatibilidade com versões anteriores, mas também pode ser utilizada vantajosamente para gerar alertas distintos disponíveis para seleção como itens individuais no campo "_Condition_" ("_Condição_") da caixa de diálogo "_Create Alert_" ("_Criar Alerta_").
+
+
+# Alertas de Script
+
+Quando um usuário de script cria um _alerta de script_ usando a caixa de diálogo "Create Alert" ("_Criar Alerta_"), os eventos que podem acionar o alerta variam dependendo se o alerta é criado a partir de um indicador ou de uma estratégia.
+
+Um _alerta de script_ criado a partir de um __indicador__ será acionado quando:
+
+- O indicador contém chamadas de [alert()](https://br.tradingview.com/pine-script-reference/v5/#fun_alert).
+- A lógica do código permite que uma chamada específica de [alert()](https://br.tradingview.com/pine-script-reference/v5/#fun_alert) seja executada.
+- A frequência especificada na chamada de [alert()](https://br.tradingview.com/pine-script-reference/v5/#fun_alert) permite que o alerta seja acionado.
+
+Um _alerta de script_ criado a partir de uma __estratégia__ pode ser acionado por _chamadas da função alert()_, por _eventos de preenchimento de ordens_ ou ambos. O usuário do script que cria um alerta sobre uma estratégia decide quais tipos de eventos deseja incluir no _alerta de script_. Embora seja possível criar um _alerta de script_ sobre _eventos de preenchimento de ordens_ sem a necessidade de incluir código especial na estratégia, é necessário que ela contenha chamadas de [alert()](https://br.tradingview.com/pine-script-reference/v5/#fun_alert) para que os usuários possam incluir _chamadas da função alert()_ no _alerta de script_, ou seja, para que os usuários possam configurar alertas que se ativam com base na função _alert()_ em uma estratégia, é necessário primeiro que essa estratégia tenha chamadas da função _alert()_ em seu código.
+
+
+
