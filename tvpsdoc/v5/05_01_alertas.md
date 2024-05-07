@@ -76,8 +76,47 @@ A função [alert()](https://br.tradingview.com/pine-script-reference/v5/#fun_al
 
 Observe que, por padrão, as estratégias são recalculadas no fechamento da barra, então se a função [alert()](https://br.tradingview.com/pine-script-reference/v5/#fun_alert) com a frequência `alert.freq_all` ou `alert.freq_once_per_bar` for usada em uma estratégia, ela será chamada no máximo uma vez no fechamento da barra. Para permitir que a função [alert()](https://br.tradingview.com/pine-script-reference/v5/#fun_alert) seja chamada durante o processo de construção da barra, é necessário ativar a opção [`calc_on_every_tick`](https://br.tradingview.com/pine-script-reference/v5/#fun_strategy).
 
+## Usando Todas as Chamadas de `alert()`
 
+Observa este exemplo de detecção de cruzamentos da linha central do RSI:
 
+```c
+//@version=5
+indicator("All `alert()` calls")
+r = ta.rsi(close, 20)
 
+// Detect crosses.
+xUp = ta.crossover( r, 50)
+xDn = ta.crossunder(r, 50)
+// Trigger an alert on crosses.
+if xUp
+    alert("Go long (RSI is " + str.tostring(r, "#.00)"))
+else if xDn
+    alert("Go short (RSI is " + str.tostring(r, "#.00)"))
 
+plotchar(xUp, "Go Long",  "▲", location.bottom, color.lime, size = size.tiny)
+plotchar(xDn, "Go Short", "▼", location.top,    color.red,  size = size.tiny)
+hline(50)
+plot(r)
+```
 
+Se um _alerta de script_ for criado a partir deste script:
+
+- Quando o RSI cruzar a linha central para cima, o _alerta de script_ será acionado com a mensagem "Go long...". Quando o RSI cruzar a linha central para baixo, o _alerta de script_ será acionado com a mensagem "Go short...".
+- Como nenhum argumento é especificado para o parâmetro `freq` na chamada de [alert()](https://br.tradingview.com/pine-script-reference/v5/#fun_alert), o valor padrão de `alert.freq_once_per_bar` será usado, então o alerta só será acionado na primeira vez que cada uma das chamadas de [alert()](https://br.tradingview.com/pine-script-reference/v5/#fun_alert) for executada durante a barra em tempo real.
+- A mensagem enviada com o alerta é composta por duas partes: uma string constante e, em seguida, o resultado da chamada [str.tostring()](https://br.tradingview.com/pine-script-reference/v5/#fun_str{dot}tostring), que incluirá o valor do RSI no momento em que a chamada de [alert()](https://br.tradingview.com/pine-script-reference/v5/#fun_alert) é executada pelo script. Uma mensagem de alerta para um cruzamento para cima seria, por exemplo: "Go long (RSI is 53.41)".
+- Como um _alerta de script_ sempre é acionado em qualquer ocorrência de uma chamada para [alert()](https://br.tradingview.com/pine-script-reference/v5/#fun_alert), desde que a frequência usada na chamada permita, este script específico não permite que um usuário de script restrinja seu _alerta de script_ apenas para posições longas, por exemplo.
+
+Observe que:
+
+- Ao contrário de uma chamada de [alertcondition()](https://br.tradingview.com/pine-script-reference/v5/#fun_alertcondition) que sempre é colocada na coluna 0 (no escopo global do script), a chamada de [alert()](https://br.tradingview.com/pine-script-reference/v5/#fun_alert) é colocada no escopo local de uma condição [if](https://br.tradingview.com/pine-script-reference/v5/#kw_if), de modo que só é executada quando a condição _desencadeante_ é atendida. Se uma chamada de [alert()](https://br.tradingview.com/pine-script-reference/v5/#fun_alert) fosse colocada no escopo global do script na coluna 0, ela seria executada em todas as barras, o que provavelmente não seria o comportamento desejado.
+- Um [alertcondition()](https://br.tradingview.com/pine-script-reference/v5/#fun_alertcondition) não poderia aceitar a mesma string que foi usada para a mensagem do alerta devido ao uso da chamada [str.tostring()](https://br.tradingview.com/pine-script-reference/v5/#fun_str{dot}tostring). As mensagens de [alertcondition()](https://br.tradingview.com/pine-script-reference/v5/#fun_alertcondition) devem ser strings constantes.
+
+Por fim, como as mensagens de [alert()](https://br.tradingview.com/pine-script-reference/v5/#fun_alert) podem ser construídas dinamicamente em tempo de execução, seria possível utilizar o seguinte código para gerar os eventos de alerta:
+
+```c
+// Trigger an alert on crosses.
+if xUp or xDn
+    firstPart = (xUp ? "Go long" : "Go short") + " (RSI is "
+    alert(firstPart + str.tostring(r, "#.00)"))
+```
