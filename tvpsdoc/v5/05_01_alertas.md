@@ -52,5 +52,32 @@ Um _alerta de script_ criado a partir de um __indicador__ será acionado quando:
 
 Um _alerta de script_ criado a partir de uma __estratégia__ pode ser acionado por _chamadas da função alert()_, por _eventos de preenchimento de ordens_ ou ambos. O usuário do script que cria um alerta sobre uma estratégia decide quais tipos de eventos deseja incluir no _alerta de script_. Embora seja possível criar um _alerta de script_ sobre _eventos de preenchimento de ordens_ sem a necessidade de incluir código especial na estratégia, é necessário que ela contenha chamadas de [alert()](https://br.tradingview.com/pine-script-reference/v5/#fun_alert) para que os usuários possam incluir _chamadas da função alert()_ no _alerta de script_, ou seja, para que os usuários possam configurar alertas que se ativam com base na função _alert()_ em uma estratégia, é necessário primeiro que essa estratégia tenha chamadas da função _alert()_ em seu código.
 
+## Eventos da Função `alert()`
+
+A função [alert()](https://br.tradingview.com/pine-script-reference/v5/#fun_alert) possui a seguinte assinatura:
+
+```c
+alert(message, freq)
+```
+
+`message`
+
+Uma "série de strings" representa o texto da mensagem enviada quando o alerta é acionado. Como esse argumento permite valores "_series_", ele pode ser gerado em tempo de execução e variar de barra a barra, tornando-o dinâmico.
+
+`freq`
+
+Uma "input string" especifica a frequência de acionamento do alerta. Os argumentos válidos são:
+
+- `alert.freq_once_per_bar`: Apenas a primeira chamada por barra em tempo real aciona o alerta (valor padrão).
+- `alert.freq_once_per_bar_close`: Um alerta é acionado apenas quando a barra em tempo real fecha e uma chamada de [alert()](https://br.tradingview.com/pine-script-reference/v5/#fun_alert) é executada durante essa iteração do script.
+- `alert.freq_all`: Todas as chamadas durante a barra em tempo real acionam o alerta.
+
+A função [alert()](https://br.tradingview.com/pine-script-reference/v5/#fun_alert) pode ser utilizada tanto em indicadores quanto em estratégias. Para que uma chamada de [alert()](https://br.tradingview.com/pine-script-reference/v5/#fun_alert) acione um _alerta de script_ configurado com base em _chamadas da função alert()_, a lógica do script deve permitir que a chamada de [alert()](https://br.tradingview.com/pine-script-reference/v5/#fun_alert) seja executada, __e__ a frequência determinada pelo parâmetro `freq` deve permitir que o alerta seja acionado.
+
+Observe que, por padrão, as estratégias são recalculadas no fechamento da barra, então se a função [alert()](https://br.tradingview.com/pine-script-reference/v5/#fun_alert) com a frequência `alert.freq_all` ou `alert.freq_once_per_bar` for usada em uma estratégia, ela será chamada no máximo uma vez no fechamento da barra. Para permitir que a função [alert()](https://br.tradingview.com/pine-script-reference/v5/#fun_alert) seja chamada durante o processo de construção da barra, é necessário ativar a opção [`calc_on_every_tick`](https://br.tradingview.com/pine-script-reference/v5/#fun_strategy).
+
+
+
+
 
 
