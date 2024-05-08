@@ -161,5 +161,42 @@ __Note como:__
     - Selecionar apenas "_Detect Longs_" nos _inputs_ e criar um primeiro _alerta de script_ no script.
     - Selecionar apenas "_Detect Shorts_" nos _inputs_ e criar outro _alerta de script_ no script.
 
+## Em Estratégias
 
+Chamadas da função [alert()](https://br.tradingview.com/pine-script-reference/v5/#fun_alert) também podem ser utilizadas em estratégias, com a observação de que, por padrão, as estratégias executam apenas no [close](https://br.tradingview.com/pine-script-reference/v5/#var_close) (_fechamento_) das barras em tempo real. A menos que `calc_on_every_tick = true` seja usado na declaração [strategy()](https://br.tradingview.com/pine-script-reference/v5/#fun_strategy), todas as chamadas de [alert()](https://br.tradingview.com/pine-script-reference/v5/#fun_alert) utilizarão a frequência `alert.freq_once_per_bar_close`, independentemente do argumento usado para `freq`.
 
+Enquanto os _alertas de script_ em estratégias utilizem _eventos de preenchimento de ordens_ para acionar alertas quando o emulador de corretagem executa ordens, a função [alert()](https://br.tradingview.com/pine-script-reference/v5/#fun_alert) pode ser usada vantajosamente para gerar outros eventos de alerta em estratégias.
+
+Esta estratégia cria _chamadas da função alert()_ quando o RSI se move contra a operação por três barras consecutivas:
+
+```c
+//@version=5
+strategy("Strategy with selective `alert()` calls")
+r = ta.rsi(close, 20)
+
+// Detect crosses.
+xUp = ta.crossover( r, 50)
+xDn = ta.crossunder(r, 50)
+// Place orders on crosses.
+if xUp
+    strategy.entry("Long", strategy.long)
+else if xDn
+    strategy.entry("Short", strategy.short)
+
+// Trigger an alert when RSI diverges from our trade's direction.
+divInLongTrade  = strategy.position_size > 0 and ta.falling(r, 3)
+divInShortTrade = strategy.position_size < 0 and ta.rising( r, 3)
+if divInLongTrade
+    alert("WARNING: Falling RSI", alert.freq_once_per_bar_close)
+if divInShortTrade
+    alert("WARNING: Rising RSI", alert.freq_once_per_bar_close)
+
+plotchar(xUp, "Go Long",  "▲", location.bottom, color.lime, size = size.tiny)
+plotchar(xDn, "Go Short", "▼", location.top,    color.red,  size = size.tiny)
+plotchar(divInLongTrade,  "WARNING: Falling RSI", "•", location.top,    color.red,  size = size.tiny)
+plotchar(divInShortTrade, "WARNING: Rising RSI",  "•", location.bottom, color.lime, size = size.tiny)
+hline(50)
+plot(r)
+```
+
+Se um usuário criar um _alerta de script_ a partir desta estratégia e incluir tanto _eventos de preenchimento de ordens_ quanto _chamadas da função alert()_ em seu alerta, o alerta será acionado sempre que uma ordem for executada ou quando uma das chamadas de [alert()](https://br.tradingview.com/pine-script-reference/v5/#fun_alert) for executada pelo script na iteração de fechamento da barra em tempo real, isto é, quando [barstate.isrealtime](https://br.tradingview.com/pine-script-reference/v5/#var_barstate{dot}isrealtime) e [barstate.isconfirmed](https://br.tradingview.com/pine-script-reference/v5/#var_barstate{dot}isconfirmed) forem ambos verdadeiros. Os _eventos da função alert()_ no script só acionarão o alerta quando a barra em tempo real fechar, pois `alert.freq_once_per_bar_close` é o argumento usado para o parâmetro `freq` nas chamadas de [alert()](https://br.tradingview.com/pine-script-reference/v5/#fun_alert).
