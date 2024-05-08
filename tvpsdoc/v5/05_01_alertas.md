@@ -107,7 +107,7 @@ Se um _alerta de script_ for criado a partir deste script:
 - A mensagem enviada com o alerta é composta por duas partes: uma string constante e, em seguida, o resultado da chamada [str.tostring()](https://br.tradingview.com/pine-script-reference/v5/#fun_str{dot}tostring), que incluirá o valor do RSI no momento em que a chamada de [alert()](https://br.tradingview.com/pine-script-reference/v5/#fun_alert) é executada pelo script. Uma mensagem de alerta para um cruzamento para cima seria, por exemplo: "Go long (RSI is 53.41)".
 - Como um _alerta de script_ sempre é acionado em qualquer ocorrência de uma chamada para [alert()](https://br.tradingview.com/pine-script-reference/v5/#fun_alert), desde que a frequência usada na chamada permita, este script específico não permite que um usuário de script restrinja seu _alerta de script_ apenas para posições longas, por exemplo.
 
-Observe que:
+__Note que:__
 
 - Ao contrário de uma chamada de [alertcondition()](https://br.tradingview.com/pine-script-reference/v5/#fun_alertcondition) que sempre é colocada na coluna 0 (no escopo global do script), a chamada de [alert()](https://br.tradingview.com/pine-script-reference/v5/#fun_alert) é colocada no escopo local de uma condição [if](https://br.tradingview.com/pine-script-reference/v5/#kw_if), de modo que só é executada quando a condição _desencadeante_ é atendida. Se uma chamada de [alert()](https://br.tradingview.com/pine-script-reference/v5/#fun_alert) fosse colocada no escopo global do script na coluna 0, ela seria executada em todas as barras, o que provavelmente não seria o comportamento desejado.
 - Um [alertcondition()](https://br.tradingview.com/pine-script-reference/v5/#fun_alertcondition) não poderia aceitar a mesma string que foi usada para a mensagem do alerta devido ao uso da chamada [str.tostring()](https://br.tradingview.com/pine-script-reference/v5/#fun_str{dot}tostring). As mensagens de [alertcondition()](https://br.tradingview.com/pine-script-reference/v5/#fun_alertcondition) devem ser strings constantes.
@@ -120,3 +120,46 @@ if xUp or xDn
     firstPart = (xUp ? "Go long" : "Go short") + " (RSI is "
     alert(firstPart + str.tostring(r, "#.00)"))
 ```
+
+## Usando Chamadas Seletivas de `alert()`
+
+Quando os usuários criam um __alerta de script com base em chamadas da função alert()__, o alerta será acionado em qualquer chamada que o script faça à função [alert()](https://br.tradingview.com/pine-script-reference/v5/#fun_alert), desde que as restrições de frequência sejam atendidas. Para permitir que os usuários do script selecionem qual chamada da função [alert()](https://br.tradingview.com/pine-script-reference/v5/#fun_alert) no script acionará um _alerta de script_, é necessário fornecer-lhes meios para indicar sua preferência nas entradas do script e codificar a lógica apropriada no script. Dessa forma, os usuários poderão criar múltiplos _alertas de script_ a partir de um único script, cada um se comportando de maneira diferente conforme as escolhas feitas nas entradas do script antes de criar o alerta na interface gráfica.
+
+Suponha, para o próximo exemplo, que se deseja oferecer a opção de acionar alertas apenas para posições _long_, apenas para posições _short_ ou ambas. O script poderia ser codificado desta forma:
+
+```c
+//@version=5
+indicator("Selective `alert()` calls")
+detectLongsInput  = input.bool(true,  "Detect Longs")
+detectShortsInput = input.bool(true,  "Detect Shorts")
+repaintInput      = input.bool(false, "Allow Repainting")
+
+r = ta.rsi(close, 20)
+// Detect crosses.
+xUp = ta.crossover( r, 50)
+xDn = ta.crossunder(r, 50)
+// Only generate entries when the trade's direction is allowed in inputs.
+enterLong  = detectLongsInput  and xUp and (repaintInput or barstate.isconfirmed)
+enterShort = detectShortsInput and xDn and (repaintInput or barstate.isconfirmed)
+// Trigger the alerts only when the compound condition is met.
+if enterLong
+    alert("Go long (RSI is " + str.tostring(r, "#.00)"))
+else if enterShort
+    alert("Go short (RSI is " + str.tostring(r, "#.00)"))
+
+plotchar(enterLong,  "Go Long",  "▲", location.bottom, color.lime, size = size.tiny)
+plotchar(enterShort, "Go Short", "▼", location.top,    color.red,  size = size.tiny)
+hline(50)
+plot(r)
+```
+
+__Note como:__
+
+- Foi criado uma condição composta que só é atendida quando a seleção do usuário permite uma entrada naquela direção. Uma entrada _long_ no cruzamento da linha central só dispara o alerta quando as entradas _longs_ estão habilitadas nos _Inputs_ (_Entradas_) do script.
+- Foi oferecido ao usuário a opção de indicar sua preferência por repintura, input do script "_Allow Repainting_". Quando ele não permite que os cálculos sejam repintados, é esperado a confirmação da barra para acionar a condição composta. Dessa forma, o alerta e o marcador só aparecem no final da barra em tempo real.
+- Se um usuário deste script quisesse criar dois alertas de script distintos a partir deste script, ou seja, um acionando apenas em posições _longs_ e outro apenas em posições _shorts_, então ele precisaria:
+    - Selecionar apenas "_Detect Longs_" nos _inputs_ e criar um primeiro _alerta de script_ no script.
+    - Selecionar apenas "_Detect Shorts_" nos _inputs_ e criar outro _alerta de script_ no script.
+
+
+
