@@ -372,9 +372,9 @@ if barstate.islast
     table.cell(t, 0, 0, "Array elements count: " + str.tostring(array.size(a)), bgcolor = color.yellow)
 ```
 
-## Utilizando um Array como uma Stack (_Pilha_)
+## Utilizando um Array como uma _Stack_ (_Pilha_)
 
-Stacks (_Pilhas_) são construções LIFO (Last In, First Out - (_último a entrar_, _primeiro a sair_)). Comportam-se de maneira similar a uma pilha vertical de livros na qual os livros podem ser adicionados ou removidos um de cada vez, sempre do topo. Arrays do Pine Script podem ser utilizados como uma pilha, caso em que as funções [array.push()](https://br.tradingview.com/pine-script-reference/v5/#fun_array{dot}push) e [array.pop()](https://br.tradingview.com/pine-script-reference/v5/#fun_array{dot}pop) são utilizadas para adicionar e remover elementos no final do array:
+_Stacks_ (_Pilhas_) são construções LIFO (Last In, First Out - (_último a entrar_, _primeiro a sair_)). Comportam-se de maneira similar a uma pilha vertical de livros na qual os livros podem ser adicionados ou removidos um de cada vez, sempre do topo. Arrays do Pine Script podem ser utilizados como uma pilha, caso em que as funções [array.push()](https://br.tradingview.com/pine-script-reference/v5/#fun_array{dot}push) e [array.pop()](https://br.tradingview.com/pine-script-reference/v5/#fun_array{dot}pop) são utilizadas para adicionar e remover elementos no final do array:
 
 - O `array.push(prices, close)` adicionará um novo elemento ao final do array `prices`, aumentando o tamanho do array em um.
 - O `array.pop(prices)` removerá o último elemento do array `prices`, retornará seu valor e diminuirá o tamanho do array em um.

@@ -200,3 +200,44 @@ plot(r)
 ```
 
 Se um usuário criar um _alerta de script_ a partir desta estratégia e incluir tanto _eventos de preenchimento de ordens_ quanto _chamadas da função alert()_ em seu alerta, o alerta será acionado sempre que uma ordem for executada ou quando uma das chamadas de [alert()](https://br.tradingview.com/pine-script-reference/v5/#fun_alert) for executada pelo script na iteração de fechamento da barra em tempo real, isto é, quando [barstate.isrealtime](https://br.tradingview.com/pine-script-reference/v5/#var_barstate{dot}isrealtime) e [barstate.isconfirmed](https://br.tradingview.com/pine-script-reference/v5/#var_barstate{dot}isconfirmed) forem ambos verdadeiros. Os _eventos da função alert()_ no script só acionarão o alerta quando a barra em tempo real fechar, pois `alert.freq_once_per_bar_close` é o argumento usado para o parâmetro `freq` nas chamadas de [alert()](https://br.tradingview.com/pine-script-reference/v5/#fun_alert).
+
+## _Order Fill Events_ (_Eventos de Preenchimento de Ordens_)
+
+Quando um _alerta de script_ é criado a partir de um indicador, ele só pode ser acionado por _chamadas da função alert()_. No entanto, quando um _alerta de script_ é criado a partir de uma estratégia, o usuário pode especificar que _eventos de preenchimento de ordens_ também acionem o _alerta de script_. Um _evento de preenchimento de ordem_ é qualquer evento gerado pelo emulador de corretagem que cause a execução de uma ordem simulada. Isso equivale ao preenchimento de uma ordem de negociação por uma corretora/bolsa. As ordens não são necessariamente executadas no momento em que são colocadas. Em uma estratégia, a execução das ordens só pode ser detectada indiretamente e após o fato, analisando mudanças em variáveis ​​incorporadas como [strategy.opentrades](https://br.tradingview.com/pine-script-reference/v5/#var_strategy{dot}opentrades) ou [strategy.position_size](https://br.tradingview.com/pine-script-reference/v5/#var_strategy{dot}position_size). _Alertas de script_ configurados em _eventos de preenchimento de ordens_ são úteis pois permitem o acionamento de alertas no momento preciso da execução de uma ordem, antes que a lógica do script possa detectá-la.
+
+Programadores de Pine Script podem personalizar a mensagem de alerta enviada quando ordens específicas são executadas. Embora isso não seja um pré-requisito para que _eventos de preenchimento de ordens_ sejam acionados, mensagens de alerta personalizadas podem ser úteis porque permitem a inclusão de sintaxe personalizada nos alertas, a fim de encaminhar ordens reais para uma _engine_ de execução de terceiros, por exemplo. A especificação de mensagens de alerta personalizadas para _eventos de preenchimento de ordens_ específicos é realizada por meio do parâmetro `alert_message` em funções que podem gerar ordens: [strategy.close()](https://br.tradingview.com/pine-script-reference/v5/#fun_strategy{dot}close), [strategy.entry()](https://br.tradingview.com/pine-script-reference/v5/#fun_strategy{dot}entry), [strategy.exit()](https://br.tradingview.com/pine-script-reference/v5/#fun_strategy{dot}exit) e [strategy.order()](https://br.tradingview.com/pine-script-reference/v5/#fun_strategy{dot}order).
+
+O argumento usado para o parâmetro `alert_message` é uma "series string", portanto, pode ser construído dinamicamente usando qualquer variável disponível para o script, desde que seja convertida para o formato de string.
+
+Examinando uma estratégia onde utiliza-se o parâmetro `alert_message` nas chamadas [strategy.entry()](https://br.tradingview.com/pine-script-reference/v5/#fun_strategy{dot}entry):
+
+```c
+//@version=5
+strategy("Strategy using `alert_message`")
+r = ta.rsi(close, 20)
+
+// Detect crosses.
+xUp = ta.crossover( r, 50)
+xDn = ta.crossunder(r, 50)
+// Place order on crosses using a custom alert message for each.
+if xUp
+    strategy.entry("Long", strategy.long, stop = high, alert_message = "Stop-buy executed (stop was " + str.tostring(high) + ")")
+else if xDn
+    strategy.entry("Short", strategy.short, stop = low, alert_message = "Stop-sell executed (stop was " + str.tostring(low) + ")")
+
+plotchar(xUp, "Go Long",  "▲", location.bottom, color.lime, size = size.tiny)
+plotchar(xDn, "Go Short", "▼", location.top,    color.red,  size = size.tiny)
+hline(50)
+plot(r)
+```
+
+__Note que:__
+
+- Utiliza-se o parâmetro `stop` nas chamadas de [strategy.entry()](https://br.tradingview.com/pine-script-reference/v5/#fun_strategy{dot}entry), o que cria ordens de compra e venda por stop. Isso implica que as ordens de compra só serão executadas quando o preço estiver acima do `high` (_máximo_) da barra onde a ordem foi colocada, e as ordens de venda só serão executadas quando o preço estiver abaixo do `low` (_mínimo_) da barra onde a ordem foi colocada.
+- As setas para cima/para baixo que são plotadas com [plotchar()](https://br.tradingview.com/pine-script-reference/v5/#fun_plotchar), são plotadas quando as ordens são __colocadas__. Pode transcorrer um número variável de barras antes que a ordem seja efetivamente executada e, em alguns casos, a ordem nunca será executada porque o preço não atende à condição necessária.
+- Devido ao uso do mesmo argumento de `id` para todas as ordens de compra, qualquer nova ordem de compra colocada antes da condição de uma ordem anterior ser atendida substituirá essa ordem. O mesmo se aplica às ordens de venda.
+- As variáveis incluídas no argumento `alert_message` são avaliadas no momento em que a ordem é executada, ou seja, quando o alerta é acionado.
+
+Quando o parâmetro `alert_message` é utilizado nas chamadas de função `strategy.*()` que geram ordens da estratégia, os usuários do script devem incluir o placeholder `{{strategy.order.alert_message}}` no campo "Message" ("_Mensagem_") da caixa de diálogo "Create Alert" ("_Criar Alerta_") ao criar _alertas de script_ sobre _eventos de preenchimento de ordens_. Isso é necessário para que o argumento `alert_message` usado nas chamadas de função `strategy.*()` que geram ordens da estratégia seja utilizado na mensagem dos alertas acionados em cada _evento de preenchimento de ordem_. Quando apenas o placeholder `{{strategy.order.alert_message}}` é usado no campo "Message" ("_Mensagem_") e o parâmetro `alert_message` está presente em apenas algumas das chamadas de função `strategy.*()` que geram ordens em sua estratégia, uma string vazia substituirá o placeholder na mensagem dos alertas acionados por qualquer chamada de função `strategy.*()` que gere ordens e não utilize o parâmetro `alert_message`.
+
+Embora outros placeholders possam ser usados no campo "Message" ("_Mensagem_") da caixa de diálogo "Create Alert" ("_Criar Alerta_") por usuários que criam alertas sobre _eventos de preenchimento de ordens_, eles não podem ser usados no argumento de `alert_message`.
