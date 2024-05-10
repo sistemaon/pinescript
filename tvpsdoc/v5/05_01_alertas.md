@@ -241,3 +241,36 @@ __Note que:__
 Quando o parâmetro `alert_message` é utilizado nas chamadas de função `strategy.*()` que geram ordens da estratégia, os usuários do script devem incluir o placeholder `{{strategy.order.alert_message}}` no campo "Message" ("_Mensagem_") da caixa de diálogo "Create Alert" ("_Criar Alerta_") ao criar _alertas de script_ sobre _eventos de preenchimento de ordens_. Isso é necessário para que o argumento `alert_message` usado nas chamadas de função `strategy.*()` que geram ordens da estratégia seja utilizado na mensagem dos alertas acionados em cada _evento de preenchimento de ordem_. Quando apenas o placeholder `{{strategy.order.alert_message}}` é usado no campo "Message" ("_Mensagem_") e o parâmetro `alert_message` está presente em apenas algumas das chamadas de função `strategy.*()` que geram ordens em sua estratégia, uma string vazia substituirá o placeholder na mensagem dos alertas acionados por qualquer chamada de função `strategy.*()` que gere ordens e não utilize o parâmetro `alert_message`.
 
 Embora outros placeholders possam ser usados no campo "Message" ("_Mensagem_") da caixa de diálogo "Create Alert" ("_Criar Alerta_") por usuários que criam alertas sobre _eventos de preenchimento de ordens_, eles não podem ser usados no argumento de `alert_message`.
+
+
+# Eventos `alertcondition()`
+
+A função [alertcondition()](https://br.tradingview.com/pine-script-reference/v5/#fun_alertcondition) permite que programadores criem _eventos de condição de alerta_ individuais em seus indicadores. Um indicador pode conter mais de uma chamada à [alertcondition()](https://br.tradingview.com/pine-script-reference/v5/#fun_alertcondition). Cada chamada para [alertcondition()](https://br.tradingview.com/pine-script-reference/v5/#fun_alertcondition) em um script cria um alerta correspondente selecionável no menu suspenso "_Condition_" ("_Condição_") da caixa de diálogo "_Create Alert_" ("_Criar Alerta_").
+
+Embora a presença de chamadas [alertcondition()](https://br.tradingview.com/pine-script-reference/v5/#fun_alertcondition) em um script de __strategy__ (__estratégia__) não cause um erro de compilação, alertas não podem ser criados a partir delas.
+
+A função [alertcondition()](https://br.tradingview.com/pine-script-reference/v5/#fun_alertcondition) possui a seguinte assinatura:
+
+```c
+alertcondition(condition, title, message)
+```
+
+`condition`
+
+Um valor de "series bool" (`true` ou `false`) que determina quando o alerta será acionado. É um argumento obrigatório. Quando o valor é `true`, o alerta é acionado. Quando é `false`, o alerta não é acionado. Ao contrário das chamadas da função [alert()](https://br.tradingview.com/pine-script-reference/v5/#fun_alert), as chamadas de [alertcondition()](https://br.tradingview.com/pine-script-reference/v5/#fun_alertcondition) devem iniciar na coluna zero de uma linha, portanto, não podem ser colocadas em blocos condicionais.
+
+`title`
+
+Um argumento opcional "const string" que define o nome da condição de alerta conforme ele aparecerá no campo "_Condition_" ("_Condição_") da caixa de diálogo "_Create Alert_" ("_Criar Alerta_") na interface gráfica. Se nenhum argumento for fornecido, "Alert" será usado.
+
+`message`
+
+Um argumento opcional "const string" que especifica a mensagem de texto a ser exibida quando o alerta é acionado. O texto aparecerá no campo "_Message_" ("_Mensagem_") da caixa de diálogo "_Create Alert_" ("_Criar Alerta_"), onde os usuários do script podem então modificá-lo ao criar um alerta. __Como esse argumento deve ser uma "const string", ele precisa ser conhecido no momento da compilação e, portanto, não pode variar de barra para barra__. No entanto, pode conter _placeholders_ que serão substituídos em tempo de execução por valores dinâmicos que podem mudar de barra para barra. Consulte a seção de [Placeholders](./05_01_alertas.md#placeholders) desta página para obter uma lista.
+
+A função [alertcondition()](https://br.tradingview.com/pine-script-reference/v5/#fun_alertcondition) não inclui o parâmetro `freq`. A frequência dos _alertas de alertcondition()_ é determinada pelos usuários na caixa de diálogo "_Create Alert_" ("_Criar Alerta_").
+
+
+
+
+
+## Placeholders
