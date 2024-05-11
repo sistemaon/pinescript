@@ -270,7 +270,42 @@ Um argumento opcional "const string" que especifica a mensagem de texto a ser ex
 A função [alertcondition()](https://br.tradingview.com/pine-script-reference/v5/#fun_alertcondition) não inclui o parâmetro `freq`. A frequência dos _alertas de alertcondition()_ é determinada pelos usuários na caixa de diálogo "_Create Alert_" ("_Criar Alerta_").
 
 
+## Utilizando uma Condição
 
+Aqui está um exemplo de código que cria _eventos alertcondition()_:
 
+```c
+//@version=5
+indicator("`alertcondition()` on single condition")
+r = ta.rsi(close, 20)
+
+xUp = ta.crossover( r, 50)
+xDn = ta.crossunder(r, 50)
+
+plot(r, "RSI")
+hline(50)
+plotchar(xUp, "Long",  "▲", location.bottom, color.lime, size = size.tiny)
+plotchar(xDn, "Short", "▼", location.top,    color.red,  size = size.tiny)
+
+alertcondition(xUp, "Long Alert",  "Go long")
+alertcondition(xDn, "Short Alert", "Go short ")
+```
+
+Devido à presença de duas chamadas de [alertcondition()](https://br.tradingview.com/pine-script-reference/v5/#fun_alertcondition)` no script, dois alertas distintos estarão disponíveis no campo "Condição" da caixa de diálogo "Criar Alerta": _"Long Alert_" e "_Short Alert_".
+
+Para incluir o valor do RSI no momento do cruzamento, não é possível adicionar diretamente seu valor à string de `message` utilizando `str.tostring(r)`, como seria possível em uma chamada de [alert()](https://br.tradingview.com/pine-script-reference/v5/#fun_alert) ou no argumento `alert_message` de uma estratégia. No entanto, é possível incluir esse valor utilizando um placeholder. 
+
+Este método apresenta duas alternativas:
+
+```c
+alertcondition(xUp, "Long Alert",  "Go long. RSI is {{plot_0}}")
+alertcondition(xDn, "Short Alert", "Go short. RSI is {{plot("RSI")}}")
+```
+
+__Note que:__
+
+- A primeira linha utiliza o placeholder `{{plot_0}}`, onde o número do plot corresponde à ordem do plot no script.
+- A segunda linha utiliza o tipo de placeholder `{{plot("[plot_title]")}}`, que deve incluir o `title` da chamada [plot()](https://br.tradingview.com/pine-script-reference/v5/#fun_plot) usada no script para plotar o RSI. Aspas duplas são utilizadas para envolver o título do plot dentro do placeholder `{{plot("RSI")}}`. Isso exige que aspas simples sejam usadas para envolver a string de `message`.
+- Utilizando um desses métodos, pode incluir qualquer valor numérico que seja plotado pelo indicador, mas como strings não podem ser plotadas, nenhuma variável de string pode ser utilizada.
 
 ## Placeholders
