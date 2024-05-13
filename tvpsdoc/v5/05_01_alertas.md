@@ -308,4 +308,83 @@ __Note que:__
 - A segunda linha utiliza o tipo de placeholder `{{plot("[plot_title]")}}`, que deve incluir o `title` da chamada [plot()](https://br.tradingview.com/pine-script-reference/v5/#fun_plot) usada no script para plotar o RSI. Aspas duplas são utilizadas para envolver o título do plot dentro do placeholder `{{plot("RSI")}}`. Isso exige que aspas simples sejam usadas para envolver a string de `message`.
 - Utilizando um desses métodos, pode incluir qualquer valor numérico que seja plotado pelo indicador, mas como strings não podem ser plotadas, nenhuma variável de string pode ser utilizada.
 
+## Usando Condições Compostas:
+
+Ao oferecer aos usuários do script a possibilidade de criar um único alerta a partir de um indicador usando múltiplas chamadas de [alertcondition()](https://br.tradingview.com/pine-script-reference/v5/#fun_alertcondition), é necessário fornecer opções nos _inputs_ do script. Por meio dessas opções, os usuários indicarão as condições que desejam acionar o alerta antes de criá-lo.
+
+Este script demonstra uma maneira de fazer isso:
+
+```c
+//@version=5
+indicator("`alertcondition()` on multiple conditions")
+detectLongsInput  = input.bool(true, "Detect Longs")
+detectShortsInput = input.bool(true, "Detect Shorts")
+
+r = ta.rsi(close, 20)
+// Detect crosses.
+xUp = ta.crossover( r, 50)
+xDn = ta.crossunder(r, 50)
+// Only generate entries when the trade's direction is allowed in inputs.
+enterLong  = detectLongsInput  and xUp
+enterShort = detectShortsInput and xDn
+
+plot(r)
+plotchar(enterLong,  "Go Long",  "▲", location.bottom, color.lime, size = size.tiny)
+plotchar(enterShort, "Go Short", "▼", location.top,    color.red,  size = size.tiny)
+hline(50)
+// Trigger the alert when one of the conditions is met.
+alertcondition(enterLong or enterShort, "Compound alert", "Entry")
+```
+
+Observe como a chamada de [alertcondition()](https://br.tradingview.com/pine-script-reference/v5/#fun_alertcondition) pode ser acionada por uma de duas condições. Cada condição só pode acionar o alerta se o usuário a habilitar nos _inputs_ do script antes de criar o alerta.
+
 ## Placeholders
+
+Esses placeholders podem ser usados no argumento de `message` das chamadas de [alertcondition()](https://br.tradingview.com/pine-script-reference/v5/#fun_alertcondition). Eles serão substituídos por valores dinâmicos quando o alerta for acionado. Esses são os únicos meios de incluir valores dinâmicos (valores que podem variar de barra para barra) nas mensagens de [alertcondition()](https://br.tradingview.com/pine-script-reference/v5/#fun_alertcondition).
+
+Note-se que os usuários que criam _alertas de alertcondition()_ a partir da caixa de diálogo "_Criar Alerta_" na interface de gráficos também podem usar esses placeholders no campo "_Mensagem_" da caixa de diálogo.
+
+`{{exchange}}`
+
+Bolsa do símbolo usado no alerta (NASDAQ, NYSE, MOEX, etc.). Observe que, para símbolos com cotação atrasada, a bolsa terminará com "_DL" ou "_DLY". Por exemplo, "NYMEX_DL".
+
+`{{interval}}`
+
+Retorna o _timeframe_ do gráfico no qual o alerta é criado. Note que gráficos de _Range_ são calculados com base em dados de 1 minuto, portanto, o placeholder sempre retornará "1" em qualquer alerta criado em um gráfico de _Range_.
+
+`{{open}}`, `{{high}}`, `{{low}}`, `{{close}}`, `{{volume}}`
+
+Valores correspondentes da barra na qual o alerta foi acionado.
+
+`{{plot_0}}`, `{{plot_1}}`, __[...]__, `{{plot_19}}`
+
+Valor do número correspondente do plot. Os plots são numerados de zero a 19 na ordem de aparecimento no script, portanto, apenas um dos primeiros 20 plots pode ser usado. Por exemplo, o indicador incorporado "Volume" possui duas séries de saída: Volume e Volume MA, então poderia usar o seguinte:
+
+```c
+alertcondition(volume > ta.sma(volume,20), "Volume alert", "Volume ({{plot_0}}) > average ({{plot_1}})")
+```
+
+`{{plot("[plot_title]")}}`
+
+Este placeholder pode ser usado quando se precisa referir a um plot utilizando o argumento de `title` usado em uma chamada de [plot()](https://br.tradingview.com/pine-script-reference/v5/#fun_plot). Observe que aspas duplas (`"`) __devem__ ser usadas dentro do placeholder para _wrap_ o argumento de `title`. Isso exige que aspas simples (`'`) sejam usadas para envolver a string de `message`:
+
+```c
+//@version=5
+indicator("")
+r = ta.rsi(close, 14)
+xUp = ta.crossover(r, 50)
+plot(r, "RSI", display = display.none)
+alertcondition(xUp, "xUp alert", message = 'RSI is bullish at: {{plot("RSI")}}')
+```
+
+`{{ticker}}`
+
+Ticker do símbolo usado no alerta (AAPL, BTCUSD, etc.).
+
+`{{time}}`
+
+Retorna o horário no início da barra. O horário é UTC, formatado como `yyyy-MM-ddTHH:mm:ssZ`, por exemplo: `2019-08-27T09:56:00Z`.
+
+`{{timenow}}`
+
+Horário atual quando o alerta é acionado, formatado da mesma forma que `{{time}}`. A precisão é até o segundo mais próximo, independentemente do _timeframe_ do gráfico.
