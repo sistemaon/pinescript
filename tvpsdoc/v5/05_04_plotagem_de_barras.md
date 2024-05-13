@@ -85,3 +85,25 @@ __Note que:__
 - Usa-se uma tupla (`[open, high, low, close]`) com [request.security()](https://br.tradingview.com/pine-script-reference/v5/#fun_request{dot}security) para obter quatro valores em uma única chamada.
 - Usa-se [var](https://br.tradingview.com/pine-script-reference/v5/#kw_var) para declarar as constantes de cor `UP_COLOR` e `DN_COLOR` apenas na barra zero. Constantes são utilizadas porque essas cores são usadas em mais de um lugar no código. Dessa forma, se for necessário alterá-las, basta fazê-lo em um único local.
 - Cria-se uma transparência mais clara para o corpo das velas na inicialização da variável `bodyColor`, para que não obstruam as velas do gráfico.
+
+
+# Plotando Barras com `plotbar()`
+
+A assinatura de [plotbar()](https://br.tradingview.com/pine-script-reference/v5/#fun_plotbar) é:
+
+```c
+plotbar(open, high, low, close, title, color, editable, show_last, display) → void
+```
+
+Observe que o [plotbar()](https://br.tradingview.com/pine-script-reference/v5/#fun_plotbar) não possui parâmetro para `bordercolor` ou `wickcolor`, pois não há bordas ou pavios em barras convencionais.
+
+Este script plota barras convencionais usando a mesma lógica de coloração do segundo exemplo da seção anterior:
+
+```c
+//@version=5
+indicator("Dual-color bars")
+paletteColor = close >= open ? color.lime : color.red
+plotbar(open, high, low, close, color = paletteColor)
+```
+
+![Plotando barras com plotbar()](./imgs/BarPlotting-Plotbar-1.png)
