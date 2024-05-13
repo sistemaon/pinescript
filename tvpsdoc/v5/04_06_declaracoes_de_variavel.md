@@ -209,7 +209,7 @@ Há uma penalidade muito leve de desempenho ao usar o modo de declaração [var]
 
 ## Varip `varip`
 
-Para compreender o comportamento das variáveis usando o modo de declaração [varip](https://br.tradingview.com/pine-script-reference/v5/#op_varip), é necessário ter conhecimento prévio do [modelo de execução](./04_01_modelo_de_execucao.md) do Pine Script e dos [estados das barras](./000_bar_states.md).
+Para compreender o comportamento das variáveis usando o modo de declaração [varip](https://br.tradingview.com/pine-script-reference/v5/#op_varip), é necessário ter conhecimento prévio do [modelo de execução](./04_01_modelo_de_execucao.md) do Pine Script e dos [estados das barras](./05_05_estados_da_barra.md).
 
 A palavra-chave [varip](https://br.tradingview.com/pine-script-reference/v5/#op_varip) pode ser usada para declarar variáveis que escapam do _processo de rollback_, sobre o qual é explicado no [modelo de execução](./04_01_modelo_de_execucao.md) do Pine Script.
 

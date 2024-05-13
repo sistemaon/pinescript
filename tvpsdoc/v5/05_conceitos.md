@@ -9,6 +9,10 @@
 
 ## 04 [Plotagem de Barras](./05_04_plotagem_de_barras.md)
 
+## 05 [Estados da Barra](./05_05_estados_da_barra.md)
+
 ## 07 [Cores](./05_07_cores.md)
 
 ## 16 [Repintura](./05_16_repintura.md)
+
+## 17 [Sessões](./05_17_sessoes.md)

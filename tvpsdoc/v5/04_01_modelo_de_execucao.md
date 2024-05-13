@@ -92,7 +92,7 @@ Quando um evento gatilha a execução do script no gráfico e faz com que ele se
 
 # Mais Informação
 
-- As variáveis integradas `barstate.*` fornecem informações sobre o [tipo de barra ou o evento](./000_bar_states.md) onde o script está executando. A página onde são documentadas também contém um script que permite visualizar a diferença entre barras em tempo real decorridas e barras históricas, por exemplo.
+- As variáveis integradas `barstate.*` fornecem informações sobre o [tipo de barra ou o evento](./05_05_estados_da_barra.md) onde o script está executando. A página onde são documentadas também contém um script que permite visualizar a diferença entre barras em tempo real decorridas e barras históricas, por exemplo.
 - A página de [Estratégias](./000_strategies.md) explica detalhadamente os cálculos das estratégias, que não são idênticos aos dos indicadores.
 
 

@@ -1,2 +1,0 @@
-
-# Estados da Barra
