@@ -7,6 +7,8 @@
 
 ## 03 [Coloração de Barras](./05_03_coloracao_de_barras.md)
 
+## 04 [Plotagem de Barras](./05_04_plotagem_de_barras.md)
+
 ## 07 [Cores](./05_07_cores.md)
 
 ## 16 [Repintura](./05_16_repintura.md)
