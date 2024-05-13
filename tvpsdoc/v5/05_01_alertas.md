@@ -388,3 +388,15 @@ Retorna o horário no início da barra. O horário é UTC, formatado como `yyyy-
 `{{timenow}}`
 
 Horário atual quando o alerta é acionado, formatado da mesma forma que `{{time}}`. A precisão é até o segundo mais próximo, independentemente do _timeframe_ do gráfico.
+
+
+# Evitando Repintura com Alertas
+
+Os casos mais comuns de repintura que os traders desejam evitar com alertas são aqueles em que é necessário prevenir o acionamento de um alerta em algum momento durante a barra em tempo real quando ele __não__ teria sido acionado no fechamento da barra. Isso pode ocorrer quando essas condições são atendidas:
+
+- Os cálculos usados na condição que aciona o alerta podem variar durante a barra em tempo real. Isso ocorrerá com qualquer cálculo que utilize valores de `high`, `low` ou `close`, por exemplo, o que inclui quase todos os indicadores integrados. Também será o caso com o resultado de qualquer chamada a [request.security()](https://br.tradingview.com/pine-script-reference/v5/#fun_request{dot}security) usando um _timeframe_ maior do que o do gráfico, quando a barra atual desse intervalo maior ainda não tiver fechado.
+- O alerta pode ser acionado antes do fechamento da barra em tempo real, portanto, com qualquer frequência diferente de "_Once Per Bar Close_" ("_Uma Vez por Fechamento da Barra_").
+
+A maneira mais simples de evitar esse tipo de repintura é configurar a frequência de acionamento dos alertas para que eles só sejam acionados no fechamento da barra em tempo real. Não existe solução única; evitar esse tipo de repintura __sempre__ envolve esperar por informações confirmadas, o que significa que o trader deve sacrificar a imediatez para alcançar confiabilidade.
+
+Note-se que outros tipos de repintura, como os documentados na seção de [Repintura](./05_16_repintura.md), podem não ser evitáveis simplesmente acionando alertas no fechamento das barras em tempo real.
