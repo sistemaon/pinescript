@@ -55,4 +55,7 @@ if barstate.islast
     label.set_text(hiLabel, str.tostring(high, format.mintick))
 ```
 
+## `barstate.ishistory`
+
+[barstate.ishistory](https://br.tradingview.com/pine-script-reference/v5/#var_barstate{dot}ishistory) é `true` em todas as barras históricas. Nunca pode ser `true` em uma barra quando [barstate.isrealtime](https://br.tradingview.com/pine-script-reference/v5/#var_barstate{dot}isrealtime) também é `true`, e não se torna `true` na atualização de fechamento de uma barra em tempo real, quando [barstate.isconfirmed](https://br.tradingview.com/pine-script-reference/v5/#var_barstate{dot}isconfirmed) se torna `true`. Em mercados fechados, pode ser `true` na mesma barra onde [barstate.islast](https://br.tradingview.com/pine-script-reference/v5/#var_barstate{dot}islast) também é `true`.
 
