@@ -37,3 +37,22 @@ if barstate.isfirst
     array.push(fillColors, color.new(FILL_COLOR, 90))
 ```
 
+## `barstate.islast`
+
+[barstate.islast](https://br.tradingview.com/pine-script-reference/v5/#var_barstate{dot}islast) é `true` se a barra atual for a última no gráfico, independentemente de ser uma barra em tempo real ou não.
+
+Pode ser usado para restringir a execução do código à última barra do gráfico, o que é frequentemente útil ao desenhar linhas, _labels_ ou tabelas. Aqui, é usado para determinar quando atualizar um _label_ que deve aparecer apenas na última barra. O _label_ é criado apenas uma vez e, em seguida, suas propriedades são atualizadas usando as funções `label.set_*()`, por ser mais eficiente:
+
+```c
+//@version=5
+indicator("", "", true)
+// Create label on the first bar only.
+var label hiLabel = label.new(na, na, "")
+// Update the label's position and text on the last bar,
+// including on all realtime bar updates.
+if barstate.islast
+    label.set_xy(hiLabel, bar_index, high)
+    label.set_text(hiLabel, str.tostring(high, format.mintick))
+```
+
+
