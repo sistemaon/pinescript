@@ -96,3 +96,61 @@ Pode ser útil para evitar repainting, exigindo que a barra em tempo real seja f
 [barstate.islastconfirmedhistory](https://br.tradingview.com/pine-script-reference/v5/#var_barstate{dot}islastconfirmedhistory) é `true` se o script estiver sendo executado na última barra do conjunto de dados quando o mercado estiver fechado, ou na barra imediatamente anterior à barra em tempo real se o mercado estiver aberto.
 
 Pode ser usado para detectar a primeira barra em tempo real com `barstate.islastconfirmedhistory[1]`, ou para adiar cálculos intensivos em servidor até a última barra histórica, que de outra forma seria indetectável em mercados abertos.
+
+
+# Exemplo
+
+Exemplo de um script usando variáveis `barstate.*`:
+
+```c
+//@version=5
+indicator("Bar States", overlay = true, max_labels_count = 500)
+
+stateText() =>
+    string txt = ""
+    txt += barstate.isfirst     ? "isfirst\n"     : ""
+    txt += barstate.islast      ? "islast\n"      : ""
+    txt += barstate.ishistory   ? "ishistory\n"   : ""
+    txt += barstate.isrealtime  ? "isrealtime\n"  : ""
+    txt += barstate.isnew       ? "isnew\n"       : ""
+    txt += barstate.isconfirmed ? "isconfirmed\n" : ""
+    txt += barstate.islastconfirmedhistory ? "islastconfirmedhistory\n" : ""
+
+labelColor = switch
+    barstate.isfirst                => color.fuchsia
+    barstate.islastconfirmedhistory => color.gray
+    barstate.ishistory              => color.silver
+    barstate.isconfirmed            => color.orange
+    barstate.isnew                  => color.red
+    => color.yellow
+
+label.new(bar_index, na, stateText(), yloc = yloc.abovebar, color = labelColor)
+```
+
+__Note que:__
+
+- O nome de cada estado aparecerá no texto do _label_ quando for `true`.
+- Existem cinco cores possíveis para o fundo do _label_:
+    - Fúcsia na primeira barra.
+    - Prata em barras históricas.
+    - Cinza na última barra histórica confirmada.
+    - Laranja quando uma barra em tempo real é confirmada (quando fecha e se torna uma barra em tempo real concluída).
+    - Vermelho na primeira execução da barra em tempo real.
+    - Amarelo para outras execuções da barra em tempo real.
+
+Primeiro, adiciona-se o indicador ao gráfico de um mercado aberto, mas antes de qualquer atualização em tempo real ser recebida. Note como a última barra histórica confirmada é identificada em _#1_ e como a última barra é identificada como a última, mas ainda é considerada uma barra histórica porque nenhuma atualização em tempo real foi recebida.
+
+![Exemplo 01](./imgs/BarStates-Example-01.png)
+
+Veja o que acontece quando as atualizações em tempo real começam a chegar:
+
+![Exemplo 02](./imgs/BarStates-Example-02.png)
+
+__Note que:__
+
+- A barra em tempo real está vermelha porque é sua primeira execução, já que `barstate.isnew` é `true` e `barstate.ishistory` __não é__ mais `true`, então a estrutura [switch](https://br.tradingview.com/pine-script-reference/v5/#kw_switch) que determina a cor usa a _ramificação_ `barstate.isnew => color.red`. Isso geralmente não dura muito, pois na próxima atualização `barstate.isnew` __não será__ mais `true`, então a cor do _label_ se tornará amarela.
+- O _label_ das barras em tempo real concluídas é laranja porque essas barras não eram barras históricas quando fecharam. Portanto, a ramificação `barstate.ishistory => color.silver` na estrutura [switch](https://br.tradingview.com/pine-script-reference/v5/#kw_switch) não foi executada, mas a próxima, `barstate.isconfirmed => color.orange`, foi.
+
+Este último exemplo mostra como o _label_ da barra em tempo real ficará amarelo após a primeira execução na barra. Esta é a forma como o _label_ geralmente aparecerá em barras em tempo real:
+
+![Exemplo 03](./imgs/BarStates-Example-03.png)
