@@ -90,3 +90,9 @@ plot(updateNo())
 Pode ser útil para evitar repainting, exigindo que a barra em tempo real seja fechada antes que uma condição possa se tornar `true`. Aqui, é usado para segurar a plotagem do RSI até que a barra em tempo real feche e se torne uma barra em tempo real concluída. Ele plotará em barras históricas porque [barstate.isconfirmed](https://br.tradingview.com/pine-script-reference/v5/#var_barstate{dot}isconfirmed) é sempre `true` nelas:
 
 [barstate.isconfirmed](https://br.tradingview.com/pine-script-reference/v5/#var_barstate{dot}isconfirmed) não funcionará quando usado em uma chamada de [request.security()](https://br.tradingview.com/pine-script-reference/v5/#fun_request{dot}security).
+
+## `barstate.islastconfirmedhistory`
+
+[barstate.islastconfirmedhistory](https://br.tradingview.com/pine-script-reference/v5/#var_barstate{dot}islastconfirmedhistory) é `true` se o script estiver sendo executado na última barra do conjunto de dados quando o mercado estiver fechado, ou na barra imediatamente anterior à barra em tempo real se o mercado estiver aberto.
+
+Pode ser usado para detectar a primeira barra em tempo real com `barstate.islastconfirmedhistory[1]`, ou para adiar cálculos intensivos em servidor até a última barra histórica, que de outra forma seria indetectável em mercados abertos.
