@@ -152,7 +152,7 @@ Repare que os valores de retorno em cada lado do `:` são expressões — não b
 
 # Operador de Referência Histórica `[]`
 
-É possível fazer referência dos valores passados das [séries temporais](./04_02_series_temporais.md) usando o operador de referência histórica [[]](https://br.tradingview.com/pine-script-reference/v5/#op_[]). Valores passados são os valores que uma variável teve em barras anteriores à barra onde o script está executando atualmente - a barra _atual_. Consulte a página [Modelo de Execução](./04_01_modelo_de_execucao.md) para mais informações sobre a maneira como os scripts são executados nas barras.
+É possível fazer referência dos valores passados das [séries temporais](./04_02_series_temporais.md) usando o operador de referência histórica [[]](https://br.tradingview.com/pine-script-reference/v5/#op_[]). Valores passados são os valores que uma variável teve em barras anteriores à barra onde o script está executando atualmente - a _barra atual_. Consulte a página [Modelo de Execução](./04_01_modelo_de_execucao.md) para mais informações sobre a maneira como os scripts são executados nas barras.
 
 O operador [[]](https://br.tradingview.com/pine-script-reference/v5/#op_[]) é usado após uma variável, expressão ou chamada de função. O valor usado dentro dos colchetes do operador é o deslocamento no passado ao qual referir. Para fazer referência ao valor da variável integrada do [volume](https://br.tradingview.com/pine-script-reference/v5/#var_volume) de duas barras atrás da barra atual, usaria `volume[2]`.
 
