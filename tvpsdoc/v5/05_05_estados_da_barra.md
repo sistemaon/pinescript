@@ -82,3 +82,11 @@ updateNo() =>
         updateNo += 1
 plot(updateNo())
 ```
+
+## `barstate.isconfirmed`
+
+[barstate.isconfirmed](https://br.tradingview.com/pine-script-reference/v5/#var_barstate{dot}isconfirmed) é `true` em todas as barras históricas e na última atualização (fechamento) de uma barra em tempo real.
+
+Pode ser útil para evitar repainting, exigindo que a barra em tempo real seja fechada antes que uma condição possa se tornar `true`. Aqui, é usado para segurar a plotagem do RSI até que a barra em tempo real feche e se torne uma barra em tempo real concluída. Ele plotará em barras históricas porque [barstate.isconfirmed](https://br.tradingview.com/pine-script-reference/v5/#var_barstate{dot}isconfirmed) é sempre `true` nelas:
+
+[barstate.isconfirmed](https://br.tradingview.com/pine-script-reference/v5/#var_barstate{dot}isconfirmed) não funcionará quando usado em uma chamada de [request.security()](https://br.tradingview.com/pine-script-reference/v5/#fun_request{dot}security).
