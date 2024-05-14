@@ -11,6 +11,8 @@
 
 ## 05 [Estados da Barra](./05_05_estados_da_barra.md)
 
+## 06 [Informações do Gráfico](./05_06_informacoes_do_grafico.md)
+
 ## 07 [Cores](./05_07_cores.md)
 
 ## 16 [Repintura](./05_16_repintura.md)

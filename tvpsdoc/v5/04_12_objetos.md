@@ -151,7 +151,7 @@ __Note que:__
 
 # Alterando Valores dos Campos
 
-O valor dos campos de um objeto pode ser alterado usando o operador de reatribuição [:=](./000_operators.md#operador-de-reatribuição).
+O valor dos campos de um objeto pode ser alterado usando o operador de reatribuição [:=](./04_05_operadores.md#operador-de-reatribuição-).
 
 Olhe esta linha do exemplo anterior:
 

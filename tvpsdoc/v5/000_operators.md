@@ -1,5 +1,0 @@
-
-# Operadores
-
-
-# `:=` Operador de Reatribuição
