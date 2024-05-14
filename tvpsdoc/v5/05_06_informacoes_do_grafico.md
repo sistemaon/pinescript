@@ -32,12 +32,62 @@ Barras em tempo real são outra história. Quando indicadores (ou estratégias u
 
 O [operador de referência histórica](./04_05_operadores.md#operador-de-referência-histórica-) [[]](https://br.tradingview.com/pine-script-reference/v5/#op_[]) pode ser usado para se referir a valores passados das variáveis incorporadas, por exemplo, `close[1]` refere-se ao valor de [close](https://www.tradingview.com/pine-script-reference/v5/#var_close) na barra anterior, em relação à barra específica em que o script está sendo executado.
 
-<!-- Informações do símbolo
 
-Variáveis embutidas no namespace `syminfo` fornecem aos scripts informações sobre o símbolo do gráfico em que o script está sendo executado. Essas informações mudam toda vez que o usuário do script altera o símbolo do gráfico. O script, então, é reexecutado em todas as barras do gráfico usando os novos valores das variáveis embutidas:
+## Informações do Símbolo
 
-- `syminfo.basecurrency`: a moeda base, por exemplo, “BTC” em “BTCUSD”, ou “EUR” em “EURUSD”.
-- `syminfo.currency`: a moeda de cotação, por exemplo, “USD” em “BTCUSD”, ou “CAD” em “USDCAD”.
-- `syminfo.description`: a descrição longa do símbolo.
-- `syminfo.mintick`: o valor do tick do símbolo, ou o incremento mínimo que o preço pode mover. Não deve ser confundido com pips ou pontos. Em “ES1!” (“S&P 500 E-Mini”), o tamanho do tick é 0.25 porque esse é o incremento mínimo em que o preço se move.
-- `syminfo.pointvalue`: o valor do ponto é o múltiplo do ativo subjacente que determina o valor de um contrato. Em “ES1!” (“S&P 500 E-Mini”), o valor do ponto é 50, então um contrato vale 50 vezes o preço do instrumento. -->
+Variáveis embutidas no _namespace_ `syminfo` fornecem aos scripts informações sobre o símbolo do gráfico em que o script está sendo executado. Essas informações mudam toda vez que o usuário do script altera o símbolo do gráfico. O script, então, é reexecutado em todas as barras do gráfico usando os novos valores das variáveis embutidas:
+
+- [syminfo.basecurrency](https://br.tradingview.com/pine-script-reference/v5/#var_syminfo{dot}basecurrency): a moeda base, por exemplo, "BTC" em "BTCUSD", ou "EUR" em "EURUSD".
+- [syminfo.currency](https://br.tradingview.com/pine-script-reference/v5/#var_syminfo{dot}currency): a moeda de cotação, por exemplo, "USD" em "BTCUSD", ou "CAD" em "USDCAD".
+- [syminfo.description](https://br.tradingview.com/pine-script-reference/v5/#var_syminfo{dot}description): a descrição longa do símbolo.
+- [syminfo.mintick](https://br.tradingview.com/pine-script-reference/v5/#var_syminfo{dot}mintick): o valor do tick do símbolo, ou o incremento mínimo que o preço pode mover. Não deve ser confundido com _pips_ ou _pontos_. Em "ES1!" ("S&P 500 E-Mini"), o tamanho do tick é 0.25 porque esse é o incremento mínimo em que o preço se move.
+- [syminfo.pointvalue](https://br.tradingview.com/pine-script-reference/v5/#var_syminfo{dot}pointvalue): o valor do ponto é o múltiplo do ativo subjacente que determina o valor de um contrato. Em "ES1!" ("S&P 500 E-Mini"), o valor do ponto é 50, então um contrato vale 50 vezes o preço do instrumento.
+- [syminfo.prefix](https://br.tradingview.com/pine-script-reference/v5/#var_syminfo{dot}prefix): O prefixo é o identificador da bolsa ou corretora: "NASDAQ" ou "BATS" para "AAPL", "CME_MINI_DL" para "ES1!".
+- [syminfo.root](https://br.tradingview.com/pine-script-reference/v5/#var_syminfo{dot}root): É o prefixo do ticker para tickers estruturados como os de futuros. É "ES" para "ES1!", "ZW" para "ZW1!".
+- [syminfo.session](https://br.tradingview.com/pine-script-reference/v5/#var_syminfo{dot}session): Reflete a configuração de sessão no gráfico para esse símbolo. Se o campo "_Chart settings/Symbol/Session_" ("_Configurações do Gráfico/Símbolo/Sessão_") estiver definido como "_Extended_" ("_Estendido_"), ele retornará "_extended_" apenas se o símbolo e o feed do usuário permitirem sessões estendidas. É raramente exibido e usado principalmente como argumento para o parâmetro de `session` em [ticker.new()](https://br.tradingview.com/pine-script-reference/v5/#fun_ticker{dot}new).
+- [syminfo.ticker](https://br.tradingview.com/pine-script-reference/v5/#var_syminfo{dot}ticker): É o nome do símbolo, sem a parte da bolsa ([syminfo.prefix](https://br.tradingview.com/pine-script-reference/v5/#var_syminfo{dot}prefix)): "BTCUSD", "AAPL", "ES1!", "USDCAD".
+- [syminfo.tickerid](https://br.tradingview.com/pine-script-reference/v5/#var_syminfo{dot}tickerid): Esta string é raramente exibida. É usada principalmente como argumento para o parâmetro `symbol` de [request.security()](https://br.tradingview.com/pine-script-reference/v5/#fun_request{dot}security). Inclui informações de sessão, prefixo e ticker.
+- [syminfo.timezone](https://br.tradingview.com/pine-script-reference/v5/#var_syminfo{dot}timezone): O fuso horário em que o símbolo é negociado. A string é um nome do [banco de dados de fuso horário IANA](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones) (por exemplo, "America/New_York").
+- [syminfo.type](https://br.tradingview.com/pine-script-reference/v5/#var_syminfo{dot}type): O tipo de mercado ao qual o símbolo pertence. Os valores são "stock", "futures", "index", "forex", "crypto", "fund", "dr", "cfd", "bond", "warrant", "structured" e "right".
+
+Este script exibirá os valores dessas variáveis embutidas no gráfico:
+
+```c
+//@version=5
+indicator("`syminfo.*` built-ins", "", true)
+printTable(txtLeft, txtRight) =>
+    var table t = table.new(position.middle_right, 2, 1)
+    table.cell(t, 0, 0, txtLeft, bgcolor = color.yellow, text_halign = text.align_right)
+    table.cell(t, 1, 0, txtRight, bgcolor = color.yellow, text_halign = text.align_left)
+
+nl = "\n"
+left =
+  "syminfo.basecurrency: "  + nl +
+  "syminfo.currency: "      + nl +
+  "syminfo.description: "   + nl +
+  "syminfo.mintick: "       + nl +
+  "syminfo.pointvalue: "    + nl +
+  "syminfo.prefix: "        + nl +
+  "syminfo.root: "          + nl +
+  "syminfo.session: "       + nl +
+  "syminfo.ticker: "        + nl +
+  "syminfo.tickerid: "      + nl +
+  "syminfo.timezone: "      + nl +
+  "syminfo.type: "
+
+right =
+  syminfo.basecurrency              + nl +
+  syminfo.currency                  + nl +
+  syminfo.description               + nl +
+  str.tostring(syminfo.mintick)     + nl +
+  str.tostring(syminfo.pointvalue)  + nl +
+  syminfo.prefix                    + nl +
+  syminfo.root                      + nl +
+  syminfo.session                   + nl +
+  syminfo.ticker                    + nl +
+  syminfo.tickerid                  + nl +
+  syminfo.timezone                  + nl +
+  syminfo.type
+
+printTable(left, right)
+```
