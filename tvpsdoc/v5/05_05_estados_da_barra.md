@@ -62,3 +62,23 @@ if barstate.islast
 ## `barstate.isrealtime`
 
 [barstate.isrealtime](https://br.tradingview.com/pine-script-reference/v5/#var_barstate{dot}isrealtime) é `true` se a atualização de dados atual for uma atualização de barra em tempo real, falso caso contrário (sendo assim histórica). Observe que [barstate.islast](https://br.tradingview.com/pine-script-reference/v5/#var_barstate{dot}islast) também é `true` em todas as barras em tempo real.
+
+## `barstate.isnew`
+
+[barstate.isnew](https://br.tradingview.com/pine-script-reference/v5/#var_barstate{dot}isnew) é `true` em todas as barras históricas e na primeira atualização (abertura) da barra em tempo real.
+
+Todas as barras históricas são consideradas _novas_ barras porque o tempo de execução do Pine Script executa o script em cada barra sequencialmente, desde a primeira barra do gráfico até a última. Cada barra histórica é, portanto, _descoberta_ pelo script à medida que é executada, barra a barra.
+
+[barstate.isnew](https://br.tradingview.com/pine-script-reference/v5/#var_barstate{dot}isnew) pode ser útil para redefinir variáveis [varip](https://br.tradingview.com/pine-script-reference/v5/#kw_varip) quando uma nova barra em tempo real chega. O código a seguir redefinirá `updateNo` para 1 em todas as barras históricas e no início de cada barra em tempo real. Ele calcula o número de atualizações em tempo real durante cada barra em tempo real:
+
+```c
+//@version=5
+indicator("")
+updateNo() =>
+    varip int updateNo = na
+    if barstate.isnew
+        updateNo := 1
+    else
+        updateNo += 1
+plot(updateNo())
+```
