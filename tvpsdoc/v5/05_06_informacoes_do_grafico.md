@@ -10,6 +10,7 @@ As variáveis abordadas aqui permitem que os scripts acessem informações relac
 - O _timeframe_ do gráfico.
 - A sessão (ou período de tempo) em que o símbolo é negociado.
 
+
 # Preços e Volume
 
 As variáveis embutidas para valores __OHLCV__ são:
@@ -33,7 +34,7 @@ Barras em tempo real são outra história. Quando indicadores (ou estratégias u
 O [operador de referência histórica](./04_05_operadores.md#operador-de-referência-histórica-) [[]](https://br.tradingview.com/pine-script-reference/v5/#op_[]) pode ser usado para se referir a valores passados das variáveis incorporadas, por exemplo, `close[1]` refere-se ao valor de [close](https://www.tradingview.com/pine-script-reference/v5/#var_close) na barra anterior, em relação à barra específica em que o script está sendo executado.
 
 
-## Informações do Símbolo
+# Informações do Símbolo
 
 Variáveis embutidas no _namespace_ `syminfo` fornecem aos scripts informações sobre o símbolo do gráfico em que o script está sendo executado. Essas informações mudam toda vez que o usuário do script altera o símbolo do gráfico. O script, então, é reexecutado em todas as barras do gráfico usando os novos valores das variáveis embutidas:
 
@@ -91,3 +92,23 @@ right =
 
 printTable(left, right)
 ```
+
+
+# Timeframe do Gráfico
+
+Um script pode obter informações sobre o tipo de _timeframe_ usado no gráfico usando estas variáveis embutidas, que todas retornam um "simple bool":
+
+- [timeframe.isseconds](https://br.tradingview.com/pine-script-reference/v5/#var_timeframe{dot}isseconds)
+- [timeframe.isminutes](https://br.tradingview.com/pine-script-reference/v5/#var_timeframe{dot}isminutes)
+- [timeframe.isintraday](https://br.tradingview.com/pine-script-reference/v5/#var_timeframe{dot}isintraday)
+- [timeframe.isdaily](https://br.tradingview.com/pine-script-reference/v5/#var_timeframe{dot}isdaily)
+- [timeframe.isweekly](https://br.tradingview.com/pine-script-reference/v5/#var_timeframe{dot}isweekly)
+- [timeframe.ismonthly](https://br.tradingview.com/pine-script-reference/v5/#var_timeframe{dot}ismonthly)
+- [timeframe.isdwm](https://br.tradingview.com/pine-script-reference/v5/#var_timeframe{dot}isdwm)
+
+Duas variáveis embutidas adicionais retornam informações mais específicas sobre o timeframe:
+
+- [timeframe.multiplier](https://br.tradingview.com/pine-script-reference/v5/#var_timeframe{dot}multiplier) retorna um "simple int" contendo o multiplicador da unidade de timeframe. Um gráfico com timeframe de _uma hora_ retornará `60` porque os timeframes intradiários são expressos em minutos. Um timeframe de _30sec_ retornará `30` (segundos), um gráfico diário retornará `1` (dia), um gráfico trimestral retornará `3` (meses) e um gráfico anual retornará `12` (meses). O valor dessa variável não pode ser usado como argumento para parâmetros de `timeframe` em funções incorporadas, pois elas esperam uma string no formato de especificações de timeframe.
+- [timeframe.period](https://br.tradingview.com/pine-script-reference/v5/#var_timeframe{dot}period) retorna uma string no formato de especificação de timeframe do Pine Script.
+
+Veja a página sobre [Timeframes](./05_22_timeframe.md) para mais informações.
