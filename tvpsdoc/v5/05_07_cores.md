@@ -24,5 +24,23 @@ A transparência de uma cor define quão opaca ela é: zero é totalmente opaca,
 
 ## Z-index
 
+Ao colocar elementos no espaço visual de um script, eles têm profundidade relativa no _eixo z_; alguns aparecerão sobre outros. O _z-index_ é um valor que representa a posição dos elementos no _eixo z_. Elementos com o _z-index_ mais alto aparecem no topo.
+
+Elementos desenhados no Pine Script são divididos em grupos. Cada grupo tem sua própria posição no espaço z, e __dentro do mesmo grupo__, elementos criados por último na lógica do script aparecerão sobre outros elementos do mesmo grupo. Um elemento de um grupo não pode ser colocado fora da região do espaço z atribuída ao seu grupo, então um plot nunca pode aparecer sobre uma tabela, por exemplo, porque as tabelas têm o _z-index_ mais alto.
+
+Esta lista contém os grupos de elementos visuais, ordenados por _z-index_ crescente, para que as cores de fundo estejam sempre na parte inferior do espaço z, e as tabelas apareçam sempre no topo de todos os outros elementos:
+
+- [Background Colors (_Cores de fundo_)](https://br.tradingview.com/pine-script-reference/v5/#fun_bgcolor)
+- [Fills (_Preenchimentos_)](https://br.tradingview.com/pine-script-reference/v5/#fun_fill)
+- [Plots](https://br.tradingview.com/pine-script-reference/v5/#fun_plot)
+- [Hlines](https://br.tradingview.com/pine-script-reference/v5/#fun_hline)
+- [LineFills](https://br.tradingview.com/pine-script-reference/v5/#fun_linefill)
+- [Lines (_Linhas_)](https://br.tradingview.com/pine-script-reference/v5/#fun_line)
+- [Boxes (_Caixas_)](https://br.tradingview.com/pine-script-reference/v5/#fun_box)
+- [Labels (_Rótulos_)](https://br.tradingview.com/pine-script-reference/v5/#fun_label)
+- [Tables (_Tabelas_)](https://br.tradingview.com/pine-script-reference/v5/#fun_table)
+
+Observe que, usando `explicit_plot_zorder = true` em [indicator()](https://br.tradingview.com/pine-script-reference/v5/#fun_indicator) ou [strategy()](https://br.tradingview.com/pine-script-reference/v5/#fun_strategy), é possível controlar o _z-index_ relativo dos visuais de `plot*()`, [hline()](https://br.tradingview.com/pine-script-reference/v5/#fun_hline) e [fill()](https://br.tradingview.com/pine-script-reference/v5/#fun_fill) usando sua ordem sequencial no script.
+
 
 # Constante de Cores
