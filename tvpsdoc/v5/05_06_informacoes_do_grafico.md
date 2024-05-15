@@ -112,3 +112,12 @@ Duas variáveis embutidas adicionais retornam informações mais específicas so
 - [timeframe.period](https://br.tradingview.com/pine-script-reference/v5/#var_timeframe{dot}period) retorna uma string no formato de especificação de timeframe do Pine Script.
 
 Veja a página sobre [Timeframes](./05_22_timeframe.md) para mais informações.
+
+
+# Informações de Sessão
+
+As informações de sessão estão disponíveis em diferentes formas:
+
+A variável embutida [syminfo.session](https://br.tradingview.com/pine-script-reference/v5/#var_syminfo{dot}session) retorna um valor que é [session.regular](https://br.tradingview.com/pine-script-reference/v5/#const_session{dot}regular) ou [session.extended](https://br.tradingview.com/pine-script-reference/v5/#const_session{dot}extended). Reflete a configuração de sessão no gráfico para esse símbolo. Se o campo "_Chart settings/Symbol/Session_" ("_Configurações do Gráfico/Símbolo/Sessão_") estiver definido como "_Extended_" ("_Estendido_"), ele retornará "extended" apenas se o símbolo e o feed do usuário permitirem sessões estendidas. É usada quando um tipo de sessão é esperado, por exemplo, como argumento para o parâmetro de sessão em [ticker.new()](https://br.tradingview.com/pine-script-reference/v5/#fun_ticker{dot}new).
+
+[Variáveis embutidas de estado de sessão](./05_17_sessoes.md#estados-da-sessão) fornecem informações sobre a sessão de negociação à qual uma barra pertence.
