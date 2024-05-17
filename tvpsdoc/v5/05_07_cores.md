@@ -69,7 +69,7 @@ Existem 17 cores incorporadas no Pine Script. Esta tabela lista seus nomes, equi
 
 No script a seguir, todos os plots usam a mesma cor [color.olive](https://br.tradingview.com/pine-script-reference/v5/#const_color{dot}olive) com uma transparência de 40, mas expressa de maneiras diferentes. Todos os cinco métodos são funcionalmente equivalentes:
 
-![Constante de Cores](./imgs/Colors-UsingColors-1.png)
+![Constante de cores](./imgs/Colors-UsingColors-1.png)
 
 ```c
 //@version=5
@@ -145,3 +145,47 @@ Para entender como esse código funciona, é preciso saber que [ta.pivothigh()](
 Ao testar o valor retornado pela função de pivô para [na](https://br.tradingview.com/pine-script-reference/v5/#var_na) usando a função [nz()](https://br.tradingview.com/pine-script-reference/v5/#fun_nz), permite-se que o valor retornado seja atribuído às variáveis `pHi` ou `pLo` apenas quando não for [na](https://br.tradingview.com/pine-script-reference/v5/#var_na), caso contrário, o valor anterior da variável é simplesmente reatribuído a ela, o que não tem impacto em seu valor. Lembre-se de que os valores anteriores de `pHi` e `pLo` são preservados de barra a barra porque se usa a palavra-chave [var](https://br.tradingview.com/pine-script-reference/v5/#kw_var) ao inicializá-los, o que faz com que a inicialização ocorra apenas na primeira barra.
 
 O que resta a fazer é, ao plotar as linhas, inserir uma instrução condicional ternária que resultará em [na](https://br.tradingview.com/pine-script-reference/v5/#var_na) para a cor quando o valor do pivô mudar, ou a cor selecionada nas entradas do script quando o nível do pivô não mudar.
+
+
+# Cores Calculadas
+
+Usando funções como [color.new()](https://br.tradingview.com/pine-script-reference/v5/#fun_color{dot}new), [color.rgb()](https://br.tradingview.com/pine-script-reference/v5/#fun_color{dot}rgb) e [color.from_gradient()](https://br.tradingview.com/pine-script-reference/v5/#fun_color{dot}from_gradient), é possível construir cores dinamicamente, conforme o script é executado barra a barra.
+
+[color.new()](https://br.tradingview.com/pine-script-reference/v5/#fun_color{dot}new) é mais útil quando é necessário gerar diferentes níveis de transparência a partir de uma cor base.
+
+[color.rgb()](https://br.tradingview.com/pine-script-reference/v5/#fun_color{dot}rgb) é útil quando é necessário construir cores dinamicamente a partir de componentes vermelho, verde, azul ou de transparência. Enquanto [color.rgb()](https://br.tradingview.com/pine-script-reference/v5/#fun_color{dot}rgb) cria uma cor, suas funções irmãs [color.r()](https://br.tradingview.com/pine-script-reference/v5/#fun_color{dot}r), [color.g()](https://br.tradingview.com/pine-script-reference/v5/#fun_color{dot}g), [color.b()](https://br.tradingview.com/pine-script-reference/v5/#fun_color{dot}b) e [color.t()](https://br.tradingview.com/pine-script-reference/v5/#fun_color{dot}t) podem ser usadas para extrair os valores de vermelho, verde, azul ou transparência de uma cor, que podem, por sua vez, ser usados para gerar uma variante.
+
+[color.from_gradient()](https://br.tradingview.com/pine-script-reference/v5/#fun_color{dot}from_gradient) é útil para criar gradientes lineares entre duas cores base. Determina qual cor intermediária usar avaliando um valor de origem em relação aos valores mínimo e máximo.
+
+## `color.new()`
+
+Usa-se [color.new(color, transp)](https://br.tradingview.com/pine-script-reference/v5/#fun_color{dot}new) para criar diferentes transparências para colunas de volume usando uma de duas cores base de alta/baixa:
+
+![Cores calculadas color.new()](./imgs/Colors-CalculatingColors-1.png)
+
+```c
+//@version=5
+indicator("Volume")
+// We name our color constants to make them more readable.
+var color GOLD_COLOR   = #CCCC00ff
+var color VIOLET_COLOR = #AA00FFff
+color bullColorInput = input.color(GOLD_COLOR,   "Bull")
+color bearColorInput = input.color(VIOLET_COLOR, "Bear")
+int levelsInput = input.int(10, "Gradient levels", minval = 1)
+// We initialize only once on bar zero with `var`, otherwise the count would reset to zero on each bar.
+var float riseFallCnt = 0
+// Count the rises/falls, clamping the range to: 1 to `i_levels`.
+riseFallCnt := math.max(1, math.min(levelsInput, riseFallCnt + math.sign(volume - nz(volume[1]))))
+// Rescale the count on a scale of 80, reverse it and cap transparency to <80 so that colors remains visible.
+float transparency = 80 - math.abs(80 * riseFallCnt / levelsInput)
+// Build the correct transparency of either the bull or bear color.
+color volumeColor = color.new(close > open ? bullColorInput : bearColorInput, transparency)
+plot(volume, "Volume", volumeColor, 1, plot.style_columns)
+```
+
+__Note que:__
+
+- Na penúltima linha do script, a cor da coluna é calculada dinamicamente, variando tanto a cor base usada, dependendo se a barra está subindo ou descendo, __quanto o__ nível de transparência, que é calculado a partir das subidas ou descidas cumulativas do volume.
+- O usuário do script tem controle não apenas sobre as cores base de alta/baixa usadas, mas também sobre o número de níveis de brilho. Esse valor é usado para determinar o número máximo de subidas ou descidas que serão acompanhadas. Permitindo que os usuários gerenciem esse valor possibilita adaptar os visuais do indicador ao _timeframe_ ou mercado que utilizam.
+- O nível máximo de transparência é controlado para que nunca ultrapasse 80. Isso garante que as cores sempre mantenham alguma visibilidade.
+- O valor mínimo para o número de níveis é definido como 1 nos _inputs_. Quando o usuário seleciona 1, as colunas de volume estarão ou na cor de alta ou de baixa de brilho máximo — ou transparência zero.
