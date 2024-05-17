@@ -91,3 +91,57 @@ As cores no script anterior não variam à medida que o script é executado barr
 
 1. Usar instruções condicionais para selecionar cores de algumas cores base predeterminadas.
 2. Construir novas cores dinamicamente, calculando-as à medida que o script é executado barra a barra, para implementar gradientes de cores, por exemplo.
+
+
+# Coloração Condicional
+
+Suponha que seja necessário colorir uma média móvel em diferentes cores, dependendo de algumas condições definidas. Para isso, pode-se usar uma instrução condicional que selecionará uma cor diferente para cada um dos estados. Começando por colorir uma média móvel em uma cor de alta quando estiver subindo, e em uma cor de baixa quando não estiver:
+
+![Coloração condicional 01](./imgs/Colors-ConditionalColors-1.png)
+
+```c
+//@version=5
+indicator("Conditional colors", "", true)
+int   lengthInput = input.int(20, "Length", minval = 2)
+color maBullColorInput = input.color(color.green, "Bull")
+color maBearColorInput = input.color(color.maroon, "Bear")
+float ma = ta.sma(close, lengthInput)
+// Define our states.
+bool maRising  = ta.rising(ma, 1)
+// Build our color.
+color c_ma = maRising ? maBullColorInput : maBearColorInput
+plot(ma, "MA", c_ma, 2)
+```
+
+__Note que:__
+
+- São fornecidas aos usuários do script uma seleção de cores para as cores de alta/baixa.
+Define-se uma variável booleana `maRising` que será `true` quando a média móvel estiver mais alta na barra atual do que na anterior.
+- Define-se uma variável de cor `c_ma` que é atribuída a uma das duas cores, dependendo do valor do booleano `maRising`. Usa-se o [operador ternário ? :](https://br.tradingview.com/pine-script-reference/v5/#op_{question}{colon}) para escrever a instrução condicional.
+
+Também é possível usar cores condicionais para evitar plotagem em determinadas condições. Aqui, plotam-se pivôs de alta e baixa usando uma linha, mas não se deseja plotar nada quando um novo pivô surge, para evitar as junções que apareceriam nas transições de pivô. Para isso, testa-se as mudanças de pivô e usa-se [na](https://br.tradingview.com/pine-script-reference/v5/#var_na) como valor de cor quando uma mudança é detectada, para que nenhuma linha seja plotada nessa barra:
+
+![Coloração condicional 02](./imgs/Colors-ConditionalColors-2.png)
+
+```c
+//@version=5
+indicator("Conditional colors", "", true)
+int legsInput = input.int(5, "Pivot Legs", minval = 1)
+color pHiColorInput = input.color(color.olive, "High pivots")
+color pLoColorInput = input.color(color.orange, "Low pivots")
+// Intialize the pivot level variables.
+var float pHi = na
+var float pLo = na
+// When a new pivot is detected, save its value.
+pHi := nz(ta.pivothigh(legsInput, legsInput), pHi)
+pLo := nz(ta.pivotlow( legsInput, legsInput), pLo)
+// When a new pivot is detected, do not plot a color.
+plot(pHi, "High", ta.change(pHi) ? na : pHiColorInput, 2, plot.style_line)
+plot(pLo, "Low",  ta.change(pLo) ? na : pLoColorInput, 2, plot.style_line)
+```
+
+Para entender como esse código funciona, é preciso saber que [ta.pivothigh()](https://br.tradingview.com/pine-script-reference/v5/#fun_ta{dot}pivothigh) e [ta.pivotlow()](https://br.tradingview.com/pine-script-reference/v5/#fun_ta{dot}pivotlow), usados como estão aqui sem um argumento para o parâmetro `source`, retornarão um valor quando encontrarem um pivô de [_high_](https://br.tradingview.com/pine-script-reference/v5/#var_high)/[_low_](https://br.tradingview.com/pine-script-reference/v5/#var_low) (_alta_/_baixa_), caso contrário, retornam [na](https://br.tradingview.com/pine-script-reference/v5/#var_na).
+
+Ao testar o valor retornado pela função de pivô para [na](https://br.tradingview.com/pine-script-reference/v5/#var_na) usando a função [nz()](https://br.tradingview.com/pine-script-reference/v5/#fun_nz), permite-se que o valor retornado seja atribuído às variáveis `pHi` ou `pLo` apenas quando não for [na](https://br.tradingview.com/pine-script-reference/v5/#var_na), caso contrário, o valor anterior da variável é simplesmente reatribuído a ela, o que não tem impacto em seu valor. Lembre-se de que os valores anteriores de `pHi` e `pLo` são preservados de barra a barra porque se usa a palavra-chave [var](https://br.tradingview.com/pine-script-reference/v5/#kw_var) ao inicializá-los, o que faz com que a inicialização ocorra apenas na primeira barra.
+
+O que resta a fazer é, ao plotar as linhas, inserir uma instrução condicional ternária que resultará em [na](https://br.tradingview.com/pine-script-reference/v5/#var_na) para a cor quando o valor do pivô mudar, ou a cor selecionada nas entradas do script quando o nível do pivô não mudar.
