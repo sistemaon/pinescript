@@ -44,3 +44,50 @@ Observe que, usando `explicit_plot_zorder = true` em [indicator()](https://br.tr
 
 
 # Constante de Cores
+
+Existem 17 cores incorporadas no Pine Script. Esta tabela lista seus nomes, equivalentes hexadecimais e valores RGB como argumentos para [color.rgb()](https://br.tradingview.com/pine-script-reference/v5/#fun_color{dot}rgb):
+
+| __Nome__       | __Hex__  | __Valores RGB__           |
+| -------------  | -------  | -----------------------:  |
+| color.aqua     | #00BCD4  | color.rgb(0, 188, 212)    |
+| color.black    | #363A45  | color.rgb(54, 58, 69)     |
+| color.blue     | #2196F3  | color.rgb(33, 150, 243)   |
+| color.fuchsia  | #E040FB  | color.rgb(224, 64, 251)   |
+| color.gray     | #787B86  | color.rgb(120, 123, 134)  |
+| color.green    | #4CAF50  | color.rgb(76, 175, 80)    |
+| color.lime     | #00E676  | color.rgb(0, 230, 118)    |
+| color.maroon   | #880E4F  | color.rgb(136, 14, 79)    |
+| color.navy     | #311B92  | color.rgb(49, 27, 146)    |
+| color.olive    | #808000  | color.rgb(128, 128, 0)    |
+| color.orange   | #FF9800  | color.rgb(255, 152, 0)    |
+| color.purple   | #9C27B0  | color.rgb(156, 39, 176)   |
+| color.red      | #FF5252  | color.rgb(255, 82, 82)    |
+| color.silver   | #B2B5BE  | color.rgb(178, 181, 190)  |
+| color.teal     | #00897B  | color.rgb(0, 137, 123)    |
+| color.white    | #FFFFFF  | color.rgb(255, 255, 255)  |
+| color.yellow   | #FFEB3B  | color.rgb(255, 235, 59)   |
+
+No script a seguir, todos os plots usam a mesma cor [color.olive](https://br.tradingview.com/pine-script-reference/v5/#const_color{dot}olive) com uma transparência de 40, mas expressa de maneiras diferentes. Todos os cinco métodos são funcionalmente equivalentes:
+
+![Constante de Cores](./imgs/Colors-UsingColors-1.png)
+
+```c
+//@version=5
+indicator("", "", true)
+// ————  Transparency (#99) is included in the hex value.
+plot(ta.sma(close, 10), "10", #80800099)
+// ————  Transparency is included in the color-generating function's arguments.
+plot(ta.sma(close, 30), "30", color.new(color.olive, 40))
+plot(ta.sma(close, 50), "50", color.rgb(128, 128, 0, 40))
+      // ————  Use `transp` parameter (deprecated and advised against)
+plot(ta.sma(close, 70), "70", color.olive, transp = 40)
+plot(ta.sma(close, 90), "90", #808000, transp = 40)
+```
+
+> __Observação__\
+> As duas últimas chamadas de [plot()](https://br.tradingview.com/pine-script-reference/v5/#fun_plot) especificam a transparência usando o parâmetro `transp`. Esse uso deve ser evitado, pois `transp` está obsoleto no Pine Script v5. Usar o parâmetro `transp` para definir transparência não é tão flexível porque requer um argumento do tipo _input integer_ (_inteiro de entrada_), o que significa que deve ser conhecido antes da execução do script e, portanto, não pode ser calculado dinamicamente, à medida que o script é executado barra a barra. Além disso, se for usado um argumento de `color` que já inclui informações de transparência, como é feito nas próximas três chamadas de [plot()](https://br.tradingview.com/pine-script-reference/v5/#fun_plot), qualquer argumento usado para o parâmetro `transp` não terá efeito. Isso também é válido para outras funções com um parâmetro `transp`.
+
+As cores no script anterior não variam à medida que o script é executado barra a barra. Às vezes, no entanto, as cores precisam ser criadas conforme o script é executado em cada barra, pois dependem de condições desconhecidas no momento da compilação ou quando o script começa a execução na barra zero. Para esses casos, os programadores têm duas opções:
+
+1. Usar instruções condicionais para selecionar cores de algumas cores base predeterminadas.
+2. Construir novas cores dinamicamente, calculando-as à medida que o script é executado barra a barra, para implementar gradientes de cores, por exemplo.
