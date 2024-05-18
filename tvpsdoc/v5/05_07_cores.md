@@ -211,3 +211,79 @@ __Note que:__
 
 - Valores são gerados na faixa de zero a 255 para os canais vermelho, verde e azul, e na faixa de zero a 100 para a transparência. Além disso, como [math.random()](https://br.tradingview.com/pine-script-reference/v5/#fun_math{dot}random) retorna valores float, a faixa float 0.0-100.0 fornece acesso aos valores completos de transparência 0-255 do canal alpha.
 - A função [math.random(min, max, seed)](https://br.tradingview.com/pine-script-reference/v5/#fun_math{dot}random) é usada para gerar valores pseudoaleatórios. Nenhum argumento é usado para o terceiro parâmetro da função: `seed`. Usar este parâmetro é útil quando se deseja garantir a repetibilidade dos resultados da função. Chamado com a mesma `seed`, ele produzirá a mesma sequência de valores.
+
+## `color.from_gradient()`
+
+Os últimos exemplos de cálculos de cor usarão [color.from_gradient(value, bottom_value, top_value, bottom_color, top_color)](https://br.tradingview.com/pine-script-reference/v5/#fun_color{dot}from_gradient). Primeiro, utiliza-se esta função na sua forma mais simples, para colorir um sinal CCI em uma versão do indicador que, de outra forma, se parece com a da funcionalidade incorporada:
+
+![Cores calculadas color.from_gradient() 01](./imgs/Colors-CalculatingColors-3.png)
+
+```c
+//@version=5
+indicator(title="CCI line gradient", precision=2, timeframe="")
+var color GOLD_COLOR   = #CCCC00
+var color VIOLET_COLOR = #AA00FF
+var color BEIGE_COLOR  = #9C6E1B
+float srcInput = input.source(close, title="Source")
+int   lenInput = input.int(20, "Length", minval = 5)
+color bullColorInput = input.color(GOLD_COLOR,   "Bull")
+color bearColorInput = input.color(BEIGE_COLOR, "Bear")
+float signal = ta.cci(srcInput, lenInput)
+color signalColor = color.from_gradient(signal, -200, 200, bearColorInput, bullColorInput)
+plot(signal, "CCI", signalColor)
+bandTopPlotID = hline(100,  "Upper Band", color.silver, hline.style_dashed)
+bandBotPlotID = hline(-100, "Lower Band", color.silver, hline.style_dashed)
+fill(bandTopPlotID, bandBotPlotID, color.new(BEIGE_COLOR, 90), "Background")
+```
+
+__Note que:__
+
+- Para calcular o gradiente, [color.from_gradient()](https://br.tradingview.com/pine-script-reference/v5/#fun_color{dot}from_gradient) requer valores mínimo e máximo contra os quais o argumento usado para o parâmetro `value` será comparado. O fato de se desejar um gradiente para um sinal sem limites como o CCI (isto é, sem limites fixos como o RSI, que sempre oscila entre 0-100), não significa que [color.from_gradient()](https://br.tradingview.com/pine-script-reference/v5/#fun_color{dot}from_gradient) não possa ser usado. Aqui, a solução é fornecer valores de -200 e 200 como argumentos. Eles não representam os valores mínimo e máximo reais para o CCI, mas estão em níveis a partir dos quais não se importa que as cores não mudem mais, pois sempre que a série estiver fora dos limites `bottom_value` e `top_value`, as cores usadas para `bottom_color` e `top_color` serão aplicadas.
+- A progressão de cores calculada por [color.from_gradient()](https://br.tradingview.com/pine-script-reference/v5/#fun_color{dot}from_gradient) é linear. Se o valor da série estiver no meio entre os argumentos `bottom_value` e `top_value`, os componentes RGBA da cor gerada também estarão no meio entre os de `bottom_color` e `top_color`.
+- Muitos cálculos de indicadores comuns estão disponíveis no Pine Script como funções embutidas. Aqui, usa-se [ta.cci()](https://br.tradingview.com/pine-script-reference/v5/#fun_ta{dot}cci) em vez de calculá-lo da maneira longa.
+
+O argumento usado para `value` em [color.from_gradient()](https://br.tradingview.com/pine-script-reference/v5/#fun_color{dot}from_gradient) não precisa necessariamente ser o valor da linha que está sendo calculada. Qualquer coisa desejada pode ser usada, desde que argumentos para `bottom_value` e `top_value` possam ser fornecidos. Aqui, o indicador CCI é aprimorado colorindo a faixa usando o número de barras desde que o sinal esteve acima/abaixo da linha central:
+
+![Cores calculadas color.from_gradient() 02](./imgs/Colors-CalculatingColors-4.png)
+
+```c
+//@version=5
+indicator(title="CCI line gradient", precision=2, timeframe="")
+var color GOLD_COLOR   = #CCCC00
+var color VIOLET_COLOR = #AA00FF
+var color GREEN_BG_COLOR = color.new(color.green, 70)
+var color RED_BG_COLOR   = color.new(color.maroon, 70)
+float srcInput      = input.source(close, "Source")
+int   lenInput      = input.int(20, "Length", minval = 5)
+int   stepsInput    = input.int(50, "Gradient levels", minval = 1)
+color bullColorInput   = input.color(GOLD_COLOR, "Line: Bull", inline = "11")
+color bearColorInput   = input.color(VIOLET_COLOR, "Bear", inline = "11")
+color bullBgColorInput = input.color(GREEN_BG_COLOR, "Background: Bull", inline = "12")
+color bearBgColorInput = input.color(RED_BG_COLOR, "Bear", inline = "12")
+
+// Plot colored signal line.
+float signal = ta.cci(srcInput, lenInput)
+color signalColor = color.from_gradient(signal, -200, 200, color.new(bearColorInput, 0), color.new(bullColorInput, 0))
+plot(signal, "CCI", signalColor, 2)
+
+// Detect crosses of the centerline.
+bool signalX = ta.cross(signal, 0)
+// Count no of bars since cross. Capping it to the no of steps from inputs.
+int gradientStep = math.min(stepsInput, nz(ta.barssince(signalX)))
+// Choose bull/bear end color for the gradient.
+color endColor = signal > 0 ? bullBgColorInput : bearBgColorInput
+// Get color from gradient going from no color to `c_endColor`
+color bandColor = color.from_gradient(gradientStep, 0, stepsInput, na, endColor)
+bandTopPlotID = hline(100,  "Upper Band", color.silver, hline.style_dashed)
+bandBotPlotID = hline(-100, "Lower Band", color.silver, hline.style_dashed)
+fill(bandTopPlotID, bandBotPlotID, bandColor, title = "Band")
+```
+
+__Note que:__
+
+- O plot do sinal usa as mesmas cores base e gradiente do exemplo anterior. No entanto, a largura da linha foi aumentada do padrão 1 para 2. É o componente mais importante dos visuais; aumentar sua largura é uma forma de dar mais destaque e garantir que os usuários não sejam distraídos pela _band_(_banda_/_faixa_), que se tornou mais movimentada do que em sua cor original, bege.
+- O preenchimento deve permanecer discreto por duas razões:
+      - Primeiro, é de importância secundária para os visuais, pois fornece informações complementares, ou seja, a duração em que o sinal esteve em território de alta/baixa.
+      - Segundo, como os preenchimentos têm um z-index maior do que os plots, o preenchimento cobrirá o plot do sinal. Por essas razões, as cores base do preenchimento são bastante transparentes, em 70, para que não mascarem os plots. O gradiente usado para a _band_(_banda_/_faixa_) começa sem cor alguma (veja o [na](https://br.tradingview.com/pine-script-reference/v5/#var_na) usado como argumento para `bottom_color` na chamada de [color.from_gradient()](https://br.tradingview.com/pine-script-reference/v5/#fun_color{dot}from_gradient)), e vai para as cores base de alta/baixa dos _inputs_, que a variável de cor condicional `c_endColor` contém.
+- São fornecidas aos usuários seleções de cores distintas para alta/baixa para a linha e a _band_(_banda_/_faixa_).
+- Ao calcular a variável `gradientStep`, usa-se [nz()](https://br.tradingview.com/pine-script-reference/v5/#fun_nz) em [ta.barssince()](https://br.tradingview.com/pine-script-reference/v5/#fun_ta{dot}barssince) pois nas barras iniciais do conjunto de dados, quando a condição testada ainda não ocorreu, [ta.barssince()](https://br.tradingview.com/pine-script-reference/v5/#fun_ta{dot}barssince) retornará [na](https://br.tradingview.com/pine-script-reference/v5/#var_na). Porque [nz()](https://br.tradingview.com/pine-script-reference/v5/#fun_nz) é usado, o valor retornado é substituído por zero nesses casos.
