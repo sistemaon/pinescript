@@ -278,7 +278,7 @@ Exemplos de literais de "cor":
 #FF000000    // completely transparent red color
 ```
 
-Pine Script também possui [constantes de cores integradas](./000_colors.md#constante-de-cores), incluindo [color.green](https://br.tradingview.com/pine-script-reference/v5/#const_color{dot}green), [color.red](https://br.tradingview.com/pine-script-reference/v5/#const_color.red), [color.orange](https://br.tradingview.com/pine-script-reference/v5/#const_color.orange), [color.blue](https://br.tradingview.com/pine-script-reference/v5/#const_color.blue) (a cor padrão nas funções `plot*()` e muitas das propriedades padrão relacionadas à cor nos [tipos de desenho](./04_09_tipagem_do_sistema.md#tipos-de-desenho)), etc.
+Pine Script também possui [constantes de cores integradas](./05_07_cores.md#constante-de-cores), incluindo [color.green](https://br.tradingview.com/pine-script-reference/v5/#const_color{dot}green), [color.red](https://br.tradingview.com/pine-script-reference/v5/#const_color.red), [color.orange](https://br.tradingview.com/pine-script-reference/v5/#const_color.orange), [color.blue](https://br.tradingview.com/pine-script-reference/v5/#const_color.blue) (a cor padrão nas funções `plot*()` e muitas das propriedades padrão relacionadas à cor nos [tipos de desenho](./04_09_tipagem_do_sistema.md#tipos-de-desenho)), etc.
 
 Ao usar constantes de cores embutidas, é possível adicionar transparência a elas por meio da função [color.new()](https://br.tradingview.com/pine-script-reference/v5/#fun_color.new).
 
@@ -300,7 +300,7 @@ int transparency = 50 + int(40 * dayofweek / 7)
 bgcolor(color.new(BASE_COLOR, transparency))
 ```
 
-Para mais informações veja [cores](./000_colors.md) e como usá-los em scripts.
+Para mais informações veja [cores](./05_07_cores.md) e como usá-los em scripts.
 
 ## `string`
 

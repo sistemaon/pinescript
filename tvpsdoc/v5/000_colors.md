@@ -1,4 +1,0 @@
-
-# Cores
-
-# Constante de Cores
