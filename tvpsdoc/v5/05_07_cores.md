@@ -189,3 +189,25 @@ __Note que:__
 - O usuário do script tem controle não apenas sobre as cores base de alta/baixa usadas, mas também sobre o número de níveis de brilho. Esse valor é usado para determinar o número máximo de subidas ou descidas que serão acompanhadas. Permitindo que os usuários gerenciem esse valor possibilita adaptar os visuais do indicador ao _timeframe_ ou mercado que utilizam.
 - O nível máximo de transparência é controlado para que nunca ultrapasse 80. Isso garante que as cores sempre mantenham alguma visibilidade.
 - O valor mínimo para o número de níveis é definido como 1 nos _inputs_. Quando o usuário seleciona 1, as colunas de volume estarão ou na cor de alta ou de baixa de brilho máximo — ou transparência zero.
+
+## `color.rgb()`
+
+No próximo exemplo, [color.rgb(red, green, blue, transp)](https://br.tradingview.com/pine-script-reference/v5/#fun_color{dot}rgb) é usado para construir cores a partir de valores RGBA. O resultado é utilizado como um presente de temporada de festas para os amigos, para que possam levar seus gráficos TradingView para as festas:
+
+![Cores calculadas color.rgb()](./imgs/Colors-CalculatingColors-2.png)
+
+```c
+//@version=5
+indicator("Holiday candles", "", true)
+float r = math.random(0, 255)
+float g = math.random(0, 255)
+float b = math.random(0, 255)
+float t = math.random(0, 100)
+color holidayColor = color.rgb(r, g, b, t)
+plotcandle(open, high, low, close, color = c_holiday, wickcolor = holidayColor, bordercolor = c_holiday)
+```
+
+__Note que:__
+
+- Valores são gerados na faixa de zero a 255 para os canais vermelho, verde e azul, e na faixa de zero a 100 para a transparência. Além disso, como [math.random()](https://br.tradingview.com/pine-script-reference/v5/#fun_math{dot}random) retorna valores float, a faixa float 0.0-100.0 fornece acesso aos valores completos de transparência 0-255 do canal alpha.
+- A função [math.random(min, max, seed)](https://br.tradingview.com/pine-script-reference/v5/#fun_math{dot}random) é usada para gerar valores pseudoaleatórios. Nenhum argumento é usado para o terceiro parâmetro da função: `seed`. Usar este parâmetro é útil quando se deseja garantir a repetibilidade dos resultados da função. Chamado com a mesma `seed`, ele produzirá a mesma sequência de valores.
