@@ -392,3 +392,24 @@ Construa as entradas apropriadas para fornecer aos usuários do script a flexibi
 Cuide para construir uma hierarquia visual das cores usadas que corresponda à importância relativa dos componentes visuais do seu script. Bons designers entendem como alcançar o equilíbrio ideal de cor e peso para que o olho seja naturalmente atraído para os elementos mais importantes do design. Quando tudo se destaca, nada se destaca. Crie espaço para que alguns elementos se destaquem suavizando os visuais ao redor deles.
 
 Fornecer uma seleção de predefinições de cores nas entradas — em vez de uma única cor que pode ser alterada — pode ajudar usuários com dificuldades de percepção de cores. O [_Technical Ratings_](https://br.tradingview.com/script/Jdw7wW2g-Technical-Ratings/) demonstra uma maneira de alcançar isso.
+
+## Plotar Linhas Nítidas
+
+É melhor usar transparência zero para plotar as linhas importantes nos visuais, para mantê-las nítidas. Dessa forma, elas aparecerão através dos preenchimentos de maneira mais precisa. Lembre-se de que os preenchimentos têm um z-index mais alto do que os plots, então eles são colocados acima deles. Um leve aumento na largura de uma linha também pode ajudar bastante a destacá-la.
+
+Se for desejado que um plot especial se destaque, ele pode ganhar mais importância usando múltiplos plots para a mesma linha. Estes são exemplos onde a largura e a transparência sucessivas dos plots são moduladas para alcançar esse objetivo:
+
+![Dicas plotar linhas nítidas](./imgs/Colors-PlotCrispLines-1.png)
+
+```c
+//@version=5
+indicator("")
+plot(high, "", color.new(color.orange, 80), 8)
+plot(high, "", color.new(color.orange, 60), 4)
+plot(high, "", color.new(color.orange, 00), 1)
+
+plot(hl2, "", color.new(color.orange, 60), 4)
+plot(hl2, "", color.new(color.orange, 00), 1)
+
+plot(low, "", color.new(color.orange, 0), 1)
+```
