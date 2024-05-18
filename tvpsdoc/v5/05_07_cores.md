@@ -287,3 +287,95 @@ __Note que:__
     - Segundo, como os preenchimentos têm um z-index maior do que os plots, o preenchimento cobrirá o plot do sinal. Por essas razões, as cores base do preenchimento são bastante transparentes, em 70, para que não mascarem os plots. O gradiente usado para a _band_ (_banda_/_faixa_) começa sem cor alguma (veja o [na](https://br.tradingview.com/pine-script-reference/v5/#var_na) usado como argumento para `bottom_color` na chamada de [color.from_gradient()](https://br.tradingview.com/pine-script-reference/v5/#fun_color{dot}from_gradient)), e vai para as cores base de alta/baixa dos _inputs_, que a variável de cor condicional `c_endColor` contém.
 - São fornecidas aos usuários seleções de cores distintas para alta/baixa para a linha e a _band_ (_banda_/_faixa_).
 - Ao calcular a variável `gradientStep`, usa-se [nz()](https://br.tradingview.com/pine-script-reference/v5/#fun_nz) em [ta.barssince()](https://br.tradingview.com/pine-script-reference/v5/#fun_ta{dot}barssince) pois nas barras iniciais do conjunto de dados, quando a condição testada ainda não ocorreu, [ta.barssince()](https://br.tradingview.com/pine-script-reference/v5/#fun_ta{dot}barssince) retornará [na](https://br.tradingview.com/pine-script-reference/v5/#var_na). Porque [nz()](https://br.tradingview.com/pine-script-reference/v5/#fun_nz) é usado, o valor retornado é substituído por zero nesses casos.
+
+
+# Misturando Transparências
+
+Neste exemplo, o indicador CCI é levado em outra direção. Buffers de zona extremas que ajustam dinamicamente são construídos usando um Canal Donchian (máximos/mínimos históricos) calculado a partir do CCI. As faixas superior e inferior são construídas fazendo com que tenham 1/4 da altura do Canal Donchian. Um _lookback_ que ajusta dinamicamente é usado para calcular o Canal Donchian. Para modular o _lookback_, uma medida simples de volatilidade é calculada mantendo uma proporção de um ATR de curto período para um de longo período. Quando essa proporção é maior do que 50 dos seus últimos 100 valores, a volatilidade é considerada alta. Quando a volatilidade está alta/baixa, o _lookback_ é diminuído/aumentado.
+
+O objetivo é fornecer aos usuários do indicador:
+
+- A linha CCI colorida usando um gradiente de alta/baixa, conforme ilustrado nos exemplos mais recentes.
+- As faixas superior e inferior do Canal Donchian, preenchidas de forma que a cor escureça à medida que um máximo/mínimo histórico se torna mais antigo.
+- Uma maneira de avaliar o estado da medida de volatilidade, pintando o fundo com uma cor cuja intensidade aumenta quando a volatilidade aumenta.
+
+Isso é como o indicador se parece usando o tema claro:
+
+![Misturando transparências 01](./imgs/Colors-MixingTransparencies-1.png)
+
+E usando o tema escuro:
+
+![Misturando transparências 02](./imgs/Colors-MixingTransparencies-2.png)
+
+```c
+//@version=5
+indicator("CCI DC", precision = 6)
+color GOLD_COLOR   = #CCCC00ff
+color VIOLET_COLOR = #AA00FFff
+int lengthInput = input.int(20, "Length", minval = 5)
+color bullColorInput = input.color(GOLD_COLOR,   "Bull")
+color bearColorInput = input.color(VIOLET_COLOR, "Bear")
+
+// ————— Function clamps `val` between `min` and `max`.
+clamp(val, min, max) =>
+    math.max(min, math.min(max, val))
+
+// ————— Volatility expressed as 0-100 value.
+float v = ta.atr(lengthInput / 5) / ta.atr(lengthInput * 5)
+float vPct = ta.percentrank(v, lengthInput * 5)
+
+// ————— Calculate dynamic lookback for DC. It increases/decreases on low/high volatility.
+bool highVolatility = vPct > 50
+var int lookBackMin = lengthInput * 2
+var int lookBackMax = lengthInput * 10
+var float lookBack = math.avg(lookBackMin, lookBackMax)
+lookBack += highVolatility ? -2 : 2
+lookBack := clamp(lookBack, lookBackMin, lookBackMax)
+
+// ————— Dynamic lookback length Donchian channel of signal.
+float signal = ta.cci(close, lengthInput)
+// `lookBack` is a float; need to cast it to int to be used a length.
+float hiTop  = ta.highest(signal, int(lookBack))
+float loBot  = ta.lowest( signal, int(lookBack))
+// Get margin of 25% of the DC height to build high and low bands.
+float margin = (hiTop - loBot) / 4
+float hiBot  = hiTop - margin
+float loTop  = loBot + margin
+// Center of DC.
+float center = math.avg(hiTop, loBot)
+
+// ————— Create colors.
+color signalColor = color.from_gradient(signal, -200, 200, bearColorInput, bullColorInput)
+// Bands: Calculate transparencies so the longer since the hi/lo has changed,
+//        the darker the color becomes. Cap highest transparency to 90.
+float hiTransp = clamp(100 - (100 * math.max(1, nz(ta.barssince(ta.change(hiTop)) + 1)) / 255), 60, 90)
+float loTransp = clamp(100 - (100 * math.max(1, nz(ta.barssince(ta.change(loBot)) + 1)) / 255), 60, 90)
+color hiColor = color.new(bullColorInput, hiTransp)
+color loColor = color.new(bearColorInput, loTransp)
+// Background: Rescale the 0-100 range of `vPct` to 0-25 to create 75-100 transparencies.
+color bgColor = color.new(color.gray, 100 - (vPct / 4))
+
+// ————— Plots
+// Invisible lines for band fills.
+hiTopPlotID = plot(hiTop, color = na)
+hiBotPlotID = plot(hiBot, color = na)
+loTopPlotID = plot(loTop, color = na)
+loBotPlotID = plot(loBot, color = na)
+// Plot signal and centerline.
+p_signal = plot(signal, "CCI", signalColor, 2)
+plot(center, "Centerline", color.silver, 1)
+
+// Fill the bands.
+fill(hiTopPlotID, hiBotPlotID, hiColor)
+fill(loTopPlotID, loBotPlotID, loColor)
+
+// ————— Background.
+bgcolor(bgColor)
+```
+
+__Observe que:__
+
+- A transparência do fundo é limitada a uma faixa de 100-75 para que não fique excessivamente destacada. Também é usada uma cor neutra que não distraia muito. Quanto mais escuro o fundo, maior é a medida de volatilidade.
+- Os valores de transparência para os preenchimentos das faixas são limitados entre 60 e 90. Usa-se 90 para que, quando um novo máximo/mínimo for encontrado e o gradiente for reiniciado, a transparência inicial torne a cor visível. Não se usa uma transparência inferior a 60 porque não se deseja que essas faixas ocultem a linha do sinal.
+- A função [ta.percentrank()](https://br.tradingview.com/pine-script-reference/v5/#fun_ta{dot}percentrank) é usada para gerar um valor de 0-100 a partir da proporção do ATR que mede a volatilidade. É útil para converter valores cuja escala é desconhecida em valores conhecidos que podem ser usados para produzir transparências.
+- Como é necessário limitar valores três vezes no script, uma função `f_clamp()` foi escrita, em vez de codificar explicitamente a lógica três vezes.
