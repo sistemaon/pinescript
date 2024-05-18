@@ -413,3 +413,7 @@ plot(hl2, "", color.new(color.orange, 00), 1)
 
 plot(low, "", color.new(color.orange, 0), 1)
 ```
+
+## Personalizar Gradientes
+
+Ao construir gradientes, adapte-os aos visuais a que se aplicam. Se um gradiente está sendo usado para colorir velas, por exemplo, geralmente é melhor limitar o número de etapas no gradiente a dez ou menos, pois é mais difícil para o olho perceber variações de intensidade em objetos discretos. Como foi feito nos exemplos, limite os níveis mínimos e máximos de transparência para que os elementos visuais permaneçam visíveis e não se destaquem mais do que o necessário.
