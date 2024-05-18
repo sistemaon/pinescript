@@ -417,3 +417,49 @@ plot(low, "", color.new(color.orange, 0), 1)
 ## Personalizar Gradientes
 
 Ao construir gradientes, adapte-os aos visuais a que se aplicam. Se um gradiente está sendo usado para colorir velas, por exemplo, geralmente é melhor limitar o número de etapas no gradiente a dez ou menos, pois é mais difícil para o olho perceber variações de intensidade em objetos discretos. Como foi feito nos exemplos, limite os níveis mínimos e máximos de transparência para que os elementos visuais permaneçam visíveis e não se destaquem mais do que o necessário.
+
+## Seleção de Cores através das Configurações do Script
+
+O tipo de cor usada nos scripts impacta a capacidade dos usuários de alterar as cores dos visuais do script. Enquanto não forem usadas cores cujos componentes RGBA precisem ser calculados em tempo de execução, os usuários poderão modificar as cores usadas acessando a aba "_Settings/Style_" ("_Configurações/Estilo_") do script. O primeiro exemplo de script nesta página atende a esse critério, e a captura de tela a seguir mostra como a aba "_Settings/Style_" ("_Configurações/Estilo_") do script foi usada para mudar a cor da primeira média móvel:
+
+![Seleção de cores através das configurações do script 01](./imgs/Colors-ColorsSelection-1.png)
+
+Se o script usa uma cor calculada, ou seja, uma cor onde pelo menos um de seus componentes RGBA só pode ser conhecido em tempo de execução, a aba "_Settings/Style_" ("_Configurações/Estilo_") __não__ oferecerá aos usuários os widgets de cores usuais para modificar as cores do plot. Plots do mesmo script que não usam cores calculadas também serão afetados. Neste script, por exemplo, a primeira chamada de [plot()](https://br.tradingview.com/pine-script-reference/v5/#fun_plot) usa uma cor calculada, e a segunda não:
+
+```c
+//@version=5
+indicator("Calculated colors", "", true)
+float ma = ta.sma(close, 20)
+float maHeight = ta.percentrank(ma, 100)
+float transparency = math.min(80, 100 - maHeight)
+// This plot uses a calculated color.
+plot(ma, "MA1", color.rgb(156, 39, 176, transparency), 2)
+// This plot does not use a calculated color.
+plot(close, "Close", color.blue)
+```
+
+A cor usada no primeiro plot é uma cor calculada porque sua transparência só pode ser conhecida em tempo de execução. Ela é calculada usando a posição relativa da média móvel em relação aos seus últimos 100 valores. Quanto maior a porcentagem de valores passados abaixo do valor atual, maior será o valor de 0-100 de `maHeight`. Como se deseja que a cor seja mais escura quando `maHeight` é 100, subtrai-se 100 dele para obter transparência zero. Além disso, o valor de `transparency` calculado é limitado a um máximo de 80 para que sempre permaneça visível.
+
+Porque essa cor calculada é usada no script, a aba "_Settings/Style_" ("_Configurações/Estilo_") não mostrará nenhum widget de cor:
+
+![Seleção de cores através das configurações do script 02](./imgs/Colors-ColorsSelection-2.png)
+
+A solução para permitir que os usuários controlem as cores usadas é fornecer entradas personalizadas, como feito aqui:
+
+![Seleção de cores através das configurações do script 03](./imgs/Colors-ColorsSelection-3.png)
+
+```c
+//@version=5
+indicator("Calculated colors", "", true)
+color maInput = input.color(color.purple, "MA")
+color closeInput = input.color(color.blue, "Close")
+float ma = ta.sma(close, 20)
+float maHeight = ta.percentrank(ma, 100)
+float transparency = math.min(80, 100 - maHeight)
+// This plot uses a calculated color.
+plot(ma, "MA1", color.new(maInput, transparency), 2)
+// This plot does not use a calculated color.
+plot(close, "Close", closeInput)
+```
+
+Observe como as "_Settings_" ("_Configurações_") do script agora mostram uma aba "_Inputs_" ("_Entradas_"), onde foram criadas duas entradas de cores. A primeira usa [color.purple](https://br.tradingview.com/pine-script-reference/v5/#const_color{dot}purple) como valor padrão. Seja o usuário mudando essa cor ou não, ela será usada em uma chamada [color.new()](https://br.tradingview.com/pine-script-reference/v5/#fun_color{dot}new) para gerar uma transparência calculada na chamada de [plot()](https://br.tradingview.com/pine-script-reference/v5/#fun_plot). A segunda entrada usa como padrão a cor incorporada [color.blue](https://br.tradingview.com/pine-script-reference/v5/#const_color{dot}blue) que foi usada anteriormente na chamada de [plot()](https://br.tradingview.com/pine-script-reference/v5/#fun_plot), e simplesmente a utiliza como está na segunda chamada de [plot()](https://br.tradingview.com/pine-script-reference/v5/#fun_plot).
