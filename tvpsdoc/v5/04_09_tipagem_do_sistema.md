@@ -400,7 +400,7 @@ Cada uma dessas funções retorna um _ID_ que é uma referência que identifica 
 
 ## Pontos do Gráfico
 
-Pontos de gráfico são tipos especiais que representam coordenadas no gráfico. Os scripts usam as informações de objetos [chart.point](https://br.tradingview.com/pine-script-reference/v5/#type_chart.point) para determinar as localizações no gráfico de [lines](./000_lines_and_boxes.md#lines), [boxes](./000_lines_and_boxes.md#boxes), [polylines](./000_lines_and_boxes.md#polylines), e [labels](./000_text_and_shapes.md#labels).
+Pontos de gráfico são tipos especiais que representam coordenadas no gráfico. Os scripts usam as informações de objetos [chart.point](https://br.tradingview.com/pine-script-reference/v5/#type_chart.point) para determinar as localizações no gráfico de [lines](./05_12_lines_e_boxes.md#lines-linhas), [boxes](./05_12_lines_e_boxes.md#boxes-caixas), [polylines](./05_12_lines_e_boxes.md#polylines-polilinhas), e [labels](./000_text_and_shapes.md#labels).
 
 Objetos deste tipo contêm três _campos_: `time`, `index` e `price` (_tempo, índice e preço_). Se uma instância de desenho usa o campo `time` ou `price` de um [chart.point](https://br.tradingview.com/pine-script-reference/v5/#type_chart.point) como _coordenada-x_ depende da propriedade `xloc` do desenho.
 
