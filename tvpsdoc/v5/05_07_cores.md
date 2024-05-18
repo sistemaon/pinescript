@@ -379,3 +379,16 @@ __Observe que:__
 - Os valores de transparência para os preenchimentos das faixas são limitados entre 60 e 90. Usa-se 90 para que, quando um novo máximo/mínimo for encontrado e o gradiente for reiniciado, a transparência inicial torne a cor visível. Não se usa uma transparência inferior a 60 porque não se deseja que essas faixas ocultem a linha do sinal.
 - A função [ta.percentrank()](https://br.tradingview.com/pine-script-reference/v5/#fun_ta{dot}percentrank) é usada para gerar um valor de 0-100 a partir da proporção do ATR que mede a volatilidade. É útil para converter valores cuja escala é desconhecida em valores conhecidos que podem ser usados para produzir transparências.
 - Como é necessário limitar valores três vezes no script, uma função `f_clamp()` foi escrita, em vez de codificar explicitamente a lógica três vezes.
+
+
+# Dicas
+
+## Desenhando Esquemas de Cores Utilizáveis
+
+Ao escrever scripts destinados a outros traders, tente evitar cores que não funcionem bem em alguns ambientes, seja para _plots_, _labels_, _tables_ ou _fills_. No mínimo, teste os visuais para garantir que eles funcionem satisfatoriamente tanto com os temas claro quanto escuro do TradingView; eles são os mais comumente usados. Cores como preto e branco, por exemplo, devem ser evitadas.
+
+Construa as entradas apropriadas para fornecer aos usuários do script a flexibilidade de adaptar os visuais do seu script aos seus ambientes particulares.
+
+Cuide para construir uma hierarquia visual das cores usadas que corresponda à importância relativa dos componentes visuais do seu script. Bons designers entendem como alcançar o equilíbrio ideal de cor e peso para que o olho seja naturalmente atraído para os elementos mais importantes do design. Quando tudo se destaca, nada se destaca. Crie espaço para que alguns elementos se destaquem suavizando os visuais ao redor deles.
+
+Fornecer uma seleção de predefinições de cores nas entradas — em vez de uma única cor que pode ser alterada — pode ajudar usuários com dificuldades de percepção de cores. O [_Technical Ratings_](https://br.tradingview.com/script/Jdw7wW2g-Technical-Ratings/) demonstra uma maneira de alcançar isso.
