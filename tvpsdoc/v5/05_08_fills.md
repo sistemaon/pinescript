@@ -98,3 +98,70 @@ ma2PlotID = plot(ma2, "20-bar SMA")
 // Fill the space between the `ma1PlotID` and `ma2PlotID` using the `fillColor`.
 fill(ma1PlotID, ma2PlotID, fillColor, "SMA plot fill")
 ```
+
+
+# Preenchimentos de Linha
+
+Enquanto a função [fill()](https://br.tradingview.com/pine-script-reference/v5/#fun_fill) permite que um script preencha o espaço entre dois [plots ou hlines](./04_09_tipagem_do_sistema.md#plot-e-hline), ela não funciona com objetos de [line](https://br.tradingview.com/pine-script-reference/v5/#type_line). Quando um script precisa preencher o espaço entre [lines](./05_12_lines_e_boxes.md#lines-linhas), é necessário um objeto [linefill](https://br.tradingview.com/pine-script-reference/v5/#type_linefill) criado pela função [linefill.new()](https://br.tradingview.com/pine-script-reference/v5/#fun_linefill.new).
+
+A função possui a seguinte assinatura:
+
+```c
+linefill.new(line1, line2, color) → series linefill
+```
+
+Os parâmetros `line1` e `line2` aceitam IDs de [line](https://br.tradingview.com/pine-script-reference/v5/#type_line). Esses IDs determinam a região do gráfico que o objeto [linefill](https://br.tradingview.com/pine-script-reference/v5/#type_linefill) preencherá com sua `color` especificada. Um script pode atualizar a propriedade de `color` de um ID de [linefill](https://br.tradingview.com/pine-script-reference/v5/#type_linefill) retornado por essa função chamando [linefill.set_color()](https://br.tradingview.com/pine-script-reference/v5/#fun_linefill.set_color) com o ID como argumento `id`.
+
+O comportamento dos preenchimentos de linha depende das linhas que eles referenciam. Scripts não podem mover preenchimentos de linha diretamente, pois as linhas que um _linefill_ usa determinam o espaço que será preenchido. Para recuperar os IDs das [lines](./05_12_lines_e_boxes.md#lines-linhas) referenciadas por um objeto [linefill](https://br.tradingview.com/pine-script-reference/v5/#type_linefill), use as funções [linefill.get_line1()](https://br.tradingview.com/pine-script-reference/v5/#fun_linefill.get_line1) e [linefill.get_line2()](https://br.tradingview.com/pine-script-reference/v5/#fun_linefill.get_line2).
+
+Qualquer par de instâncias de [line](https://br.tradingview.com/pine-script-reference/v5/#type_line) pode ter apenas um [linefill](https://br.tradingview.com/pine-script-reference/v5/#type_linefill) entre elas. Chamadas sucessivas para [linefill.new()](https://br.tradingview.com/pine-script-reference/v5/#fun_linefill.new) usando os mesmos argumentos `line1` e `line2` criarão um novo ID de [linefill](https://br.tradingview.com/pine-script-reference/v5/#type_linefill) que _substituirá_ o anterior associado a elas.
+
+O exemplo abaixo demonstra um caso de uso simples para preenchimentos de linha. O script calcula uma série `pivotHigh` e `pivotLow` usando as funções embutidas [ta.pivothigh()](https://br.tradingview.com/pine-script-reference/v5/#fun_ta.pivothigh) e [ta.pivotlow()](https://br.tradingview.com/pine-script-reference/v5/#fun_ta.pivotlow) com argumentos constantes `leftbars` e `rightbars`. Na última barra histórica confirmada, o script desenha duas linhas estendidas. A primeira linha conecta os dois valores `pivotHigh` mais recentes, não-_na_, e a segunda conecta os valores `pivotLow` mais recentes, não-_na_.
+
+Para enfatizar o "canal" formado por essas linhas, o script preenche o espaço entre elas usando [linefill.new()](https://br.tradingview.com/pine-script-reference/v5/#fun_linefill.new):
+
+![Preenchimentos de linha](./imgs/Fills-Linefill-01.png)
+
+```c
+//@version=5
+indicator("Linefill demo", "Channel", true)
+
+//@variable The number bars to the left of a detected pivot.
+int LEFT_BARS = 15
+//@variable The number bars to the right for pivot confirmation.
+int RIGHT_BARS = 5
+
+//@variable The price of the pivot high point.
+float pivotHigh = ta.pivothigh(LEFT_BARS, RIGHT_BARS)
+//@variable The price of the pivot low point.
+float pivotLow = ta.pivotlow(LEFT_BARS, RIGHT_BARS)
+
+// Initialize the chart points the lines will use.
+var firstHighPoint  = chart.point.new(na, na, na)
+var secondHighPoint = chart.point.new(na, na, na)
+var firstLowPoint   = chart.point.new(na, na, na)
+var secondLowPoint  = chart.point.new(na, na, na)
+
+// Update the `firstHighPoint` and `secondHighPoint` when `pivotHigh` is not `na`.
+if not na(pivotHigh)
+    firstHighPoint  := secondHighPoint
+    secondHighPoint := chart.point.from_index(bar_index - RIGHT_BARS, pivotHigh)
+// Update the `firstLowPoint` and `secondLowPoint` when `pivotlow` is not `na`.
+if not na(pivotLow)
+    firstLowPoint  := secondLowPoint
+    secondLowPoint := chart.point.from_index(bar_index - RIGHT_BARS, pivotLow)
+
+if barstate.islastconfirmedhistory
+    //@variable An extended line that passes through the `firstHighPoint` and `secondHighPoint`.
+    line pivotHighLine = line.new(firstHighPoint, secondHighPoint, extend = extend.right)
+    //@variable An extended line that passes through the `firstLowPoint` and `secondLowPoint`.
+    line pivotLowLine = line.new(firstLowPoint, secondLowPoint, extend = extend.right)
+    //@variable The color of the space between the lines.
+    color fillColor = switch
+        secondHighPoint.price > firstHighPoint.price and secondLowPoint.price > firstLowPoint.price => color.lime
+        secondHighPoint.price < firstHighPoint.price and secondLowPoint.price < firstLowPoint.price => color.red
+        =>                                                                                             color.silver
+    //@variable A linefill that colors the space between the `pivotHighLine` and `pivotLowLine`.
+    linefill channelFill = linefill.new(pivotHighLine, pivotLowLine, color.new(fillColor, 90))
+```
+
