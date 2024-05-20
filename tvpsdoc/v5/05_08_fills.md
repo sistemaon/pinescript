@@ -165,3 +165,50 @@ if barstate.islastconfirmedhistory
     linefill channelFill = linefill.new(pivotHighLine, pivotLowLine, color.new(fillColor, 90))
 ```
 
+
+# Preenchimentos de Caixas e Polilinhas
+
+Os tipos [box](https://br.tradingview.com/pine-script-reference/v5/#type_box) e [polyline](https://br.tradingview.com/pine-script-reference/v5/#type_polyline) permitem que scripts desenhem formas geométricas e outras formações no gráfico. Scripts criam [boxes](./05_12_lines_e_boxes.md#boxes-caixas) e [polylines](./05_12_lines_e_boxes.md#polylines-polilinhas) com as funções [box.new()](https://br.tradingview.com/pine-script-reference/v5/#fun_box.new) e [polyline.new()](https://br.tradingview.com/pine-script-reference/v5/#fun_polyline.new), que incluem parâmetros que permitem que os desenhos preencham seus espaços visuais.
+
+Para preencher o espaço dentro das bordas de uma [box](https://br.tradingview.com/pine-script-reference/v5/#type_box) com uma cor especificada, inclua um argumento `bgcolor` na função [box.new()](https://br.tradingview.com/pine-script-reference/v5/#fun_box.new). Para preencher o espaço visual de uma polilinha, passe um argumento `fill_color` para a função [polyline.new()](https://br.tradingview.com/pine-script-reference/v5/#fun_polyline.new).
+
+Por exemplo, este script desenha um octógono com uma [polyline](https://br.tradingview.com/pine-script-reference/v5/#type_polyline) e um retângulo inscrito com uma [box](https://br.tradingview.com/pine-script-reference/v5/#type_box) na última barra histórica confirmada. Ele determina o tamanho dos desenhos usando o valor da variável `radius`, que corresponde a aproximadamente um-quarto do número de barras visíveis no gráfico. Incluiu-se `fill_color = color.new(color.blue, 60)` na chamada [polyline.new()](https://br.tradingview.com/pine-script-reference/v5/#fun_polyline.new) para preencher o octógono com uma cor azul translúcida, e usou-se `bgcolor = color.purple` na chamada [box.new()](https://br.tradingview.com/pine-script-reference/v5/#fun_box.new) para preencher o retângulo inscrito com um roxo opaco:
+
+![Preenchimentos de caixas e polilinhas](./imgs/Fills-Box-and-polyline-fills-1.png)
+
+```c
+//@version=5
+indicator("Box and polyline fills demo")
+
+//@variable The number of visible chart bars, excluding the leftmost and rightmost bars.
+var int barCount = 0
+if time > chart.left_visible_bar_time and time < chart.right_visible_bar_time
+    barCount += 1
+
+//@variable The approximate radius used to calculate the octagon and rectangle coordinates.
+int radius = math.ceil(barCount / 4)
+
+if barstate.islastconfirmedhistory
+    //@variable An array of chart points. The polyline uses all points in this array, but the box only needs two.
+    array<chart.point> points = array.new<chart.point>()
+    //@variable The counterclockwise angle of each point, in radians. Updates on each loop iteration.
+    float angle = 0.0
+    //@variable The radians to add to the `angle` on each loop iteration.
+    float increment = 0.25 * math.pi
+    // Loop 8 times to calculate octagonal points.
+    for i = 0 to 7
+        //@variable The point's x-coordinate (bar offset).
+        int x = int(math.round(math.cos(angle) * radius))
+        //@variable The point's y-coordinate.
+        float y = math.round(math.sin(angle) * radius)
+        // Push a new chart point into the `points` array and increase the `angle`.
+        points.push(chart.point.from_index(bar_index - radius + x, y))
+        angle += increment
+    // Create a closed polyline to draw the octagon and fill it with translucent blue.
+    polyline.new(points, closed = true, fill_color = color.new(color.blue, 60))
+    // Create a box for the rectangle using index 3 and 7 for the top-left and bottom-right corners,
+    // and fill it with opaque purple.
+    box.new(points.get(3), points.get(7), bgcolor = color.purple)
+```
+
+Veja a página [Lines e Boxes](./05_12_lines_e_boxes.md) para saber mais sobre como trabalhar com esses tipos.
