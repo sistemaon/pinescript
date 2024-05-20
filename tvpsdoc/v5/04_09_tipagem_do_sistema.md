@@ -388,7 +388,7 @@ fill(emaFastPlot, emaSlowPlot, color.new(color.purple, 50), "EMA Fill")
 
 É importante notar que, ao contrário de outros tipos especiais, não há palavras-chave `plot` ou `hline` em Pine para declarar explicitamente o tipo de variável como "plot" ou "hline".
 
-Os usuários podem controlar onde os gráficos de seus scripts são exibidos por meio das variáveis no `display.*`. Além disso, um script pode usar os valores dos gráficos de outro script como _entradas externas_ por meio da função [input.source()](https://br.tradingview.com/pine-script-reference/v5/#fun_input.source) (consulte [entradas de origem](./000_inputs.md#input-de-origem) para maiores informações).
+Os usuários podem controlar onde os gráficos de seus scripts são exibidos por meio das variáveis no `display.*`. Além disso, um script pode usar os valores dos gráficos de outro script como _entradas externas_ por meio da função [input.source()](https://br.tradingview.com/pine-script-reference/v5/#fun_input.source) (consulte [entradas da fonte](./05_09_inputs.md#input-da-fonte) para maiores informações).
 
 ## Tipos de Desenho
 
