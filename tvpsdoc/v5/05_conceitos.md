@@ -15,11 +15,11 @@
 
 ## 07 [Cores](./05_07_cores.md)
 
-## 08 [Fills _Preenchimentos_](./05_08_fills.md)
+## 08 [Fills (_Preenchimentos_)](./05_08_fills.md)
 
-## 09 [Inputs _Entradas_](./05_09_inputs.md)
+## 09 [Inputs (_Entradas_)](./05_09_inputs.md)
 
-## 12 [Lines e Boxes _Linhas e Caixas_](./05_12_lines_e_boxes.md)
+## 12 [Lines e Boxes (_Linhas e Caixas_)](./05_12_lines_e_boxes.md)
 
 ## 16 [Repintura](./05_16_repintura.md)
 

@@ -11,7 +11,7 @@ indicator("MA", "", true)
 plot(ta.sma(close, 20))
 ```
 
-Se, em vez disso, o script for escrito desta maneira, ele se torna muito mais flexível, pois os usuários poderão selecionar a "_sourece_" ("_fonte_") e a "_length_" ("_comprimento_") que desejam usar para o cálculo da MA:
+Se, em vez disso, o script for escrito desta maneira, ele se torna muito mais flexível, pois os usuários poderão selecionar a "_source_" ("_fonte_") e a "_length_" ("_comprimento_") que desejam usar para o cálculo da MA:
 
 ```c
 //@version=5
