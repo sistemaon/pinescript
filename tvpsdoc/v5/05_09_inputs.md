@@ -36,4 +36,48 @@ Quando um script contém chamadas para funções `input.*()`, uma aba "_Inputs_"
 
 No fluxo de execução de um script, as entradas são processadas quando o script já está em um gráfico e um usuário altera valores na aba "_Inputs_" ("_Entradas_"). As mudanças desencadeiam uma reexecução do script em todas as barras do gráfico, então quando um usuário altera um valor de entrada, seu script recalcula usando esse novo valor.
 
+
+# Funções de Input
+
+As seguintes funções de _input_ (_entrada_) estão disponíveis:
+
+- [input()](https://br.tradingview.com/pine-script-reference/v5/#fun_input)
+- [input.int()](https://br.tradingview.com/pine-script-reference/v5/#fun_input{dot}int)
+- [input.float()](https://br.tradingview.com/pine-script-reference/v5/#fun_input{dot}float)
+- [input.bool()](https://br.tradingview.com/pine-script-reference/v5/#fun_input{dot}bool)
+- [input.color()](https://br.tradingview.com/pine-script-reference/v5/#fun_input{dot}color)
+- [input.string()](https://br.tradingview.com/pine-script-reference/v5/#fun_input{dot}string)
+- [input.timeframe()](https://br.tradingview.com/pine-script-reference/v5/#fun_input{dot}timeframe)
+- [input.symbol()](https://br.tradingview.com/pine-script-reference/v5/#fun_input{dot}symbol)
+- [input.price()](https://br.tradingview.com/pine-script-reference/v5/#fun_input{dot}price)
+- [input.source()](https://br.tradingview.com/pine-script-reference/v5/#fun_input{dot}source)
+- [input.session()](https://br.tradingview.com/pine-script-reference/v5/#fun_input{dot}session)
+- [input.time()](https://br.tradingview.com/pine-script-reference/v5/#fun_input{dot}time)
+
+Um _widget_ de _entrada_ específico é criado na aba "_Inputs_" ("_Entradas_") para aceitar cada tipo de entrada. A menos que especificado de outra forma na chamada `input.*()`, cada entrada aparece em uma nova linha da aba "_Inputs_" ("_Entradas_"), na ordem em que as chamadas `input.*()` aparecem no script.
+
+É recomendado pelo [Guia de Estilo](./000_style_guide.md) colocar as chamadas `input.*()` no início do script.
+
+As definições das funções de entrada normalmente contêm muitos parâmetros, permitindo controlar o valor padrão das entradas, seus limites e sua organização na aba "_Inputs_" ("_Entradas_").
+
+Uma chamada `input.*()` sendo apenas outra chamada de função no Pine Script, seu resultado pode ser combinado com operadores [aritméticos](./04_05_operadores.md#operadores-aritméticos), [comparação](./04_05_operadores.md#operadores-de-comparação), [lógicos](./04_05_operadores.md#operadores-lógicos) ou [ternários](./04_05_operadores.md#operador-ternário-) para formar uma expressão a ser atribuída à variável. Aqui, o resultado da chamada [input.string()](https://br.tradingview.com/pine-script-reference/v5/#fun_input{dot}string) é comparado à string "`On`". O resultado da expressão é então armazenado na variável `plotDisplayInput`. Como essa variável contém um valor `true` ou `false`, ela é do tipo "input bool":
+
+```c
+//@version=5
+indicator("Input in an expression`", "", true)
+bool plotDisplayInput = input.string("On", "Plot Display", options = ["On", "Off"]) == "On"
+plot(plotDisplayInput ? close : na)
+```
+
+Todos os valores retornados pelas funções `input.*()`, exceto os de "source", são valores qualificados como "input". Veja a seção sobre [qualificadores de tipo](./04_09_tipagem_do_sistema.md#qualificadores) para mais informações.
+
+
+
+
+
+
+
+
+
+
 # Input da Fonte

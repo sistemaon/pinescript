@@ -30,3 +30,6 @@ O "for…in" tá referenciando o link (https://www.tradingview.com/pine-script-r
 
 In MATRICES > Operation not available for non-square matrices. = matrix.inv(), matrix.det(), matrix.eigenvalues(), and matrix.eigenvectors().
 matrix.eigenvectors() tá referenciando o link (https://www.tradingview.com/pine-script-reference/v5/#fun_matrix.inv) sendo que deveria ser (https://www.tradingview.com/pine-script-reference/v5/#fun_matrix.eigenvectors).
+
+In INPUTS > INPUT FUNCTIONS = An input*.() call being just another function call in Pine Script™, its result can be combined with [arithmetic], _comparison_, [logical] or [ternary] operators to form an expression to be assigned to the variable.
+O "_comparison_" não está sendo referenciado pela página específica sobre comparison em "./04_05_operadores.md#operadores-de-comparação", exemplo [comparison](./v5/04_05_operadores.md#operadores-de-comparação)
