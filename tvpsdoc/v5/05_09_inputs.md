@@ -72,12 +72,26 @@ plot(plotDisplayInput ? close : na)
 Todos os valores retornados pelas funções `input.*()`, exceto os de "source", são valores qualificados como "input". Veja a seção sobre [qualificadores de tipo](./04_09_tipagem_do_sistema.md#qualificadores) para mais informações.
 
 
+# Parâmetros das Funções de Input
 
+Os parâmetros comuns a todas as funções de entrada são: `defval`, `title`, `tooltip`, `inline` e `group`. Alguns parâmetros são usados por outras funções de entrada: `options`, `minval`, `maxval`, `step` e `confirm`.
 
+Todos esses parâmetros esperam argumentos "const" (exceto se for uma entrada usada para uma "source", que retorna um resultado "series float"). Isso significa que devem ser conhecidos no momento da compilação e não podem mudar durante a execução do script. Como o resultado de uma função `input.*()` é sempre qualificado como "input" ou "series", segue-se que o resultado de uma chamada de função `input.*()` não pode ser usado como argumento em uma chamada `input.*()` subsequente porque o qualificador "input" é mais forte que "const".
 
+Revisão de cada parâmetro:
 
+- `defval` é o primeiro parâmetro de todas as funções de entrada. É o valor padrão que aparecerá no widget de entrada. Requer um argumento do tipo de valor de entrada para o qual a função é usada.
+- `title` requer um argumento "const string". É o _label_ (_rótulo_) do campo.
+- `tooltip` requer um argumento "const string". Quando o parâmetro é usado, um ícone de ponto de interrogação aparecerá à direita do campo. Quando os usuários passarem o cursor sobre ele, o texto do _tooltip_ (_dica de ferramenta_) aparecerá. Note que, se vários campos de entrada forem agrupados em uma linha usando `inline`, o _tooltip_ (_dica de ferramenta_) sempre aparecerá à direita do campo mais à direita e exibirá o texto do último argumento `tooltip` usado na linha. Quebras de linha (`\n`) são suportadas na string do argumento.
+- `inline` requer um argumento "const string". Usar o mesmo argumento para o parâmetro em várias chamadas `input.*()` agrupará seus widgets de entrada na mesma linha. Há um limite para a largura que a aba "_Inputs_" pode expandir, então uma quantidade limitada de campos de entrada pode ser ajustada em uma linha. Usar uma chamada `input.*()` com um argumento único para `inline` tem o efeito de trazer o campo de entrada para a esquerda, imediatamente após o _label_, ignorando o alinhamento padrão à esquerda de todos os campos de entrada usado quando nenhum argumento `inline` é usado.
+- `group` requer um argumento "const string". É usado para agrupar qualquer número de entradas na mesma seção. A string usada como argumento `group` se torna o título da seção. Todas as chamadas `input.*()` a serem agrupadas devem usar a mesma string para seu argumento de `group`.
+- `options` requer uma lista de elementos separados por vírgulas e delimitados por colchetes (por exemplo, `["ON", "OFF"]`). É usado para criar um menu suspenso (_dropdown_) que oferece os elementos da lista na forma de seleções de menu. Apenas um item do menu pode ser selecionado. Quando uma lista de `options` é usada, o valor `defval` deve ser um dos elementos da lista. Quando `options` é usado em funções de entrada que permitem `minval`, `maxval` ou `step`, esses parâmetros não podem ser usados simultaneamente.
+- `minval` requer um argumento "const int/float", dependendo do tipo de valor de `defval`. É o valor mínimo válido para o campo de entrada.
+- `maxval` requer um argumento "const int/float", dependendo do tipo de valor de `defval`. É o valor máximo válido para o campo de entrada.
+- `step` é o incremento pelo qual o valor do campo se moverá quando as setas para cima/baixo do widget forem usadas.
+- `confirm` requer um argumento "const bool" (`true` ou `false`). Esse parâmetro afeta o comportamento do script quando ele é adicionado a um gráfico. Chamadas `input.*()` usando `confirm = true` farão com que a aba "_Settings/Inputs_" ("_Configurações/Entradas_") apareça quando o script for adicionado ao gráfico. `confirm` é útil para garantir que os usuários configurem um campo específico.
 
-
+Os parâmetros `minval`, `maxval` e `step` são somente presentes nas assinaturas das fonções [input.int()](https://br.tradingview.com/pine-script-reference/v5/#fun_input{dot}int) e [input.float()](https://br.tradingview.com/pine-script-reference/v5/#fun_input{dot}float)
 
 
 # Input da Fonte
