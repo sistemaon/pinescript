@@ -94,4 +94,33 @@ Revisão de cada parâmetro:
 Os parâmetros `minval`, `maxval` e `step` são somente presentes nas assinaturas das fonções [input.int()](https://br.tradingview.com/pine-script-reference/v5/#fun_input{dot}int) e [input.float()](https://br.tradingview.com/pine-script-reference/v5/#fun_input{dot}float)
 
 
+# Tipos de Input
+
+As próximas seções explicam o que cada função de entrada faz. No decorrer, serão exploradas as diferentes maneiras de usar as funções de entrada e organizar sua exibição.
+
+## Input Simples
+
+[input()](https://br.tradingview.com/pine-script-reference/v5/#fun_input) é uma função simples e genérica que suporta os tipos fundamentais do Pine Script: "int", "float", "bool", "color" e "string". Ela também suporta entradas "source", que são valores relacionados ao preço, como [close](https://br.tradingview.com/pine-script-reference/v5/#var_close), [hl2](https://br.tradingview.com/pine-script-reference/v5/#hl2), [hlc3](https://br.tradingview.com/pine-script-reference/v5/#var_hlc3) e [hlcc4](https://br.tradingview.com/pine-script-reference/v5/#var_hlcc4), ou que podem ser usadas para receber o valor de saída de outro script.
+
+Sua assinatura é:
+
+```c
+input(defval, title, tooltip, inline, group) → input int/float/bool/color/string | series float
+```
+
+A função detecta automaticamente o tipo de entrada analisando o tipo do argumento `defval` usado na chamada da função. Este script mostra todos os tipos suportados e o tipo qualificado retornado pela função quando usada com argumentos `defval` de diferentes tipos:
+
+```c
+//@version=5
+indicator("`input()`", "", true)
+a = input(1, "input int")
+b = input(1.0, "input float")
+c = input(true, "input bool")
+d = input(color.orange, "input color")
+e = input("1", "input string")
+f = input(close, "series float")
+plot(na)
+```
+
+
 # Input da Fonte
