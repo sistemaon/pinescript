@@ -156,4 +156,33 @@ A versão com a lista `options` usa um menu suspenso para seu widget. Quando o p
 ![Input integer](./imgs/Inputs-InputTypes-02.png)
 
 
+## Input Float
+
+Existem duas assinaturas para a função [input.float()](https://br.tradingview.com/pine-script-reference/v5/#fun_input{dot}float); uma quando `options` não é usada e outra quando é usada:
+
+```c
+input.float(defval, title, minval, maxval, step, tooltip, inline, group, confirm) → input int
+input.float(defval, title, options, tooltip, inline, group, confirm) → input int
+```
+
+Aqui, uma entrada "float" é usada para o fator multiplicador do desvio padrão, para calcular as Bandas de Bollinger:
+
+```c
+//@version=5
+indicator("MA", "", true)
+maLengthInput = input.int(10, minval = 1)
+bbFactorInput = input.float(1.5, minval = 0, step = 0.5)
+ma      = ta.sma(close, maLengthInput)
+bbWidth = ta.stdev(ma, maLengthInput) * bbFactorInput
+bbHi    = ma + bbWidth
+bbLo    = ma - bbWidth
+plot(ma)
+plot(bbHi, "BB Hi", color.gray)
+plot(bbLo, "BB Lo", color.gray)
+```
+
+Os widgets de entrada para floats são semelhantes aos usados para entradas inteiras.
+
+![Input float](./imgs/Inputs-InputTypes-03.png)
+
 # Input da Fonte
