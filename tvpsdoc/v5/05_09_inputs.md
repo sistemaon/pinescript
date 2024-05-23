@@ -155,7 +155,6 @@ A versão com a lista `options` usa um menu suspenso para seu widget. Quando o p
 
 ![Input integer](./imgs/Inputs-InputTypes-02.png)
 
-
 ## Input Float
 
 Existem duas assinaturas para a função [input.float()](https://br.tradingview.com/pine-script-reference/v5/#fun_input{dot}float); uma quando `options` não é usada e outra quando é usada:
@@ -184,5 +183,34 @@ plot(bbLo, "BB Lo", color.gray)
 Os widgets de entrada para floats são semelhantes aos usados para entradas inteiras.
 
 ![Input float](./imgs/Inputs-InputTypes-03.png)
+
+## Input Boolean
+
+Continuando a desenvolver o script, desta vez adicionando uma entrada booleana para permitir que os usuários alternem a exibição das BBs:
+
+```c
+//@version=5
+indicator("MA", "", true)
+maLengthInput = input.int(10,    "MA length", minval = 1)
+bbFactorInput = input.float(1.5, "BB factor", inline = "01", minval = 0, step = 0.5)
+showBBInput   = input.bool(true, "Show BB",   inline = "01")
+ma      = ta.sma(close, maLengthInput)
+bbWidth = ta.stdev(ma, maLengthInput) * bbFactorInput
+bbHi    = ma + bbWidth
+bbLo    = ma - bbWidth
+plot(ma, "MA", color.aqua)
+plot(showBBInput ? bbHi : na, "BB Hi", color.gray)
+plot(showBBInput ? bbLo : na, "BB Lo", color.gray)
+```
+
+Observe que:
+
+- Foi adicionada uma entrada usando [input.bool()](https://br.tradingview.com/pine-script-reference/v5/#fun_input{dot}bool) para definir o valor de `showBBInput`.
+- O parâmetro `inline` foi usado nessa entrada e na de `bbFactorInput` para colocá-las na mesma linha. O argumento `"01"` foi usado em ambos os casos. É assim que o compilador do Pine Script reconhece que elas pertencem à mesma linha. A string específica usada como argumento não é importante e não aparece em nenhum lugar na aba "_Inputs_" ("_Entradas_"); é usada apenas para identificar quais entradas vão na mesma linha.
+- Os argumentos `title` das chamadas `input.*()` foram alinhados verticalmente para facilitar a leitura.
+- A variável `showBBInput` é usada nas duas chamadas [plot()](https://br.tradingview.com/pine-script-reference/v5/#fun_plot) para plotar condicionalmente. Quando o usuário desmarca a caixa de seleção da entrada `showBBInput`, o valor da variável se torna `false`. Quando isso acontece, as chamadas [plot()](https://br.tradingview.com/pine-script-reference/v5/#fun_plot) plotam o valor [na](https://br.tradingview.com/pine-script-reference/v5/#var_na), que não exibe nada. O valor padrão da entrada é `true`, então as BBs são plotadas por padrão.
+- Como o parâmetro `inline` é usado para a variável `bbFactorInput`, seu campo de entrada na aba "_Inputs_" ("_Entradas_") não se alinha verticalmente com o de `maLengthInput`, em que não usa `inline`.
+
+![Input boolean](./imgs/Inputs-InputTypes-04.png)
 
 # Input da Fonte
