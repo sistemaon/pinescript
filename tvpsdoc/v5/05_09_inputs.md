@@ -122,5 +122,38 @@ f = input(close, "series float")
 plot(na)
 ```
 
+## Input Integer
+
+Existem duas assinaturas para a função [input.int()](https://br.tradingview.com/pine-script-reference/v5/#fun_input{dot}int); uma quando `options` não é usada e outra quando é usada:
+
+```c
+input.int(defval, title, minval, maxval, step, tooltip, inline, group, confirm) → input int
+input.int(defval, title, options, tooltip, inline, group, confirm) → input int
+```
+
+Esta chamada usa o parâmetro `options` para propor uma lista predefinida de comprimentos para a MA:
+
+```c
+//@version=5
+indicator("MA", "", true)
+maLengthInput = input.int(10, options = [3, 5, 7, 10, 14, 20, 50, 100, 200])
+ma = ta.sma(close, maLengthInput)
+plot(ma)
+```
+
+Esta usa o parâmetro `minval` para limitar o _length_ (_comprimento_):
+
+```c
+//@version=5
+indicator("MA", "", true)
+maLengthInput = input.int(10, minval = 2)
+ma = ta.sma(close, maLengthInput)
+plot(ma)
+```
+
+A versão com a lista `options` usa um menu suspenso para seu widget. Quando o parâmetro `options` não é usado, um widget de entrada simples é usado para inserir o valor.
+
+![Input integer](./imgs/Inputs-InputTypes-02.png)
+
 
 # Input da Fonte
