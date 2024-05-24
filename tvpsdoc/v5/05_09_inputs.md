@@ -331,4 +331,22 @@ Observe que:
 
 ![Input session](./imgs/Inputs-InputTypes-07.png)
 
-# Input da Fonte
+## Input Source
+
+Entradas da fonte, [input.source()](https://br.tradingview.com/pine-script-reference/v5/#fun_input.source), são úteis para fornecer uma seleção de dois tipos de fontes:
+
+- Valores de preço, a saber: [open](https://br.tradingview.com/pine-script-reference/v5/#var_open), [high](https://br.tradingview.com/pine-script-reference/v5/#var_high), [low](https://br.tradingview.com/pine-script-reference/v5/#var_low), [close](https://br.tradingview.com/pine-script-reference/v5/#var_close), [hl2](https://br.tradingview.com/pine-script-reference/v5/#var_hl2), [hlc3](https://br.tradingview.com/pine-script-reference/v5/#var_hlc3) e [ohlc4](https://br.tradingview.com/pine-script-reference/v5/#var_ohlc4).
+- Os valores plotados por outros scripts no gráfico. Isso pode ser útil para "_link_" ("_vincular_") dois ou mais scripts juntos, enviando a saída de um como entrada para outro script.
+
+Este script simplesmente plota a seleção da fonte do usuário. Propõe-se o valor [high](https://br.tradingview.com/pine-script-reference/v5/#var_high) como padrão:
+
+```c
+//@version=5
+indicator("Source input", "", true)
+srcInput = input.source(high, "Source")
+plot(srcInput, "Src", color.new(color.purple, 70), 6)
+```
+
+Isso mostra um gráfico onde, além do script, foi carregado um indicador "Arnaud Legoux Moving Average". Veja aqui como o widget de entrada da fonte do script é usado para selecionar a saída do script ALMA como entrada no script. Como script plota essa fonte em uma linha grossa de cor roxo claro, é possível ver os plots dos dois scripts sobrepostos porque eles plotam o mesmo valor:
+
+![Input source](./imgs/Inputs-InputTypes-08.png)
