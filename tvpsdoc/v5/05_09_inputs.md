@@ -303,5 +303,32 @@ Observe que:
 - O argumento `defval` usado é uma string vazia. Isso faz com que [request.security()](https://br.tradingview.com/pine-script-reference/v5/#fun_request{dot}security), onde a variável `symbolInput` contendo essa entrada é usada, para utilizar o símbolo do gráfico por padrão. Se o usuário selecionar outro símbolo e quiser retornar ao valor padrão usando o símbolo do gráfico, ele precisará usar a seleção "_Reset Settings_" ("_Redefinir Configurações_") do menu "_Defaults_" ("_Padrões_") da aba "_Inputs_" ("_Entradas_").
 - A função definida pelo usuário `securityNoRepaint()` é usada para [request.security()](https://br.tradingview.com/pine-script-reference/v5/#fun_request{dot}security) de maneira que não cause repaint; ela só retorna valores quando o timeframe superior é completado.
 
+## Input Session
+
+Entradas de sessão são úteis para coletar valores de início e término para períodos de tempo. A função incorporada [input.session()](https://br.tradingview.com/pine-script-reference/v5/#fun_input{dot}session) cria um widget de entrada permitindo que os usuários especifiquem o início e o fim de uma sessão. As seleções podem ser feitas usando um menu suspenso ou inserindo valores de tempo no formato "hh:mm".
+
+O valor retornado por [input.session()](https://br.tradingview.com/pine-script-reference/v5/#fun_input{dot}session) é uma string válida no formato de sessão. Veja a página do manual sobre [sessões](./05_17_sessoes.md) para maiores informações.
+
+As informações de sessão também podem conter informações sobre os dias em que a sessão é válida. Aqui, a chamada da função [input.string()](https://br.tradingview.com/pine-script-reference/v5/#fun_input{dot}string) é usada para inserir essas informações de dias:
+
+```c
+//@version=5
+indicator("Session input", "", true)
+string sessionInput = input.session("0600-1700", "Session")
+string daysInput = input.string("1234567", tooltip = "1 = Sunday, 7 = Saturday")
+sessionString = sessionInput + ":" + daysInput
+inSession = not na(time(timeframe.period, sessionString))
+bgcolor(inSession ? color.silver : na)
+```
+
+Observe que:
+
+- Este script propõe uma sessão padrão de "0600-1700".
+- A chamada [input.string()](https://br.tradingview.com/pine-script-reference/v5/#fun_input{dot}string) usa uma dica de ferramenta para fornecer aos usuários ajuda sobre o formato a ser usado para inserir informações de dias.
+- Uma string de sessão completa é construída concatenando as duas strings que o script recebe como entradas.
+- O tipo das duas entradas é explicitamente declarado com a palavra-chave [string](https://br.tradingview.com/pine-script-reference/v5/#type_string) para deixar claro que essas variáveis conterão uma string.
+- É detectado se a barra do gráfico está na sessão definida pelo usuário chamando [time()](https://br.tradingview.com/pine-script-reference/v5/#fun_time) com a string da sessão. Se o valor de [time](https://br.tradingview.com/pine-script-reference/v5/#var_time) da barra atual (o tempo no [open](https://br.tradingview.com/pine-script-reference/v5/#var_open) da barra) não estiver na sessão, [time()](https://br.tradingview.com/pine-script-reference/v5/#fun_time) retorna [na](https://br.tradingview.com/pine-script-reference/v5/#var_na), então `inSession` será verdadeiro sempre que [time()](https://br.tradingview.com/pine-script-reference/v5/#fun_time) retornar um valor que não seja [na](https://br.tradingview.com/pine-script-reference/v5/#var_na).
+
+![Input session](./imgs/Inputs-InputTypes-07.png)
 
 # Input da Fonte
