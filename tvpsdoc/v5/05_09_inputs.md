@@ -213,4 +213,46 @@ Observe que:
 
 ![Input boolean](./imgs/Inputs-InputTypes-04.png)
 
+## Input Color
+
+Como explicado na seção seleção de cores através das configurações do script da página "[Cores](./05_07_cores.md)", as seleções de cores que geralmente aparecem na aba "_Settings_/_Style_" ("_Configurações_/_Estilo_") nem sempre estão disponíveis. Quando isso ocorre, os usuários do script não terão meios de alterar as cores usadas pelo seu script. Para esses casos, é essencial fornecer entradas de cor se for desejado que as cores do script sejam modificáveis através das "Configurações" do script. Em vez de usar a aba "_Settings_/_Style_" ("_Configurações_/_Estilo_") para alterar cores, os usuários do script poderão alterar as cores usando chamadas para [input.color()](https://br.tradingview.com/pine-script-reference/v5/#fun_input{dot}color).
+
+Suponha que seja necessário plotar as BBs em um tom mais claro quando os valores [high](https://br.tradingview.com/pine-script-reference/v5/#var_high) e [low](https://br.tradingview.com/pine-script-reference/v5/#var_low) forem maiores/menores do que as BBs.
+
+Poderia-se usar um código como este para criar as cores:
+
+```c
+bbHiColor = color.new(color.gray, high > bbHi ? 60 : 0)
+bbLoColor = color.new(color.gray, low  < bbLo ? 60 : 0)
+```
+
+Quando componentes de cor dinâmicos (ou "series"), como a transparência aqui, são usados, os widgets de cor na aba "Configurações/Estilo" não aparecerão mais. Criando-se os próprios widgets, eles aparecerão na aba "Entradas":
+
+```c
+//@version=5
+indicator("MA", "", true)
+maLengthInput = input.int(10,           "MA length", inline = "01", minval = 1)
+maColorInput  = input.color(color.aqua, "",          inline = "01")
+bbFactorInput = input.float(1.5,        "BB factor", inline = "02", minval = 0, step = 0.5)
+bbColorInput  = input.color(color.gray, "",          inline = "02")
+showBBInput   = input.bool(true,        "Show BB",   inline = "02")
+ma      = ta.sma(close, maLengthInput)
+bbWidth = ta.stdev(ma, maLengthInput) * bbFactorInput
+bbHi    = ma + bbWidth
+bbLo    = ma - bbWidth
+bbHiColor = color.new(bbColorInput, high > bbHi ? 60 : 0)
+bbLoColor = color.new(bbColorInput, low  < bbLo ? 60 : 0)
+plot(ma, "MA", maColorInput)
+plot(showBBInput ? bbHi : na, "BB Hi", bbHiColor, 2)
+plot(showBBInput ? bbLo : na, "BB Lo", bbLoColor, 2)
+```
+
+Observe que:
+
+- Foram adicionadas duas chamadas para input.color() para obter os valores das variáveis maColorInput e bbColorInput. maColorInput é usado diretamente na chamada plot(ma, "MA", maColorInput), e bbColorInput é usado para construir as variáveis bbHiColor e bbLoColor, que modulam a transparência usando a posição do preço em relação às BBs. Um valor condicional é usado para o valor de transp na chamada color.new(), para gerar diferentes transparências da mesma cor base.
+- Não é usado um argumento title para as novas entradas de cor porque elas estão na mesma linha que outras entradas, permitindo que os usuários entendam a quais plots se aplicam.
+- Os argumentos inline foram reorganizados para refletir o fato de que as entradas estão agrupadas em duas linhas distintas.
+
+![Input color](./imgs/Inputs-InputTypes-05.png)
+
 # Input da Fonte
