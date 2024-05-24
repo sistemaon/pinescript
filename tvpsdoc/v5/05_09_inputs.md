@@ -255,4 +255,29 @@ Observe que:
 
 ![Input color](./imgs/Inputs-InputTypes-05.png)
 
+## Input Timeframe
+
+Entradas de timeframe podem ser úteis quando se deseja em poder alterar o timeframe usado para calcular valores em seus scripts.
+
+Eliminando as BBs das seções anteriores e adicionando uma entrada de timeframe a um script simples de MA:
+
+```c
+//@version=5
+indicator("MA", "", true)
+tfInput = input.timeframe("D", "Timeframe")
+ma = ta.sma(close, 20)
+securityNoRepaint(sym, tf, src) =>
+    request.security(sym, tf, src[barstate.isrealtime ? 1 : 0])[barstate.isrealtime ? 0 : 1]
+maHTF = securityNoRepaint(syminfo.tickerid, tfInput, ma)
+plot(maHTF, "MA", color.aqua)
+```
+
+Observe que:
+
+- A função [input.timeframe()](https://br.tradingview.com/pine-script-reference/v5/#fun_input{dot}timeframe) é usada para receber a entrada de timeframe.
+- A função cria um widget do menu suspenso onde alguns timeframes padrão são propostos. A lista de timeframes também inclui qualquer timeframe que tenha sido favoritado na interface do usuário do gráfico.
+- `tfInput` é usado na chamada [request.security()](https://br.tradingview.com/pine-script-reference/v5/#fun_request{dot}security). Também é usado `gaps = barmerge.gaps_on` na chamada, para que a função só retorne dados quando o timeframe superior for completado.
+
+![Input timeframe](./imgs/Inputs-InputTypes-06.png)
+
 # Input da Fonte
