@@ -280,4 +280,28 @@ Observe que:
 
 ![Input timeframe](./imgs/Inputs-InputTypes-06.png)
 
+## Input Symbol
+
+A função [input.symbol()](https://br.tradingview.com/pine-script-reference/v5/#fun_input{dot}symbol) cria um widget que permite aos usuários pesquisar e selecionar símbolos, assim como fariam na interface do usuário do gráfico.
+
+Adicionando uma entrada de símbolo ao script:
+
+```c
+//@version=5
+indicator("MA", "", true)
+tfInput = input.timeframe("D", "Timeframe")
+symbolInput = input.symbol("", "Symbol")
+ma = ta.sma(close, 20)
+securityNoRepaint(sym, tf, src) =>
+    request.security(sym, tf, src[barstate.isrealtime ? 1 : 0])[barstate.isrealtime ? 0 : 1]
+maHTF = securityNoRepaint(symbolInput, tfInput, ma)
+plot(maHTF, "MA", color.aqua)
+```
+
+Observe que:
+
+- O argumento `defval` usado é uma string vazia. Isso faz com que [request.security()](https://br.tradingview.com/pine-script-reference/v5/#fun_request{dot}security), onde a variável `symbolInput` contendo essa entrada é usada, para utilizar o símbolo do gráfico por padrão. Se o usuário selecionar outro símbolo e quiser retornar ao valor padrão usando o símbolo do gráfico, ele precisará usar a seleção "_Reset Settings_" ("_Redefinir Configurações_") do menu "_Defaults_" ("_Padrões_") da aba "_Inputs_" ("_Entradas_").
+- A função definida pelo usuário `securityNoRepaint()` é usada para [request.security()](https://br.tradingview.com/pine-script-reference/v5/#fun_request{dot}security) de maneira que não cause repaint; ela só retorna valores quando o timeframe superior é completado.
+
+
 # Input da Fonte
