@@ -368,7 +368,6 @@ plotchar(barIsLater, "barIsLater", "🠆", location.top, size = size.tiny)
 Observe que o valor `defval` usado é uma chamada para a função [timestamp()](https://br.tradingview.com/pine-script-reference/v5/#fun_timestamp).
 
 
-
 # Outros Recursos que Afetam Inputs
 
 Alguns parâmetros da função [indicator()](https://br.tradingview.com/pine-script-reference/v5/#fun_indicator), quando usados, irão preencher a aba "_Inputs_" ("_Entradas_") do script com um campo. Os parâmetros são `timeframe` e `timeframe_gaps`.
@@ -382,3 +381,50 @@ plot(ta.vwma(close, 10))
 ```
 
 ![Outros recursos que afetam inputs](./imgs/Inputs-OtherFeaturesAffectingInputs-03.png)
+
+
+# Dicas
+
+O design das entradas do seu script tem um impacto importante na usabilidade dos seus scripts. Entradas bem projetadas são mais intuitivas e proporcionam uma melhor experiência do usuário:
+
+- Escolha _labels_ claros e concisos (o argumento `title` da sua entrada).
+- Escolha os valores padrão com cuidado.
+- Forneça valores `minval` e `maxval` que evitem que seu código produza resultados inesperados, por exemplo, limite o valor mínimo dos comprimentos para 1 ou 2, dependendo do tipo de MA que está sendo usado.
+- Forneça um valor `step` que seja congruente com o valor que está sendo capturado. Passos de 5 podem ser mais úteis em uma faixa de 0-200, por exemplo, ou passos de 0,05 em uma escala de 0,0-1,0.
+- Agrupe entradas relacionadas na mesma linha usando `inline`; cores de alta e baixa, por exemplo, ou a largura e a cor de uma linha.
+- Quando houver muitas entradas, agrupe-as em seções significativas usando `group`. Coloque as seções mais importantes no topo.
+- Faça o mesmo para entradas individuais __dentro__ das seções.
+
+Pode ser vantajoso alinhar verticalmente diferentes argumentos de múltiplas chamadas `input.*()` no seu código. Quando for necessário fazer alterações globais, isso permitirá usar o recurso de multi-cursor do Editor para operar em todas as linhas de uma vez.
+
+Por vezes é necessário usar espaços Unicode para conseguir o alinhamento ideal nas entradas.
+
+Exemplo:
+
+```c
+//@version=5
+indicator("Aligned inputs", "", true)
+
+var GRP1 = "Not aligned"
+ma1SourceInput   = input(close, "MA source",     inline = "11", group = GRP1)
+ma1LengthInput   = input(close, "Length",        inline = "11", group = GRP1)
+long1SourceInput = input(close, "Signal source", inline = "12", group = GRP1)
+long1LengthInput = input(close, "Length",        inline = "12", group = GRP1)
+
+var GRP2 = "Aligned"
+// The three spaces after "MA source" are Unicode EN spaces (U+2002).
+ma2SourceInput   = input(close, "MA source   ",  inline = "21", group = GRP2)
+ma2LengthInput   = input(close, "Length",        inline = "21", group = GRP2)
+long2SourceInput = input(close, "Signal source", inline = "22", group = GRP2)
+long2LengthInput = input(close, "Length",        inline = "22", group = GRP2)
+
+plot(ta.vwma(close, 10))
+```
+
+![Dicas](./imgs/Inputs-Tips-1.png)
+
+Observe que:
+
+- O parâmetro `group` é usado para distinguir entre as duas seções de entradas. Uma constante é usada para manter o nome dos grupos. Dessa forma, se for decidido mudar o nome do grupo, será necessário mudar apenas em um lugar.
+- Os widgets de entrada da primeira seção não se alinham verticalmente. Está sendo usado `inline`, que coloca os widgets de entrada imediatamente à direita do _label_. Pelos _labels_ para as entradas `ma1SourceInput` e `long1SourceInput` têm comprimentos diferentes, os _labels_ estão em posições _y_ diferentes.
+- Para compensar o desalinhamento, o argumento `title` na linha de `ma2SourceInput` é preenchido com três espaços EN Unicode (U+2002). Espaços Unicode são necessários porque espaços comuns seriam removidos do _label_. Alinhamento preciso pode ser alcançado combinando diferentes quantidades e tipos de espaços Unicode. Veja aqui uma lista de [espaços Unicode](https://jkorpela.fi/chars/spaces.html) de diferentes larguras.
