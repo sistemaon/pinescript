@@ -226,7 +226,7 @@ bbHiColor = color.new(color.gray, high > bbHi ? 60 : 0)
 bbLoColor = color.new(color.gray, low  < bbLo ? 60 : 0)
 ```
 
-Quando componentes de cor dinâmicos (ou "series"), como a transparência aqui, são usados, os widgets de cor na aba "Configurações/Estilo" não aparecerão mais. Criando-se os próprios widgets, eles aparecerão na aba "Entradas":
+Quando componentes de cor dinâmicos (ou "series"), como a transparência aqui, são usados, os widgets de cor na aba "Configurações/Estilo" não aparecerão mais. Criando-se os próprios widgets, eles aparecerão na aba "_Inputs_" ("_Entradas_"):
 
 ```c
 //@version=5
@@ -366,3 +366,19 @@ plotchar(barIsLater, "barIsLater", "🠆", location.top, size = size.tiny)
 ```
 
 Observe que o valor `defval` usado é uma chamada para a função [timestamp()](https://br.tradingview.com/pine-script-reference/v5/#fun_timestamp).
+
+
+
+# Outros Recursos que Afetam Inputs
+
+Alguns parâmetros da função [indicator()](https://br.tradingview.com/pine-script-reference/v5/#fun_indicator), quando usados, irão preencher a aba "_Inputs_" ("_Entradas_") do script com um campo. Os parâmetros são `timeframe` e `timeframe_gaps`.
+
+Exemplo:
+
+```c
+//@version=5
+indicator("MA", "", true, timeframe = "D", timeframe_gaps = false)
+plot(ta.vwma(close, 10))
+```
+
+![Outros recursos que afetam inputs](./imgs/Inputs-OtherFeaturesAffectingInputs-03.png)
