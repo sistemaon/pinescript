@@ -19,7 +19,13 @@
 
 ## 09 [Inputs (_Entradas_)](./05_09_inputs.md)
 
+## 10 [Levels (_Níveis_)](./05_10_levels.md)
+
+## 11 [Bibliotecas](./05_11_libraries.md)
+
 ## 12 [Lines e Boxes (_Linhas e Caixas_)](./05_12_lines_e_boxes.md)
+
+## 15 [Plots (_Plotagens_)](./05_15_plots.md)
 
 ## 16 [Repintura](./05_16_repintura.md)
 
