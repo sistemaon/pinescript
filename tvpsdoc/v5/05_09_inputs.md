@@ -350,3 +350,19 @@ plot(srcInput, "Src", color.new(color.purple, 70), 6)
 Isso mostra um gráfico onde, além do script, foi carregado um indicador "Arnaud Legoux Moving Average". Veja aqui como o widget de entrada da fonte do script é usado para selecionar a saída do script ALMA como entrada no script. Como script plota essa fonte em uma linha grossa de cor roxo claro, é possível ver os plots dos dois scripts sobrepostos porque eles plotam o mesmo valor:
 
 ![Input source](./imgs/Inputs-InputTypes-08.png)
+
+## Input Time
+
+Entradas de tempo usam a função [input.time()](https://br.tradingview.com/pine-script-reference/v5/#fun_input{dot}time). A função retorna um horário Unix em milissegundos (veja a página [Tempo](./05_21_time.md) para mais informações). Esse tipo de dado também contém informações de data, então a função [input.time()](https://br.tradingview.com/pine-script-reference/v5/#fun_input{dot}time) _retorna um horário __e__ uma data_. Por isso, seu widget permite a seleção de ambos.
+
+Aqui, o tempo da barra é testado contra um valor de entrada, e uma seta é plotada quando o tempo é maior:
+
+```c
+//@version=5
+indicator("Time input", "T", true)
+timeAndDateInput = input.time(timestamp("1 Aug 2021 00:00 +0300"), "Date and time")
+barIsLater = time > timeAndDateInput
+plotchar(barIsLater, "barIsLater", "🠆", location.top, size = size.tiny)
+```
+
+Observe que o valor `defval` usado é uma chamada para a função [timestamp()](https://br.tradingview.com/pine-script-reference/v5/#fun_timestamp).

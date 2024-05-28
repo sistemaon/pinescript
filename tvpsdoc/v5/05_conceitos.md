@@ -25,4 +25,6 @@
 
 ## 17 [Sessões](./05_17_sessoes.md)
 
+## 21 [Time](./05_21_time.md)
+
 ## 22 [Timeframe](./05_22_timeframe.md)
