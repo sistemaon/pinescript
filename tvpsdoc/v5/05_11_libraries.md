@@ -65,3 +65,22 @@ export lo(float val = low) =>
 plot(hi())
 plot(lo())
 ```
+
+## Funções de Biblioteca
+
+As definições de funções em bibliotecas são um pouco diferentes das funções definidas pelo usuário em indicadores e estratégias. Existem restrições quanto ao que pode ser incluído no corpo das funções de biblioteca.
+
+Nas assinaturas de funções de biblioteca (sua primeira linha):
+
+- A palavra-chave [export](https://br.tradingview.com/pine-script-reference/v5/#kw_export) é obrigatória.
+- O tipo de argumento esperado para cada parâmetro deve ser explicitamente mencionado.
+- Uma palavra-chave [simple](https://br.tradingview.com/pine-script-reference/v5/#type_simple) ou [series](https://br.tradingview.com/pine-script-reference/v5/#type_series) pode restringir os tipos qualificados permitidos para os argumentos (a próxima seção explica seu uso).
+
+Estas são as restrições impostas às funções de biblioteca:
+
+- Elas não podem usar variáveis do escopo global da biblioteca, a menos que sejam qualificadas como "const". Isso significa que não se pode usar variáveis globais inicializadas a partir de entradas de script, por exemplo, ou arrays declarados globalmente.
+- Chamadas `request.*()` não são permitidas.
+- Chamadas `input.*()` não são permitidas.
+- Chamadas `plot*()`, `fill()` e `bgcolor()` não são permitidas.
+
+As funções de biblioteca sempre retornam um resultado qualificado como "simple" ou "series". Elas não podem ser usadas onde são necessários valores qualificados como "const" ou "input", como é o caso de algumas funções embutidas. Por exemplo, uma função de biblioteca não pode ser usada para calcular um argumento para o parâmetro `show_last` em uma chamada [plot()](https://br.tradingview.com/pine-script-reference/v5/#fun_plot) porque ele requer um valor "input int".
