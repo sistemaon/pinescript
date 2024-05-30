@@ -373,7 +373,7 @@ fill(loTopPlotID, loBotPlotID, loColor)
 bgcolor(bgColor)
 ```
 
-__Observe que:__
+__Note que:__
 
 - A transparência do fundo é limitada a uma faixa de 100-75 para que não fique excessivamente destacada. Também é usada uma cor neutra que não distraia muito. Quanto mais escuro o fundo, maior é a medida de volatilidade.
 - Os valores de transparência para os preenchimentos das faixas são limitados entre 60 e 90. Usa-se 90 para que, quando um novo máximo/mínimo for encontrado e o gradiente for reiniciado, a transparência inicial torne a cor visível. Não se usa uma transparência inferior a 60 porque não se deseja que essas faixas ocultem a linha do sinal.

@@ -203,7 +203,7 @@ plot(showBBInput ? bbHi : na, "BB Hi", color.gray)
 plot(showBBInput ? bbLo : na, "BB Lo", color.gray)
 ```
 
-Observe que:
+__Note que:__
 
 - Foi adicionada uma entrada usando [input.bool()](https://br.tradingview.com/pine-script-reference/v5/#fun_input{dot}bool) para definir o valor de `showBBInput`.
 - O parâmetro `inline` foi usado nessa entrada e na de `bbFactorInput` para colocá-las na mesma linha. O argumento `"01"` foi usado em ambos os casos. É assim que o compilador do Pine Script reconhece que elas pertencem à mesma linha. A string específica usada como argumento não é importante e não aparece em nenhum lugar na aba "_Inputs_" ("_Entradas_"); é usada apenas para identificar quais entradas vão na mesma linha.
@@ -247,7 +247,7 @@ plot(showBBInput ? bbHi : na, "BB Hi", bbHiColor, 2)
 plot(showBBInput ? bbLo : na, "BB Lo", bbLoColor, 2)
 ```
 
-Observe que:
+__Note que:__
 
 - Foram adicionadas duas chamadas para input.color() para obter os valores das variáveis maColorInput e bbColorInput. maColorInput é usado diretamente na chamada plot(ma, "MA", maColorInput), e bbColorInput é usado para construir as variáveis bbHiColor e bbLoColor, que modulam a transparência usando a posição do preço em relação às BBs. Um valor condicional é usado para o valor de transp na chamada color.new(), para gerar diferentes transparências da mesma cor base.
 - Não é usado um argumento title para as novas entradas de cor porque elas estão na mesma linha que outras entradas, permitindo que os usuários entendam a quais plots se aplicam.
@@ -272,7 +272,7 @@ maHTF = securityNoRepaint(syminfo.tickerid, tfInput, ma)
 plot(maHTF, "MA", color.aqua)
 ```
 
-Observe que:
+__Note que:__
 
 - A função [input.timeframe()](https://br.tradingview.com/pine-script-reference/v5/#fun_input{dot}timeframe) é usada para receber a entrada de timeframe.
 - A função cria um widget do menu suspenso onde alguns timeframes padrão são propostos. A lista de timeframes também inclui qualquer timeframe que tenha sido favoritado na interface do usuário do gráfico.
@@ -298,7 +298,7 @@ maHTF = securityNoRepaint(symbolInput, tfInput, ma)
 plot(maHTF, "MA", color.aqua)
 ```
 
-Observe que:
+__Note que:__
 
 - O argumento `defval` usado é uma string vazia. Isso faz com que [request.security()](https://br.tradingview.com/pine-script-reference/v5/#fun_request{dot}security), onde a variável `symbolInput` contendo essa entrada é usada, para utilizar o símbolo do gráfico por padrão. Se o usuário selecionar outro símbolo e quiser retornar ao valor padrão usando o símbolo do gráfico, ele precisará usar a seleção "_Reset Settings_" ("_Redefinir Configurações_") do menu "_Defaults_" ("_Padrões_") da aba "_Inputs_" ("_Entradas_").
 - A função definida pelo usuário `securityNoRepaint()` é usada para [request.security()](https://br.tradingview.com/pine-script-reference/v5/#fun_request{dot}security) de maneira que não cause repaint; ela só retorna valores quando o timeframe superior é completado.
@@ -321,7 +321,7 @@ inSession = not na(time(timeframe.period, sessionString))
 bgcolor(inSession ? color.silver : na)
 ```
 
-Observe que:
+__Note que:__
 
 - Este script propõe uma sessão padrão de "0600-1700".
 - A chamada [input.string()](https://br.tradingview.com/pine-script-reference/v5/#fun_input{dot}string) usa uma dica de ferramenta para fornecer aos usuários ajuda sobre o formato a ser usado para inserir informações de dias.
@@ -423,7 +423,7 @@ plot(ta.vwma(close, 10))
 
 ![Dicas](./imgs/Inputs-Tips-1.png)
 
-Observe que:
+__Note que:__
 
 - O parâmetro `group` é usado para distinguir entre as duas seções de entradas. Uma constante é usada para manter o nome dos grupos. Dessa forma, se for decidido mudar o nome do grupo, será necessário mudar apenas em um lugar.
 - Os widgets de entrada da primeira seção não se alinham verticalmente. Está sendo usado `inline`, que coloca os widgets de entrada imediatamente à direita do _label_. Pelos _labels_ para as entradas `ma1SourceInput` e `long1SourceInput` têm comprimentos diferentes, os _labels_ estão em posições _y_ diferentes.
