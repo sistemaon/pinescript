@@ -112,4 +112,135 @@ export makeTickerid(simple string prefix, simple string ticker) =>
 
 Observe que para a função retornar um valor "simple", nenhum valor "series" pode ser usado em seu cálculo; caso contrário, o resultado será um valor "series".
 
-Também é possível usar a palavra-chave [series](https://br.tradingview.com/pine-script-reference/v5/#type_simple) para prefixar o tipo de um parâmetro de função de biblioteca. No entanto, como os argumentos são qualificados como "series" por padrão, usar o modificador [series](https://br.tradingview.com/pine-script-reference/v5/#type_simple) é redundante.
+Também é possível usar a palavra-chave [series](https://br.tradingview.com/pine-script-reference/v5/#type_series) para prefixar o tipo de um parâmetro de função de biblioteca. No entanto, como os argumentos são qualificados como "series" por padrão, usar o modificador [series](https://br.tradingview.com/pine-script-reference/v5/#type_series) é redundante.
+
+## Tipos e Objetos Definidos pelo Usuário
+
+É possível exportar [tipos definidos pelo usuário (UDTs)](./04_09_tipagem_do_sistema.md#tipos-definidos-pelo-usuário) de bibliotecas, e as funções de biblioteca podem retornar [objetos](./04_12_objetos.md).
+
+Para exportar um _UDT_, prefixe sua definição com a palavra-chave [export](https://br.tradingview.com/pine-script-reference/v5/#kw_export), da mesma forma que exportaria uma função:
+
+```c
+//@version=5
+library("Point")
+
+export type point
+    int x
+    float y
+    bool isHi
+    bool wasBreached = false
+```
+
+Um script importando essa biblioteca e criando um objeto a partir do seu _UDT_ `point` seria algo assim:
+
+```c
+//@version=5
+indicator("")
+import userName/Point/1 as pt
+newPoint = pt.point.new()
+```
+
+__Note que:__
+
+- Este código não será compilado porque nenhuma biblioteca "Point" foi publicada, e o script nada exibe.
+- `userName` precisaria ser substituído pelo nome de usuário do TradingView do publicador da biblioteca.
+- O método embutido `new()` é usado para criar um objeto a partir do _UDT_ `point`.
+- A referência ao _UDT_ `point` da biblioteca é prefixada com o alias `pt` definido na declaração [import](https://br.tradingview.com/pine-script-reference/v5/#kw_import), assim como seria feito ao usar uma função de uma biblioteca importada.
+
+_UDTs_ usados em uma biblioteca __devem__ ser exportados se alguma de suas funções exportadas usar um parâmetro ou retornar um resultado desse tipo definido pelo usuário.
+
+Quando uma biblioteca usa um _UDT_ apenas internamente, não é necessário exportá-lo. A biblioteca a seguir usa o _UDT_ `point` internamente, mas apenas sua função `drawPivots()` é exportada, que não usa um parâmetro nem retorna um resultado do tipo `point`:
+
+```c
+//@version=5
+library("PivotLabels", true)
+
+// We use this `point` UDT in the library, but it does NOT require exporting because:
+//   1. The exported function's parameters do not use the UDT.
+//   2. The exported function does not return a UDT result.
+type point
+    int x
+    float y
+    bool isHi
+    bool wasBreached = false
+
+
+fillPivotsArray(qtyLabels, leftLegs, rightLegs) =>
+    // Create an array of the specified qty of pivots to maintain.
+    var pivotsArray = array.new<point>(math.max(qtyLabels, 0))
+
+    // Detect pivots.
+    float pivotHi = ta.pivothigh(leftLegs, rightLegs)
+    float pivotLo = ta.pivotlow(leftLegs, rightLegs)
+
+    // Create a new `point` object when a pivot is found.
+    point foundPoint = switch
+        pivotHi => point.new(time[rightLegs], pivotHi, true)
+        pivotLo => point.new(time[rightLegs], pivotLo, false)
+        => na
+
+    // Add new pivot info to the array and remove the oldest pivot.
+    if not na(foundPoint)
+        array.push(pivotsArray, foundPoint)
+        array.shift(pivotsArray)
+
+    array<point> result = pivotsArray
+
+
+detectBreaches(pivotsArray) =>
+    // Detect breaches.
+    for [i, eachPoint] in pivotsArray
+        if not na(eachPoint)
+            if not eachPoint.wasBreached
+                bool hiWasBreached =     eachPoint.isHi and high[1] <= eachPoint.y and high > eachPoint.y
+                bool loWasBreached = not eachPoint.isHi and low[1]  >= eachPoint.y and low  < eachPoint.y
+                if hiWasBreached or loWasBreached
+                    // This pivot was breached; change its `wasBreached` field.
+                    point p = array.get(pivotsArray, i)
+                    p.wasBreached := true
+                    array.set(pivotsArray, i, p)
+
+
+drawLabels(pivotsArray) =>
+    for eachPoint in pivotsArray
+        if not na(eachPoint)
+            label.new(
+              eachPoint.x,
+              eachPoint.y,
+              str.tostring(eachPoint.y, format.mintick),
+              xloc.bar_time,
+              color = eachPoint.wasBreached ? color.gray : eachPoint.isHi ? color.teal : color.red,
+              style = eachPoint.isHi ? label.style_label_down: label.style_label_up,
+              textcolor = eachPoint.wasBreached ? color.silver : color.white)
+
+
+// @function        Displays a label for each of the last `qtyLabels` pivots.
+//                  Colors high pivots in green, low pivots in red, and breached pivots in gray.
+// @param qtyLabels (simple int) Quantity of last labels to display.
+// @param leftLegs  (simple int) Left pivot legs.
+// @param rightLegs (simple int) Right pivot legs.
+// @returns         Nothing.
+export drawPivots(int qtyLabels, int leftLegs, int rightLegs) =>
+    // Gather pivots as they occur.
+    pointsArray = fillPivotsArray(qtyLabels, leftLegs, rightLegs)
+
+    // Mark breached pivots.
+    detectBreaches(pointsArray)
+
+    // Draw labels once.
+    if barstate.islastconfirmedhistory
+        drawLabels(pointsArray)
+
+
+// Example use of the function.
+drawPivots(20, 10, 5)
+```
+
+Se o usuário do TradingView publicasse a biblioteca acima, ela poderia ser usada assim:
+
+```c
+//@version=5
+indicator("")
+import TradingView/PivotLabels/1 as dpl
+dpl.drawPivots(20, 10, 10)
+```

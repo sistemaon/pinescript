@@ -33,3 +33,7 @@ matrix.eigenvectors() tá referenciando o link (https://www.tradingview.com/pine
 
 In INPUTS > INPUT FUNCTIONS = An input*.() call being just another function call in Pine Script™, its result can be combined with [arithmetic], _comparison_, [logical] or [ternary] operators to form an expression to be assigned to the variable.
 O "_comparison_" não está sendo referenciado pela página específica sobre comparison em "./04_05_operadores.md#operadores-de-comparação", exemplo [comparison](./v5/04_05_operadores.md#operadores-de-comparação)
+
+In LIBRARIES > QUALIFIED TYPE CONTROL = One can also use the [series](https://www.tradingview.com/pine-script-reference/v5/#type_simple) keyword to prefix the type of a library function parameter. However, because arguments are qualified as "series" by default, using the [series](https://www.tradingview.com/pine-script-reference/v5/#type_simple) modifier is redundant.
+Os dois series que estão referenciando o link externo, deveria ser sobre o type series, este [link](https://www.tradingview.com/pine-script-reference/v5/#type_series).
+ 
