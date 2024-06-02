@@ -244,3 +244,25 @@ indicator("")
 import TradingView/PivotLabels/1 as dpl
 dpl.drawPivots(20, 10, 10)
 ```
+
+
+# Publicando uma Biblioteca
+
+Antes que você ou outros programadores de Pine Script possam reutilizar qualquer biblioteca, ela deve ser publicada. Se desejar compartilhar sua biblioteca com todos os usuários do TradingView, publique-a publicamente. Para usá-la de forma privada, use uma publicação privada. Assim como em indicadores ou estratégias, o gráfico ativo quando você publica uma biblioteca aparecerá tanto em seu widget (o pequeno marcador que denota bibliotecas no fluxo de scripts do TradingView) quanto na página do script (a página que os usuários veem quando clicam no widget).
+
+Bibliotecas privadas podem ser usadas em scripts públicos protegidos ("_Protected_") ou somente com convite ("_Invite-only_").
+
+Após adicionar a biblioteca de exemplo ao gráfico e configurar um gráfico limpo mostrando os plots da biblioteca da maneira desejada, use o botão "Publish Script" ("_Publicar Script_") do Pine Editor. A janela "Publish Library" ("_Publicar Biblioteca_") aparecerá:
+
+![Publicando uma biblioteca](./imgs/Libraries-CreatingALibrary-PublishWindow.png)
+
+__Note que:__
+
+- O título da biblioteca é deixado como está (o argumento `title` na declaração [library()](https://br.tradingview.com/pine-script-reference/v5/#fun_library) é usado como padrão). Embora seja possível alterar o título da publicação, é preferível manter seu valor padrão porque o argumento `title` é usado para referenciar bibliotecas importadas na declaração [import](https://br.tradingview.com/pine-script-reference/v5/#kw_import). Isso facilita a vida dos usuários da biblioteca quando o título da publicação corresponde ao nome real da biblioteca.
+- Uma descrição padrão é construída a partir das [anotações do compilador](./04_03_estrutura_do_script.md#anotações-do-compilador) usadas na biblioteca. A biblioteca será publicada sem retocá-la.
+- Foi escolhida a publicação da biblioteca de forma pública, para que seja visível para todos os usuários do TradingView.
+- Não é possível selecionar um tipo de visibilidade diferente de "_Open_" ("_Aberto_") porque bibliotecas são sempre de código aberto.
+- A lista de categorias para bibliotecas é diferente das categorias para indicadores e estratégias. Foi selecionada a categoria "_Statistics and Metrics_" ("_Estatísticas e Métricas_").
+- Foram adicionadas algumas tags personalizadas: "all-time", "high" e "low".
+
+Como os usuários pretendidos de bibliotecas públicas são outros programadores de Pine, quanto melhor você explicar e documentar as funções da biblioteca, maiores serão as chances de outros usá-las. Fornecer exemplos demonstrando como usar as funções da biblioteca no código da publicação também ajudará.
