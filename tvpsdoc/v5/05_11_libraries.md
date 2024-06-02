@@ -84,3 +84,32 @@ Estas são as restrições impostas às funções de biblioteca:
 - Chamadas `plot*()`, `fill()` e `bgcolor()` não são permitidas.
 
 As funções de biblioteca sempre retornam um resultado qualificado como "simple" ou "series". Elas não podem ser usadas onde são necessários valores qualificados como "const" ou "input", como é o caso de algumas funções embutidas. Por exemplo, uma função de biblioteca não pode ser usada para calcular um argumento para o parâmetro `show_last` em uma chamada [plot()](https://br.tradingview.com/pine-script-reference/v5/#fun_plot) porque ele requer um valor "input int".
+
+## Controle de Tipo Qualificado
+
+Os tipos qualificados de argumentos fornecidos em chamadas para funções de biblioteca são autodetectados com base em como cada argumento é usado dentro da função. Se o argumento pode ser usado como "series", então é qualificado como tal. Se não puder, uma tentativa é feita com o qualificador de tipo "simple". Isso explica por que este código:
+
+```c
+export myEma(int x) =>
+    ta.ema(close, x)
+```
+
+Funcionará quando chamado usando `myCustomLibrary.myEma(20)`, mesmo que o parâmetro `length` de [ta.ema()](https://br.tradingview.com/pine-script-reference/v5/#fun_ta{dot}ema) exija um argumento "simple int". Quando o compilador Pine Script detecta que um comprimento "series" não pode ser usado com [ta.ema()](https://br.tradingview.com/pine-script-reference/v5/#fun_ta{dot}ema), ele tenta o qualificador "simple", que neste caso é permitido.
+
+Embora funções de biblioteca não possam retornar valores "const" ou "input", elas podem ser escritas para produzir resultados "simple". Isso as torna úteis em mais contextos do que funções que retornam resultados "series", já que algumas funções embutidas não permitem argumentos "series". Por exemplo, [request.security()](https://br.tradingview.com/pine-script-reference/v5/#fun_request{dot}security) requer uma "simple string" para seu parâmetro `symbol`. Se uma função de biblioteca fosse escrita para montar o argumento para `symbol` da seguinte maneira, o resultado da função não funcionaria porque é do tipo qualificado "series string":
+
+```c
+export makeTickerid(string prefix, string ticker) =>
+    prefix + ":" + ticker
+```
+
+No entanto, restringindo os qualificadores de parâmetro para "simple", é possível forçar a função a produzir um resultado "simple". Isso pode ser alcançado prefixando o tipo dos parâmetros com a palavra-chave [simple](https://br.tradingview.com/pine-script-reference/v5/#type_simple):
+
+```c
+export makeTickerid(simple string prefix, simple string ticker) =>
+    prefix + ":" + ticker
+```
+
+Observe que para a função retornar um valor "simple", nenhum valor "series" pode ser usado em seu cálculo; caso contrário, o resultado será um valor "series".
+
+Também é possível usar a palavra-chave [series](https://br.tradingview.com/pine-script-reference/v5/#type_simple) para prefixar o tipo de um parâmetro de função de biblioteca. No entanto, como os argumentos são qualificados como "series" por padrão, usar o modificador [series](https://br.tradingview.com/pine-script-reference/v5/#type_simple) é redundante.
