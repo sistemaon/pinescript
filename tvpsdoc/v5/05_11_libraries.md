@@ -252,7 +252,7 @@ Antes que você ou outros programadores de Pine Script possam reutilizar qualque
 
 Bibliotecas privadas podem ser usadas em scripts públicos protegidos ("_Protected_") ou somente com convite ("_Invite-only_").
 
-Após adicionar a biblioteca de exemplo ao gráfico e configurar um gráfico limpo mostrando os plots da biblioteca da maneira desejada, use o botão "Publish Script" ("_Publicar Script_") do Pine Editor. A janela "Publish Library" ("_Publicar Biblioteca_") aparecerá:
+Após adicionar a biblioteca de exemplo ao gráfico e configurar um gráfico limpo mostrando os plots da biblioteca da maneira desejada, use o botão "_Publish Script_" ("_Publicar Script_") do Pine Editor. A janela "_Publish Library_" ("_Publicar Biblioteca_") aparecerá:
 
 ![Publicando uma biblioteca](./imgs/Libraries-CreatingALibrary-PublishWindow.png)
 
@@ -266,3 +266,9 @@ __Note que:__
 - Foram adicionadas algumas tags personalizadas: "all-time", "high" e "low".
 
 Como os usuários pretendidos de bibliotecas públicas são outros programadores de Pine, quanto melhor você explicar e documentar as funções da biblioteca, maiores serão as chances de outros usá-las. Fornecer exemplos demonstrando como usar as funções da biblioteca no código da publicação também ajudará.
+
+## Regras da Casa
+
+As bibliotecas Pine são consideradas código de "_public domain_" ("_domínio público_") nas nossas [Regras da Casa sobre Publicação de Scripts](https://br.tradingview.com/support/solutions/43000590599), o que significa que não é necessário permissão do autor se chamar suas funções ou reutilizar seu código em seus scripts de código aberto. No entanto, se for pretendido reutilizar o código das funções de uma biblioteca Pine Script em uma publicação pública protegida ou somente com convite, é necessária permissão explícita do autor para reutilização dessa forma.
+
+Quer esteja usando funções de uma biblioteca ou reutilizando seu código, é necessário creditar o autor na descrição da sua publicação. Também é uma boa prática creditar em comentários de código aberto.
