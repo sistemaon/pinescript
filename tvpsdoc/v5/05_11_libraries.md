@@ -272,3 +272,46 @@ Como os usuários pretendidos de bibliotecas públicas são outros programadores
 As bibliotecas Pine são consideradas código de "_public domain_" ("_domínio público_") nas nossas [Regras da Casa sobre Publicação de Scripts](https://br.tradingview.com/support/solutions/43000590599), o que significa que não é necessário permissão do autor se chamar suas funções ou reutilizar seu código em seus scripts de código aberto. No entanto, se for pretendido reutilizar o código das funções de uma biblioteca Pine Script em uma publicação pública protegida ou somente com convite, é necessária permissão explícita do autor para reutilização dessa forma.
 
 Quer esteja usando funções de uma biblioteca ou reutilizando seu código, é necessário creditar o autor na descrição da sua publicação. Também é uma boa prática creditar em comentários de código aberto.
+
+
+# Usando uma Biblioteca
+
+Usar uma biblioteca de outro script (que pode ser um indicador, uma estratégia ou outra biblioteca) é feito através da declaração [import](https://br.tradingview.com/pine-script-reference/v5/#kw_import):
+
+```c
+import <username>/<libraryName>/<libraryVersion> [as <alias>]
+```
+
+onde:
+
+- O caminho `<username>/<libraryName>/<libraryVersion>` identificará exclusivamente a biblioteca.
+- O `<libraryVersion>` deve ser especificado explicitamente. Para garantir a confiabilidade dos scripts que utilizam bibliotecas, não há como usar automaticamente a versão mais recente de uma biblioteca. Toda vez que uma atualização de biblioteca é publicada por seu autor, o número da versão da biblioteca aumenta. Se for pretendido usar a versão mais recente da biblioteca, o valor `<libraryVersion>` precisará ser atualizado na declaração [import](https://br.tradingview.com/pine-script-reference/v5/#kw_import).
+- A parte `as <alias>` é opcional. Quando usada, define o namespace que se referirá às funções da biblioteca. Por exemplo, se uma biblioteca for importada usando o alias `allTime`, como no exemplo abaixo, será necessário referir-se às funções da biblioteca como `allTime.<function_name>()`. Quando nenhum alias é definido, o nome da biblioteca se torna seu namespace.
+
+Para usar a biblioteca publicada na seção anterior, nosso próximo script exigirá uma declaração [import](https://br.tradingview.com/pine-script-reference/v5/#kw_import):
+
+```c
+import PineCoders/AllTimeHighLow/1 as allTime
+```
+
+Ao digitar o nome de usuário do autor da biblioteca, é possível usar o comando "_Auto-complete_" ("_Auto-completar_") do Editor (__ctrl__ + __espaço__ / __cmd__ + __espaço__) para exibir um popup com seleções que correspondem às bibliotecas disponíveis:
+
+![Usando uma biblioteca](./imgs/Libraries-UsingALibrary-1.png)
+
+Este é um indicador que reutiliza a nossa biblioteca:
+
+```c
+//@version=5
+indicator("Using AllTimeHighLow library", "", true)
+import PineCoders/AllTimeHighLow/1 as allTime
+
+plot(allTime.hi())
+plot(allTime.lo())
+plot(allTime.hi(close))
+```
+
+__Note que:__
+
+- Foi escolhido usar o alias "allTime" para a instância da biblioteca no script. Ao digitar esse alias no Editor, um popup aparecerá para ajudar a selecionar a função específica que deseja usar da biblioteca.
+- As funções `hi()` e `lo()` da biblioteca são usadas sem um argumento, então as variáveis embutidas [high](https://br.tradingview.com/pine-script-reference/v5/#var_high) e [low](https://br.tradingview.com/pine-script-reference/v5/#var_low) serão usadas para suas séries, respectivamente.
+- Uma segunda chamada para `allTime.hi()` é usada, mas desta vez usando [close](https://br.tradingview.com/pine-script-reference/v5/#var_close) como argumento, para plotar o fechamento mais alto na história do gráfico.
