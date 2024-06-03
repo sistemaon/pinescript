@@ -162,7 +162,7 @@ plot(lowest, "Lowest source", color.red)
 Os _tipos_ do Pine Script classificam os valores e determinam as funções e operações com as quais eles são compatíveis. Isto incluem:
 
 - Os tipos fundamentais: [int](./04_09_tipagem_do_sistema.md#int), [float](./04_09_tipagem_do_sistema.md#float), [bool](./04_09_tipagem_do_sistema.md#bool), [color](./04_09_tipagem_do_sistema.md#color) e [string](./04_09_tipagem_do_sistema.md#string).
-- Os tipos especiais: [plot](./04_09_tipagem_do_sistema.md#plot-e-hline), [hline](./04_09_tipagem_do_sistema.md#plot-e-hline), [line](./04_09_tipagem_do_sistema.md#tipos-de-desenho), [linefill](./04_09_tipagem_do_sistema.md#tipos-de-desenho), [box](./04_09_tipagem_do_sistema.md#tipos-de-desenho), [polyline](./04_09_tipagem_do_sistema.md#tipos-de-desenho), [label](./04_09_tipagem_do_sistema.md#tipos-de-desenho), [table](./04_09_tipagem_do_sistema.md#tipos-de-desenho), [chart.point](./04_09_tipagem_do_sistema.md#pontos-do-gráfico), [array](./04_09_tipagem_do_sistema.md#coleções), [matrix](./04_09_tipagem_do_sistema.md#coleções) e [map](./04_09_tipagem_do_sistema.md#coleções).
+- Os tipos especiais: [plot](./04_09_tipagem_do_sistema.md#plot-e-hline), [hline](./04_09_tipagem_do_sistema.md#plot-e-hline), [line](./04_09_tipagem_do_sistema.md#tipos-de-desenho), [linefill](./04_09_tipagem_do_sistema.md#tipos-de-desenho), [box](./04_09_tipagem_do_sistema.md#tipos-de-desenho), [polyline](./04_09_tipagem_do_sistema.md#tipos-de-desenho), [label](./04_09_tipagem_do_sistema.md#tipos-de-desenho), [table](./04_09_tipagem_do_sistema.md#tipos-de-desenho), [chart.point](./04_09_tipagem_do_sistema.md#chart-points-pontos-do-gráfico), [array](./04_09_tipagem_do_sistema.md#coleções), [matrix](./04_09_tipagem_do_sistema.md#coleções) e [map](./04_09_tipagem_do_sistema.md#coleções).
 - [Tipos definidos pelo usuário](./04_09_tipagem_do_sistema.md#tipos-definidos-pelo-usuário) (_User-defined types (UDTs)_).
 - [vazio](./04_09_tipagem_do_sistema.md#void) (_void_).
 
@@ -358,7 +358,7 @@ string ohlcString = str.format("Open: {0}\nHigh: {1}\nLow: {2}\nClose: {3}", ope
 label.new(bar_index, high, ohlcString, textcolor = color.white)
 ```
 
-Para mais informações sobre exibir valores "string" a partir de um script veja [Texto e Formas](./000_text_and_shapes.md).
+Para mais informações sobre exibir valores "string" a partir de um script veja [Texto e Formas](./05_20_text_e_shapes.md).
 
 As variáveis internas como [syminfo.tickerid](https://br.tradingview.com/pine-script-reference/v5/#var_syminfo.tickerid), [syminfo.currency](https://br.tradingview.com/pine-script-reference/v5/#var_syminfo.currency) e [timeframe.period](https://br.tradingview.com/pine-script-reference/v5/#var_timeframe.period) retornam valores do tipo "string".
 
@@ -398,9 +398,9 @@ Cada tipo também possui um espaço de nomes que contém todos os construtores e
 
 Cada uma dessas funções retorna um _ID_ que é uma referência que identifica unicamente um objeto de desenho. Os IDs são sempre qualificados como "series", significando que seus tipos qualificados são "series line", "series label", etc. Os IDs de desenho agem como ponteiros, pois cada ID referencia uma instância específica de um desenho em todas as funções do espaço de nomes desse desenho. Por exemplo, o ID de uma linha retornado por uma chamada [line.new()](https://br.tradingview.com/pine-script-reference/v5/#fun_line.new) é usado posteriormente para se referir a esse objeto específico quando é hora de excluí-lo com [line.delete()](https://br.tradingview.com/pine-script-reference/v5/#fun_line.delete).
 
-## Pontos do Gráfico
+## Chart Points (_Pontos do Gráfico_)
 
-Pontos de gráfico são tipos especiais que representam coordenadas no gráfico. Os scripts usam as informações de objetos [chart.point](https://br.tradingview.com/pine-script-reference/v5/#type_chart.point) para determinar as localizações no gráfico de [lines](./05_12_lines_e_boxes.md#lines-linhas), [boxes](./05_12_lines_e_boxes.md#boxes-caixas), [polylines](./05_12_lines_e_boxes.md#polylines-polilinhas), e [labels](./000_text_and_shapes.md#labels).
+Pontos de gráfico são tipos especiais que representam coordenadas no gráfico. Os scripts usam as informações de objetos [chart.point](https://br.tradingview.com/pine-script-reference/v5/#type_chart.point) para determinar as localizações no gráfico de [lines](./05_12_lines_e_boxes.md#lines-linhas), [boxes](./05_12_lines_e_boxes.md#boxes-caixas), [polylines](./05_12_lines_e_boxes.md#polylines-polilinhas), e [labels](./05_20_text_e_shapes.md#labels).
 
 Objetos deste tipo contêm três _campos_: `time`, `index` e `price` (_tempo, índice e preço_). Se uma instância de desenho usa o campo `time` ou `price` de um [chart.point](https://br.tradingview.com/pine-script-reference/v5/#type_chart.point) como _coordenada-x_ depende da propriedade `xloc` do desenho.
 
@@ -478,7 +478,7 @@ A sintaxe para definir um tipo definido pelo usuário é:
 
 Onde:
 
-- `export` é a palavra-chave que um script de [biblioteca](https://br.tradingview.com/pine-script-reference/v5/#fun_library) usa para exportar o tipo definido pelo usuário. Para saber mais sobre a exportação de _UDTs_, veja [Bibliotecas](./000_library.md#tipos-e-objetos-definidos-pelo-usuário).
+- `export` é a palavra-chave que um script de [biblioteca](https://br.tradingview.com/pine-script-reference/v5/#fun_library) usa para exportar o tipo definido pelo usuário. Para saber mais sobre a exportação de _UDTs_, veja [Bibliotecas](./05_11_libraries.md#tipos-e-objetos-definidos-pelo-usuário).
 - `<UDT_identifier>` é o nome do tipo definido pelo usuário.
 - `<field_type>` é o tipo do campo.
 - `<field_name>` é o nome do campo.
@@ -625,7 +625,7 @@ Templates para [maps](./04_16_mapas.md) consistem em _dois_ tipos de identificad
 Os usuários podem construir templates de tipo a partir de:
 
 - Tipos fundamentais: [int](./04_09_tipagem_do_sistema.md#int), [float](./04_09_tipagem_do_sistema.md#float), [bool](./04_09_tipagem_do_sistema.md#bool), [color](./04_09_tipagem_do_sistema.md#color) e [string](./04_09_tipagem_do_sistema.md#string).
-- Os seguintes tipos especiais: [line](./04_09_tipagem_do_sistema.md#tipos-de-desenho), [linefill](./04_09_tipagem_do_sistema.md#tipos-de-desenho), [box](./04_09_tipagem_do_sistema.md#tipos-de-desenho), [polyline](./04_09_tipagem_do_sistema.md#tipos-de-desenho), [label](./04_09_tipagem_do_sistema.md#tipos-de-desenho), [table](./04_09_tipagem_do_sistema.md#tipos-de-desenho) e [chart.point](./04_09_tipagem_do_sistema.md#pontos-do-gráfico).
+- Os seguintes tipos especiais: [line](./04_09_tipagem_do_sistema.md#tipos-de-desenho), [linefill](./04_09_tipagem_do_sistema.md#tipos-de-desenho), [box](./04_09_tipagem_do_sistema.md#tipos-de-desenho), [polyline](./04_09_tipagem_do_sistema.md#tipos-de-desenho), [label](./04_09_tipagem_do_sistema.md#tipos-de-desenho), [table](./04_09_tipagem_do_sistema.md#tipos-de-desenho) e [chart.point](./04_09_tipagem_do_sistema.md#chart-points-pontos-do-gráfico).
 - [Tipos definidos pelo usuário (UDTs)](./04_09_tipagem_do_sistema.md#tipos-definidos-pelo-usuário).
 
 __Note que:__

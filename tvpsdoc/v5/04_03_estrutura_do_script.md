@@ -42,7 +42,7 @@ Cada tipo de script possui requisitos distintos:
 
 - Indicadores devem conter pelo menos uma chamada de função que produza a saída no gráfico (por exemplo, [plot()](https://br.tradingview.com/pine-script-reference/v5/#fun_plot), [plotshape()](https://br.tradingview.com/pine-script-reference/v5/#fun_plotshape), [barcolor()](https://br.tradingview.com/pine-script-reference/v5/#fun_barcolor), [line.new()](https://br.tradingview.com/pine-script-reference/v5/#fun_line{dot}new), etc.).
 - Estratégias devem conter pelo menos uma chamada de `strategy.*()`, por exemplo, [strategy.entry()](https://br.tradingview.com/pine-script-reference/v5/#fun_strategy{dot}entry).
-- Bibliotecas devem conter pelo menos uma [função](./000_library.md#funções-da-biblioteca) exportada ou um [tipo definido pelo usuário](./000_library.md#tipos-e-objetos-definidos-pelo-usuário.md).
+- Bibliotecas devem conter pelo menos uma [função](./05_11_libraries.md#funções-de-biblioteca) exportada ou um [tipo definido pelo usuário](./05_11_libraries.md#tipos-e-objetos-definidos-pelo-usuário).
 
 
 # Código
@@ -52,7 +52,7 @@ Linhas em um script que não são [comentários](./04_03_estrutura_do_script.md#
 - Declaração de variável.
 - Reatribuição de variável.
 - Declaração de função.
-- Chamada de função interna, chamada de [função definida pelo usuário](./04_11_funcoes_definida_pelo_usuario.md) ou chamada de [função de biblioteca](./000_library.md#usando-uma-biblioteca).
+- Chamada de função interna, chamada de [função definida pelo usuário](./04_11_funcoes_definida_pelo_usuario.md) ou chamada de [função de biblioteca](././05_11_libraries.md#usando-uma-biblioteca).
 - _Estrutura_ [if](https://br.tradingview.com/pine-script-reference/v5/#op_if), [for](https://br.tradingview.com/pine-script-reference/v5/#op_for), [while](https://br.tradingview.com/pine-script-reference/v5/#op_while), [switch](https://br.tradingview.com/pine-script-reference/v5/#op_switch) ou [type](https://br.tradingview.com/pine-script-reference/v5/#op_type).
 
 As instruções podem ser organizadas em várias maneiras:

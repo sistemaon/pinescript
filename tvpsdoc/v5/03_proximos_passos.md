@@ -62,7 +62,7 @@ Tendo feito o [Primeiro indicador](./02_primeiro_indicador.md), reproduze os exe
 Assim é como o [Manual do Usuário](https://www.tradingview.com/pine-script-docs/en/v5/index.html) do Pine Script v5 que está lendo encontra-se organizado:
 
 - A seção da [Linguagem](./04_linguagem.md) explica os principais componentes do Pine Script e como os scripts são executados.
-- A seção de [Conceitos](./000_concepts.md) é mais direcionada para tarefas. Explica como efetuar coisas no Pine Script.
+- A seção de [Conceitos](./05_conceitos.md) é mais direcionada para tarefas. Explica como efetuar coisas no Pine Script.
 - A seção da [Criação de Scripts](./000_writing.md) explora ferramentas e truques que ajudarão a programar e publicar scripts.
 - A seção de [Perguntas Frequentes](./000_faq.md) tira dúvidas das perguntas comuns dos desenvolvedores do Pine Script.
 - A página de [Mensagens de Erro](./000_error_messages.md) documenta as causas e soluções para os erros mais comuns de tempo de execução e compilador.
