@@ -12,7 +12,7 @@ Ao contrário dos [plots](./05_15_plots.md), a flexibilidade desses tipos os tor
 
 _Linhas_ desenhadas por um script podem ser verticais, horizontais ou anguladas. _Caixas_ são sempre retangulares. _Polilinhas_ conectam sequencialmente vários segmentos de linha verticais, horizontais, angulados ou curvos. Embora todos esses tipos de desenho tenham características diferentes, eles têm algumas coisas em comum:
 
-- [linhas](./05_12_lines_e_boxes.md#lines-linhas), [caixas](./05_12_lines_e_boxes.md#boxes-caixas) e [polilinhas](./05_12_lines_e_boxes.md#polylines-polilinhas) podem ter coordenadas em qualquer localização disponível no gráfico, incluindo aquelas em tempos futuros além da última barra do gráfico.
+- As [linhas](./05_12_lines_e_boxes.md#lines-linhas), [caixas](./05_12_lines_e_boxes.md#boxes-caixas) e [polilinhas](./05_12_lines_e_boxes.md#polylines-polilinhas) podem ter coordenadas em qualquer localização disponível no gráfico, incluindo aquelas em tempos futuros além da última barra do gráfico.
 - Objetos desses tipos podem usar instâncias de [chart.point](https://br.tradingview.com/pine-script-reference/v5/#type_chart.point) para definir suas coordenadas.
 - As _coordenadas-x_ de cada objeto podem ser valores de índice da barra ou valores de tempo (_time_), dependendo da propriedade `xloc` especificada.
 - Cada objeto pode ter um dos vários estilos de linha predefinidos.
@@ -22,7 +22,19 @@ _Linhas_ desenhadas por um script podem ser verticais, horizontais ou anguladas.
 > __Observação__\
 > Nos gráficos do TradingView, um conjunto completo de _Ferramentas de Desenho_ permite aos usuários criar e modificar desenhos usando ações do mouse. Embora às vezes possam se assemelhar a objetos de desenho criados com código Pine Script, são entidades __não relacionadas__. Scripts Pine não podem interagir com as _ferramentas de desenho_ da interface do usuário do gráfico, e ações do mouse não afetam diretamente os objetos de desenho Pine.
 
+
 # Lines (_Linhas_)
+
+As funções incorporadas no namespace `line.*` controlam a criação e gerenciamento de objetos de [line](https://br.tradingview.com/pine-script-reference/v5/#type_line):
+
+- A função [line.new()](https://br.tradingview.com/pine-script-reference/v5/#fun_line.new) cria uma nova _linha_.
+- As funções `line.set_*()` modificam as propriedades da _linha_.
+- As funções `line.get_*()` recuperam valores de uma instância de _linha_.
+- A função [line.copy()](https://br.tradingview.com/pine-script-reference/v5/#fun_line.copy) clona uma instância de _linha_.
+- A função [line.delete()](https://br.tradingview.com/pine-script-reference/v5/#fun_line.delete) exclui uma instância de _linha_ existente.
+- A variável [line.all](https://br.tradingview.com/pine-script-reference/v5/#var_line.all) referencia um [array](https://br.tradingview.com/pine-script-reference/v5/#type_array) somente leitura contendo os IDs de todas as linhas exibidas pelo script. O [tamanho](https://br.tradingview.com/pine-script-reference/v5/#fun_array.size) do array depende do `max_lines_count` da declaração [indicator()](https://br.tradingview.com/pine-script-reference/v5/#fun_indicator) ou [strategy()](https://br.tradingview.com/pine-script-reference/v5/#fun_strategy) e do número de linhas que o script desenhou.
+
+Scripts podem chamar as funções incorporadas `line.set_*()`, `line.get_*()`, [line.copy()](https://br.tradingview.com/pine-script-reference/v5/#fun_line.copy) e [line.delete()](https://br.tradingview.com/pine-script-reference/v5/#fun_line.delete) como funções ou [métodos](./04_13_metodos.md).
 
 # Boxes (_Caixas_)
 
