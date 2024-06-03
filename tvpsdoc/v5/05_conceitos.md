@@ -31,6 +31,10 @@
 
 ## 17 [Sessões](./05_17_sessoes.md)
 
+## 19 [Tables (_Tabelas_)](./05_19_tables.md)
+
+## 20 [Text e Shapes (_Texto e Formas_)](./05_20_text_e_shapes.md)
+
 ## 21 [Time](./05_21_time.md)
 
 ## 22 [Timeframe](./05_22_timeframe.md)

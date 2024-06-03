@@ -282,7 +282,7 @@ Usar uma biblioteca de outro script (que pode ser um indicador, uma estratégia 
 import <username>/<libraryName>/<libraryVersion> [as <alias>]
 ```
 
-onde:
+Onde:
 
 - O caminho `<username>/<libraryName>/<libraryVersion>` identificará exclusivamente a biblioteca.
 - O `<libraryVersion>` deve ser especificado explicitamente. Para garantir a confiabilidade dos scripts que utilizam bibliotecas, não há como usar automaticamente a versão mais recente de uma biblioteca. Toda vez que uma atualização de biblioteca é publicada por seu autor, o número da versão da biblioteca aumenta. Se for pretendido usar a versão mais recente da biblioteca, o valor `<libraryVersion>` precisará ser atualizado na declaração [import](https://br.tradingview.com/pine-script-reference/v5/#kw_import).
