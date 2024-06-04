@@ -60,7 +60,7 @@ Ambas as sobrecargas compartilham os mesmos parâmetros adicionais:
 
 - Ao chamar a segunda sobrecarga, um valor `xloc` de [xloc.bar_index](https://br.tradingview.com/pine-script-reference/v5/#var_xloc.bar_index) faz com que a função trate os argumentos `x1` e `x2` como valores deíndice de barra. Ao usar [xloc.bar_time](https://br.tradingview.com/pine-script-reference/v5/#var_xloc.bar_time), a função tratará `x1` e `x2` como valores de tempo.
 
-- Quando as _coordenadas-x_ especificadas representam valores de índice de barra, é importante notar que a coordenada x mínima permitida é `bar_index - 9999`. Para deslocamentos maiores, pode-se usar [xloc.bar_time](https://br.tradingview.com/pine-script-reference/v5/#var_xloc.bar_time).
+- Quando as _coordenadas-x_ especificadas representam valores de índice de barra, é importante notar que a _coordenada-x_ mínima permitida é `bar_index - 9999`. Para deslocamentos maiores, pode-se usar [xloc.bar_time](https://br.tradingview.com/pine-script-reference/v5/#var_xloc.bar_time).
 
 `extend`
 
@@ -230,6 +230,26 @@ Os usuários podem controlar o estilo dos desenhos de linha de seus scripts pass
 __Note que:__
 
 - _Polilinhas_ também podem usar qualquer uma dessas variáveis como seu valor `line_style`. Veja a seção [Criando _polilinhas_](./05_12_lines_e_boxes.md#criando-polilinhas) desta página.
+
+## Lendo Valores de _Linha_
+
+O namespace `line.*` inclui funções _getter_, que permitem a um script recuperar valores de um objeto [linha](https://br.tradingview.com/pine-script-reference/v5/#type_line) para uso posterior:
+
+- [line.get_x1()](https://br.tradingview.com/pine-script-reference/v5/#fun_line.get_x1) e [line.get_x2()](https://br.tradingview.com/pine-script-reference/v5/#fun_line.get_x2) obtêm, respectivamente, a primeira e a segunda _coordenada-x_ da linha `id`. Se o valor retornado representa um índice de barra ou um valor de tempo depende da propriedade `xloc` da linha.
+- [line.get_y1()](https://br.tradingview.com/pine-script-reference/v5/#fun_line.get_y1) e [line.get_y2()](https://br.tradingview.com/pine-script-reference/v5/#fun_line.get_y2) obtêm, respectivamente, a primeira e a segunda _coordenada-y_ da linha `id`.
+- [line.get_price()](https://br.tradingview.com/pine-script-reference/v5/#fun_line.get_price) recupera o preço (_coordenada-y_) de uma linha `id` em um valor `x` especificado, incluindo índices de barra fora dos pontos de início e fim da linha. Esta função é compatível apenas com linhas que usam [xloc.bar_index](https://br.tradingview.com/pine-script-reference/v5/#var_xloc.bar_index) como valor `xloc`.
+
+O script abaixo desenha uma nova linha no início de um padrão de preço [ascendente](https://br.tradingview.com/pine-script-reference/v5/#fun_ta.rising) ou [descendente](https://br.tradingview.com/pine-script-reference/v5/#fun_ta.falling) formado ao longo de `length` barras. Ele usa a palavra-chave [var](https://br.tradingview.com/pine-script-reference/v5/#kw_var) para declarar a variável `directionLine` na primeira barra do gráfico. O ID atribuído a `directionLine` persiste nas barras subsequentes até que a condição `newDirection` ocorra, caso em que o script atribui uma nova linha à variável.
+
+Em cada barra, o script chama os _getters_ [line.get_y2()](https://br.tradingview.com/pine-script-reference/v5/#fun_line.get_y2), [line.get_y1()](https://br.tradingview.com/pine-script-reference/v5/#fun_line.get_y1), [line.get_x2()](https://br.tradingview.com/pine-script-reference/v5/#fun_line.get_x2) e [line.get_x1()](https://br.tradingview.com/pine-script-reference/v5/#fun_line.get_x1) como [métodos](./04_13_metodos.md) para recuperar valores da `directionLine` atual e calcular seu `slope`, que é usada para determinar a cor de cada desenho e plot. Ele recupera valores estendidos da `directionLine` _além_ de seu segundo ponto usando [line.get_price()](https://br.tradingview.com/pine-script-reference/v5/#fun_line.get_price) e os [plota](./05_15_plots.md) no gráfico:
+
+![Lendo valores de linha](./imgs/Lines-and-boxes-Lines-Reading-line-values-1.png)
+
+__Note que:__
+
+- Este exemplo chama a segunda sobrecarga da função [line.new()](https://br.tradingview.com/pine-script-reference/v5/#fun_line.new), que usa os parâmetros `x1`, `y1`, `x2` e `y2` para definir os pontos de início e fim da linha. O valor `x1` está `length` barras atrás do [bar_index](https://br.tradingview.com/pine-script-reference/v5/#var_bar_index) atual, e o valor `y1` é o valor [hlc3](https://br.tradingview.com/pine-script-reference/v5/#var_hlc3) nesse índice. Os `x2` e `y2` na chamada da função usam o [bar_index](https://br.tradingview.com/pine-script-reference/v5/#var_bar_index) e os valores [hlc3](https://br.tradingview.com/pine-script-reference/v5/#var_hlc3) da barra atual.
+- A chamada da função [line.get_price()](https://br.tradingview.com/pine-script-reference/v5/#fun_line.get_price) trata a `directionLine` como se ela se estendesse infinitamente, independentemente de sua propriedade `extend`.
+- O script exibe aproximadamente as últimas 50 linhas no gráfico, mas o [plot](https://br.tradingview.com/pine-script-reference/v5/#fun_plot) dos valores extrapolados se estende por toda a história do gráfico.
 
 
 # Boxes (_Caixas_)
