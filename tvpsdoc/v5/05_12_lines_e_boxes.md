@@ -65,15 +65,15 @@ Ambas as sobrecargas compartilham os mesmos parâmetros adicionais:
 `extend`
 
 - Determina se a _linha_ desenhada se estenderá infinitamente além de suas coordenadas de início e fim definidas. Aceita um dos seguintes valores: [extend.left](https://br.tradingview.com/pine-script-reference/v5/#var_extend.left), [extend.right](https://br.tradingview.com/pine-script-reference/v5/#var_extend.right), [extend.both](https://br.tradingview.com/pine-script-reference/v5/#var_extend.both) ou [extend.none](https://br.tradingview.com/pine-script-reference/v5/#var_extend.none) (padrão).
-    
+
 `color`
 
 - Especifica a cor da _linha_ desenhada. O padrão é [color.blue](https://br.tradingview.com/pine-script-reference/v5/#var_color.blue).
-    
+
 `style`
-    
+
 - Especifica o estilo da _linha_, que pode ser qualquer uma das opções listadas na seção [Estilos de Linha](./05_12_lines_e_boxes.md#line-styles-estilos-de-linha) desta página. O valor padrão é [line.style_solid](https://br.tradingview.com/pine-script-reference/v5/#var_line.style_solid).
-    
+
 `width`
 
 - Controla a largura da _linha_, em pixels. O valor padrão é 1.
@@ -147,8 +147,79 @@ __Note que:__
 - Foi incluído `max_lines_count = 500` na chamada da função [indicator()](https://br.tradingview.com/pine-script-reference/v5/#fun_indicator), o que significa que o script preserva até 500 _linhas_ no gráfico.
 - Cada chamada [line.new()](https://br.tradingview.com/pine-script-reference/v5/#fun_line.new) copia a informação do [chart.point](https://br.tradingview.com/pine-script-reference/v5/#type_chart.point) referenciado pelas variáveis `firstPoint` e `secondPoint`. Como tal, o script pode alterar o campo de `price` do `secondPoint` em cada iteração do [loop](./04_08_loops.md) sem afetar as _coordenadas-y_ em outras _linhas_.
 
+## Modificando Linhas
 
+O namespace `line.*` contém várias funções _setter_ que modificam as propriedades das instâncias de [linha](https://br.tradingview.com/pine-script-reference/v5/#type_line):
 
+- [line.set_first_point()](https://br.tradingview.com/pine-script-reference/v5/#fun_line.set_first_point) e [line.set_second_point()](https://br.tradingview.com/pine-script-reference/v5/#fun_line.set_second_point) atualizam, respectivamente, os pontos de início e fim da linha `id` usando informações do `point` especificado.
+- [line.set_x1()](https://br.tradingview.com/pine-script-reference/v5/#fun_line.set_x1) e [line.set_x2()](https://br.tradingview.com/pine-script-reference/v5/#fun_line.set_x2) definem uma das _coordenadas-x_ da linha `id` para um novo valor `x`, que pode representar um índice de barra ou valor de tempo, dependendo da propriedade `xloc` da linha.
+- [line.set_y1()](https://br.tradingview.com/pine-script-reference/v5/#fun_line.set_y1) e [line.set_y2()](https://br.tradingview.com/pine-script-reference/v5/#fun_line.set_y2) definem uma das _coordenadas-y_ da linha `id` para um novo valor `y`.
+- [line.set_xy1()](https://br.tradingview.com/pine-script-reference/v5/#fun_line.set_xy1) e [line.set_xy2()](https://br.tradingview.com/pine-script-reference/v5/#fun_line.set_xy2) atualizam um dos pontos da linha `id` com novos valores `x` e `y`.
+- [line.set_xloc()](https://br.tradingview.com/pine-script-reference/v5/#fun_line.set_xloc) define o `xloc` da linha `id` e atualiza ambas as _coordenadas-x_ com novos valores `x1` e `x2`.
+- [line.set_extend()](https://br.tradingview.com/pine-script-reference/v5/#fun_line.set_extend) define a propriedade `extend` da linha `id`.
+- [line.set_color()](https://br.tradingview.com/pine-script-reference/v5/#fun_line.set_color) atualiza o valor `color` da linha `id`.
+- [line.set_style()](https://br.tradingview.com/pine-script-reference/v5/#fun_line.set_style) altera o `style` da linha `id`.
+- [line.set_width()](https://br.tradingview.com/pine-script-reference/v5/#fun_line.set_width) define `width` da linha `id`.
+
+Todas as funções _setter_ modificam diretamente a linha `id` passada na chamada e não retornam valor algum. Cada função _setter_ aceita argumentos "series", pois um script pode alterar as propriedades de uma linha durante sua execução.
+
+O exemplo a seguir desenha linhas conectando o preço de abertura do `timeframe` ao seu preço de fechamento. O script usa a palavra-chave [var](https://br.tradingview.com/pine-script-reference/v5/#kw_var) para declarar `periodLine` e as variáveis que referenciam valores [chart.point](https://br.tradingview.com/pine-script-reference/v5/#type_chart.point) (`openPoint` e `closePoint`) apenas na _primeira_ barra do gráfico, e atribui novos valores a essas variáveis durante sua execução. Após detectar uma [mudança](https://br.tradingview.com/pine-script-reference/v5/#fun_timeframe.change) no `timeframe`, define `color` da `periodLine` existente usando [line.set_color()](https://br.tradingview.com/pine-script-reference/v5/#fun_line.set_color), cria novos valores para `openPoint` e `closePoint` usando [chart.point.now()](https://br.tradingview.com/pine-script-reference/v5/#fun_chart.point.now), e em seguida, atribui uma [nova linha](https://br.tradingview.com/pine-script-reference/v5/#fun_line.new) usando esses pontos para `periodLine`.
+
+Em outras barras onde o valor de `periodLine` não é [na](https://br.tradingview.com/pine-script-reference/v5/#var_na), o script atribui um novo [chart.point](https://br.tradingview.com/pine-script-reference/v5/#type_chart.point) ao `closePoint`, e então usa [line.set_second_point()](https://br.tradingview.com/pine-script-reference/v5/#fun_line.set_second_point) e [line.set_color()](https://br.tradingview.com/pine-script-reference/v5/#fun_line.set_color) como [métodos](./04_13_metodos.md) para atualizar as propriedades da linha:
+
+![Modificando linhas](./imgs/Lines-and-boxes-Lines-Modifying-lines-1.png)
+
+```c
+//@version=5
+indicator("Modifying lines demo", overlay = true)
+
+//@variable The size of each period.
+string timeframe = input.timeframe("D", "Timeframe")
+
+//@variable A line connecting the period's opening and closing prices.
+var line periodLine = na
+
+//@variable The first point of the line. Contains `time` and `index` information.
+var chart.point openPoint = chart.point.now(open)
+//@variable The closing point of the line. Contains `time` and `index` information.
+var chart.point closePoint = chart.point.now(close)
+
+if timeframe.change(timeframe)
+    //@variable The final color of the `periodLine`.
+    color finalColor = switch
+        closePoint.price > openPoint.price => color.green
+        closePoint.price < openPoint.price => color.red
+        =>                                    color.gray
+
+    // Update the color of the current `periodLine` to the `finalColor`.
+    line.set_color(periodLine, finalColor)
+
+    // Assign new points to the `openPoint` and `closePoint`.
+    openPoint  := chart.point.now(open)
+    closePoint := chart.point.now(close)
+    // Assign a new line to the `periodLine`. Uses `time` fields from the `openPoint` and `closePoint` as x-coordinates.
+    periodLine := line.new(openPoint, closePoint, xloc.bar_time, style = line.style_arrow_right, width = 3)
+
+else if not na(periodLine)
+    // Assign a new point to the `closePoint`.
+    closePoint := chart.point.now(close)
+
+    //@variable The color of the developing `periodLine`.
+    color developingColor = switch
+        closePoint.price > openPoint.price => color.aqua
+        closePoint.price < openPoint.price => color.fuchsia
+        =>                                    color.gray
+
+    // Update the coordinates of the line's second point using the new `closePoint`.
+    // It uses the `time` field from the point for its new x-coordinate.
+    periodLine.set_second_point(closePoint)
+    // Update the color of the line using the `developingColor`.
+    periodLine.set_color(developingColor)
+```
+
+__Note que:__
+
+Cada desenho de linha neste exemplo usa o estilo [line.style_arrow_right](https://br.tradingview.com/pine-script-reference/v5/#var_line.style_arrow_right). Veja a seção [Estilos de Linha](./05_12_lines_e_boxes.md#line-styles-estilos-de-linha) abaixo para uma visão geral de todas as configurações de estilo disponíveis.
 
 
 ## Line Styles (_Estilos de Linha_)
