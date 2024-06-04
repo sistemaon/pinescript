@@ -221,11 +221,20 @@ __Note que:__
 
 - Cada desenho de linha neste exemplo usa o estilo [line.style_arrow_right](https://br.tradingview.com/pine-script-reference/v5/#var_line.style_arrow_right). Veja a seção [Estilos de Linha](./05_12_lines_e_boxes.md#line-styles-estilos-de-linha) abaixo para uma visão geral de todas as configurações de estilo disponíveis.
 
-
 ## Line Styles (_Estilos de Linha_)
+
+Os usuários podem controlar o estilo dos desenhos de linha de seus scripts passando uma das seguintes variáveis como argumento `style` nas chamadas das funções [line.new()](https://br.tradingview.com/pine-script-reference/v5/#fun_line.new) ou [line.set_style()](https://br.tradingview.com/pine-script-reference/v5/#fun_line.set_style):
+
+![Estilos de linha](./imgs/line_styles.png)
+
+__Note que:__
+
+- _Polilinhas_ também podem usar qualquer uma dessas variáveis como seu valor `line_style`. Veja a seção [Criando _polilinhas_](./05_12_lines_e_boxes.md#criando-polilinhas) desta página.
 
 
 # Boxes (_Caixas_)
 
 
 # Polylines (_Polilinhas_)
+
+## Criando _Polilinhas_
