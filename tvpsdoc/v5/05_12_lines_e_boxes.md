@@ -219,7 +219,7 @@ else if not na(periodLine)
 
 __Note que:__
 
-Cada desenho de linha neste exemplo usa o estilo [line.style_arrow_right](https://br.tradingview.com/pine-script-reference/v5/#var_line.style_arrow_right). Veja a seção [Estilos de Linha](./05_12_lines_e_boxes.md#line-styles-estilos-de-linha) abaixo para uma visão geral de todas as configurações de estilo disponíveis.
+- Cada desenho de linha neste exemplo usa o estilo [line.style_arrow_right](https://br.tradingview.com/pine-script-reference/v5/#var_line.style_arrow_right). Veja a seção [Estilos de Linha](./05_12_lines_e_boxes.md#line-styles-estilos-de-linha) abaixo para uma visão geral de todas as configurações de estilo disponíveis.
 
 
 ## Line Styles (_Estilos de Linha_)
