@@ -290,9 +290,63 @@ line.set_second_point(copiedLine, chart.point.now(close))
 
 __Note que:__
 
-- O campo `index` do `secondPoint` está `length` barras além do [bar_index](https://br.tradingview.com/pine-script-reference/v5/#var_bar_index) atual. Como a _coordenada-x_ máxima permitida com [xloc.bar_index](https://br.tradingview.com/pine-script-reference/v5/#var_xloc.bar_index) é `bar_index + 500`, o valor máximo (`maxval`) da entrada `length` foi definido para 500.
+- O campo `index` do `secondPoint` está `length` barras além do [bar_index](https://br.tradingview.com/pine-script-reference/v5/#var_bar_index) atual. Como a _coordenada-x_ máxima permitida com [xloc.bar_index](https://br.tradingview.com/pine-script-reference/v5/#var_xloc.bar_index) é `bar_index + 500`, o _valor máximo_ `maxval` da entrada `length` foi definido para 500.
 
+## Excluindo _Linhas_
 
+Para excluir um `id` de linha desenhado por um script, use a função [line.delete()](https://br.tradingview.com/pine-script-reference/v5/#fun_line.delete). Esta função remove a instância da linha do script e seu desenho no gráfico.
+
+Excluir instâncias de linha é útil quando se deseja manter apenas um número específico de linhas no gráfico a qualquer momento ou remover condicionalmente desenhos à medida que o gráfico avança.
+
+Por exemplo, este script desenha uma linha horizontal com a propriedade [extend.right](https://br.tradingview.com/pine-script-reference/v5/#var_extend.right) sempre que o [RSI](https://br.tradingview.com/pine-script-reference/v5/#fun_ta.rsi) cruza sua [EMA](https://br.tradingview.com/pine-script-reference/v5/#fun_ta.ema).
+
+O script armazena todos os IDs de linha em um array `lines` que ele [usa como uma fila](./04_14_arrays.md#utilizando-um-array-como-uma-fila) para exibir apenas o último número de linhas `numberOfLines` no gráfico. Quando o [tamanho](https://br.tradingview.com/pine-script-reference/v5/#fun_array.size) do [array](https://br.tradingview.com/pine-script-reference/v5/#type_array) excede o número especificado de `numberOfLines`, o script remove o ID da linha mais antiga do array usando [array.shift()](https://br.tradingview.com/pine-script-reference/v5/#fun_array.shift) e o exclui com [line.delete()](https://br.tradingview.com/pine-script-reference/v5/#fun_line.delete):
+
+![Excluindo linhas](./imgs/Lines-and-boxes-Lines-Deleting-lines-1.png)
+
+```c
+//@version=5
+
+//@variable The maximum number of lines allowed on the chart.
+const int MAX_LINES_COUNT = 500
+
+indicator("Deleting lines demo", "RSI cross levels", max_lines_count = MAX_LINES_COUNT)
+
+//@variable The length of the RSI.
+int rsiLength = input.int(14, "RSI length", 2)
+//@variable The length of the RSI's EMA.
+int emaLength = input.int(28, "RSI average length", 2)
+//@variable The maximum number of lines to keep on the chart.
+int numberOfLines = input.int(20, "Lines on the chart", 0, MAX_LINES_COUNT)
+
+//@variable An array containing the IDs of lines on the chart.
+var array<line> lines = array.new<line>()
+
+//@variable An `rsiLength` RSI of `close`.
+float rsi = ta.rsi(close, rsiLength)
+//@variable A `maLength` EMA of the `rsi`.
+float rsiMA = ta.ema(rsi, emaLength)
+
+if ta.cross(rsi, rsiMA)
+    //@variable The color of the horizontal line.
+    color lineColor = rsi > rsiMA ? color.green : color.red
+    // Draw a new horizontal line. Uses the default `xloc.bar_index`.
+    newLine = line.new(bar_index, rsiMA, bar_index + 1, rsiMA, extend = extend.right, color = lineColor, width = 2)
+    // Push the `newLine` into the `lines` array.
+    lines.push(newLine)
+    // Delete the oldest line when the size of the array exceeds the specified `numberOfLines`.
+    if array.size(lines) > numberOfLines
+        line.delete(lines.shift())
+
+// Plot the `rsi` and `rsiMA`.
+plot(rsi, "RSI", color.new(color.blue, 40))
+plot(rsiMA, "EMA of RSI", color.new(color.gray, 30))
+```
+
+__Note que:__
+
+- Foi declarada uma variável `MAX_LINES_COUNT` com o _tipo qualificado_ "const int", que o script usa como `max_lines_count` na função [indicator()](https://br.tradingview.com/pine-script-reference/v5/#fun_indicator) e como `maxval` da [input.int()](https://br.tradingview.com/pine-script-reference/v5/#fun_input.int) atribuída à variável `numberOfLines`.
+- Este exemplo usa a segunda sobrecarga da função [line.new()](https://br.tradingview.com/pine-script-reference/v5/#fun_line.new), que especifica as coordenadas `x1`, `y1`, `x2` e `y2` independentemente.
 
 
 # Boxes (_Caixas_)
