@@ -147,7 +147,7 @@ __Note que:__
 - Foi incluído `max_lines_count = 500` na chamada da função [indicator()](https://br.tradingview.com/pine-script-reference/v5/#fun_indicator), o que significa que o script preserva até 500 _linhas_ no gráfico.
 - Cada chamada [line.new()](https://br.tradingview.com/pine-script-reference/v5/#fun_line.new) copia a informação do [chart.point](https://br.tradingview.com/pine-script-reference/v5/#type_chart.point) referenciado pelas variáveis `firstPoint` e `secondPoint`. Como tal, o script pode alterar o campo de `price` do `secondPoint` em cada iteração do [loop](./04_08_loops.md) sem afetar as _coordenadas-y_ em outras _linhas_.
 
-## Modificando Linhas
+## Modificando _Linhas_
 
 O namespace `line.*` contém várias funções _setter_ que modificam as propriedades das instâncias de [linha](https://br.tradingview.com/pine-script-reference/v5/#type_line):
 
@@ -347,6 +347,54 @@ __Note que:__
 
 - Foi declarada uma variável `MAX_LINES_COUNT` com o _tipo qualificado_ "const int", que o script usa como `max_lines_count` na função [indicator()](https://br.tradingview.com/pine-script-reference/v5/#fun_indicator) e como `maxval` da [input.int()](https://br.tradingview.com/pine-script-reference/v5/#fun_input.int) atribuída à variável `numberOfLines`.
 - Este exemplo usa a segunda sobrecarga da função [line.new()](https://br.tradingview.com/pine-script-reference/v5/#fun_line.new), que especifica as coordenadas `x1`, `y1`, `x2` e `y2` independentemente.
+
+## Preenchendo o Espaço entre _Linhas_
+
+Scripts podem _preencher_ o espaço entre dois desenhos de [linha](https://br.tradingview.com/pine-script-reference/v5/#type_line) criando um objeto [linefill](https://br.tradingview.com/pine-script-reference/v5/#type_linefill) que os referencia com a função [linefill.new()](https://br.tradingview.com/pine-script-reference/v5/#fun_linefill.new). _Linefills_ determinam automaticamente seus limites de preenchimento usando as propriedades dos IDs `line1` e `line2` que referenciam.
+
+Por exemplo, este script calcula um canal de regressão linear simples. Na primeira barra do gráfico, o script declara as variáveis `basisLine`, `upperLine` e `lowerLine` para referenciar os IDs da [linha](https://br.tradingview.com/pine-script-reference/v5/#type_line) do canal, e então faz duas chamadas [linefill.new()](https://br.tradingview.com/pine-script-reference/v5/#fun_linefill.new) para criar objetos [linefill](https://br.tradingview.com/pine-script-reference/v5/#type_linefill) que preenchem as porções superior e inferior do canal. O primeiro [linefill](https://br.tradingview.com/pine-script-reference/v5/#type_linefill) preenche o espaço entre a `basisLine` e a `upperLine`, e o segundo preenche o espaço entre a `basisLine` e a `lowerLine`.
+
+O script atualiza as coordenadas das linhas nas barras subsequentes. No entanto, observe que o script nunca precisa atualizar os _linefills_ declarados na primeira barra. Eles atualizam automaticamente suas regiões de preenchimento com base nas coordenadas das linhas atribuídas:
+
+![Preenchendo o espaço entre linhas](./imgs/Lines-and-boxes-Filling-the-space-between-lines-1.png)
+
+```c
+//@version=5
+indicator("Filling the space between lines demo", "Simple linreg channel", true)
+
+//@variable The number of bars in the linear regression calculation.
+int lengthInput = input.int(100)
+
+//@variable The basis line of the regression channel.
+var line basisLine = line.new(na, na, na, na, extend = extend.right, color = chart.fg_color, width = 2)
+//@variable The channel's upper line.
+var line upperLine = line.new(na, na, na, na, extend = extend.right, color = color.teal, width = 2)
+//@variable The channel's lower line.
+var line lowerLine = line.new(na, na, na, na, extend = extend.right, color = color.maroon, width = 2)
+
+//@variable A linefill instance that fills the space between the `basisLine` and `upperLine`.
+var linefill upperFill = linefill.new(basisLine, upperLine, color.new(color.teal, 80))
+//@variable A linefill instance that fills the space between the `basisLine` and `lowerLine`.
+var linefill lowerFill = linefill.new(basisLine, lowerLine, color.new(color.maroon, 80))
+
+// Update the `basisLine` coordinates with current linear regression values.
+basisLine.set_xy1(bar_index + 1 - lengthInput, ta.linreg(close, lengthInput, lengthInput - 1))
+basisLine.set_xy2(bar_index, ta.linreg(close, lengthInput, 0))
+
+//@variable The channel's standard deviation.
+float stDev = 0.0
+for i = 0 to lengthInput - 1
+    stDev += math.pow(close[i] - line.get_price(basisLine, bar_index - i), 2)
+stDev := math.sqrt(stDev / lengthInput) * 2.0
+
+// Update the `upperLine` and `lowerLine` using the values from the `basisLine` and the `stDev`.
+upperLine.set_xy1(basisLine.get_x1(), basisLine.get_y1() + stDev)
+upperLine.set_xy2(basisLine.get_x2(), basisLine.get_y2() + stDev)
+lowerLine.set_xy1(basisLine.get_x1(), basisLine.get_y1() - stDev)
+lowerLine.set_xy2(basisLine.get_x2(), basisLine.get_y2() - stDev)
+```
+
+Para saber mais sobre o tipo [linefill](https://br.tradingview.com/pine-script-reference/v5/#type_linefill), consulte [esta](./05_08_fills.md#preenchimentos-de-linha) seção da página [Preenchimentos](./05_08_fills.md).
 
 
 # Boxes (_Caixas_)
