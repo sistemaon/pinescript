@@ -251,6 +251,49 @@ __Note que:__
 - A chamada da função [line.get_price()](https://br.tradingview.com/pine-script-reference/v5/#fun_line.get_price) trata a `directionLine` como se ela se estendesse infinitamente, independentemente de sua propriedade `extend`.
 - O script exibe aproximadamente as últimas 50 linhas no gráfico, mas o [plot](https://br.tradingview.com/pine-script-reference/v5/#fun_plot) dos valores extrapolados se estende por toda a história do gráfico.
 
+## Clonando _Linhas_
+
+Scripts podem clonar uma linha `id` e todas as suas propriedades com a função [line.copy()](https://br.tradingview.com/pine-script-reference/v5/#fun_line.copy). Quaisquer alterações na instância da linha copiada não afetam a original.
+
+Por exemplo, este script cria uma linha horizontal no preço de [abertura](https://br.tradingview.com/pine-script-reference/v5/#var_open) da barra a cada `length` barras, que é atribuída a uma variável `mainLine`. Em todas as outras barras, ele cria uma `copiedLine` usando [line.copy()](https://br.tradingview.com/pine-script-reference/v5/#fun_line.copy) e chama funções `line.set_*()` para modificar suas propriedades. Como podemos ver abaixo, alterar a `copiedLine` não afeta a `mainLine` de forma alguma:
+
+![Clonando linhas](./imgs/Lines-and-boxes-Lines-Cloning-lines-1.png)
+
+```c
+//@version=5
+indicator("Cloning lines demo", overlay = true, max_lines_count = 500)
+
+//@variable The number of bars between each new mainLine assignment.
+int length = input.int(20, "Length", 2, 500)
+
+//@variable The first `chart.point` used by the `mainLine`. Contains `index` and `time` information.
+firstPoint = chart.point.now(open)
+//@variable The second `chart.point` used by the `mainLine`. Does not contain `time` information.
+secondPoint = chart.point.from_index(bar_index + length, open)
+
+//@variable A horizontal line drawn at the `open` price once every `length` bars.
+var line mainLine = na
+
+if bar_index % length == 0
+    // Assign a new line to the `mainLine` that connects the `firstPoint` to the `secondPoint`.
+    // This line uses the `index` fields from both points as x-coordinates.
+    mainLine := line.new(firstPoint, secondPoint, color = color.purple, width = 2)
+
+//@variable A copy of the `mainLine`. Changes to this line do not affect the original.
+line copiedLine = line.copy(mainLine)
+
+// Update the color, style, and second point of the `copiedLine`.
+line.set_color(copiedLine, color.orange)
+line.set_style(copiedLine, line.style_dotted)
+line.set_second_point(copiedLine, chart.point.now(close))
+```
+
+__Note que:__
+
+- O campo `index` do `secondPoint` está `length` barras além do [bar_index](https://br.tradingview.com/pine-script-reference/v5/#var_bar_index) atual. Como a _coordenada-x_ máxima permitida com [xloc.bar_index](https://br.tradingview.com/pine-script-reference/v5/#var_xloc.bar_index) é `bar_index + 500`, o valor máximo (`maxval`) da entrada `length` foi definido para 500.
+
+
+
 
 # Boxes (_Caixas_)
 
