@@ -25,7 +25,7 @@ _Linhas_ desenhadas por um script podem ser verticais, horizontais ou anguladas.
 
 # Lines (_Linhas_)
 
-As funções incorporadas no namespace `line.*` controlam a criação e gerenciamento de objetos de [line](https://br.tradingview.com/pine-script-reference/v5/#type_line):
+As funções incorporadas no _namespace_ `line.*` controlam a criação e gerenciamento de objetos de [line](https://br.tradingview.com/pine-script-reference/v5/#type_line):
 
 - A função [line.new()](https://br.tradingview.com/pine-script-reference/v5/#fun_line.new) cria uma nova _linha_.
 - As funções `line.set_*()` modificam as propriedades da _linha_.
@@ -149,7 +149,7 @@ __Note que:__
 
 ## Modificando _Linhas_
 
-O namespace `line.*` contém várias funções _setter_ que modificam as propriedades das instâncias de [linha](https://br.tradingview.com/pine-script-reference/v5/#type_line):
+O _namespace_ `line.*` contém várias funções _setter_ que modificam as propriedades das instâncias de [linha](https://br.tradingview.com/pine-script-reference/v5/#type_line):
 
 - [line.set_first_point()](https://br.tradingview.com/pine-script-reference/v5/#fun_line.set_first_point) e [line.set_second_point()](https://br.tradingview.com/pine-script-reference/v5/#fun_line.set_second_point) atualizam, respectivamente, os pontos de início e fim da linha `id` usando informações do `point` especificado.
 - [line.set_x1()](https://br.tradingview.com/pine-script-reference/v5/#fun_line.set_x1) e [line.set_x2()](https://br.tradingview.com/pine-script-reference/v5/#fun_line.set_x2) definem uma das _coordenadas-x_ da linha `id` para um novo valor `x`, que pode representar um índice de barra ou valor de tempo, dependendo da propriedade `xloc` da linha.
@@ -233,7 +233,7 @@ __Note que:__
 
 ## Lendo Valores de _Linha_
 
-O namespace `line.*` inclui funções _getter_, que permitem a um script recuperar valores de um objeto [linha](https://br.tradingview.com/pine-script-reference/v5/#type_line) para uso posterior:
+O _namespace_ `line.*` inclui funções _getter_, que permitem a um script recuperar valores de um objeto [linha](https://br.tradingview.com/pine-script-reference/v5/#type_line) para uso posterior:
 
 - [line.get_x1()](https://br.tradingview.com/pine-script-reference/v5/#fun_line.get_x1) e [line.get_x2()](https://br.tradingview.com/pine-script-reference/v5/#fun_line.get_x2) obtêm, respectivamente, a primeira e a segunda _coordenada-x_ da linha `id`. Se o valor retornado representa um índice de barra ou um valor de tempo depende da propriedade `xloc` da linha.
 - [line.get_y1()](https://br.tradingview.com/pine-script-reference/v5/#fun_line.get_y1) e [line.get_y2()](https://br.tradingview.com/pine-script-reference/v5/#fun_line.get_y2) obtêm, respectivamente, a primeira e a segunda _coordenada-y_ da linha `id`.
@@ -398,6 +398,17 @@ Para saber mais sobre o tipo [linefill](https://br.tradingview.com/pine-script-r
 
 
 # Boxes (_Caixas_)
+
+Funções incorporadas no _namespace_ `box.*` criam e gerenciam objetos de [caixa](https://br.tradingview.com/pine-script-reference/v5/#type_box):
+
+- A função [box.new()](https://br.tradingview.com/pine-script-reference/v5/#fun_box.new) cria uma nova caixa.
+- As funções `box.set_*()` modificam as propriedades da caixa.
+- As funções `box.get_*()` recuperam valores de uma instância de caixa.
+- A função [box.copy()](https://br.tradingview.com/pine-script-reference/v5/#fun_box.copy) clona uma instância de caixa.
+- A função [box.delete()](https://br.tradingview.com/pine-script-reference/v5/#fun_box.delete) exclui uma instância de caixa.
+- A variável [box.all](https://br.tradingview.com/pine-script-reference/v5/#var_box.all) referencia um [array](https://br.tradingview.com/pine-script-reference/v5/#type_array) somente leitura contendo os IDs de todas as caixas exibidas pelo script. O [tamanho](https://br.tradingview.com/pine-script-reference/v5/#fun_array.size) do array depende do `max_boxes_count` da declaração [indicator()](https://br.tradingview.com/pine-script-reference/v5/#fun_indicator) ou [strategy()](https://br.tradingview.com/pine-script-reference/v5/#fun_strategy) e do número de caixas que o script desenhou.
+
+Assim como nas [linhas](./05_12_lines_e_boxes.md#lines-linhas), os usuários podem chamar `box.set_*()`, `box.get_*()`, [box.copy()](https://br.tradingview.com/pine-script-reference/v5/#fun_box.copy) e [box.delete()](https://br.tradingview.com/pine-script-reference/v5/#fun_box.delete) como funções ou [métodos](./04_13_metodos.md).
 
 
 # Polylines (_Polilinhas_)
