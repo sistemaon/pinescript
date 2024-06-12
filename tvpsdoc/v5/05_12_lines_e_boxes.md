@@ -410,6 +410,109 @@ Funções incorporadas no _namespace_ `box.*` criam e gerenciam objetos de [caix
 
 Assim como nas [linhas](./05_12_lines_e_boxes.md#lines-linhas), os usuários podem chamar `box.set_*()`, `box.get_*()`, [box.copy()](https://br.tradingview.com/pine-script-reference/v5/#fun_box.copy) e [box.delete()](https://br.tradingview.com/pine-script-reference/v5/#fun_box.delete) como funções ou [métodos](./04_13_metodos.md).
 
+## Criando _Caixas_
+
+A função [box.new()](https://br.tradingview.com/pine-script-reference/v5/#fun_box.new) cria um novo objeto de [caixa](https://br.tradingview.com/pine-script-reference/v5/#type_box) para exibir no gráfico. Ela possui as seguintes assinaturas:
+
+```c
+box.new(top_left, bottom_right, border_color, border_width, border_style, extend, xloc, bgcolor, text, text_size, text_color, text_halign, text_valign, text_wrap, text_font_family) → series box
+
+box.new(left, top, right, bottom, border_color, border_width, border_style, extend, xloc, bgcolor, text, text_size, text_color, text_halign, text_valign, text_wrap, text_font_family) → series box
+```
+
+A primeira sobrecarga desta função inclui os parâmetros `top_left` e `bottom_right`, que aceitam objetos [chart.point](https://br.tradingview.com/pine-script-reference/v5/#type_chart.point) representando os cantos superior esquerdo e inferior direito da caixa, respectivamente. A função copia as informações desses [pontos do gráfico](./04_09_tipagem_do_sistema.md#chart-points-pontos-do-gráfico) para definir as coordenadas dos cantos da caixa. Se usa os campos `index` ou `time` dos pontos `top_left` e `bottom_right` como _coordenadas-x_ depende do valor `xloc` da função.
+
+A segunda sobrecarga especifica as bordas `left`, `top`, `right` e `bottom` da caixa. Os parâmetros `left` e `right` aceitam valores [int](https://br.tradingview.com/pine-script-reference/v5/#type_int) especificando as _coordenadas-x_ esquerda e direita da caixa, que podem ser valores do índice da barra ou de tempo, dependendo do valor `xloc` na chamada da função. Os parâmetros `top` e `bottom` aceitam valores [float](https://br.tradingview.com/pine-script-reference/v5/#type_float) representando as _coordenadas-y_ superior e inferior da caixa.
+
+Os parâmetros adicionais da função são idênticos em ambas as sobrecargas:
+
+`border_color`
+
+- Especifica a cor de todas as quatro bordas da caixa. O padrão é [color.blue](https://br.tradingview.com/pine-script-reference/v5/#var_color.blue).
+
+`border_width`
+
+- Especifica a largura das bordas, em pixels. O valor padrão é 1.
+
+`border_style`
+
+- Especifica o estilo das bordas, que pode ser qualquer uma das opções na seção [Estilos de Caixa](./05_12_lines_e_boxes.md#box-styles-estilos-de-caixa) desta página.
+
+`extend`
+
+- Determina se as bordas da caixa se estendem infinitamente além das _coordenadas-x_ esquerda ou direita. Aceita um dos seguintes valores: [extend.left](https://br.tradingview.com/pine-script-reference/v5/#var_extend.left), [extend.right](https://br.tradingview.com/pine-script-reference/v5/#var_extend.right), [extend.both](https://br.tradingview.com/pine-script-reference/v5/#var_extend.both) ou [extend.none](https://br.tradingview.com/pine-script-reference/v5/#var_extend.none) (padrão).
+
+`xloc`
+
+- Determina se as bordas esquerda e direita da caixa usam valores de índice de barra ou de tempo como _coordenadas-x_. O padrão é [xloc.bar_index](https://br.tradingview.com/pine-script-reference/v5/#var_xloc.bar_index).
+
+- Na primeira sobrecarga, um valor `xloc` de [xloc.bar_index](https://br.tradingview.com/pine-script-reference/v5/#var_xloc.bar_index) significa que a função usará os campos de `index` dos pontos gráfico `top_left` e `bottom_right`, e um valor [xloc.bar_time](https://br.tradingview.com/pine-script-reference/v5/#var_xloc.bar_time) significa que usará seus campos de `time`.
+
+- Na segunda sobrecarga, usar um valor `xloc` de [xloc.bar_index](https://br.tradingview.com/pine-script-reference/v5/#var_xloc.bar_index) significa que a função trata os valores `left` e `right` como índices de barra, e [xloc.bar_time](https://br.tradingview.com/pine-script-reference/v5/#var_xloc.bar_time) significa que tratará esses valores como carimbos de tempo (_timestamps_).
+
+- Quando as _coordenadas-x_ especificadas representam valores de _índice de barra_, é importante notar que a _coordenada-x_ mínima permitida é `bar_index - 9999`. Para deslocamentos maiores, pode-se usar [xloc.bar_time](https://br.tradingview.com/pine-script-reference/v5/#var_xloc.bar_time).
+
+`bgcolor`
+
+- Especifica a cor de fundo do espaço dentro da caixa. O valor padrão é [color.blue](https://br.tradingview.com/pine-script-reference/v5/#var_color.blue).
+
+`text`
+
+- O texto a ser exibido dentro da caixa. Por padrão, seu valor é uma string vazia.
+
+`text_size`
+
+- Especifica o tamanho do texto dentro da caixa. Aceita um dos seguintes valores: [size.tiny](https://br.tradingview.com/pine-script-reference/v5/#var_size.tiny), [size.small](https://br.tradingview.com/pine-script-reference/v5/#var_size.small), [size.normal](https://br.tradingview.com/pine-script-reference/v5/#var_size.normal), [size.large](https://br.tradingview.com/pine-script-reference/v5/#var_size.large), [size.huge](https://br.tradingview.com/pine-script-reference/v5/#var_size.huge) ou [size.auto](https://br.tradingview.com/pine-script-reference/v5/#var_size.auto) (padrão).
+
+`text_color`
+
+- Controla a cor do texto. O padrão é [color.black](https://br.tradingview.com/pine-script-reference/v5/#const_color.black).
+
+`text_halign`
+
+- Especifica o alinhamento horizontal do texto dentro dos limites da caixa. Aceita um dos seguintes: [text.align_left](https://br.tradingview.com/pine-script-reference/v5/#var_text.align_left), [text.align_right](https://br.tradingview.com/pine-script-reference/v5/#var_text.align_right) ou [text.align_center](https://br.tradingview.com/pine-script-reference/v5/#var_text.align_center) (padrão).
+
+`text_valign`
+
+- Especifica o alinhamento vertical do texto dentro dos limites da caixa. Aceita um dos seguintes: [text.align_top](https://br.tradingview.com/pine-script-reference/v5/#var_text.align_top), [text.align_bottom](https://br.tradingview.com/pine-script-reference/v5/#var_text.align_bottom) ou [text.align_center](https://br.tradingview.com/pine-script-reference/v5/#var_text.align_center) (padrão).
+
+`text_wrap`
+
+- Determina se a caixa irá quebrar o texto dentro dela. Se o valor for [text.wrap_auto](https://br.tradingview.com/pine-script-reference/v5/#var_text.wrap_auto), a caixa quebra o texto para garantir que ele não ultrapasse suas bordas verticais. Também corta o texto quebrado quando se estende além da parte inferior. Se o valor for [text.wrap_none](https://br.tradingview.com/pine-script-reference/v5/#var_text.wrap_none), a caixa exibe o texto em uma única linha que pode se estender além de suas bordas. O padrão é [text.wrap_none](https://br.tradingview.com/pine-script-reference/v5/#var_text.wrap_none).
+
+`text_font_family`
+
+- Define a família de fontes do texto da caixa. Usar [font.family_default](https://br.tradingview.com/pine-script-reference/v5/#var_font.family_default) exibe o texto da caixa com a fonte padrão do sistema. [font.family_monospace](https://br.tradingview.com/pine-script-reference/v5/#var_font.family_monospace) exibe o texto em um formato monoespaçado. O valor padrão é [font.family_default](https://br.tradingview.com/pine-script-reference/v5/#var_font.family_default).
+
+Escrever um script simples para exibir caixas em um gráfico. O exemplo abaixo desenha uma caixa projetando os valores [altos](https://br.tradingview.com/pine-script-reference/v5/#var_high) e [baixos](https://br.tradingview.com/pine-script-reference/v5/#var_low) de cada barra, do centro horizontal da barra atual até o centro da próxima barra disponível.
+
+Em cada barra, o script cria os pontos `topLeft` e `bottomRight` via [chart.point.now()](https://br.tradingview.com/pine-script-reference/v5/#fun_chart.point.now) e [chart.point_from_index()](https://br.tradingview.com/pine-script-reference/v5/#fun_chart.point.from_index), e então chama [box.new()](https://br.tradingview.com/pine-script-reference/v5/#fun_box.new) para construir uma nova caixa e exibi-la no gráfico. Também destaca o fundo na barra não confirmada do gráfico usando [bgcolor()](https://br.tradingview.com/pine-script-reference/v5/#fun_bgcolor) para indicar que redesenha essa caixa até a última atualização da barra:
+
+![Criando caixas](./imgs/Lines-and-boxes-Boxes-Creating-boxes-1.png)
+
+```c
+//@version=5
+indicator("Creating boxes demo", overlay = true)
+
+//@variable The `chart.point` for the top-left corner of the box. Contains `index` and `time` information.
+topLeft = chart.point.now(high)
+//@variable The `chart.point` for the bottom-right corner of the box. Does not contain `time` information.
+bottomRight = chart.point.from_index(bar_index + 1, low)
+
+// Draw a box using the `topLeft` and `bottomRight` corner points. Uses the `index` fields as x-coordinates.
+box.new(topLeft, bottomRight, color.purple, 2, bgcolor = color.new(color.gray, 70))
+
+// Color the background on the unconfirmed bar.
+bgcolor(barstate.isconfirmed ? na : color.new(color.orange, 70), title = "Unconfirmed bar highlight")
+```
+
+__Note que:__
+
+- O campo `index` do ponto `bottomRight` é uma barra maior que o `index` no `topLeft`. Se as coordenadas x dos cantos fossem iguais, o script desenharia uma linha vertical no centro horizontal de cada barra, semelhante ao exemplo na seção [Criando linhas](./05_12_lines_e_boxes.md#criando-linhas) desta página.
+- Semelhante às linhas, se `topLeft` e `bottomRight` contivessem coordenadas idênticas, a caixa não seria exibida no gráfico, pois não haveria espaço entre elas para desenhar. No entanto, seu ID ainda existiria.
+- Este script exibe aproximadamente as últimas 50 caixas no gráfico, pois não foi especificado um `max_boxes_count` na chamada da função [indicator()](https://br.tradingview.com/pine-script-reference/v5/#fun_indicator).
+
+## Box Styles (_Estilos de Caixa_)
 
 # Polylines (_Polilinhas_)
 
