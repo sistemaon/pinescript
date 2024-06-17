@@ -512,6 +512,98 @@ __Note que:__
 - Semelhante às linhas, se `topLeft` e `bottomRight` contivessem coordenadas idênticas, a caixa não seria exibida no gráfico, pois não haveria espaço entre elas para desenhar. No entanto, seu ID ainda existiria.
 - Este script exibe aproximadamente as últimas 50 caixas no gráfico, pois não foi especificado um `max_boxes_count` na chamada da função [indicator()](https://br.tradingview.com/pine-script-reference/v5/#fun_indicator).
 
+## Modificando _Caixas_
+
+Existem várias funções _setter_ no _namespace_ `box.*`, permitindo que scripts modifiquem as propriedades dos objetos [caixa](https://br.tradingview.com/pine-script-reference/v5/#type_box):
+
+- [box.set_top_left_point()](https://br.tradingview.com/pine-script-reference/v5/#fun_box.set_top_left_point) e [box.set_bottom_right_point()](https://br.tradingview.com/pine-script-reference/v5/#fun_box.set_bottom_right_point) atualizam, respectivamente, as coordenadas superior esquerda e inferior direita da caixa `id` usando informações do `point` especificado.
+- [box.set_left()](https://br.tradingview.com/pine-script-reference/v5/#fun_box.set_left) e [box.set_right()](https://br.tradingview.com/pine-script-reference/v5/#fun_box.set_right) definem a _coordenada-x_ esquerda ou direita da caixa `id` para um novo valor `left/right` (_esquerdo/direito_), que pode ser um índice de barra ou um valor de tempo, dependendo da propriedade `xloc` da caixa.
+- [box.set_top()](https://br.tradingview.com/pine-script-reference/v5/#fun_box.set_top) e [box.set_bottom()](https://br.tradingview.com/pine-script-reference/v5/#fun_box.set_bottom) definem a _coordenada-y_ superior ou inferior da caixa `id` para um novo valor `top/bottom` (_superior/inferior_).
+- [box.set_lefttop()](https://br.tradingview.com/pine-script-reference/v5/#fun_box.set_lefttop) define as coordenadas `left` e `top` da caixa `id`, e [box.set_rightbottom()](https://br.tradingview.com/pine-script-reference/v5/#fun_box.set_rightbottom) define suas coordenadas `right` e `bottom`.
+- [box.set_border_color()](https://br.tradingview.com/pine-script-reference/v5/#fun_box.set_border_color), [box.set_border_width()](https://br.tradingview.com/pine-script-reference/v5/#fun_box.set_border_width) e [box.set_border_style()](https://br.tradingview.com/pine-script-reference/v5/#fun_box.set_border_style) atualizam, respectivamente, a `color`, `width` e `style` da borda da caixa `id`.
+- [box.set_extend()](https://br.tradingview.com/pine-script-reference/v5/#fun_box.set_extend) define a propriedade `extend` horizontal da caixa `id`.
+- `box.set_bgcolor()` define a cor do espaço dentro da caixa `id` para uma nova `color`.
+- [box.set_text()](https://br.tradingview.com/pine-script-reference/v5/#fun_box.set_text), [box.set_text_size()](https://br.tradingview.com/pine-script-reference/v5/#fun_box.set_text_size), [box.set_text_color()](https://br.tradingview.com/pine-script-reference/v5/#fun_box.set_text_color), [box.set_text_halign()](https://br.tradingview.com/pine-script-reference/v5/#fun_box.set_text_halign), [box.set_text_valign()](https://br.tradingview.com/pine-script-reference/v5/#fun_box.set_text_valign), [box.set_text_wrap()](https://br.tradingview.com/pine-script-reference/v5/#fun_box.set_text_wrap) e [box.set_text_font_family()](https://br.tradingview.com/pine-script-reference/v5/#fun_box.set_text_font_family) atualizam as propriedades relacionadas ao texto da caixa `id`.
+
+Assim como as funções _setter_ em `line.*`, todos os _setters_ de caixa modificam diretamente a caixa `id` sem retornar um valor, e cada função _setter_ aceita argumentos "series".
+
+Observe que, ao contrário das [linhas](./05_12_lines_e_boxes.md#lines-linhas), o _namespace_ `box.*` não contém uma função _setter_ para modificar o `xloc` de uma caixa. É necessário [criar](./05_12_lines_e_boxes.md#criando-caixas) uma nova caixa com a configuração `xloc` desejada para esses casos.
+
+Este exemplo usa caixas para visualizar os intervalos de barras ascendentes e descendentes com o maior [volume](https://br.tradingview.com/pine-script-reference/v5/#var_volume) durante um `timeframe` definido pelo usuário. Quando o script detecta uma [mudança](https://br.tradingview.com/pine-script-reference/v5/#fun_timeframe.change) no `timeframe`, ele atribui [novas caixas](https://br.tradingview.com/pine-script-reference/v5/#fun_box.new) às variáveis `upBox` e `downBox`, redefine seus valores `upVolume` e `downVolume` e destaca o fundo do gráfico.
+
+Quando o [volume](https://br.tradingview.com/pine-script-reference/v5/#var_volume) de uma barra ascendente ou descendente excede o `upVolume` ou `downVolume`, o script atualiza as variáveis de rastreamento de volume e chama [box.set_top_left_point()](https://br.tradingview.com/pine-script-reference/v5/#fun_box.set_top_left_point) e [box.set_bottom_right_point()](https://br.tradingview.com/pine-script-reference/v5/#fun_box.set_bottom_right_point) para atualizar as coordenadas da `upBox` ou `downBox`. Os _setters_ usam as informações dos [pontos do gráfico](./04_09_tipagem_do_sistema.md#chart-points-pontos-do-gráfico) criados com [chart.point.now()](https://br.tradingview.com/pine-script-reference/v5/#fun_chart.point.now) e [chart.point.from_time()](https://br.tradingview.com/pine-script-reference/v5/#fun_chart.point.from_time) para projetar os valores [alto](https://br.tradingview.com/pine-script-reference/v5/#var_high) e [baixo](https://br.tradingview.com/pine-script-reference/v5/#var_low) dessa barra desde o tempo atual até o [horário de fechamento](https://br.tradingview.com/pine-script-reference/v5/#fun_time_close) do `timeframe`:
+
+![Modificando caixas](./imgs/Lines-and-boxes-Boxes-Modifying-boxes-1.png)
+
+```c
+//@version=5
+indicator("Modifying boxes demo", "High volume boxes", true, max_boxes_count = 100)
+
+//@variable The timeframe of the calculation.
+string timeframe = input.timeframe("D", "Timeframe")
+
+//@variable A box projecting the range of the upward bar with the highest `volume` over the `timeframe`.
+var box upBox = na
+//@variable A box projecting the range of the downward bar with the lowest `volume` over the `timeframe`.
+var box downBox = na
+//@variable The highest volume of upward bars over the `timeframe`.
+var float upVolume = na
+//@variable The highest volume of downward bars over the `timeframe`.
+var float downVolume = na
+
+// Color variables.
+var color upBorder   = color.teal
+var color upFill     = color.new(color.teal, 90)
+var color downBorder = color.maroon
+var color downFill   = color.new(color.maroon, 90)
+
+//@variable The closing time of the `timeframe`.
+int closeTime = time_close(timeframe)
+//@variable Is `true` when a new bar starts on the `timeframe`.
+bool changeTF = timeframe.change(timeframe)
+
+//@variable The `chart.point` for the top-left corner of the boxes. Contains `index` and `time` information.
+topLeft = chart.point.now(high)
+//@variable The `chart.point` for the bottom-right corner of the boxes. Does not contain `index` information.
+bottomRight = chart.point.from_time(closeTime, low)
+
+if changeTF and not na(volume)
+    if close > open
+        // Update `upVolume` and `downVolume` values.
+        upVolume   := volume
+        downVolume := 0.0
+        // Draw a new `upBox` using `time` and `price` info from the `topLeft` and `bottomRight` points.
+        upBox := box.new(topLeft, bottomRight, upBorder, 3, xloc = xloc.bar_time, bgcolor = upFill)
+        // Draw a new `downBox` with `na` coordinates.
+        downBox := box.new(na, na, na, na, downBorder, 3, xloc = xloc.bar_time, bgcolor = downFill)
+    else
+        // Update `upVolume` and `downVolume` values.
+        upVolume   := 0.0
+        downVolume := volume
+        // Draw a new `upBox` with `na` coordinates.
+        upBox := box.new(na, na, na, na, upBorder, 3, xloc = xloc.bar_time, bgcolor = upFill)
+        // Draw a new `downBox` using `time` and `price` info from the `topLeft` and `bottomRight` points.
+        downBox := box.new(topLeft, bottomRight, downBorder, 3, xloc = xloc.bar_time, bgcolor = downFill)
+// Update the ``upVolume`` and change the ``upBox`` coordinates when volume increases on an upward bar.
+else if close > open and volume > upVolume
+    upVolume := volume
+    box.set_top_left_point(upBox, topLeft)
+    box.set_bottom_right_point(upBox, bottomRight)
+// Update the ``downVolume`` and change the ``downBox`` coordinates when volume increases on a downward bar.
+else if close <= open and volume > downVolume
+    downVolume := volume
+    box.set_top_left_point(downBox, topLeft)
+    box.set_bottom_right_point(downBox, bottomRight)
+
+// Highlight the background when a new `timeframe` bar starts.
+bgcolor(changeTF ? color.new(color.orange, 70) : na, title = "Timeframe change highlight")
+```
+
+__Note que:__
+
+- A chamada da função [indicator()](https://br.tradingview.com/pine-script-reference/v5/#fun_indicator) contém `max_boxes_count = 100`, o que significa que o script preservará as últimas 100 caixas no gráfico.
+- Utiliza-se _ambas as sobrecargas_ de [box.new()](https://br.tradingview.com/pine-script-reference/v5/#fun_box.new) neste exemplo. Na primeira barra do `timeframe`, o script chama a primeira sobrecarga para a `upBox` quando a barra está subindo, e chama essa sobrecarga para a `downBox` quando a barra está caindo. Ele usa a segunda sobrecarga para atribuir uma nova caixa com valores [na](https://br.tradingview.com/pine-script-reference/v5/#var_na) para a outra variável de caixa nessa barra.
+
 ## Box Styles (_Estilos de Caixa_)
 
 # Polylines (_Polilinhas_)
