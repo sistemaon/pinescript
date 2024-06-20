@@ -606,6 +606,10 @@ __Note que:__
 
 ## Box Styles (_Estilos de Caixa_)
 
+Usuários podem incluir uma das seguintes variáveis `line.style_*` em suas chamadas de função [box.new()](https://br.tradingview.com/pine-script-reference/v5/#fun_box.new) ou [box.set_border_style()](https://br.tradingview.com/pine-script-reference/v5/#fun_box.set_border_style) para definir os estilos de borda das caixas desenhadas por seus scripts.
+
+![Box styles](./imgs/Lines-Boxes-BoxStyles.png)
+
 # Polylines (_Polilinhas_)
 
 ## Criando _Polilinhas_
