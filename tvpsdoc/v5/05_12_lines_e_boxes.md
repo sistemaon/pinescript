@@ -508,7 +508,7 @@ bgcolor(barstate.isconfirmed ? na : color.new(color.orange, 70), title = "Unconf
 
 __Note que:__
 
-- O campo `index` do ponto `bottomRight` é uma barra maior que o `index` no `topLeft`. Se as coordenadas x dos cantos fossem iguais, o script desenharia uma linha vertical no centro horizontal de cada barra, semelhante ao exemplo na seção [Criando linhas](./05_12_lines_e_boxes.md#criando-linhas) desta página.
+- O campo `index` do ponto `bottomRight` é uma barra maior que o `index` no `topLeft`. Se as _coordenadas-x_ dos cantos fossem iguais, o script desenharia uma linha vertical no centro horizontal de cada barra, semelhante ao exemplo na seção [Criando linhas](./05_12_lines_e_boxes.md#criando-linhas) desta página.
 - Semelhante às linhas, se `topLeft` e `bottomRight` contivessem coordenadas idênticas, a caixa não seria exibida no gráfico, pois não haveria espaço entre elas para desenhar. No entanto, seu ID ainda existiria.
 - Este script exibe aproximadamente as últimas 50 caixas no gráfico, pois não foi especificado um `max_boxes_count` na chamada da função [indicator()](https://br.tradingview.com/pine-script-reference/v5/#fun_indicator).
 
@@ -606,9 +606,79 @@ __Note que:__
 
 ## Box Styles (_Estilos de Caixa_)
 
-Usuários podem incluir uma das seguintes variáveis `line.style_*` em suas chamadas de função [box.new()](https://br.tradingview.com/pine-script-reference/v5/#fun_box.new) ou [box.set_border_style()](https://br.tradingview.com/pine-script-reference/v5/#fun_box.set_border_style) para definir os estilos de borda das caixas desenhadas por seus scripts.
+Usuários podem incluir uma das seguintes variáveis `line.style_*` em suas chamadas de função [box.new()](https://br.tradingview.com/pine-script-reference/v5/#fun_box.new) ou [box.set_border_style()](https://br.tradingview.com/pine-script-reference/v5/#fun_box.set_border_style) para definir os estilos de borda das caixas desenhadas por seus scripts:
 
 ![Box styles](./imgs/Lines-Boxes-BoxStyles.png)
+
+## Lendo Valores de Caixa
+
+O namespace `box.*` possui funções _getter_ que permitem que scripts recuperem valores de coordenadas de uma instância de caixa:
+
+- [box.get_left()](https://br.tradingview.com/pine-script-reference/v5/#fun_box.get_left) e [box.get_right()](https://br.tradingview.com/pine-script-reference/v5/#fun_box.get_right) obtêm, respectivamente, as _coordenadas-x_ das bordas esquerda e direita da caixa `id`. Se o valor retornado representa um índice de barra ou um valor de tempo depende da propriedade `xloc` da caixa.
+- [box.get_top()](https://br.tradingview.com/pine-script-reference/v5/#fun_box.get_top) e [box.get_bottom()](https://br.tradingview.com/pine-script-reference/v5/#fun_box.get_bottom) obtêm, respectivamente, as _coordenadas-y_ superior e inferior da caixa `id`.
+
+O exemplo abaixo desenha caixas para visualizar hipoteticamente intervalos de preços ao longo de um período de `length` barras. No início de cada novo período, usa a média do intervalo de velas multiplicada pelo input `scaleFactor` para calcular os pontos dos cantos de uma caixa centrada no preço [hl2](https://br.tradingview.com/pine-script-reference/v5/#var_hl2) com uma altura de `initialRange`. Após desenhar a primeira caixa, cria `numberOfBoxes - 1` novas caixas dentro de um loop [for](https://br.tradingview.com/pine-script-reference/v5/#kw_for).
+
+Dentro de cada iteração do loop, o script obtém a `lastBoxDrawn` recuperando o [último](https://br.tradingview.com/pine-script-reference/v5/#fun_array.last) elemento do array somente leitura [box.all](https://br.tradingview.com/pine-script-reference/v5/#var_box.all), então chama [box.get_top()](https://br.tradingview.com/pine-script-reference/v5/#fun_box.get_top) e [box.get_bottom()](https://br.tradingview.com/pine-script-reference/v5/#fun_box.get_bottom) para obter suas _coordenadas-y_. Usa esses valores para calcular as coordenadas de uma nova caixa que é `scaleFactor` vezes mais alta que a anterior:
+
+![Lendo valores de caixa](./imgs/Lines-and-boxes-Boxes-Reading-box-values-1.png)
+
+```c
+//@version=5
+indicator("Reading box values demo", "Nested boxes", overlay = true, max_boxes_count = 500)
+
+//@variable The number of bars in the range calculation.
+int length = input.int(10, "Length", 2, 500)
+//@variable The number of nested boxes drawn on each period.
+int numberOfBoxes = input.int(5, "Nested box count", 1)
+//@variable The scale factor applied to each box.
+float scaleFactor = input.float(1.6, "Scale factor", 1)
+
+//@variable The initial box range.
+float initialRange = scaleFactor * ta.sma(high - low, length)
+
+if bar_index % length == 0
+    //@variable The top-left `chart.point` for the initial box. Does not contain `time` information.
+    topLeft = chart.point.from_index(bar_index, hl2 + initialRange / 2)
+    //@variable The bottom-right `chart.point` for the initial box. Does not contain `time` information.
+    bottomRight = chart.point.from_index(bar_index + length, hl2 - initialRange / 2)
+
+    // Calculate border and fill colors of the boxes.
+    borderColor = color.rgb(math.random(100, 255), math.random(0, 100), math.random(100, 255))
+    bgColor = color.new(borderColor, math.max(100 * (1 - 1/numberOfBoxes), 90))
+
+    // Draw a new box using the `topLeft` and `bottomRight` points. Uses their `index` fields as x-coordinates.
+    box.new(topLeft, bottomRight, borderColor, 2, bgcolor = bgColor)
+
+    if numberOfBoxes > 1
+        // Loop to create additional boxes.
+        for i = 1 to numberOfBoxes - 1
+            //@variable The last box drawn by the script.
+            box lastBoxDrawn = box.all.last()
+
+            //@variable The top price of the last box.
+            float top = box.get_top(lastBoxDrawn)
+            //@variable The bottom price of the last box.
+            float bottom = box.get_bottom(lastBoxDrawn)
+
+            //@variable The scaled range of the new box.
+            float newRange = scaleFactor * (top - bottom) * 0.5
+
+            // Update the `price` fields of the `topLeft` and `bottomRight` points.
+            // This does not affect the coordinates of previous boxes.
+            topLeft.price     := hl2 + newRange
+            bottomRight.price := hl2 - newRange
+
+            // Draw a new box using the updated `topLeft` and `bottomRight` points.
+            box.new(topLeft, bottomRight, borderColor, 2, bgcolor = bgColor)
+```
+
+__Note que:__
+
+- A chamada da função [indicator()](https://br.tradingview.com/pine-script-reference/v5/#fun_indicator) usa `max_boxes_count = 500`, o que significa que o script pode exibir até 500 caixas no gráfico.
+- Cada desenho possui um `length` do índice `right` das barras além do índice `left`. Como as _coordenadas-x_ desses desenhos podem estar até 500 barras no futuro, o valor máximo (`maxval`) da entrada `length` foi definido como 500.
+- Em cada novo período, o script usa valores aleatórios de [color.rgb()](https://br.tradingview.com/pine-script-reference/v5/#fun_color.rgb) para `border_color` e `bgcolor` das caixas.
+- Cada chamada [box.new()](https://br.tradingview.com/pine-script-reference/v5/#fun_box.new) copia as coordenadas dos objetos [chart.point](https://br.tradingview.com/pine-script-reference/v5/#type_chart.point) atribuídos às variáveis `topLeft` e `bottomRight`, por isso o script pode modificar seus campos de `price` em cada iteração do loop sem afetar as outras caixas.
 
 # Polylines (_Polilinhas_)
 
