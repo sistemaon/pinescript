@@ -610,7 +610,7 @@ Usuários podem incluir uma das seguintes variáveis `line.style_*` em suas cham
 
 ![Box styles](./imgs/Lines-Boxes-BoxStyles.png)
 
-## Lendo Valores de Caixa
+## Lendo Valores de _Caixa_
 
 O namespace `box.*` possui funções _getter_ que permitem que scripts recuperem valores de coordenadas de uma instância de caixa:
 
@@ -679,6 +679,55 @@ __Note que:__
 - Cada desenho possui um `length` do índice `right` das barras além do índice `left`. Como as _coordenadas-x_ desses desenhos podem estar até 500 barras no futuro, o valor máximo (`maxval`) da entrada `length` foi definido como 500.
 - Em cada novo período, o script usa valores aleatórios de [color.rgb()](https://br.tradingview.com/pine-script-reference/v5/#fun_color.rgb) para `border_color` e `bgcolor` das caixas.
 - Cada chamada [box.new()](https://br.tradingview.com/pine-script-reference/v5/#fun_box.new) copia as coordenadas dos objetos [chart.point](https://br.tradingview.com/pine-script-reference/v5/#type_chart.point) atribuídos às variáveis `topLeft` e `bottomRight`, por isso o script pode modificar seus campos de `price` em cada iteração do loop sem afetar as outras caixas.
+
+## Clonando _Caixas_
+
+Para clonar um `id` de caixa específico, use [box.copy()](https://br.tradingview.com/pine-script-reference/v5/#fun_box.copy). Esta função copia a caixa e suas propriedades. Quaisquer alterações na caixa copiada não afetam a original.
+
+Por exemplo, este script declara uma variável `originalBox` na primeira barra e atribui uma [nova caixa](https://br.tradingview.com/pine-script-reference/v5/#fun_box.new) a ela a cada `length` barras. Nas outras barras, usa [box.copy()](https://br.tradingview.com/pine-script-reference/v5/#fun_box.copy) para criar uma `copiedBox` e chama funções `box.set_*()` para [modificar](./05_12_lines_e_boxes.md#modificando-caixas) suas propriedades. Conforme mostrado no gráfico abaixo, essas mudanças não modificam a `originalBox`:
+
+![Clonando caixas](./imgs/Lines-and-boxes-Boxes-Cloning-boxes-1.png)
+
+```c
+//@version=5
+indicator("Cloning boxes demo", overlay = true, max_boxes_count = 500)
+
+//@variable The number of bars between each new mainLine assignment.
+int length = input.int(20, "Length", 2)
+
+//@variable The `chart.point` for the top-left of the `originalBox`. Contains `time` and `index` information.
+topLeft = chart.point.now(high)
+//@variable The `chart.point` for the bottom-right of the `originalBox`. Does not contain `time` information.
+bottomRight = chart.point.from_index(bar_index + 1, low)
+
+//@variable A new box with `topLeft` and `bottomRight` corners on every `length` bars.
+var box originalBox = na
+
+//@variable Is teal when the bar is rising, maroon when it's falling.
+color originalColor = close > open ? color.teal : color.maroon
+
+if bar_index % length == 0
+    // Assign a new box using the `topLeft` and `bottomRight` info to the `originalBox`.
+    // This box uses the `index` fields from the points as x-coordinates.
+    originalBox := box.new(topLeft, bottomRight, originalColor, 2, bgcolor = color.new(originalColor, 60))
+else
+    //@variable A clone of the `originalBox`.
+    box copiedBox = box.copy(originalBox)
+    // Modify the `copiedBox`. These changes do not affect the `originalBox`.
+    box.set_top(copiedBox, high)
+    box.set_bottom_right_point(copiedBox, bottomRight)
+    box.set_border_color(copiedBox, color.gray)
+    box.set_border_width(copiedBox, 1)
+    box.set_bgcolor(copiedBox, na)
+```
+
+<!-- ## Excluindo _Caixas_
+
+Para excluir caixas desenhadas por um script, use `box.delete()`. Assim como as funções `*.delete()` em outros namespaces de desenho, essa função é útil para remover condicionalmente caixas ou manter um número específico de caixas no gráfico.
+
+Este exemplo exibe caixas representando valores periódicos de volume acumulado. O script cria um novo `id` de caixa e o armazena em um array `boxes` a cada `length` barras. Se o tamanho do array exceder o número especificado de `numberOfBoxes`, o script remove a caixa mais antiga do array usando `array.shift()` e a exclui usando `box.delete()`.
+
+Nas outras barras, acumula volume ao longo de cada período modificando o topo da última caixa no array `boxes`. O script então usa loops `for` para encontrar o `highestTop` de todas as caixas do array e definir o `bgcolor` de cada caixa com uma cor gradiente baseada no valor `box.get_top()` relativo ao `highestTop`. -->
 
 # Polylines (_Polilinhas_)
 
