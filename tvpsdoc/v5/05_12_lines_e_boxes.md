@@ -721,13 +721,62 @@ else
     box.set_bgcolor(copiedBox, na)
 ```
 
-<!-- ## Excluindo _Caixas_
+## Excluindo _Caixas_
 
-Para excluir caixas desenhadas por um script, use `box.delete()`. Assim como as funções `*.delete()` em outros namespaces de desenho, essa função é útil para remover condicionalmente caixas ou manter um número específico de caixas no gráfico.
+Para excluir caixas desenhadas por um script, use [box.delete()](https://br.tradingview.com/pine-script-reference/v5/#fun_box.delete). Assim como as funções `*.delete()` em outros namespaces de desenho, essa função é útil para remover condicionalmente caixas ou manter um número específico de caixas no gráfico.
 
-Este exemplo exibe caixas representando valores periódicos de volume acumulado. O script cria um novo `id` de caixa e o armazena em um array `boxes` a cada `length` barras. Se o tamanho do array exceder o número especificado de `numberOfBoxes`, o script remove a caixa mais antiga do array usando `array.shift()` e a exclui usando `box.delete()`.
+Este exemplo exibe caixas representando valores periódicos de volume acumulado. O script [cria](./05_12_lines_e_boxes.md#criando-caixas) um novo `id` de caixa e o armazena em um array `boxes` a cada `length` barras. Se o [tamanho do array](https://br.tradingview.com/pine-script-reference/v5/#fun_array.size) exceder o número especificado de `numberOfBoxes`, o script remove a caixa mais antiga do array usando [array.shift()](https://br.tradingview.com/pine-script-reference/v5/#fun_array.shift) e a exclui usando [box.delete()](https://br.tradingview.com/pine-script-reference/v5/#fun_box.delete).
 
-Nas outras barras, acumula volume ao longo de cada período modificando o topo da última caixa no array `boxes`. O script então usa loops `for` para encontrar o `highestTop` de todas as caixas do array e definir o `bgcolor` de cada caixa com uma cor gradiente baseada no valor `box.get_top()` relativo ao `highestTop`. -->
+Nas outras barras, acumula [volume](https://br.tradingview.com/pine-script-reference/v5/#var_volume) ao longo de cada período [modificando](./05_12_lines_e_boxes.md#modificando-caixas) o topo da [última](https://br.tradingview.com/pine-script-reference/v5/#fun_array.last) caixa no array `boxes`. O script então usa [for loops](./04_08_loops.md#for) para encontrar o `highestTop` de todas as caixas do array e definir o `bgcolor` de cada caixa com uma [cor gradiente](https://br.tradingview.com/pine-script-reference/v5/#fun_color.from_gradient) baseada no valor [box.get_top()](https://br.tradingview.com/pine-script-reference/v5/#fun_box.get_top) relativo ao `highestTop`:
+
+![Excluindo caixas](./imgs/Lines-and-boxes-Boxes-Deleting-boxes-1.png)
+
+```c
+//@version=5
+
+//@variable The maximum number of boxes to show on the chart.
+const int MAX_BOXES_COUNT = 500
+
+indicator("Deleting boxes demo", "Cumulative volume boxes", format = format.volume, max_boxes_count = MAX_BOXES_COUNT)
+
+//@variable The number of bars in each period.
+int length = input.int(20, "Length", 1)
+//@variable The maximum number of volume boxes in the calculation.
+int numberOfBoxes = input.int(10, "Number of boxes", 1, MAX_BOXES_COUNT)
+
+//@variable An array containing the ID of each box displayed by the script.
+var boxes = array.new<box>()
+
+if bar_index % length == 0
+    // Push a new box into the `boxes` array. The box has the default `xloc.bar_index` property.
+    boxes.push(box.new(bar_index, 0, bar_index + 1, 0, #000000, 2, text_color = #000000))
+    // Shift the oldest box out of the array and delete it when the array's size exceeds the `numberOfBoxes`.
+    if boxes.size() > numberOfBoxes
+        box.delete(boxes.shift())
+
+//@variable The last box drawn by the script as of the current chart bar.
+box lastBox = boxes.last()
+// Add the current bar's volume to the top of the `lastBox` and update the `right` index.
+lastBox.set_top(lastBox.get_top() + volume)
+lastBox.set_right(bar_index + 1)
+// Display the top of the `lastBox` as volume-formatted text.
+lastBox.set_text(str.tostring(lastBox.get_top(), format.volume))
+
+//@variable The highest `top` of all boxes in the `boxes` array.
+float highestTop = 0.0
+for id in boxes
+    highestTop := math.max(id.get_top(), highestTop)
+
+// Set the `bgcolor` of each `id` in `boxes` with a gradient based on the ratio of its `top` to the `highestTop`.
+for id in boxes
+    id.set_bgcolor(color.from_gradient(id.get_top() / highestTop, 0, 1, color.purple, color.orange))
+```
+
+__Note que:__
+
+- No início do código, foi declarada uma variável `MAX_BOXES_COUNT` com o _tipo qualificado_ "const int". Esse valor é usado como `max_boxes_count` na função [indicator()](https://br.tradingview.com/pine-script-reference/v5/#fun_indicator) e como o valor máximo possível da entrada `numberOfBoxes`.
+- Este script usa a segunda sobrecarga da função [box.new()](https://br.tradingview.com/pine-script-reference/v5/#fun_box.new), que especifica as coordenadas `left`, `top`, `right`, e `bottom` da caixa separadamente.
+- Foi incluído [format.volume](https://br.tradingview.com/pine-script-reference/v5/#var_format.volume) como argumento `format` na chamada da função [indicator()](https://br.tradingview.com/pine-script-reference/v5/#fun_indicator), o que informa ao script que o _eixo-y_ do painel do gráfico representa valores de _volume_. Cada caixa também exibe seu valor [superior](https://br.tradingview.com/pine-script-reference/v5/#fun_box.get_top) como texto [formatado em volume](https://br.tradingview.com/pine-script-reference/v5/#var_format.volume).
 
 # Polylines (_Polilinhas_)
 
