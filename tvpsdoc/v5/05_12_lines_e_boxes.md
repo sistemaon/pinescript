@@ -1026,3 +1026,86 @@ __Note que:__
 - O cálculo de `yScale` multiplica um [input.float()](https://br.tradingview.com/pine-script-reference/v5/#fun_input.float) por [ta.atr(2)](https://br.tradingview.com/pine-script-reference/v5/#fun_ta.atr) para adaptar a escala vertical dos desenhos às recentes faixas de preço.
 - Os polígonos resultantes têm uma largura máxima de duas vezes o semi-eixo horizontal (`2 * xScale`), arredondada para o inteiro mais próximo. A condição `newPolygon` usa esse valor para evitar que os desenhos dos polígonos se sobreponham.
 - O script arredonda o cálculo de `xValue` para o inteiro mais próximo porque o campo `index` de um [chart.point](https://br.tradingview.com/pine-script-reference/v5/#type_chart.point) aceita apenas um valor [inteiro](https://br.tradingview.com/pine-script-reference/v5/#type_int), já que o _eixo-x_ do gráfico não inclui índices de barra fracionários.
+
+## Excluindo _Polilinhas_
+
+Para deletar um `id` polilinha específica, use [polyline.delete()](https://br.tradingview.com/pine-script-reference/v5/#fun_polyline.delete). Esta função remove o objeto [polilinha](https://br.tradingview.com/pine-script-reference/v5/#type_polyline) do script e seu desenho do gráfico.
+
+Assim como outros objetos de desenho, [polyline.delete()](https://br.tradingview.com/pine-script-reference/v5/#fun_polyline.delete) pode ser usado para manter um número específico de desenhos de polilinha ou remover condicionalmente desenhos de um gráfico.
+
+Por exemplo, o script abaixo desenha periodicamente espirais aritméticas aproximadas e armazena seus IDs de polilinha em um [array](https://br.tradingview.com/pine-script-reference/v5/#type_array), que é [usado como uma fila](./04_14_arrays.md#utilizando-um-array-como-uma-fila) para gerenciar o número de desenhos exibidos.
+
+Quando a condição `newSpiral` ocorre, o script cria um array `points` e adiciona [pontos de gráfico](./04_09_tipagem_do_sistema.md#chart-points-pontos-do-gráfico) dentro de um [for loop](./04_08_loops.md#for). Em cada iteração do loop, ele chama a [função definida pelo usuário](./04_11_funcoes_definida_pelo_usuario.md) `spiralPoint()` para criar um novo [chart.point](https://br.tradingview.com/pine-script-reference/v5/#type_chart.point) contendo valores escalonados de um caminho elíptico que cresce em relação ao `angle`. O script então cria uma polilinha _curva colorida_ aleatoriamente conectando as coordenadas dos `points` e [adiciona](https://br.tradingview.com/pine-script-reference/v5/#fun_array.push) seu ID ao array `polylines`.
+
+Quando o [tamanho](https://br.tradingview.com/pine-script-reference/v5/#fun_array.size) do array excede o número especificado de espirais (`numberOfSpirals`), o script remove a polilinha mais antiga usando [array.shift()](https://br.tradingview.com/pine-script-reference/v5/#fun_array.shift) e deleta o objeto usando [polyline.delete()](https://br.tradingview.com/pine-script-reference/v5/#fun_polyline.delete):
+
+![Excluindo polilinhas](./imgs/Lines-and-boxes-Polylines-Deleting-polylines-1.png)
+
+```c
+//@version=5
+
+//@variable The maximum number of polylines allowed on the chart.
+const int MAX_POLYLINES_COUNT = 100
+
+indicator("Deleting polylines example", "Spirals", true, max_polylines_count = MAX_POLYLINES_COUNT)
+
+//@variable The number of spiral drawings on the chart.
+int numberOfSpirals = input.int(10, "Spirals shown", 1, MAX_POLYLINES_COUNT)
+//@variable The number of full spiral rotations to draw.
+int rotations = input.int(5, "Rotations", 1)
+//@variable The scale of the horizontal semi-axis.
+float xScale = input.float(1.0, "X scale")
+//@variable The scale of the vertical semi-axis.
+float yScale = input.float(0.2, "Y scale") * ta.atr(2)
+
+//@function Calculates an approximate point from an elliptically-scaled arithmetic spiral.
+//@returns  A `chart.point` with `index` and `price` information.
+spiralPoint(float angle, int xOffset, float yOffset) =>
+    result = chart.point.from_index(
+         int(math.round(angle * xScale * math.cos(angle))) + xOffset,
+         angle * yScale * math.sin(angle) + yOffset
+     )
+
+//@variable An array of polylines.
+var polylines = array.new<polyline>()
+
+//@variable The condition to create a new spiral.
+bool newSpiral = bar_index % int(math.round(4 * math.pi * rotations * xScale)) == 0
+
+if newSpiral
+    //@variable An array of `chart.point` objects for the `spiral` drawing.
+    points = array.new<chart.point>()
+    //@variable The counter-clockwise angle between calculated points, in radians.
+    float step = math.pi / 2
+    //@variable The rotation angle of each calculated point on the spiral, in radians.
+    float theta = 0.0
+    // Loop to create the spiral's points. Creates 4 points per full rotation.
+    for i = 0 to rotations * 4
+        //@variable A new point on the calculated spiral.
+        chart.point newPoint = spiralPoint(theta, bar_index, ohlc4)
+        // Add the `newPoint` to the `points` array.
+        points.push(newPoint)
+        // Add the `step` to the `theta` angle.
+        theta += step
+
+    //@variable A random color for the new `spiral` drawing.
+    color spiralColor = color.rgb(math.random(150, 255), math.random(0, 100), math.random(150, 255))
+    //@variable A new polyline connecting the spiral points. Uses the `index` field from each point as x-coordinates.
+    polyline spiral = polyline.new(points, true, line_color = spiralColor, line_width = 3)
+
+    // Push the new `spiral` into the `polylines` array.
+    polylines.push(spiral)
+    // Shift the first polyline out of the array and delete it when the array's size exceeds the `numberOfSpirals`.
+    if polylines.size() > numberOfSpirals
+        polyline.delete(polylines.shift())
+
+// Highlight the background when `newSpiral` is `true`.
+bgcolor(newSpiral ? color.new(color.blue, 70) : na, title = "New drawing highlight")
+```
+
+__Note que:__
+
+- Foi declarada uma variável global `MAX_POLYLINES_COUNT` com um valor constante de 100. O script usa essa constante como o valor de `max_polylines_count` na função [indicator()](https://br.tradingview.com/pine-script-reference/v5/#fun_indicator) e o valor máximo (`maxval`) do input `numberOfSpirals`.
+- Assim como no exemplo "N-sided polygons" na [seção anterior](./05_12_lines_e_boxes.md#formas-fechadas), o cálculo das _coordenadas-x_ é arredondado para o inteiro mais próximo, pois o campo `index` de um [chart.point](https://br.tradingview.com/pine-script-reference/v5/#type_chart.point) só pode aceitar um valor [int](https://br.tradingview.com/pine-script-reference/v5/#type_int).
+- Apesar da aparência suave dos desenhos, o array de pontos de cada polilinha contém apenas _quatro_ objetos [chart.point](https://br.tradingview.com/pine-script-reference/v5/#type_chart.point) por rotação da espiral. Como a chamada [polyline.new()](https://br.tradingview.com/pine-script-reference/v5/#fun_polyline.new) inclui `curved = true`, cada polilinha usa _curvas suaves_ para conectar seus `points`, produzindo uma aproximação visual da curvatura real da espiral.
+- A largura de cada espiral é aproximadamente `4 * math.pi * rotations * xScale`, arredondada para o inteiro mais próximo. Esse valor é usado na condição `newSpiral` para espaçar cada desenho e evitar sobreposições.
