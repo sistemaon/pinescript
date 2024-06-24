@@ -1227,3 +1227,56 @@ polyline.new(array.from(firstPoint, secondPoint, thirdPoint), true, line_width =
 __Note que:__
 
 - Foi usado a ferramenta de desenho "Measure" do TradingView para medir o número de barras cobertas pelos objetos de desenho do script.
+
+# Referências Futuras com `xloc.bar_index`
+
+Objetos posicionados usando [xloc.bar_index](https://br.tradingview.com/pine-script-reference/v5/#var_xloc.bar_index) podem conter _coordenadas-x_ não mais do que 500 barras no futuro.
+
+<!-- # Outros Contextos
+
+Scripts não podem usar [Linhas](./05_12_lines_e_boxes.md#lines-linhas), [caixas](./05_12_lines_e_boxes.md#boxes-caixas) ou [polilinhas](./05_12_lines_e_boxes.md#polylines-polilinhas) em funções `request.*()`. Instâncias desses tipos podem usar os valores das chamadas `request.*()`, mas scripts só podem criá-los e desenhá-los no contexto do gráfico.
+
+Essa limitação também é a razão pela qual objetos de desenho não funcionarão ao usar o parâmetro `timeframe` na declaração da função [indicator()](https://br.tradingview.com/pine-script-reference/v5/#fun_indicator).
+
+# Buffer Histórico e `max_bars_back`
+
+Usar [barstate.isrealtime](https://br.tradingview.com/pine-script-reference/v5/#var_barstate.isrealtime) em combinação com desenhos pode, às vezes, produzir resultados inesperados. Por exemplo, a intenção deste script é ignorar todas as barras históricas e desenhar linhas horizontais abrangendo 300 barras para trás em barras de _tempo real_:
+
+```c
+//@version=5
+indicator("Historical buffer demo", overlay = true)
+
+//@variable A `chart.point` at the `bar_index` from 300 bars ago and current `close`.
+firstPoint = chart.point.from_index(bar_index[300], close)
+//@variable The current bar's `chart.point` containing the current `close`.
+secondPoint = chart.point.now(close)
+
+// Draw a new line on realtime bars.
+if barstate.isrealtime
+    line.new(firstPoint, secondPoint)
+```
+
+No entanto, ele falhará em tempo de execução e gerará um erro. O script falha porque não pode determinar o tamanho do buffer para valores históricos da série [time](https://br.tradingview.com/pine-script-reference/v5/#var_time) subjacente. Embora o código não contenha a variável [time](https://br.tradingview.com/pine-script-reference/v5/#var_time) incorporada, o [bar_index](https://br.tradingview.com/pine-script-reference/v5/#var_bar_index) incorporado usa a série [time](https://br.tradingview.com/pine-script-reference/v5/#var_time) em seus funcionamentos internos. Portanto, acessar o valor do [bar_index](https://br.tradingview.com/pine-script-reference/v5/#var_bar_index) de 300 barras atrás requer que o buffer histórico da série [time](https://br.tradingview.com/pine-script-reference/v5/#var_time) seja de pelo menos 300 barras.
+
+Pine Script inclui um mecanismo que detecta automaticamente o tamanho do buffer histórico necessário na maioria dos casos. Ele funciona permitindo que o script acesse valores históricos de qualquer número de barras atrás por uma duração limitada. No caso deste script, usar [barstate.isrealtime](https://br.tradingview.com/pine-script-reference/v5/#var_barstate.isrealtime) para controlar o desenho de linhas impede que ele acesse a série histórica, então não pode inferir o tamanho necessário do buffer histórico, e o script falha.
+
+A solução simples para este problema é usar a função [max_bars_back()](https://br.tradingview.com/pine-script-reference/v5/#fun_max_bars_back) para _definir explicitamente_ o buffer histórico da série [time](https://br.tradingview.com/pine-script-reference/v5/#var_time) antes de avaliar a [estrutura condicional](./04_07_estruturas_condicionais.md):
+
+```c
+//@version=5
+indicator("Historical buffer demo", overlay = true)
+
+//@variable A `chart.point` at the `bar_index` from 300 bars ago and current `close.
+firstPoint = chart.point.from_index(bar_index[300], close)
+//@variable The current bar's `chart.point` containing the current `close`.
+secondPoint = chart.point.now(close)
+
+// Explicitly set the historical buffer of the `time` series to 300 bars.
+max_bars_back(time, 300)
+
+// Draw a new line on realtime bars.
+if barstate.isrealtime
+    line.new(firstPoint, secondPoint)
+```
+
+Esses problemas podem ser confusos, mas são bastante raros. A equipe do Pine Script espera eliminá-los com o tempo. -->
