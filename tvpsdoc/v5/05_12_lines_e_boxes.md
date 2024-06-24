@@ -1109,3 +1109,64 @@ __Note que:__
 - Assim como no exemplo "N-sided polygons" na [seção anterior](./05_12_lines_e_boxes.md#formas-fechadas), o cálculo das _coordenadas-x_ é arredondado para o inteiro mais próximo, pois o campo `index` de um [chart.point](https://br.tradingview.com/pine-script-reference/v5/#type_chart.point) só pode aceitar um valor [int](https://br.tradingview.com/pine-script-reference/v5/#type_int).
 - Apesar da aparência suave dos desenhos, o array de pontos de cada polilinha contém apenas _quatro_ objetos [chart.point](https://br.tradingview.com/pine-script-reference/v5/#type_chart.point) por rotação da espiral. Como a chamada [polyline.new()](https://br.tradingview.com/pine-script-reference/v5/#fun_polyline.new) inclui `curved = true`, cada polilinha usa _curvas suaves_ para conectar seus `points`, produzindo uma aproximação visual da curvatura real da espiral.
 - A largura de cada espiral é aproximadamente `4 * math.pi * rotations * xScale`, arredondada para o inteiro mais próximo. Esse valor é usado na condição `newSpiral` para espaçar cada desenho e evitar sobreposições.
+
+## Redesenhando _Polilinhas_
+
+Pode ser desejável, em alguns casos, mudar um desenho de polilinha durante a execução de um script. Embora o namespace `polyline.*` não contenha funções setter incorporadas, é possível _redesenhar_ polilinhas referenciadas por variáveis ou [coleções](./04_09_tipagem_do_sistema.md#coleções) _deletando_ as polilinhas existentes e atribuindo _novas instâncias_ com as mudanças desejadas.
+
+O exemplo a seguir usa chamadas [polyline.delete()](https://br.tradingview.com/pine-script-reference/v5/#fun_polyline.delete) e [polyline.new()](https://br.tradingview.com/pine-script-reference/v5/#fun_polyline.new) para atualizar o valor de uma variável de polilinha.
+
+Este script desenha polilinhas fechadas que conectam os pontos de abertura, máxima, mínima e fechamento de períodos contendo `length` barras. Ele cria uma variável `currentDrawing` na primeira barra e atribui um ID de polilinha a ela em cada barra do gráfico. Ele usa as variáveis `openPoint`, `highPoint`, `lowPoint` e `closePoint` para referenciar [pontos do gráfico](./04_09_tipagem_do_sistema.md#chart-points-pontos-do-gráfico) que acompanham os valores OHLC em desenvolvimento do período. À medida que novos valores surgem, o script atribui novos objetos [chart.point](https://br.tradingview.com/pine-script-reference/v5/#type_chart.point) às variáveis, coleta-os em um [array](https://br.tradingview.com/pine-script-reference/v5/#type_array) usando [array.from](https://br.tradingview.com/pine-script-reference/v5/#fun_array.from), e então cria uma [nova polilinha](https://br.tradingview.com/pine-script-reference/v5/#fun_polyline.new) conectando as coordenadas dos pontos do array e a atribui a `currentDrawing`.
+
+Quando a condição `newPeriod` é `false` (ou seja, o período atual não está completo), o script [deleta](./05_12_lines_e_boxes.md#excluindo-polilinhas) a polilinha referenciada por `currentDrawing` antes de [criar](./05_12_lines_e_boxes.md#criando-polilinhas) uma nova, resultando em um desenho dinâmico que muda durante o período em desenvolvimento:
+
+![Redesenhando polilinhas](./imgs/Lines-and-boxes-Polylines-Redrawing-polylines-1.png)
+
+```c
+//@version=5
+indicator("Redrawing polylines demo", "OHLC polygons", true, max_polylines_count = 100)
+
+//@variable The length of the period.
+int length = input.int(100, "Length", 1)
+
+//@variable A `chart.point` representing the start of each period.
+var chart.point openPoint = na
+//@variable A `chart.point` representing the highest point of each period.
+var chart.point highPoint = na
+//@variable A `chart.point` representing the lowest point of each period.
+var chart.point lowPoint = na
+//@variable A `chart.point` representing the current bar's closing point.
+closePoint = chart.point.now(close)
+
+//@variable The current period's polyline drawing.
+var polyline currentDrawing = na
+
+//@variable Is `true` once every `length` bars.
+bool newPeriod = bar_index % length == 0
+
+if newPeriod
+    // Assign new chart points to the `openPoint`, `highPoint`, and `closePoint`.
+    openPoint := chart.point.now(open)
+    highPoint := chart.point.now(high)
+    lowPoint  := chart.point.now(low)
+else
+    // Assign a new `chart.point` to the `highPoint` when the `high` is greater than its `price`.
+    if high > highPoint.price
+        highPoint := chart.point.now(high)
+    // Assign a new `chart.point` to the `lowPoint` when the `low` is less than its `price`.
+    if low < lowPoint.price
+        lowPoint := chart.point.now(low)
+
+//@variable Is teal when the `closePoint.price` is greater than the `openPoint.price`, maroon otherwise.
+color drawingColor = closePoint.price > openPoint.price ? color.teal : color.maroon
+
+// Delete the polyline assigned to the `currentDrawing` if it's not a `newPeriod`.
+if not newPeriod
+    polyline.delete(currentDrawing)
+// Assign a new polyline to the `currentDrawing`.
+// Uses the `index` field from each `chart.point` in its array as x-coordinates.
+currentDrawing := polyline.new(
+     array.from(openPoint, highPoint, closePoint, lowPoint), closed = true,
+     line_color = drawingColor, fill_color = color.new(drawingColor, 60)
+ )
+```
