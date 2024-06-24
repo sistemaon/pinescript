@@ -961,3 +961,68 @@ if barstate.islastconfirmedhistory
 // Highlight the chart background on every `newPoint` condition.
 bgcolor(newPoint ? color.new(color.gray, 70) : na, title = "New point highlight")
 ```
+
+## Formas Fechadas
+
+Uma única polilinha pode conter vários segmentos de linha reta ou curva, e o parâmetro `closed` permite que o desenho conecte as coordenadas do primeiro e do último [chart.point](https://br.tradingview.com/pine-script-reference/v5/#type_chart.point) em seu [array](https://br.tradingview.com/pine-script-reference/v5/#type_array) de `points`. É possível usar polilinhas para desenhar muitos tipos diferentes de formas poligonais fechadas.
+
+Este script desenha periodicamente polígonos aleatórios centrados nos valores de preço [hl2](https://br.tradingview.com/pine-script-reference/v5/#var_hl2).
+
+Em cada ocorrência da condição `newPolygon`, ele [limpa](https://br.tradingview.com/pine-script-reference/v5/#fun_array.clear) o array `points`, calcula o `numberOfSides` e o `rotationOffset` do novo desenho do polígono com base em valores [math.random()](https://br.tradingview.com/pine-script-reference/v5/#fun_math.random), e então usa um [for loop](./04_08_loops.md#for) para adicionar `numberOfSides` novos [pontos de gráfico](./04_09_tipagem_do_sistema.md#chart-points-pontos-do-gráfico) no [array](https://br.tradingview.com/pine-script-reference/v5/#type_array) que contêm coordenadas escalonadas de um caminho elíptico com semi-eixos `xScale` e `yScale`. O script desenha o polígono conectando cada [chart.point](https://br.tradingview.com/pine-script-reference/v5/#type_chart.point) do array `points` usando uma _polilinha fechada_ com segmentos de linha reta:
+
+![Formas fechadas](./imgs/Lines-and-boxes-Polylines-Creating-polylines-Closed-shapes-1.png)
+
+```c
+//@version=5
+indicator("Closed shapes demo", "N-sided polygons", true)
+
+//@variable The size of the horizontal semi-axis.
+float xScale = input.float(3.0, "X scale", 1.0)
+//@variable The size of the vertical semi-axis.
+float yScale = input.float(1.0, "Y scale") * ta.atr(2)
+
+//@variable An array of `chart.point` objects containing vertex coordinates.
+var points = array.new<chart.point>()
+
+//@variable The condition that triggers a new polygon drawing. Based on the horizontal axis to prevent overlaps.
+bool newPolygon = bar_index % int(math.round(2 * xScale)) == 0 and barstate.isconfirmed
+
+if newPolygon
+    // Clear the `points` array.
+    points.clear()
+
+    //@variable The number of sides and vertices in the new polygon.
+    int numberOfSides = int(math.random(3, 7))
+    //@variable A random rotation offset applied to the new polygon, in radians.
+    float rotationOffset = math.random(0.0, 2.0) * math.pi
+    //@variable The size of the angle between each vertex, in radians.
+    float step = 2 * math.pi / numberOfSides
+
+    //@variable The counter-clockwise rotation angle of each vertex.
+    float angle = rotationOffset
+
+    for i = 1 to numberOfSides
+        //@variable The approximate x-coordinate from an ellipse at the `angle`, rounded to the nearest integer.
+        int xValue = int(math.round(xScale * math.cos(angle))) + bar_index
+        //@variable The y-coordinate from an ellipse at the `angle`.
+        float yValue = yScale * math.sin(angle) + hl2
+
+        // Push a new `chart.point` containing the `xValue` and `yValue` into the `points` array.
+        // The new point does not contain `time` information.
+        points.push(chart.point.from_index(xValue, yValue))
+        // Add the `step` to the `angle`.
+        angle += step
+
+    // Draw a closed polyline connecting the `points`.
+    // The polyline uses the `index` field from each `chart.point` in the `points` array.
+    polyline.new(
+         points, closed = true, line_color = color.navy, fill_color = color.new(color.orange, 50), line_width = 3
+     )
+```
+
+__Note que:__
+
+- Este exemplo mostra as últimas 50 polilinhas no gráfico, já que não foi especificado um valor `max_polylines_count` na chamada da função [indicator()](https://br.tradingview.com/pine-script-reference/v5/#fun_indicator).
+- O cálculo de `yScale` multiplica um [input.float()](https://br.tradingview.com/pine-script-reference/v5/#fun_input.float) por [ta.atr(2)](https://br.tradingview.com/pine-script-reference/v5/#fun_ta.atr) para adaptar a escala vertical dos desenhos às recentes faixas de preço.
+- Os polígonos resultantes têm uma largura máxima de duas vezes o semi-eixo horizontal (`2 * xScale`), arredondada para o inteiro mais próximo. A condição `newPolygon` usa esse valor para evitar que os desenhos dos polígonos se sobreponham.
+- O script arredonda o cálculo de `xValue` para o inteiro mais próximo porque o campo `index` de um [chart.point](https://br.tradingview.com/pine-script-reference/v5/#type_chart.point) aceita apenas um valor [inteiro](https://br.tradingview.com/pine-script-reference/v5/#type_int), já que o _eixo-x_ do gráfico não inclui índices de barra fracionários.
