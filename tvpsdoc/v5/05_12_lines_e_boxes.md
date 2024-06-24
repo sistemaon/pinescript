@@ -778,6 +778,19 @@ __Note que:__
 - Este script usa a segunda sobrecarga da função [box.new()](https://br.tradingview.com/pine-script-reference/v5/#fun_box.new), que especifica as coordenadas `left`, `top`, `right`, e `bottom` da caixa separadamente.
 - Foi incluído [format.volume](https://br.tradingview.com/pine-script-reference/v5/#var_format.volume) como argumento `format` na chamada da função [indicator()](https://br.tradingview.com/pine-script-reference/v5/#fun_indicator), o que informa ao script que o _eixo-y_ do painel do gráfico representa valores de _volume_. Cada caixa também exibe seu valor [superior](https://br.tradingview.com/pine-script-reference/v5/#fun_box.get_top) como texto [formatado em volume](https://br.tradingview.com/pine-script-reference/v5/#var_format.volume).
 
+
 # Polylines (_Polilinhas_)
+
+Pine Script polilinhas são desenhos __avançados__ que conectam sequencialmente as coordenadas de um [array](https://br.tradingview.com/pine-script-reference/v5/#type_array) de instâncias [chart.point](https://br.tradingview.com/pine-script-reference/v5/#type_chart.point) usando segmentos de linha reta ou curva.
+
+Esses desenhos poderosos podem conectar até 10.000 pontos em qualquer local disponível no gráfico, permitindo que scripts desenhem séries personalizadas, polígonos e outras formações geométricas complexas que são difíceis ou impossíveis de desenhar usando objetos de [linha](https://br.tradingview.com/pine-script-reference/v5/#type_line) ou [caixa](https://br.tradingview.com/pine-script-reference/v5/#type_box).
+
+O _namespace_ `polyline.*` possui as seguintes funções embutidas para criar e gerenciar objetos de [polilinha](https://br.tradingview.com/pine-script-reference/v5/#type_polyline):
+
+- A função [polyline.new()](https://br.tradingview.com/pine-script-reference/v5/#fun_polyline.new) cria uma nova instância de polilinha.
+- A função [polyline.delete()](https://br.tradingview.com/pine-script-reference/v5/#fun_polyline.delete) exclui uma instância de polilinha existente.
+- A variável [polyline.all](https://br.tradingview.com/pine-script-reference/v5/#var_polyline.all) referencia um [array](https://br.tradingview.com/pine-script-reference/v5/#type_array) somente leitura contendo os IDs de todas as polilinhas exibidas pelo script. O [tamanho](https://br.tradingview.com/pine-script-reference/v5/#fun_array.size) do array depende do `max_polylines_count` da declaração [indicator()](https://br.tradingview.com/pine-script-reference/v5/#fun_indicator) ou [strategy()](https://br.tradingview.com/pine-script-reference/v5/#fun_strategy) e do número de polilinhas desenhadas pelo script.
+
+Ao contrário das [linhas](./05_12_lines_e_boxes.md#lines-linhas) ou [caixas](./05_12_lines_e_boxes.md#boxes-caixas), polilinhas não possuem funções para modificação ou leitura de suas propriedades. Para redesenhar uma polilinha no gráfico, é possível _excluir_ a instância existente e _criar_ uma nova polilinha com as alterações desejadas.
 
 ## Criando _Polilinhas_
