@@ -1238,7 +1238,7 @@ Scripts não podem usar [Linhas](./05_12_lines_e_boxes.md#lines-linhas), [caixas
 
 Essa limitação também é a razão pela qual objetos de desenho não funcionarão ao usar o parâmetro `timeframe` na declaração da função [indicator()](https://br.tradingview.com/pine-script-reference/v5/#fun_indicator).
 
-<!-- ## Buffer Histórico e `max_bars_back`
+## Buffer Histórico e `max_bars_back`
 
 Usar [barstate.isrealtime](https://br.tradingview.com/pine-script-reference/v5/#var_barstate.isrealtime) em combinação com desenhos pode, às vezes, produzir resultados inesperados. Por exemplo, a intenção deste script é ignorar todas as barras históricas e desenhar linhas horizontais abrangendo 300 barras para trás em barras de _tempo real_:
 
@@ -1279,4 +1279,4 @@ if barstate.isrealtime
     line.new(firstPoint, secondPoint)
 ```
 
-Esses problemas podem ser confusos, mas são bastante raros. A equipe do Pine Script espera eliminá-los com o tempo. -->
+Esses problemas podem ser confusos, mas são bastante raros. A equipe do Pine Script espera eliminá-los com o tempo.
