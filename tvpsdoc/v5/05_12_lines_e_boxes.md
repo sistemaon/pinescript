@@ -1228,17 +1228,17 @@ __Note que:__
 
 - Foi usado a ferramenta de desenho "Measure" do TradingView para medir o número de barras cobertas pelos objetos de desenho do script.
 
-# Referências Futuras com `xloc.bar_index`
+## Referências Futuras com `xloc.bar_index`
 
 Objetos posicionados usando [xloc.bar_index](https://br.tradingview.com/pine-script-reference/v5/#var_xloc.bar_index) podem conter _coordenadas-x_ não mais do que 500 barras no futuro.
 
-<!-- # Outros Contextos
+## Outros Contextos
 
 Scripts não podem usar [Linhas](./05_12_lines_e_boxes.md#lines-linhas), [caixas](./05_12_lines_e_boxes.md#boxes-caixas) ou [polilinhas](./05_12_lines_e_boxes.md#polylines-polilinhas) em funções `request.*()`. Instâncias desses tipos podem usar os valores das chamadas `request.*()`, mas scripts só podem criá-los e desenhá-los no contexto do gráfico.
 
 Essa limitação também é a razão pela qual objetos de desenho não funcionarão ao usar o parâmetro `timeframe` na declaração da função [indicator()](https://br.tradingview.com/pine-script-reference/v5/#fun_indicator).
 
-# Buffer Histórico e `max_bars_back`
+<!-- ## Buffer Histórico e `max_bars_back`
 
 Usar [barstate.isrealtime](https://br.tradingview.com/pine-script-reference/v5/#var_barstate.isrealtime) em combinação com desenhos pode, às vezes, produzir resultados inesperados. Por exemplo, a intenção deste script é ignorar todas as barras históricas e desenhar linhas horizontais abrangendo 300 barras para trás em barras de _tempo real_:
 
