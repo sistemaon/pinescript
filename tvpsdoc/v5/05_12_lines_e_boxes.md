@@ -1170,3 +1170,24 @@ currentDrawing := polyline.new(
      line_color = drawingColor, fill_color = color.new(drawingColor, 60)
  )
 ```
+
+
+# Comportamento em Tempo Real
+
+[Linhas](./05_12_lines_e_boxes.md#lines-linhas), [caixas](./05_12_lines_e_boxes.md#boxes-caixas) e [polilinhas](./05_12_lines_e_boxes.md#polylines-polilinhas) estão sujeitas a ações de _commit_ e _rollback_, que afetam o comportamento de um script quando ele é executado em uma barra de tempo real. Veja a página sobre o [modelo de execução](./04_01_modelo_de_execucao.md) do Pine Script.
+
+Este script demonstra o efeito do rollback quando é executado na barra de gráfico em tempo real, _não confirmada_:
+
+![Comportamento em tempo real](./imgs/Lines-and-boxes-Realtime-behavior-1.png)
+
+```c
+//@version=5
+indicator("Realtime behavior demo", overlay = true)
+
+//@variable Is orange when the `line` is subject to rollback and gray after the `line` is committed.
+color lineColor = barstate.isconfirmed ? color.gray : color.orange
+
+line.new(bar_index, hl2, bar_index + 1, hl2, color = lineColor, width = 4)
+```
+
+A chamada [line.new()](https://br.tradingview.com/pine-script-reference/v5/#fun_line.new) neste exemplo cria um novo ID de [linha](https://br.tradingview.com/pine-script-reference/v5/#type_line) em cada iteração quando os valores mudam na barra não confirmada. O script automaticamente deleta os objetos criados em cada mudança nessa barra devido ao _rollback_ antes de cada iteração. Ele apenas faz o _commit_ da última linha criada antes de a barra fechar, e essa instância de [linha](https://br.tradingview.com/pine-script-reference/v5/#type_line) é a que persiste na barra confirmada.
