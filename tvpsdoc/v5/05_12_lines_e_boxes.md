@@ -1191,3 +1191,39 @@ line.new(bar_index, hl2, bar_index + 1, hl2, color = lineColor, width = 4)
 ```
 
 A chamada [line.new()](https://br.tradingview.com/pine-script-reference/v5/#fun_line.new) neste exemplo cria um novo ID de [linha](https://br.tradingview.com/pine-script-reference/v5/#type_line) em cada iteração quando os valores mudam na barra não confirmada. O script automaticamente deleta os objetos criados em cada mudança nessa barra devido ao _rollback_ antes de cada iteração. Ele apenas faz o _commit_ da última linha criada antes de a barra fechar, e essa instância de [linha](https://br.tradingview.com/pine-script-reference/v5/#type_line) é a que persiste na barra confirmada.
+
+
+# Limitações
+
+## Número Total de Objetos
+
+[Linhas](./05_12_lines_e_boxes.md#lines-linhas), [caixas](./05_12_lines_e_boxes.md#boxes-caixas) e [polilinhas](./05_12_lines_e_boxes.md#polylines-polilinhas) consomem recursos do servidor, por isso há limites para o número total de desenhos por script. Quando um script cria mais objetos de desenho do que o limite permitido, o runtime do Pine Script automaticamente remove os mais antigos em um processo chamado "_garbage collection_" (_coleta de lixo_).
+
+Um único script pode conter até 500 linhas, 500 caixas e 100 polilinhas. Usuários podem controlar os limites da coleta de lixo especificando os valores de `max_lines_count`, `max_boxes_count` e `max_polylines_count` na declaração da função [indicator()](https://br.tradingview.com/pine-script-reference/v5/#fun_indicator) ou [strategy()](https://br.tradingview.com/pine-script-reference/v5/#fun_strategy) do seu script.
+
+Este script demonstra como a coleta de lixo funciona no Pine. Ele cria uma nova linha, caixa e polilinha em cada barra do gráfico. Não especificamos valores para os parâmetros `max_lines_count`, `max_boxes_count` ou `max_polylines_count` na chamada da função [indicator()](https://br.tradingview.com/pine-script-reference/v5/#fun_indicator), então o script manterá as 50 linhas, caixas e polilinhas mais recentes no gráfico, já que esta é a configuração padrão para cada parâmetro:
+
+![Limitações número total de objetos](./imgs/Lines-and-boxes-Limitations-Total-number-of-objects-1.png)
+
+```c
+//@version=5
+indicator("Garbage collection demo", overlay = true)
+
+//@variable A new `chart.point` at the current `bar_index` and `high`.
+firstPoint = chart.point.now(high)
+//@variable A new `chart.point` one bar into the future at the current `low`.
+secondPoint = chart.point.from_index(bar_index + 1, low)
+//@variable A new `chart.point` one bar into the future at the current `high`.
+thirdPoint = chart.point.from_index(bar_index + 1, high)
+
+// Draw a new `line` connecting the `firstPoint` to the `secondPoint`.
+line.new(firstPoint, secondPoint, color = color.red, width = 2)
+// Draw a new `box` with the `firstPoint` top-left corner and `secondPoint` bottom-right corner.
+box.new(firstPoint, secondPoint, color.purple, 2, bgcolor = na)
+// Draw a new `polyline` connecting the `firstPoint`, `secondPoint`, and `thirdPoint` sequentially.
+polyline.new(array.from(firstPoint, secondPoint, thirdPoint), true, line_width = 2)
+```
+
+__Note que:__
+
+- Foi usado a ferramenta de desenho "Measure" do TradingView para medir o número de barras cobertas pelos objetos de desenho do script.
