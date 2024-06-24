@@ -876,3 +876,88 @@ __Note que:__
 
 - Este script usa apenas _uma_ polilinha para conectar cada [ponto do gráfico](./04_09_tipagem_do_sistema.md#chart-points-pontos-do-gráfico) no [array](https://br.tradingview.com/pine-script-reference/v5/#type_array) com segmentos de linha reta, e este desenho se estende por todos os dados disponíveis no gráfico, começando pela primeira barra.
 - Embora seja possível alcançar um efeito semelhante usando [linhas](./05_12_lines_e_boxes.md#lines-linhas), isso exigiria uma nova instância de [linha](https://br.tradingview.com/pine-script-reference/v5/#type_line) em cada ocorrência da condição `newPoint`, e tal desenho estaria limitado a um máximo de 500 segmentos de linha. Este desenho de polilinha único e não fechado, por outro lado, pode conter até 9.999 segmentos de linha.
+
+## Desenhos Curvados
+
+Polilinhas podem desenhar _curvas_ que são impossíveis de produzir com [linhas](./05_12_lines_e_boxes.md#lines-linhas) ou [caixas](./05_12_lines_e_boxes.md#boxes-caixas). Ao ativar o parâmetro `curved` da função [polyline.new()](https://br.tradingview.com/pine-script-reference/v5/#fun_polyline.new), a polyline resultante interpola valores _não lineares_ entre as coordenadas de cada [chart.point](https://br.tradingview.com/pine-script-reference/v5/#type_chart.point) em seu [array](https://br.tradingview.com/pine-script-reference/v5/#type_array) de `points` para gerar um efeito curvilíneo.
+
+Por exemplo, o script "Oscillating polyline" no exemplo anterior usa segmentos de linha reta para produzir um desenho que se assemelha a uma onda triangular, ou seja, uma forma de onda que zigzagueia entre seus picos e vales. Se definir o parâmetro `curved` na chamada [polyline.new()](https://br.tradingview.com/pine-script-reference/v5/#fun_polyline.new) desse exemplo para `true`, o desenho resultante conectaria os pontos usando _segmentos curvos_, produzindo uma forma suave e não linear semelhante a uma onda senoidal:
+
+![Desenhos curvados 01](./imgs/Lines-and-boxes-Polylines-Creating-polylines-Curved-drawings-1.png)
+
+```c
+//@version=5
+indicator("Curved drawings demo", "Smooth oscillating polyline")
+
+//@variable The number of bars between each point in the drawing.
+int length = input.int(20, "Length between points", 2)
+
+//@variable An array of `chart.point` objects to sequentially connect with a polyline.
+var points = array.new<chart.point>()
+
+//@variable The y-coordinate of each point in the `points`. Alternates between 1 and -1 on each `newPoint`.
+var int yValue = 1
+
+//@variable Is `true` once every `length` bars, `false` otherwise.
+bool newPoint = bar_index % length == 0
+
+if newPoint
+    // Push a new `chart.point` into the `points`. The new point contains `time` and `index` info.
+    points.push(chart.point.now(yValue))
+    // Change the sign of the `yValue`.
+    yValue *= -1
+
+// Draw a new curved `polyline` on the last confirmed historical chart bar.
+// The polyline uses the `time` field from each `chart.point` in the `points` array as x-coordinates.
+if barstate.islastconfirmedhistory
+    polyline.new(points, curved = true, xloc = xloc.bar_time, line_color = #9151A6, line_width = 3)
+
+// Highlight the chart background on every `newPoint` condition.
+bgcolor(newPoint ? color.new(color.gray, 70) : na, title = "New point highlight")
+```
+
+Observe que, neste exemplo, as curvas suaves apresentam um comportamento relativamente consistente, e nenhuma parte do desenho se estende além de suas coordenadas definidas, o que nem sempre é o caso ao desenhar polilinhas curvadas. Os dados usados para construir uma polilinha impactam fortemente a função suave e segmentada que interpola entre seus pontos. Em alguns casos, a curva interpolada _pode_ ultrapassar suas coordenadas reais.
+
+Adicionando alguma variação aos [pontos do gráfico](./04_09_tipagem_do_sistema.md#chart-points-pontos-do-gráfico) no array `points` do exemplo para demonstrar esse comportamento. Na versão abaixo, o script multiplica o `yValue` por um valor [aleatório](https://br.tradingview.com/pine-script-reference/v5/#fun_math.random) nas chamadas [chart.point.now()](https://br.tradingview.com/pine-script-reference/v5/#fun_chart.point.now).
+
+Para visualizar o comportamento, este script também cria uma [linha](https://br.tradingview.com/pine-script-reference/v5/#type_line) horizontal no valor de `price` de cada [chart.point](https://br.tradingview.com/pine-script-reference/v5/#type_chart.point) no array `points`, e exibe outra polilinha conectando os mesmos pontos com segmentos de linha reta. Como se vê no gráfico, ambas as polilinhas passam por todas as coordenadas do array `points`. No entanto, a polilinha curvada ocasionalmente ultrapassa os _limites_ verticais indicados pelas [linhas](./05_12_lines_e_boxes.md#lines-linhas) horizontais, enquanto a polilinha desenhada usando segmentos retos não:
+
+![Desenhos curvados 02](./imgs/Lines-and-boxes-Polylines-Creating-polylines-Curved-drawings-2.png)
+
+```c
+//@version=5
+indicator("Curved drawings demo", "Random oscillating polylines")
+
+//@variable The number of bars between each point in the drawing.
+int length = input.int(20, "Length between points", 2)
+
+//@variable An array of `chart.point` objects to sequentially connect with a polyline.
+var points = array.new<chart.point>()
+
+//@variable The sign of each `price` in the `points`. Alternates between 1 and -1 on each `newPoint`.
+var int yValue = 1
+
+//@variable Is `true` once every `length` bars.
+bool newPoint = bar_index % length == 0
+
+if newPoint
+    // Push a new `chart.point` with a randomized `price` into the `points`.
+    // The new point contains `time` and `index` info.
+    points.push(chart.point.now(yValue * math.random()))
+    // Change the sign of the `yValue`.
+    yValue *= -1
+
+    //@variable The newest `chart.point`.
+    lastPoint = points.last()
+    // Draw a horizontal line at the `lastPoint.price`. This line uses the default `xloc.bar_index`.
+    line.new(lastPoint.index - length, lastPoint.price, lastPoint.index + length, lastPoint.price, color = color.red)
+
+// Draw two `polyline` instances on the last confirmed chart bar.
+// Both polylines use the `time` field from each `chart.point` in the `points` array as x-coordinates.
+if barstate.islastconfirmedhistory
+    polyline.new(points, curved = false, xloc = xloc.bar_time, line_color = #EB8A3B, line_width = 2)
+    polyline.new(points, curved = true, xloc = xloc.bar_time, line_color = #9151A6, line_width = 3)
+
+// Highlight the chart background on every `newPoint` condition.
+bgcolor(newPoint ? color.new(color.gray, 70) : na, title = "New point highlight")
+```
