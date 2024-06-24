@@ -794,3 +794,85 @@ O _namespace_ `polyline.*` possui as seguintes funções embutidas para criar e 
 Ao contrário das [linhas](./05_12_lines_e_boxes.md#lines-linhas) ou [caixas](./05_12_lines_e_boxes.md#boxes-caixas), polilinhas não possuem funções para modificação ou leitura de suas propriedades. Para redesenhar uma polilinha no gráfico, é possível _excluir_ a instância existente e _criar_ uma nova polilinha com as alterações desejadas.
 
 ## Criando _Polilinhas_
+
+A função [polyline.new()](https://br.tradingview.com/pine-script-reference/v5/#fun_polyline.new) cria uma nova instância de [polilinha](https://br.tradingview.com/pine-script-reference/v5/#type_polyline) para exibir no gráfico. Ela tem a seguinte assinatura:
+
+```c
+polyline.new(points, curved, closed, xloc, line_color, fill_color, line_style, line_width) → series polyline
+```
+
+Os seguintes oito parâmetros afetam o comportamento de um desenho de polilinha:
+
+`points`
+
+- Aceita um [array](https://br.tradingview.com/pine-script-reference/v5/#type_array) de objetos [chart.point](https://br.tradingview.com/pine-script-reference/v5/#type_chart.point) que determinam as coordenadas de cada ponto na polilinha. O desenho conecta as coordenadas de cada elemento no [array](https://br.tradingview.com/pine-script-reference/v5/#type_array) sequencialmente, começando pelo _primeiro_. Se a polilinha usa o campo `index` ou `time` de cada [ponto do gráfico](./04_09_tipagem_do_sistema.md#chart-points-pontos-do-gráfico) para suas _coordenadas-x_ depende do valor de `xloc` na chamada da função.
+
+`curved`
+
+- Especifica se o desenho usa segmentos de linha curva para conectar cada [chart.point](https://br.tradingview.com/pine-script-reference/v5/#type_chart.point) no array `points`. O valor padrão é `false`, ou seja, usa segmentos de linha reta.
+
+`closed`
+
+- Controla se a polilinha conectará o último [chart.point](https://br.tradingview.com/pine-script-reference/v5/#type_chart.point) no array `points` ao primeiro, formando uma _polilinha fechada_. O valor padrão é `false`.
+
+`xloc`
+
+- Especifica qual campo de cada [chart.point](https://br.tradingview.com/pine-script-reference/v5/#type_chart.point) no array `points` a polilinha usará para suas _coordenadas-x_. Quando seu valor é [xloc.bar_index](https://br.tradingview.com/pine-script-reference/v5/#var_xloc.bar_index), a função usa os campos índice para criar a polilinha. Quando seu valor é [xloc.bar_time](https://br.tradingview.com/pine-script-reference/v5/#var_xloc.bar_time), a função usa os campos de tempo. O valor padrão é [xloc.bar_index](https://br.tradingview.com/pine-script-reference/v5/#var_xloc.bar_index).
+
+`line_color`
+
+- Especifica a cor de todos os segmentos de linha no desenho da polilinha. O padrão é `color.blue`.
+
+`fill_color`
+
+- Controla a cor do espaço fechado preenchido pelo desenho da polilinha. Seu valor padrão é [na](https://br.tradingview.com/pine-script-reference/v5/#var_na).
+
+`line_style`
+
+- Especifica o estilo da polilinha, que pode ser qualquer uma das opções disponíveis na seção Estilos de Linha desta página. O padrão é [line.style_solid](https://br.tradingview.com/pine-script-reference/v5/#var_line.style_solid).
+
+`line_width`
+
+- Especifica a largura da polilinha, em pixels. O valor padrão é 1.
+
+Este script demonstra um exemplo simples de como desenhar uma polyline no gráfico. Ele [adiciona](https://br.tradingview.com/pine-script-reference/v5/#fun_array.push) um novo [chart.point](https://br.tradingview.com/pine-script-reference/v5/#type_chart.point) com um valor de `price` alternado em um array `points` e colore o fundo com [bgcolor()](https://br.tradingview.com/pine-script-reference/v5/#fun_bgcolor) a cada `length` barras.
+
+Na [última barra histórica confirmada](https://br.tradingview.com/pine-script-reference/v5/#var_barstate.islastconfirmedhistory), o script desenha uma nova polyline no gráfico, conectando as coordenadas de cada [ponto do gráfico](./04_09_tipagem_do_sistema.md#chart-points-pontos-do-gráfico) no [array](https://br.tradingview.com/pine-script-reference/v5/#type_array), começando pelo primeiro:
+
+![Criando polilinhas](./imgs/Lines-and-boxes-Polylines-Creating-polylines-1.png)
+
+```c
+//@version=5
+indicator("Creating polylines demo", "Oscillating polyline")
+
+//@variable The number of bars between each point in the drawing.
+int length = input.int(20, "Length between points", 2)
+
+//@variable An array of `chart.point` objects to sequentially connect with a polyline.
+var points = array.new<chart.point>()
+
+//@variable The y-coordinate of each point in the `points`. Alternates between 1 and -1 on each `newPoint`.
+var int yValue = 1
+
+//@variable Is `true` once every `length` bars, `false` otherwise.
+bool newPoint = bar_index % length == 0
+
+if newPoint
+    // Push a new `chart.point` into the `points`. The new point contains `time` and `index` info.
+    points.push(chart.point.now(yValue))
+    // Change the sign of the `yValue`.
+    yValue *= -1
+
+// Draw a new `polyline` on the last confirmed historical chart bar.
+// The polyline uses the `time` field from each `chart.point` in the `points` array as x-coordinates.
+if barstate.islastconfirmedhistory
+    polyline.new(points, xloc = xloc.bar_time, line_color = #9151A6, line_width = 3)
+
+// Highlight the chart background on every `newPoint` condition.
+bgcolor(newPoint ? color.new(color.gray, 70) : na, title = "New point highlight")
+```
+
+__Note que:__
+
+- Este script usa apenas _uma_ polilinha para conectar cada [ponto do gráfico](./04_09_tipagem_do_sistema.md#chart-points-pontos-do-gráfico) no [array](https://br.tradingview.com/pine-script-reference/v5/#type_array) com segmentos de linha reta, e este desenho se estende por todos os dados disponíveis no gráfico, começando pela primeira barra.
+- Embora seja possível alcançar um efeito semelhante usando [linhas](./05_12_lines_e_boxes.md#lines-linhas), isso exigiria uma nova instância de [linha](https://br.tradingview.com/pine-script-reference/v5/#type_line) em cada ocorrência da condição `newPoint`, e tal desenho estaria limitado a um máximo de 500 segmentos de linha. Este desenho de polilinha único e não fechado, por outro lado, pode conter até 9.999 segmentos de linha.
