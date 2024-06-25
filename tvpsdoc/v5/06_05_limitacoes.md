@@ -1,0 +1,4 @@
+
+# Limitações
+
+# Chamadas `request.*()`
