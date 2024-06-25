@@ -12,7 +12,7 @@ Elas são:
 
 Todas elas funcionam da mesma maneira; criam um identificador de ticker especial para ser usado como o primeiro argumento em uma chamada de função [request.security()](https://br.tradingview.com/pine-script-reference/v5/#fun_request{dot}security).
 
-<!-- ## `ticker.heikinashi()`
+## `ticker.heikinashi()`
 
 _Heikin-Ashi_ significa _barra média_ em japonês.
 Os valores de abertura/máxima/mínima/fechamento dos candlesticks Heikin-Ashi são sintéticos; eles não são preços reais de mercado.
@@ -87,7 +87,7 @@ __Note que:__
 - Usa-se uma [tupla](./04_06_declaracoes_de_variavel.md) com [request.security()](https://br.tradingview.com/pine-script-reference/v5/#fun_request{dot}security) para buscar quatro valores com a mesma chamada.
 - Usa-se [plotcandle()](https://br.tradingview.com/pine-script-reference/v5/#fun_plotcandle) para plotar as velas. Veja a página de [Plotagem de Barras](./05_04_plotagem_de_barras.md) para mais informações.
 
-## `ticker.renko()`
+<!-- ## `ticker.renko()`
 
 Barras _Renko_ apenas representam movimentos de preços, sem levar em consideração o tempo ou volume. Elas se parecem com tijolos empilhados em colunas adjacentes [[1]](./05_13_dados_de_graficos_nao_padronizados.md#1). Um novo tijolo é desenhado apenas após o preço ultrapassar o topo ou o fundo por uma quantidade predeterminada. A função [ticker.renko()](https://br.tradingview.com/pine-script-reference/v5/#fun_ticker{dot}renko) cria um ID de ticker que pode ser usado com [request.security()](https://br.tradingview.com/pine-script-reference/v5/#fun_request{dot}security) para obter valores de Renko, mas não há uma função do Pine Script para desenhar barras de Renko no gráfico:
 
@@ -139,4 +139,4 @@ plot(pnfC, "PnF Close", color.red, 4, plot.style_linebr)
 ### __Notas de Rodapé__
 
 > ###### [1]
-> _(1, 2, 3, 4)_: No TradingView, os tipos de gráficos Renko, Line Break, Kagi e PnF são gerados a partir de valores OHLC de um intervalo de tempo inferior. Esses tipos de gráficos representam apenas uma aproximação de como seriam se fossem gerados a partir de dados de tick.
+> _(1, 2, 3, 4)_: No TradingView, os tipos de gráficos Renko, Line Break, Kagi e PnF são gerados a partir dos valores OHLC de um intervalo de tempo inferior. Esses tipos de gráficos representam apenas uma aproximação de como seriam se fossem gerados a partir de dados do tick.
