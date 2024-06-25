@@ -87,7 +87,7 @@ __Note que:__
 - Usa-se uma [tupla](./04_06_declaracoes_de_variavel.md) com [request.security()](https://br.tradingview.com/pine-script-reference/v5/#fun_request{dot}security) para buscar quatro valores com a mesma chamada.
 - Usa-se [plotcandle()](https://br.tradingview.com/pine-script-reference/v5/#fun_plotcandle) para plotar as velas. Veja a página de [Plotagem de Barras](./05_04_plotagem_de_barras.md) para mais informações.
 
-<!-- ## `ticker.renko()`
+## `ticker.renko()`
 
 Barras _Renko_ apenas representam movimentos de preços, sem levar em consideração o tempo ou volume. Elas se parecem com tijolos empilhados em colunas adjacentes [[1]](./05_13_dados_de_graficos_nao_padronizados.md#1). Um novo tijolo é desenhado apenas após o preço ultrapassar o topo ou o fundo por uma quantidade predeterminada. A função [ticker.renko()](https://br.tradingview.com/pine-script-reference/v5/#fun_ticker{dot}renko) cria um ID de ticker que pode ser usado com [request.security()](https://br.tradingview.com/pine-script-reference/v5/#fun_request{dot}security) para obter valores de Renko, mas não há uma função do Pine Script para desenhar barras de Renko no gráfico:
 
@@ -99,7 +99,7 @@ renkoLow = request.security(renkoTicker, timeframe.period, low)
 plot(renkoLow)
 ```
 
-## `ticker.linebreak()`
+<!-- ## `ticker.linebreak()`
 
 O gráfico _Line Break_ exibe uma série de caixas verticais baseadas em mudanças de preço [[1]](./05_13_dados_de_graficos_nao_padronizados.md#1). A função [ticker.linebreak()](https://br.tradingview.com/pine-script-reference/v5/#fun_ticker{dot}linebreak) cria um ID de ticker que pode ser usado com [request.security()](https://br.tradingview.com/pine-script-reference/v5/#fun_request{dot}security) para obter valores de "Line Break", mas não há uma função do Pine Script para desenhar essas barras no gráfico:
 
