@@ -36,4 +36,21 @@ O "_comparison_" não está sendo referenciado pela página específica sobre co
 
 In LIBRARIES > QUALIFIED TYPE CONTROL = One can also use the [series](https://www.tradingview.com/pine-script-reference/v5/#type_simple) keyword to prefix the type of a library function parameter. However, because arguments are qualified as "series" by default, using the [series](https://www.tradingview.com/pine-script-reference/v5/#type_simple) modifier is redundant.
 Os dois series que estão referenciando o link externo, deveria ser sobre o type series, este [link](https://www.tradingview.com/pine-script-reference/v5/#type_series).
- 
+
+In CONCEPTS > Other timeframes and data > Introduction = request.security() retrieves data from another symbol, timeframe, or other context.
+request.security_lower_tf() retrieves intrabar data, i.e., data from a timeframe lower than the chart timeframe.
+request.currency_rate() requests a daily rate to convert a value expressed in one currency to another.
+request.dividends(), request.splits(), and request.earnings() respectively retrieve information about an issuing company’s dividends, splits, and earnings.
+request.quandl() retrieves information from NASDAQ Data Link (formerly Quandl).
+request.financial() retrieves financial data from FactSet.
+request.economic() retrieves economic and industry data.
+request.seed() retrieves data from a user-maintained GitHub repository.
+Os links de referencia para os 'request.*' estão redirecionando para a mesma página.
+[request.security()](https://www.tradingview.com/pine-script-reference/v5/#fun_request{dot}security)
+[request.security_lower_tf()](https://www.tradingview.com/pine-script-reference/v5/#fun_request{dot}security_lower_tf)
+[request.currency_rate()](https://www.tradingview.com/pine-script-reference/v5/#fun_request{dot}currency_rate)
+[request.dividends(), request.splits(), e request.earnings()](https://www.tradingview.com/pine-script-reference/v5/#fun_request{dot}dividends-request{dot}splits-request{dot}earnings)
+[request.quandl()](https://www.tradingview.com/pine-script-reference/v5/#fun_request{dot}quandl)
+[request.financial()](https://www.tradingview.com/pine-script-reference/v5/#fun_request{dot}financial)
+[request.economic()](https://www.tradingview.com/pine-script-reference/v5/#fun_request{dot}economic)
+[request.seed()](https://www.tradingview.com/pine-script-reference/v5/#fun_request{dot}seed)

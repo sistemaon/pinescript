@@ -27,6 +27,8 @@
 
 ## 13 [Dados de Gráficos Não-Padronizados](./05_13_dados_de_graficos_nao_padronizados.md)
 
+## 14 [Outros Timeframes e Dados](./05_14_outros_timeframes_e_dados.md)
+
 ## 15 [Plots (_Plotagens_)](./05_15_plots.md)
 
 ## 16 [Repintura](./05_16_repintura.md)
