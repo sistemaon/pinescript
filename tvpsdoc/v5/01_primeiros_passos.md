@@ -51,7 +51,7 @@ Ao clicar em um dos indicadores ou estratégias (aqueles com as setas verdes e v
 # Navegando pelos Scripts da Comunidade
 
 A partir da página inicial do [TradingView](https://br.tradingview.com), pode ter acesso aos Scripts da Comunidade através do menu "Comunidade" (_Community_).
-Aqui, estamos destacando a seção "Escolhas dos Editores" (_Editors’ Picks_), porém existem outras categorias que você pode escolher:
+Aqui, estamos destacando a seção "Escolhas dos Editores" (_Editor's Picks_), porém existem outras categorias que você pode escolher:
 
 ![Navegando pelos scripts da comunidade](./imgs/FirstSteps-BrowsingCommunityScripts-01.png)
 
@@ -85,7 +85,7 @@ E Isso é tão real para o Pine Script quanto para outras linguagens de programa
 Encontrar um bom código aberto em Pine Script é relativamente fácil, aqui encontra-se fontes confiáveis de códigos escritos por estes programadores no TradingView:
 
 * Indicadores integrados do TradingView (_Built-ins_).
-* Scripts selecionados como ["Sugestão da Casa"](https://br.tradingview.com/scripts/editors-picks) (_Editors’ Picks_).
+* Scripts selecionados como ["Sugestão da Casa"](https://br.tradingview.com/scripts/editors-picks) (_Editor's Picks_).
 * Scripts pelos [autores seguidos pela conta PineCoders](https://br.tradingview.com/u/PineCoders/#following-people).
 * Scripts de autores com alta reputação e publicações de código aberto.
 

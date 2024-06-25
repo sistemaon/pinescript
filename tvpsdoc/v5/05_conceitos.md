@@ -25,6 +25,8 @@
 
 ## 12 [Lines e Boxes (_Linhas e Caixas_)](./05_12_lines_e_boxes.md)
 
+## 13 [Dados de Gráficos Não-Padronizados](./05_13_dados_de_graficos_nao_padronizados.md)
+
 ## 15 [Plots (_Plotagens_)](./05_15_plots.md)
 
 ## 16 [Repintura](./05_16_repintura.md)

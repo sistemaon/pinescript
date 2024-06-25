@@ -1234,7 +1234,7 @@ Objetos posicionados usando [xloc.bar_index](https://br.tradingview.com/pine-scr
 
 ## Outros Contextos
 
-Scripts não podem usar [Linhas](./05_12_lines_e_boxes.md#lines-linhas), [caixas](./05_12_lines_e_boxes.md#boxes-caixas) ou [polilinhas](./05_12_lines_e_boxes.md#polylines-polilinhas) em funções `request.*()`. Instâncias desses tipos podem usar os valores das chamadas `request.*()`, mas scripts só podem criá-los e desenhá-los no contexto do gráfico.
+Scripts não podem usar [linhas](./05_12_lines_e_boxes.md#lines-linhas), [caixas](./05_12_lines_e_boxes.md#boxes-caixas) ou [polilinhas](./05_12_lines_e_boxes.md#polylines-polilinhas) em funções `request.*()`. Instâncias desses tipos podem usar os valores das chamadas `request.*()`, mas scripts só podem criá-los e desenhá-los no contexto do gráfico.
 
 Essa limitação também é a razão pela qual objetos de desenho não funcionarão ao usar o parâmetro `timeframe` na declaração da função [indicator()](https://br.tradingview.com/pine-script-reference/v5/#fun_indicator).
 

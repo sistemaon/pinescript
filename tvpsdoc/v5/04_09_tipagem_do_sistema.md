@@ -701,7 +701,7 @@ float sma = ta.sma(close, LENGTH) // Compilation error. The `length` parameter r
 plot(sma)
 ```
 
-O código gera o seguinte erro: "_Cannot call ‘ta.sma’ with argument ‘length’=’LENGTH’. An argument of ‘const float’ type was used but a ‘series int’ is expected._" ("_Não é possível chamar 'ta.sma' com o argumento 'length'='LENGTH'. Foi usado um argumento do tipo 'const float', mas é esperado um 'series int'._").
+O código gera o seguinte erro: "_Cannot call 'ta.sma' with argument 'length'='LENGTH'. An argument of 'const float' type was used but a 'series int' is expected._" ("_Não é possível chamar 'ta.sma' com o argumento 'length'='LENGTH'. Foi usado um argumento do tipo 'const float', mas é esperado um 'series int'._").
 
 O compilador está informando que o código está usando um valor "float" onde é necessário um "int". Não há uma regra de auto-conversão para converter um "float" em um "int", então deve-se fazer o trabalho manualmente.
 
