@@ -111,7 +111,7 @@ lineBreakClose = request.security(lineBreakTicker, timeframe.period, close)
 plot(lineBreakClose)
 ```
 
-<!-- ## `ticker.kagi()`
+## `ticker.kagi()`
 
 Gráficos _Kagi_ são compostos por uma linha contínua que muda de direção. A direção muda quando o preço varia [[1]](./05_13_dados_de_graficos_nao_padronizados.md#1) além de um valor predeterminado. A função [`ticker.kagi()`](https://br.tradingview.com/pine-script-reference/v5/#fun_ticker{dot}kagi) cria um ID de ticker que pode ser usado com [`request.security()`](https://br.tradingview.com/pine-script-reference/v5/#fun_request{dot}security) para obter valores de "Kagi", mas não há uma função do Pine Script para desenhar essas barras no gráfico:
 
@@ -123,7 +123,7 @@ kagiBreakClose = request.security(kagiBreakTicker, timeframe.period, close)
 plot(kagiBreakClose)
 ```
 
-## `ticker.pointfigure()`
+<!-- ## `ticker.pointfigure()`
 
 Gráficos "_Point and Figure (PnF)_" ("_Figura e Ponto_") apenas representam movimentos de preços [[1]](./05_13_dados_de_graficos_nao_padronizados.md#1), sem levar em consideração o tempo. Uma coluna de X's é plotada à medida que o preço sobe, e O's são plotados quando o preço cai. A função [`ticker.pointfigure()`](https://br.tradingview.com/pine-script-reference/v5/#fun_ticker{dot}pointfigure) cria um ID de ticker que pode ser usado com [`request.security()`](https://br.tradingview.com/pine-script-reference/v5/#fun_request{dot}security) para obter valores de "PnF", mas não há uma função do Pine Script para desenhar essas barras no gráfico. Cada coluna de X's ou O's é representada com quatro números. Pode-se pensar neles como valores sintéticos de OHLC PnF:
 
