@@ -123,7 +123,7 @@ kagiBreakClose = request.security(kagiBreakTicker, timeframe.period, close)
 plot(kagiBreakClose)
 ```
 
-<!-- ## `ticker.pointfigure()`
+## `ticker.pointfigure()`
 
 Gráficos "_Point and Figure (PnF)_" ("_Figura e Ponto_") apenas representam movimentos de preços [[1]](./05_13_dados_de_graficos_nao_padronizados.md#1), sem levar em consideração o tempo. Uma coluna de X's é plotada à medida que o preço sobe, e O's são plotados quando o preço cai. A função [`ticker.pointfigure()`](https://br.tradingview.com/pine-script-reference/v5/#fun_ticker{dot}pointfigure) cria um ID de ticker que pode ser usado com [`request.security()`](https://br.tradingview.com/pine-script-reference/v5/#fun_request{dot}security) para obter valores de "PnF", mas não há uma função do Pine Script para desenhar essas barras no gráfico. Cada coluna de X's ou O's é representada com quatro números. Pode-se pensar neles como valores sintéticos de OHLC PnF:
 
@@ -134,7 +134,8 @@ pnfTicker = ticker.pointfigure(syminfo.tickerid, "hl", "ATR", 14, 3)
 [pnfO, pnfC] = request.security(pnfTicker, timeframe.period, [open, close], barmerge.gaps_on)
 plot(pnfO, "PnF Open", color.green, 4, plot.style_linebr)
 plot(pnfC, "PnF Close", color.red, 4, plot.style_linebr)
-``` -->
+```
+
 
 ### __Notas de Rodapé__
 
