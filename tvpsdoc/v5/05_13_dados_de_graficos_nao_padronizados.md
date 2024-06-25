@@ -99,7 +99,7 @@ renkoLow = request.security(renkoTicker, timeframe.period, low)
 plot(renkoLow)
 ```
 
-<!-- ## `ticker.linebreak()`
+## `ticker.linebreak()`
 
 O gráfico _Line Break_ exibe uma série de caixas verticais baseadas em mudanças de preço [[1]](./05_13_dados_de_graficos_nao_padronizados.md#1). A função [ticker.linebreak()](https://br.tradingview.com/pine-script-reference/v5/#fun_ticker{dot}linebreak) cria um ID de ticker que pode ser usado com [request.security()](https://br.tradingview.com/pine-script-reference/v5/#fun_request{dot}security) para obter valores de "Line Break", mas não há uma função do Pine Script para desenhar essas barras no gráfico:
 
@@ -111,7 +111,7 @@ lineBreakClose = request.security(lineBreakTicker, timeframe.period, close)
 plot(lineBreakClose)
 ```
 
-## `ticker.kagi()`
+<!-- ## `ticker.kagi()`
 
 Gráficos _Kagi_ são compostos por uma linha contínua que muda de direção. A direção muda quando o preço varia [[1]](./05_13_dados_de_graficos_nao_padronizados.md#1) além de um valor predeterminado. A função [`ticker.kagi()`](https://br.tradingview.com/pine-script-reference/v5/#fun_ticker{dot}kagi) cria um ID de ticker que pode ser usado com [`request.security()`](https://br.tradingview.com/pine-script-reference/v5/#fun_request{dot}security) para obter valores de "Kagi", mas não há uma função do Pine Script para desenhar essas barras no gráfico:
 
