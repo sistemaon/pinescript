@@ -36,7 +36,7 @@ Se desconhece dados organizados em séries temporais, será necessário praticar
 
 TradingView é o lar de uma vasta comunidade de programadores de Pine Script e milhões de traders do mundo todo. Uma vez que se torne proficiente o suficiente em Pine Script, pode optar por compartilhar seus scripts com outros traders. Antes de fazer isso, por favor, reserve um tempo para aprender Pine Script o suficiente para fornecer aos traders uma ferramenta original e confiável. Todos os scripts publicados, sem exceção, são analisados por nossa equipe de moderadores e devem cumprir com as nossas [Regras de Publicação de Scripts](https://br.tradingview.com/support/solutions/43000590599), que exigem que sejam originais e bem documentados.
 
-Se deseja usar scripts em Pine para uso próprio, simplesmente escreva-os no Editor Pine e adicione-os ao gráfico a partir daí; não precisa publicá-los para usá-los. Se deseja compartilhar seus scripts com amigos, pode publicá-los de forma privada e enviar o link da sua publicação privada. Para mais informações veja a página [Publicando](./000_publishing.md).
+Se deseja usar scripts em Pine para uso próprio, simplesmente escreva-os no Editor Pine e adicione-os ao gráfico a partir daí; não precisa publicá-los para usá-los. Se deseja compartilhar seus scripts com amigos, pode publicá-los de forma privada e enviar o link da sua publicação privada. Para mais informações veja a página sobre [Publicando](./06_04_publicando_scripts.md).
 
 
 # Explorando a Documentação do Pine Script
