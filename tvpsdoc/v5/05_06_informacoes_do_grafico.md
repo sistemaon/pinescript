@@ -111,7 +111,7 @@ Duas variáveis embutidas adicionais retornam informações mais específicas so
 - [timeframe.multiplier](https://br.tradingview.com/pine-script-reference/v5/#var_timeframe{dot}multiplier) retorna um "simple int" contendo o multiplicador da unidade de timeframe. Um gráfico com timeframe de _uma hora_ retornará `60` porque os timeframes intradiários são expressos em minutos. Um timeframe de _30sec_ retornará `30` (segundos), um gráfico diário retornará `1` (dia), um gráfico trimestral retornará `3` (meses) e um gráfico anual retornará `12` (meses). O valor dessa variável não pode ser usado como argumento para parâmetros de `timeframe` em funções incorporadas, pois elas esperam uma string no formato de especificações de timeframe.
 - [timeframe.period](https://br.tradingview.com/pine-script-reference/v5/#var_timeframe{dot}period) retorna uma string no formato de especificação de timeframe do Pine Script.
 
-Veja a página sobre [Timeframes](./05_22_timeframe.md) para mais informações.
+Veja a página sobre [Timeframes](./05_22_timeframes.md) para mais informações.
 
 
 # Informações de Sessão

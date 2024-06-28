@@ -41,4 +41,4 @@
 
 ## 21 [Time](./05_21_time.md)
 
-## 22 [Timeframe](./05_22_timeframe.md)
+## 22 [Timeframes](./05_22_timeframes.md)

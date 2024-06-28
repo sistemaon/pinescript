@@ -44,7 +44,7 @@ else
     color.red
 ```
 
-> __Observação__\
+> __Observação!__\
 > As declarações acima todas contêm o operador de atribuição `=` porque são __declarações de variáveis__. Quando encontrar linhas semelhantes usando o operador de reatribuição `:=`, o código está __reatribuindo__ um valor a uma variável que __já foi declarada__. Essas são __reatribuições de variáveis__. Certifique-se de entender a distinção, pois isso é uma armadilha comum para iniciantes no Pine Script. Consulte a próxima seção sobre [Reatribuição de Variáveis](./04_06_declaracoes_de_variavel.md#reatribuição-de-variável) para mais detalhes.
 
 A sintaxe formal de uma declaração de variável é:

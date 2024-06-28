@@ -1,7 +1,7 @@
 
 # Matrices (_Matrix_)
 
-> __Observação__\
+> __Observação!__\
 > Esta seção contém material avançado. Recomenda-se que programadores iniciantes em Pine Script se familiarizem com outras funcionalidades do Pine Script mais acessíveis antes de explorarem este conteúdo.
 
 _Matrices_ no Pine Script são coleções que armazenam referências de valores em um formato retangular. Elas são essencialmente equivalentes a objetos de [array](https://br.tradingview.com/pine-script-reference/v5/#type_array) bidimensionais com funções e métodos para inspeção, modificação e cálculos especializados. Assim como os [arrays](./04_14_arrays.md), todos os elementos de uma _matrix_ devem ser do mesmo [type](./04_09_tipagem_do_sistema.md#tipos) (_tipo_), que pode ser um [tipo integrado](./04_09_tipagem_do_sistema.md#qualificadores) ou [definido pelo usuário](./04_09_tipagem_do_sistema.md#tipos-definidos-pelo-usuário).
@@ -60,7 +60,7 @@ if update
 plot(m.get(0, 0), linewidth = 3) // Plot the value from the first row and column.
 ```
 
-> __Observação__\
+> __Observação!__\
 > Variáveis de _matrix_ declaradas usando [varip](https://br.tradingview.com/pine-script-reference/v5/#kw_varip) comportam-se como as que utilizam [var](https://br.tradingview.com/pine-script-reference/v5/#kw_var) em dados históricos, mas atualizam seus valores para barras em tempo real (ou seja, as barras desde a última compilação do script) a cada novo tick de preço. _Matrices_ atribuídas a variáveis [varip](https://br.tradingview.com/pine-script-reference/v5/#kw_varip) podem conter apenas tipos [int](https://br.tradingview.com/pine-script-reference/v5/#type_int), [float](https://br.tradingview.com/pine-script-reference/v5/#type_float), [bool](https://br.tradingview.com/pine-script-reference/v5/#type_bool), [color](https://br.tradingview.com/pine-script-reference/v5/#type_color) ou [string](https://br.tradingview.com/pine-script-reference/v5/#type_string) ou [tipos definidos pelo usuário](./04_09_tipagem_do_sistema.md#tipos-definidos-pelo-usuário) que contenham exclusivamente em seus campos esses tipos ou coleções ([arrays](./04_14_arrays.md), [matrices](./04_15_matrices.md), ou [maps](./04_16_mapas.md)) (_arrays_, _matrizes_ ou _mapas_) desses tipos.
 
 
@@ -294,7 +294,7 @@ if bar_index == last_bar_index - 1
     debugLabel(m, bar_index + 20, note = "New row at\nindex 3")
 ```
 
-> __Observação__\
+> __Observação!__\
 > Assim como as _matrices_ de linhas ou colunas [resgatados](./04_15_matrices.md#resgatando) de uma _matrix_ de instâncias do tipo [line](https://br.tradingview.com/pine-script-reference/v5/#type_line), [linefill](https://br.tradingview.com/pine-script-reference/v5/#type_linefill), [box](https://br.tradingview.com/pine-script-reference/v5/#type_box), [polyline](https://br.tradingview.com/pine-script-reference/v5/#type_polyline), [label](https://br.tradingview.com/pine-script-reference/v5/#type_label), [table](https://br.tradingview.com/pine-script-reference/v5/#type_table), [chart.point](https://br.tradingview.com/pine-script-reference/v5/#type_chart.point) ou [_UDTs_](./04_09_tipagem_do_sistema.md#tipos-definidos-pelo-usuário) comportam-se como cópias superficiais, os elementos de _matrices_ contendo tais tipos referenciam os mesmos objetos que os [arrays](./04_14_arrays.md) inseridos nelas. Modificações nos valores dos elementos em qualquer um dos objetos afetam o outro nesses casos.
 
 ## Removendo

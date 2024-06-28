@@ -53,7 +53,7 @@ O comportamento de um script Pine na barra em tempo real é muito diferente do q
 
 A diferença mais importante entre a execução de scripts em barras históricas e em tempo real é que enquanto eles são executados apenas uma vez em barras históricas, os scripts são executados toda vez que uma atualização ocorre durante uma barra em tempo real. Isso implica que variáveis embutidas, como `high`, `low` e `close`, que nunca mudam em uma barra histórica, __podem__ mudar a cada iteração do script na barra em tempo real. Mudanças nas variáveis integradas usadas nos cálculos do script, por sua vez, induzirão mudanças nos resultados desses cálculos. Isso é necessário para que o script acompanhe a ação do preço em tempo real. Como resultado, o mesmo script pode produzir resultados diferentes cada vez que é executado durante a barra em tempo real.
 
-> __Observação__\
+> __Observação!__\
 > Na barra em tempo real, a variável `close` sempre representa o __preço atual__. Da mesma forma, as variáveis embutidas `high` e `low` representam a _máxima mais alta_ e a _mínima mais baixa_ alcançadas desde o início da barra em tempo real. As variáveis integradas do Pine Script só representarão os valores finais da barra em tempo real na última barra atualizada.
 
 Vamos acompanhar nosso exemplo de script na barra em tempo real.

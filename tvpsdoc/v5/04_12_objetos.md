@@ -1,7 +1,7 @@
 
 # Objetos
 
-> __Observação__\
+> __Observação!__\
 > Esta seção contém material avançado. Recomenda-se que programadores iniciantes em Pine Script se familiarizem com outras funcionalidades do Pine Script mais acessíveis antes de explorarem este conteúdo.
 
 Os objetos Pine Script são instâncias de _tipos definidos pelo usuário (UDTs)_. São equivalentes a variáveis contendo partes chamadas de _fields_ (_campos_), cada uma capaz de conter valores independentes que podem ser de vários tipos.

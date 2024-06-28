@@ -1,7 +1,7 @@
 
 # Arrays
 
-> __Observação__\
+> __Observação!__\
 > Esta seção contém material avançado. Recomenda-se que programadores iniciantes em Pine Script se familiarizem com outras funcionalidades do Pine Script mais acessíveis antes de explorarem este conteúdo.
 
 Arrays do Pine Script são coleções unidimensionais capazes de armazenar múltiplas referências de valores. Podem ser considerados uma forma mais eficiente de lidar com situações nas quais seria necessário declarar explicitamente um conjunto de variáveis similares (por exemplo, `price00`, `price01`, `price02`, ...).
@@ -10,7 +10,7 @@ Todos os elementos dentro de um array devem ser do mesmo tipo, que pode ser um t
 
 Scripts referenciam os elementos de um array usando um _index_, que começa em _0_ e vai até o _número de elementos no array menos um_. Arrays no Pine Script podem ter um tamanho dinâmico que varia ao longo das barras, já que é possível alterar o número de elementos em um array a cada iteração de um script. Scripts podem conter múltiplas instâncias de arrays. O tamanho dos arrays é limitado a 100.000 elementos.
 
-> __Observação__\
+> __Observação!__\
 > Utiliza-se o termo "início de um array" para designar o index 0, e "final de um array" para designar o elemento do array com o maior valor de index. Também se ampliará o significado de array para incluir IDs de array, em prol da brevidade.
 
 
@@ -48,7 +48,7 @@ O exemplo a seguir cria um array contendo zero elementos do tipo "float", e dest
 prices = array.new<float>(0)
 ```
 
-> __Observação__\
+> __Observação!__\
 > O _namespace_ `array.*` também contém funções específicas de tipo para a criação de arrays, incluindo [array.new_int()](https://br.tradingview.com/pine-script-reference/v5/#fun_array{dot}new_int), [array.new_float()](https://br.tradingview.com/pine-script-reference/v5/#fun_array{dot}new_float), [array.new_bool()](https://br.tradingview.com/pine-script-reference/v5/#fun_array{dot}new_bool), [array.new_color()](https://br.tradingview.com/pine-script-reference/v5/#fun_array{dot}new_color), [array.new_string()](https://br.tradingview.com/pine-script-reference/v5/#fun_array{dot}new_string), [array.new_line()](https://br.tradingview.com/pine-script-reference/v5/#fun_array{dot}new_line), [array.new_linefill()](https://br.tradingview.com/pine-script-reference/v5/#fun_array{dot}new_linefill), [array.new_label()](https://br.tradingview.com/pine-script-reference/v5/#fun_array{dot}new_label), [array.new_box()](https://br.tradingview.com/pine-script-reference/v5/#fun_array{dot}new_box) e [array.new_table()](https://br.tradingview.com/pine-script-reference/v5/#fun_array{dot}new_table). A função [array.new<type>()](https://br.tradingview.com/pine-script-reference/v5/#fun_array.new%3Ctype%3E) pode criar um array de qualquer tipo, incluindo [tipos definidos pelo usuário](./04_09_tipagem_do_sistema.md#tipos-definidos-pelo-usuário).
 
 O parâmetro `initial_value` das funções `array.new*` permite aos usuários definir todos os elementos do array para um valor especificado. Se nenhum argumento for fornecido para `initial_value`, o array será preenchido com valores `na`.
@@ -91,7 +91,7 @@ if barstate.islast
 
 O mesmo código sem a palavra-chave [var](https://br.tradingview.com/pine-script-reference/v5/#kw_var) resultaria na redeclaração do array em cada barra. Neste caso, após a execução da chamada [array.push()](https://br.tradingview.com/pine-script-reference/v5/#fun_array{dot}push), a chamada [a.size()](https://br.tradingview.com/pine-script-reference/v5/#fun_array{dot}size) retornaria o valor de 1.
 
-> __Observação__\
+> __Observação!__\
 > Variáveis de array declaradas usando [varip](https://br.tradingview.com/pine-script-reference/v5/#kw_varip) comportam-se como as que utilizam [var](https://br.tradingview.com/pine-script-reference/v5/#kw_var) em _dados históricos_, mas atualizam seus valores para barras em tempo real (ou seja, as barras desde a última compilação do script) a cada novo tick de preço. Arrays atribuídos a variáveis [varip](https://br.tradingview.com/pine-script-reference/v5/#kw_varip) podem conter apenas tipos [int](https://br.tradingview.com/pine-script-reference/v5/#type_int), [float](https://br.tradingview.com/pine-script-reference/v5/#type_float), [bool](https://br.tradingview.com/pine-script-reference/v5/#type_bool), [color](https://br.tradingview.com/pine-script-reference/v5/#type_color) ou [string](https://br.tradingview.com/pine-script-reference/v5/#type_string) ou [tipos definidos pelo usuário](./04_09_tipagem_do_sistema.md#tipos-definidos-pelo-usuário) que contenham exclusivamente em seus campos esses tipos ou coleções ([arrays](./04_14_arrays.md), [matrices](./04_15_matrices.md) ou [maps](./04_16_mapas.md)) desses tipos.
 
 
