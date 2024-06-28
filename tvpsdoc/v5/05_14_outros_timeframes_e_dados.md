@@ -292,7 +292,7 @@ A função [request.security()](https://br.tradingview.com/pine-script-reference
 
 Scripts também podem solicitar dados _limitados_ de timeframes inferiores com [request.security()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.security) (por exemplo, usando "1" como argumento `timeframe` enquanto o script é executado em um gráfico de 60 minutos). No entanto, não é recomendado usar esta função para solicitações de dados LTF. A função [request.security_lower_tf()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.security_lower_tf) é mais adequada para esses casos.
 
-<!-- ## Timeframes Superiores
+## Timeframes Superiores
 
 A maioria dos casos de uso de [request.security()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.security) envolve solicitar dados de um timeframe superior ou igual ao timeframe do gráfico. Por exemplo, este script recupera o preço [hl2](https://br.tradingview.com/pine-script-reference/v5/#var_hl2) de um `higherTimeframe` solicitado. Ele [plota](./05_15_plots.md) a série resultante no gráfico ao lado do [hl2](https://br.tradingview.com/pine-script-reference/v5/#var_hl2) do gráfico atual para comparação:
 
@@ -342,7 +342,7 @@ plot(hl2, "Current timeframe HL2", color.teal, 2)
 plot(htfPrice, "Higher timeframe HL2", color.purple, 3)
 ```
 
-## Timeframes Inferiores
+<!-- ## Timeframes Inferiores
 
 Embora a função [request.security()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.security) seja destinada a operar em timeframes maiores ou iguais ao timeframe do gráfico, ela _pode_ solicitar dados de timeframes inferiores também, com limitações. Ao chamar essa função para acessar um timeframe inferior, ela avaliará a `expression` a partir do contexto LTF. No entanto, ela só pode retornar os resultados de uma única intrabar (barra LTF) em cada barra do gráfico.
 
