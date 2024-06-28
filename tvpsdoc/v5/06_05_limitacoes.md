@@ -2,3 +2,6 @@
 # Limitações
 
 # Chamadas `request.*()`
+
+
+## Intrabars

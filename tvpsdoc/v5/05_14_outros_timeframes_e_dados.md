@@ -95,7 +95,7 @@ __Note que:__
 
 - [barmerge.gaps_off](https://br.tradingview.com/pine-script-reference/v5/#var_barmerge.gaps_off) é o valor padrão para o parâmetro `gaps` em todas as funções `request.*()` aplicáveis.
 - O script plota a série solicitada como linhas com quebras ([plot.style_linebr](https://br.tradingview.com/pine-script-reference/v5/#var_plot.style_linebr)), que não se conectam sobre valores [na](https://br.tradingview.com/pine-script-reference/v5/#var_na) como o estilo padrão ([plot.style_line](https://br.tradingview.com/pine-script-reference/v5/#var_plot.style_line)) faz.
-- Ao usar [barmerge.gaps_off](https://br.tradingview.com/pine-script-reference/v5/#var_barmerge.gaps_off), a função [request.security()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.security) retorna o último fechamento confirmado ([close](https://br.tradingview.com/pine-script-reference/v5/#var_close)) do timeframe horário em todas as barras históricas. Ao rodar em barras em tempo real (as barras com o fundo [color.aqua](https://br.tradingview.com/pine-script-reference/v5/#var_color.aqua) neste exemplo), ela retorna o valor de fechamento atual do símbolo, independentemente da confirmação. Para mais informações, veja a seção [Comportamento histórico e em tempo real](./05_14_outros_timeframes_e_dados.md#comportamento-histórico-e-tempo-real) desta página.
+- Ao usar [barmerge.gaps_off](https://br.tradingview.com/pine-script-reference/v5/#var_barmerge.gaps_off), a função [request.security()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.security) retorna o último fechamento confirmado ([fechamento](https://br.tradingview.com/pine-script-reference/v5/#var_close)) do timeframe horário em todas as barras históricas. Ao rodar em barras em tempo real (as barras com o fundo [color.aqua](https://br.tradingview.com/pine-script-reference/v5/#var_color.aqua) neste exemplo), ela retorna o valor de fechamento atual do símbolo, independentemente da confirmação. Para mais informações, veja a seção [Comportamento histórico e em tempo real](./05_14_outros_timeframes_e_dados.md#comportamento-histórico-e-tempo-real) desta página.
 
 ## `ignore_invalid_symbol`
 
@@ -286,6 +286,102 @@ O parâmetro `expression` da função [request.security()](https://br.tradingvie
 > Ao usar o valor de uma chamada [input.source()](https://br.tradingview.com/pine-script-reference/v5/#fun_input.source) no argumento `expression` e a entrada referenciar uma série de outro indicador, as funções `request.*()` calculam os resultados desse valor usando o __símbolo do gráfico__, independentemente do argumento `symbol` fornecido, pois não podem avaliar os escopos exigidos por uma série externa. Portanto, não se recomenda tentar solicitar dados de entrada de fonte externa de outros contextos.
 
 
+# Timeframes
+
+A função [request.security()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.security) pode solicitar dados de qualquer timeframe disponível, independentemente do gráfico em que o script está sendo executado. O timeframe dos dados recuperados depende do argumento `timeframe` na chamada da função, que pode representar um timeframe superior (por exemplo, usando "1D" como valor de `timeframe` enquanto o script é executado em um gráfico intradiário) ou o timeframe do gráfico (ou seja, usando [timeframe.period](https://br.tradingview.com/pine-script-reference/v5/#var_timeframe.period) ou uma string vazia como argumento `timeframe`).
+
+Scripts também podem solicitar dados _limitados_ de timeframes inferiores com [request.security()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.security) (por exemplo, usando "1" como argumento `timeframe` enquanto o script é executado em um gráfico de 60 minutos). No entanto, não é recomendado usar esta função para solicitações de dados LTF. A função [request.security_lower_tf()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.security_lower_tf) é mais adequada para esses casos.
+
+<!-- ## Timeframes Superiores
+
+A maioria dos casos de uso de [request.security()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.security) envolve solicitar dados de um timeframe superior ou igual ao timeframe do gráfico. Por exemplo, este script recupera o preço [hl2](https://br.tradingview.com/pine-script-reference/v5/#var_hl2) de um `higherTimeframe` solicitado. Ele [plota](./05_15_plots.md) a série resultante no gráfico ao lado do [hl2](https://br.tradingview.com/pine-script-reference/v5/#var_hl2) do gráfico atual para comparação:
+
+![Timeframes superiores 01](./imgs/Other-timeframes-and-data-Request-security-Timeframes-Higher-timeframes-1.Cfl6KncV_1tTnEJ.webp)
+
+```c
+//@version=5
+indicator("Higher timeframe security demo", overlay = true)
+
+//@variable The higher timeframe to request data from.
+string higherTimeframe = input.timeframe("240", "Higher timeframe")
+
+//@variable The `hl2` value from the `higherTimeframe`. Combines lookahead with an offset to avoid repainting.
+float htfPrice = request.security(syminfo.tickerid, higherTimeframe, hl2[1], lookahead = barmerge.lookahead_on)
+
+// Plot the `hl2` from the chart timeframe and the `higherTimeframe`.
+plot(hl2, "Current timeframe HL2", color.teal, 2)
+plot(htfPrice, "Higher timeframe HL2", color.purple, 3)
+```
+
+__Note que:__
+
+- Foi incluído um "_deslocamento_" ("_offset_") no argumento `expression` e usado [barmerge.lookahead_on](https://br.tradingview.com/pine-script-reference/v5/#var_barmerge.lookahead_on) em [request.security()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.security) para garantir que a série retornada se comporte da mesma forma em barras históricas e em tempo real. Veja a seção [Evitando Repintura](./05_14_outros_timeframes_e_dados.md#evitando-repintura) para mais informações.
+
+Note que no exemplo acima, é possível selecionar um valor de `higherTimeframe` que na verdade representa um _timeframe inferior_ ao usado pelo gráfico, pois o código não impede isso. Ao projetar um script para funcionar especificamente com timeframes superiores, recomenda-se incluir condições para evitar o acesso a timeframes inferiores, especialmente se houver intenção de [publicar](./06_04_publicando_scripts.md) o script.
+
+Abaixo, foi adicionada uma estrutura [if](https://br.tradingview.com/pine-script-reference/v5/#kw_if) ao exemplo anterior que gera um [runtime error](https://br.tradingview.com/pine-script-reference/v5/#fun_runtime.error) ("_erro de tempo de execução_") quando a entrada `higherTimeframe` representa um timeframe menor que o timeframe do gráfico, evitando efetivamente que o script solicite dados LTF:
+
+![Timeframes superiores 02](./imgs/Other-timeframes-and-data-Request-security-Timeframes-Higher-timeframes-2.DLmdElJ0_Z1Wqvh6.webp)
+
+```c
+//@version=5
+indicator("Higher timeframe security demo", overlay = true)
+
+//@variable The higher timeframe to request data from.
+string higherTimeframe = input.timeframe("240", "Higher timeframe")
+
+// Raise a runtime error when the `higherTimeframe` is smaller than the chart's timeframe.
+if timeframe.in_seconds() > timeframe.in_seconds(higherTimeframe)
+    runtime.error("The requested timeframe is smaller than the chart's timeframe. Select a higher timeframe.")
+
+//@variable The `hl2` value from the `higherTimeframe`. Combines lookahead with an offset to avoid repainting.
+float htfPrice = request.security(syminfo.tickerid, higherTimeframe, hl2[1], lookahead = barmerge.lookahead_on)
+
+// Plot the `hl2` from the chart timeframe and the `higherTimeframe`.
+plot(hl2, "Current timeframe HL2", color.teal, 2)
+plot(htfPrice, "Higher timeframe HL2", color.purple, 3)
+```
+
+## Timeframes Inferiores
+
+Embora a função [request.security()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.security) seja destinada a operar em timeframes maiores ou iguais ao timeframe do gráfico, ela _pode_ solicitar dados de timeframes inferiores também, com limitações. Ao chamar essa função para acessar um timeframe inferior, ela avaliará a `expression` a partir do contexto LTF. No entanto, ela só pode retornar os resultados de uma única intrabar (barra LTF) em cada barra do gráfico.
+
+A intrabar da qual a função retorna dados em cada barra histórica do gráfico depende do valor `lookahead` na chamada da função. Ao usar [barmerge.lookahead_on](https://br.tradingview.com/pine-script-reference/v5/#var_barmerge.lookahead_on), ela retornará a _primeira_ intrabar disponível do período do gráfico. Ao usar [barmerge.lookahead_off](https://br.tradingview.com/pine-script-reference/v5/#var_barmerge.lookahead_off), ela retornará a _última_ intrabar do período do gráfico. Em barras em tempo real, ela retorna o último valor disponível da `expression` do timeframe, independentemente do valor `lookahead`, pois as informações da intrabar em tempo real recuperadas pela função ainda não estão ordenadas.
+
+Este script recupera dados de [fechamento](https://br.tradingview.com/pine-script-reference/v5/#var_close) do timeframe válido mais próximo a um quarto do tamanho do timeframe do gráfico. Ele faz duas chamadas para [request.security()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.security) com valores `lookahead` diferentes. A primeira chamada usa [barmerge.lookahead_on](https://br.tradingview.com/pine-script-reference/v5/#var_barmerge.lookahead_on) para acessar o primeiro valor intrabar em cada barra do gráfico. A segunda usa o valor padrão `lookahead` ([barmerge.lookahead_off](https://br.tradingview.com/pine-script-reference/v5/#var_barmerge.lookahead_off)), que solicita o último valor intrabar atribuído a cada barra do gráfico. O script [plota](./05_15_plots.md) as saídas de ambas as chamadas no gráfico para comparar a diferença:
+
+![Timeframes inferiores](./imgs/Other-timeframes-and-data-Request-security-Timeframes-Lower-timeframes-1.CzbZyyC2_Z2o4fpJ.webp)
+
+```c
+//@version=5
+indicator("Lower timeframe security demo", overlay = true)
+
+//@variable The valid timeframe closest to 1/4 the size of the chart timeframe.
+string lowerTimeframe = timeframe.from_seconds(int(timeframe.in_seconds() / 4))
+
+//@variable The `close` value on the `lowerTimeframe`. Represents the first intrabar value on each chart bar.
+float firstLTFClose = request.security(syminfo.tickerid, lowerTimeframe, close, lookahead = barmerge.lookahead_on)
+//@variable The `close` value on the `lowerTimeframe`. Represents the last intrabar value on each chart bar.
+float lastLTFClose = request.security(syminfo.tickerid, lowerTimeframe, close)
+
+// Plot the values.
+plot(firstLTFClose, "First intrabar close", color.teal, 3)
+plot(lastLTFClose, "Last intrabar close", color.purple, 3)
+// Highlight the background on realtime bars.
+bgcolor(barstate.isrealtime ? color.new(color.orange, 70) : na, title = "Realtime background highlight")
+```
+
+__Note que:__
+
+- O script determina o valor de `lowerTimeframe` calculando o número de segundos no timeframe do gráfico com [timeframe.in_seconds()](https://br.tradingview.com/pine-script-reference/v5/#fun_timeframe.in_seconds), depois dividindo por quatro e convertendo o resultado para uma [string de timeframe válida](./05_22_timeframes.md#especificações-de-string-do-timeframe) via [timeframe.from_seconds()](https://br.tradingview.com/pine-script-reference/v5/#fun_timeframe.from_seconds).
+- O plot da série sem lookahead ([purple](https://br.tradingview.com/pine-script-reference/v5/#var_color.purple)) alinha-se com o valor de [fechamento](https://br.tradingview.com/pine-script-reference/v5/#var_close) no timeframe do gráfico, pois este é o último valor intrabar na barra do gráfico.
+- Ambas as chamadas de [request.security()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.security) retornam o _mesmo_ valor (o [fechamento](https://br.tradingview.com/pine-script-reference/v5/#var_close) atual) em cada barra [realtime](https://br.tradingview.com/pine-script-reference/v5/#var_barstate.isrealtime), como mostrado nas barras com o fundo [orange](https://br.tradingview.com/pine-script-reference/v5/#var_color.orange).
+- Scripts podem recuperar até 100.000 intrabars de um contexto de timeframe inferior. Veja [esta](./06_05_limitacoes.md#intrabars) seção da página de [Limitações](./06_05_limitacoes.md).
+
+> __Observação!__\
+> Embora scripts possam usar [request.security()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.security) para recuperar os valores de uma única intrabar em cada barra do gráfico, o que pode ser útil em alguns casos únicos, recomenda-se usar a função [request.security_lower_tf()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.security_lower_tf) para análise intrabar sempre que possível, pois ela retorna um [array](https://br.tradingview.com/pine-script-reference/v5/#type_array) contendo dados de _todas_ as intrabars disponíveis dentro de uma barra do gráfico. Veja [esta seção](./05_14_outros_timeframes_e_dados.md#requestsecurity_lower_tf) para mais informações. -->
+
+
 # Comportamento Histórico e Tempo Real
 
 
@@ -302,3 +398,5 @@ O parâmetro `expression` da função [request.security()](https://br.tradingvie
 
 
 # Contextos Personalizados
+
+# `request.security_lower_tf()`
