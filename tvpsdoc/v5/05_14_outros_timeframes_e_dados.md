@@ -382,6 +382,56 @@ __Note que:__
 > Embora scripts possam usar [request.security()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.security) para recuperar os valores de uma única intrabar em cada barra do gráfico, o que pode ser útil em alguns casos únicos, recomenda-se usar a função [request.security_lower_tf()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.security_lower_tf) para análise intrabar sempre que possível, pois ela retorna um [array](https://br.tradingview.com/pine-script-reference/v5/#type_array) contendo dados de _todas_ as intrabars disponíveis dentro de uma barra do gráfico. Veja [esta seção](./05_14_outros_timeframes_e_dados.md#requestsecurity_lower_tf) para mais informações.
 
 
+# Dados Solicitáveis
+
+A função [request.security()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.security) é bastante versátil, pois pode recuperar valores de qualquer tipo fundamental ([int](./04_09_tipagem_do_sistema.md#int), [float](./04_09_tipagem_do_sistema.md#float), [bool](./04_09_tipagem_do_sistema.md#bool), [color](./04_09_tipagem_do_sistema.md#color), ou [string](./04_09_tipagem_do_sistema.md#string)). Ela também pode solicitar IDs de estruturas de dados e tipos embutidos ou [definidos pelo usuário](./04_09_tipagem_do_sistema.md#tipos-definidos-pelo-usuário) que referenciam tipos fundamentais. Os dados que essa função solicita dependem do parâmetro `expression`, que aceita qualquer um dos seguintes argumentos:
+
+- [Variáveis incorporadas e chamadas de função](./05_14_outros_timeframes_e_dados.md#variáveis-e-funções-embutidas)
+- [Variáveis calculadas pelo script](./05_14_outros_timeframes_e_dados.md#variáveis-calculadas)
+- [Tuplas](./05_14_outros_timeframes_e_dados.md#tuples-tuplas)
+- [Chamadas de funções definidas pelo usuário](./05_14_outros_timeframes_e_dados.md#funções-definidas-pelo-usuário)
+- [Pontos do gráfico](./05_14_outros_timeframes_e_dados.md#pontos-do-gráfico)
+- [Coleções](./05_14_outros_timeframes_e_dados.md#coleções)
+- [Tipos definidos pelo usuário](./05_14_outros_timeframes_e_dados.md#tipos-definidos-pelo-usuário)
+
+> __Observação!__\
+> A função [request.security()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.security) duplica os escopos e operações necessários para a `expression` calcular os valores solicitados em outro contexto, o que aumenta o consumo de memória em tempo de execução. Além disso, os escopos adicionais produzidos por cada chamada de [request.security()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.security) contam para os _limites de compilação_ do script. Consulte a seção [Contagem de escopos](./06_05_limitacoes.md#contagem-de-escopos) da página de [Limitações](./06_05_limitacoes.md) para mais informações.
+
+## Variáveis e Funções Embutidas
+
+<!-- ### Um caso de uso frequente de [request.security()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.security) é solicitar a saída de uma variável embutida ou chamada de função/[método](https://www.tradingview.com/pine-script-docs/language/methods) de outro símbolo ou timeframe.
+
+Por exemplo, suponha que se queira calcular a [SMA](https://br.tradingview.com/pine-script-reference/v5/#fun_ta.sma) de 20 barras do preço [ohlc4](https://br.tradingview.com/pine-script-reference/v5/#var_ohlc4) de um símbolo no timeframe diário enquanto está em um gráfico intradiário. Isso pode ser feito com uma única linha de código:
+
+A linha acima calcula o valor de [ta.sma(ohlc4, 20)](https://br.tradingview.com/pine-script-reference/v5/#fun_ta.sma) no símbolo atual a partir do timeframe diário.
+
+É importante notar que novos usuários do Pine podem às vezes confundir a linha de código acima como sendo equivalente à seguinte:
+
+No entanto, essa linha retornará um resultado totalmente _diferente_. Em vez de solicitar uma SMA de 20 barras do timeframe diário, ela solicita o preço [ohlc4](https://br.tradingview.com/pine-script-reference/v5/#var_ohlc4) do timeframe diário e calcula a [ta.sma()](https://br.tradingview.com/pine-script-reference/v5/#fun_ta.sma) dos resultados ao longo de 20 **barras do gráfico**.
+
+Em essência, quando a intenção é solicitar os resultados de uma expressão de outros contextos, passe a expressão _diretamente_ para o parâmetro `expression` na chamada [request.security()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.security), como demonstrado no exemplo inicial.
+
+Vamos expandir esse conceito. O script abaixo calcula uma fita de médias móveis de múltiplos timeframes (MTF), onde cada média móvel na fita é calculada sobre o mesmo número de barras em seu respectivo timeframe. Cada chamada de [request.security()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.security) usa [ta.sma(close, length)](https://br.tradingview.com/pine-script-reference/v5/#fun_ta.sma) como seu argumento `expression` para retornar uma SMA de `length` barras do timeframe especificado:
+
+__Note que:__
+
+- O script calcula os timeframes superiores da fita multiplicando o valor de [timeframe.in_seconds()](https://br.tradingview.com/pine-script-reference/v5/#fun_timeframe.in_seconds) do gráfico por 2, 3 e 4, depois convertendo cada resultado em uma [string de timeframe válida](https://www.tradingview.com/pine-script-docs/concepts/timeframes#timeframe-string-specifications) usando [timeframe.from_seconds()](https://br.tradingview.com/pine-script-reference/v5/#fun_timeframe.from_seconds).
+- Em vez de chamar [ta.sma()](https://br.tradingview.com/pine-script-reference/v5/#fun_ta.sma) dentro de cada chamada de [request.security()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.security), pode-se usar a variável `chartAvg` como `expression` em cada chamada para alcançar o mesmo resultado. Veja a [próxima seção](./05_14_outros_timeframes_e_dados.md#calculated-variables) para mais informações.
+- Em barras em tempo real, este script também rastreia valores de SMA _não confirmados_ de cada timeframe superior. Veja a seção de [Comportamento Histórico e em Tempo Real](./05_14_outros_timeframes_e_dados.md#historical-and-realtime-behavior) para saber mais. -->
+
+## Variáveis Calculadas
+
+## Tuples (_Tuplas_)
+
+## Funções Definidas pelo Usuário
+
+## Pontos do Gráfico
+
+## Coleções
+
+## Tipos Definidos pelo Usuário
+
+
 # Comportamento Histórico e Tempo Real
 
 
@@ -390,9 +440,6 @@ __Note que:__
 ## Dados Higher-Timeframe (HTF) _Timeframe Superior_
 
 ## Dados Lower-Timeframe (LTF) _Timeframe Inferior_
-
-
-# Dados Solicitáveis
 
 
 # Contextos Personalizados
