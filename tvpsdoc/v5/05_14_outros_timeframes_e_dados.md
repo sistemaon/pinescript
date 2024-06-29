@@ -399,6 +399,121 @@ A função [request.security()](https://br.tradingview.com/pine-script-reference
 
 ## Variáveis e Funções Embutidas
 
+Um caso de uso frequente de [request.security()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.security) é solicitar a saída de uma variável incorporada ou chamada de função/[método](./04_13_metodos.md) de outro símbolo ou período.
+
+Por exemplo, para calcular a [SMA](https://br.tradingview.com/pine-script-reference/v5/#fun_ta.sma) de 20 barras do preço [ohlc4](https://br.tradingview.com/pine-script-reference/v5/#var_ohlc4) de um símbolo do período diário enquanto se está em um gráfico intradiário, pode-se realizar isso com uma única linha de código:
+
+```c
+float ma = request.security(syminfo.tickerid, "1D", ta.sma(ohlc4, 20))
+```
+
+A linha acima calcula o valor de [ta.sma(ohlc4, 20)](https://br.tradingview.com/pine-script-reference/v5/#fun_ta.sma) no símbolo atual a partir do período diário.
+
+É importante notar que iniciantes no Pine podem confundir a linha de código acima como equivalente à seguinte:
+
+```c
+float ma = ta.sma(request.security(syminfo.tickerid, "1D", ohlc4), 20)
+```
+
+No entanto, essa linha retornará um resultado completamente _diferente_. Em vez de solicitar uma SMA de 20 barras do período diário, ela solicita o preço [ohlc4](https://br.tradingview.com/pine-script-reference/v5/#var_ohlc4) do período diário e calcula a [ta.sma()](https://br.tradingview.com/pine-script-reference/v5/#fun_ta.sma) dos resultados ao longo de 20 __barras do gráfico__.
+
+Em essência, quando a intenção é solicitar os resultados de uma expressão de outros contextos, passe a expressão _diretamente_ para o parâmetro `expression` na chamada [request.security()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.security), conforme demonstrado no exemplo inicial.
+
+Explicando esse conceito: o script abaixo calcula uma faixa de médias móveis em múltiplos períodos (_multi-timeframe (MTF)_), onde cada média móvel na faixa é calculada sobre o mesmo número de barras em seu respectivo período. Cada chamada [request.security()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.security) usa [ta.sma(close, length)](https://br.tradingview.com/pine-script-reference/v5/#fun_ta.sma) como seu argumento `expression` para retornar uma SMA de `length` barras do período especificado:
+
+![Variáveis e funções embutidas](./imgs/Other-timeframes-and-data-Request-security-Requestable-data-Built-in-variables-and-functions-1.CPvZdzBd_Z1LKRRo.webp)
+
+```c
+//@version=5
+indicator("Requesting built-ins demo", "MTF Ribbon", true)
+
+//@variable The length of each moving average.
+int length = input.int(20, "Length", 1)
+
+//@variable The number of seconds in the chart timeframe.
+int chartSeconds = timeframe.in_seconds()
+
+// Calculate the higher timeframes closest to 2, 3, and 4 times the size of the chart timeframe.
+string htf1 = timeframe.from_seconds(chartSeconds * 2)
+string htf2 = timeframe.from_seconds(chartSeconds * 3)
+string htf3 = timeframe.from_seconds(chartSeconds * 4)
+
+// Calculate the `length`-bar moving averages from each timeframe.
+float chartAvg = ta.sma(ohlc4, length)
+float htfAvg1  = request.security(syminfo.tickerid, htf1, ta.sma(ohlc4, length))
+float htfAvg2  = request.security(syminfo.tickerid, htf2, ta.sma(ohlc4, length))
+float htfAvg3  = request.security(syminfo.tickerid, htf3, ta.sma(ohlc4, length))
+
+// Plot the results.
+plot(chartAvg, "Chart timeframe SMA", color.red, 3)
+plot(htfAvg1, "Double timeframe SMA", color.orange, 3)
+plot(htfAvg2, "Triple timeframe SMA", color.green, 3)
+plot(htfAvg3, "Quadruple timeframe SMA", color.blue, 3)
+
+// Highlight the background on realtime bars.
+bgcolor(barstate.isrealtime ? color.new(color.aqua, 70) : na, title = "Realtime highlight")
+```
+
+__Note que:__
+
+- O script calcula os períodos mais altos da faixa multiplicando o valor de [timeframe.in_seconds()](https://br.tradingview.com/pine-script-reference/v5/#fun_timeframe.in_seconds) do gráfico por 2, 3 e 4, convertendo cada resultado em uma [string de período válida](./05_22_timeframes.md#especificações-de-string-do-timeframe) usando [timeframe.from_seconds()](https://br.tradingview.com/pine-script-reference/v5/#fun_timeframe.from_seconds).
+- Em vez de chamar [ta.sma()](https://br.tradingview.com/pine-script-reference/v5/#fun_ta.sma) dentro de cada chamada [request.security()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.security), poderia-se usar a variável `chartAvg` como `expression` em cada chamada para obter o mesmo resultado. Veja a [próxima seção](./05_14_outros_timeframes_e_dados.md#variáveis-calculadas) para mais informações.
+- Em barras em tempo real, este script também rastreia valores de SMA _não confirmados_ de cada período mais alto. Veja a seção [Comportamento histórico e em tempo real](./05_14_outros_timeframes_e_dados.md#comportamento-histórico-e-tempo-real) para saber mais.
+
+<!-- ## Variáveis Calculadas
+
+O parâmetro `expression` de [request.security()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.security) aceita variáveis declaradas no escopo global, permitindo que scripts avaliem os cálculos de suas variáveis em outros contextos sem listar as operações de forma redundante em cada chamada de função.
+
+Por exemplo, pode-se declarar a seguinte variável:
+
+```c
+priceReturn = (close - close[1]) / close[1]
+```
+
+e executar o cálculo da variável a partir de outro contexto com [request.security()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.security):
+
+```c
+requestedReturn = request.security(symbol, timeframe.period, priceReturn)
+```
+
+A chamada da função na linha acima retornará o resultado do cálculo de `priceReturn` nos dados de outro `símbolo` como uma série adaptada ao gráfico atual, que o script pode exibir diretamente no gráfico ou utilizar em operações adicionais.
+
+O exemplo a seguir compara os retornos de preço do símbolo do gráfico atual e de outro `símbolo` especificado. O script declara a variável `priceReturn` no contexto do gráfico, depois usa essa variável em [request.security()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.security) para avaliar seu cálculo em outro `símbolo`. Em seguida, calcula a [correlação](https://br.tradingview.com/pine-script-reference/v5/#fun_ta.correlation) entre `priceReturn` e `requestedReturn` e [plota](https://br.tradingview.com/pine-script-docs/concepts/plots) o resultado no gráfico:
+
+```c
+//@version=5
+indicator("Requesting calculated variables demo", "Price return correlation")
+
+//@variable O símbolo para comparar com o símbolo do gráfico.
+string symbol = input.symbol("SPY", "Símbolo para comparar")
+//@variable O número de barras na janela de cálculo.
+int length = input.int(60, "Comprimento", 1)
+
+//@variable O retorno de preço de fechamento para fechamento.
+float priceReturn = (close - close[1]) / close[1]
+//@variable O retorno de preço de fechamento para fechamento calculado em outro `símbolo`.
+float requestedReturn = request.security(symbol, timeframe.period, priceReturn)
+
+//@variable A correlação entre `priceReturn` e `requestedReturn` ao longo de `length` barras.
+float correlation = ta.correlation(priceReturn, requestedReturn, length)
+//@variable A cor do gráfico de correlação.
+color plotColor = color.from_gradient(correlation, -1, 1, color.purple, color.orange)
+
+// Plota o valor da correlação.
+plot(correlation, "Correlação", plotColor, style = plot.style_area)
+```
+
+__Note que:__
+
+- A chamada [request.security()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.security) executa o mesmo cálculo usado na declaração de `priceReturn`, exceto que utiliza os valores de [close](https://br.tradingview.com/pine-script-reference/v5/#var_close) obtidos do `símbolo` de entrada.
+- O script colore o gráfico com um [gradiente](https://br.tradingview.com/pine-script-reference/v5/#fun_color.from_gradient) baseado no valor de `correlation`. Para saber mais sobre gradientes de cores no Pine, consulte [esta](
+
+https://br.tradingview.com/pine-script-docs/concepts/colors#color-from-gradient) seção da página do Manual do Usuário sobre [cores](https://br.tradingview.com/pine-script-docs/concepts/colors).
+
+####  Tuplas
+
+[Tuplas](https://br.tradingview.com/pine-script-docs/language/type-system#tuples) no Pine Script™ são conjuntos de expressões separados por vírgula, delimitados por colchetes, que podem conter múltiplos valores de qualquer tipo disponível. Usam-se tuplas ao criar funções que... -->
+
 <!-- ### Um caso de uso frequente de [request.security()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.security) é solicitar a saída de uma variável embutida ou chamada de função/[método](https://www.tradingview.com/pine-script-docs/language/methods) de outro símbolo ou timeframe.
 
 Por exemplo, suponha que se queira calcular a [SMA](https://br.tradingview.com/pine-script-reference/v5/#fun_ta.sma) de 20 barras do preço [ohlc4](https://br.tradingview.com/pine-script-reference/v5/#var_ohlc4) de um símbolo no timeframe diário enquanto está em um gráfico intradiário. Isso pode ser feito com uma única linha de código:
@@ -407,7 +522,7 @@ A linha acima calcula o valor de [ta.sma(ohlc4, 20)](https://br.tradingview.com/
 
 É importante notar que novos usuários do Pine podem às vezes confundir a linha de código acima como sendo equivalente à seguinte:
 
-No entanto, essa linha retornará um resultado totalmente _diferente_. Em vez de solicitar uma SMA de 20 barras do timeframe diário, ela solicita o preço [ohlc4](https://br.tradingview.com/pine-script-reference/v5/#var_ohlc4) do timeframe diário e calcula a [ta.sma()](https://br.tradingview.com/pine-script-reference/v5/#fun_ta.sma) dos resultados ao longo de 20 **barras do gráfico**.
+No entanto, essa linha retornará um resultado totalmente _diferente_. Em vez de solicitar uma SMA de 20 barras do timeframe diário, ela solicita o preço [ohlc4](https://br.tradingview.com/pine-script-reference/v5/#var_ohlc4) do timeframe diário e calcula a [ta.sma()](https://br.tradingview.com/pine-script-reference/v5/#fun_ta.sma) dos resultados ao longo de 20 __barras do gráfico__.
 
 Em essência, quando a intenção é solicitar os resultados de uma expressão de outros contextos, passe a expressão _diretamente_ para o parâmetro `expression` na chamada [request.security()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.security), como demonstrado no exemplo inicial.
 
@@ -418,8 +533,6 @@ __Note que:__
 - O script calcula os timeframes superiores da fita multiplicando o valor de [timeframe.in_seconds()](https://br.tradingview.com/pine-script-reference/v5/#fun_timeframe.in_seconds) do gráfico por 2, 3 e 4, depois convertendo cada resultado em uma [string de timeframe válida](https://www.tradingview.com/pine-script-docs/concepts/timeframes#timeframe-string-specifications) usando [timeframe.from_seconds()](https://br.tradingview.com/pine-script-reference/v5/#fun_timeframe.from_seconds).
 - Em vez de chamar [ta.sma()](https://br.tradingview.com/pine-script-reference/v5/#fun_ta.sma) dentro de cada chamada de [request.security()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.security), pode-se usar a variável `chartAvg` como `expression` em cada chamada para alcançar o mesmo resultado. Veja a [próxima seção](./05_14_outros_timeframes_e_dados.md#calculated-variables) para mais informações.
 - Em barras em tempo real, este script também rastreia valores de SMA _não confirmados_ de cada timeframe superior. Veja a seção de [Comportamento Histórico e em Tempo Real](./05_14_outros_timeframes_e_dados.md#historical-and-realtime-behavior) para saber mais. -->
-
-## Variáveis Calculadas
 
 ## Tuples (_Tuplas_)
 
