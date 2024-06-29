@@ -62,3 +62,7 @@ Os links de referencia para os 'request.financial()' pode estar sendo redirecion
 
 In Other timeframes and data > TIMEFRAMES> LOWER TIMEFRAMES = Notice!While scripts can use request.security() to retrieve the values from a single intrabar on each chart bar, which might provide utility in some unique cases, we recommend using the request.security_lower_tf() function for intrabar analysis when possible, as it returns an array containing data from all available intrabars within a chart bar. See [this section](https://www.tradingview.com/pine-script-docs/concepts/other-timeframes-and-data/#request-security-lower-tf) to learn more.
 O link para o "See [this section]" não encaminha para o destino correto. O link pode ser supostamente para "See [this section](https://www.tradingview.com/pine-script-docs/concepts/other-timeframes-and-data/#requestsecurity_lower_tf)"
+
+IN Other timeframes and data > Calculated variables = The script colors the plot with a gradient based on the correlation value. To learn more about color gradients in Pine, see [this](https://www.tradingview.com/pine-script-docs/concepts/colors/#colors) section of our User Manual’s page on colors.
+O link do [this] deveria referenciar a parte do link sobre cores de gradiente.
+[this](https://www.tradingview.com/pine-script-docs/concepts/colors/#colorfrom_gradient)
