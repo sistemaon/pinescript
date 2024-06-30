@@ -660,9 +660,9 @@ __Note que:__
 
 As _coleções_ do Pine Script ([arrays](./04_14_arrays.md) e [mapas](./04_16_mapas.md)) são estruturas de dados que contêm um número arbitrário de elementos com tipos especificados. A função [request.security()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.security) pode recuperar os IDs de [coleções](./04_09_tipagem_do_sistema.md#coleções) cujos elementos consistem em:
 
-- [Tipos fundamentais](./04_09_tipagem_do_sistema.md#tipos)
-- [Pontos do gráfico](./04_09_tipagem_do_sistema.md#chart-points-pontos-do-gráfico)
-- [Tipos definidos pelo usuário](./04_09_tipagem_do_sistema.md#tipos-definidos-pelo-usuário) que atendem aos critérios listados na [seção abaixo](./05_14_outros_timeframes_e_dados.md#tipos-definidos-pelo-usuário)
+- [Tipos fundamentais](./04_09_tipagem_do_sistema.md#tipos).
+- [Pontos do gráfico](./04_09_tipagem_do_sistema.md#chart-points-pontos-do-gráfico).
+- [Tipos definidos pelo usuário](./04_09_tipagem_do_sistema.md#tipos-definidos-pelo-usuário) que atendem aos critérios listados na [seção abaixo](./05_14_outros_timeframes_e_dados.md#tipos-definidos-pelo-usuário).
 
 Este exemplo calcula o _ratio_ da variação alta-baixa de uma barra confirmada em relação à variação entre os valores [mais altos](https://br.tradingview.com/pine-script-reference/v5/#fun_ta.highest) e [mais baixos](https://br.tradingview.com/pine-script-reference/v5/#fun_ta.lowest) em 10 barras de um `symbol` e `timeframe` especificados. Ele usa [mapas](./04_16_mapas.md) para armazenar os valores usados nos cálculos.
 
@@ -707,52 +707,149 @@ __Note que:__
 
 - A chamada [request.security()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.security) neste script pode retornar [na](https://br.tradingview.com/pine-script-reference/v5/#var_na) se não houver dados disponíveis do contexto especificado. Como não é possível chamar [métodos](./04_13_metodos.md) em uma variável [map](https://br.tradingview.com/pine-script-reference/v5/#type_map) quando seu valor é [na](https://br.tradingview.com/pine-script-reference/v5/#var_na), foi adicionada uma estrutura [if](https://br.tradingview.com/pine-script-reference/v5/#kw_if) para calcular um novo valor de `ratio` apenas quando `otherData` referencia um ID [map](https://br.tradingview.com/pine-script-reference/v5/#type_map) válido.
 
-<!-- ## Tipos Definidos pelo Usuário
+## Tipos Definidos pelo Usuário
 
 [Tipos Definidos pelo Usuário (UDTs)](./04_09_tipagem_do_sistema.md#tipos-definidos-pelo-usuário) são _tipos compostos_ que contêm um número arbitrário de _campos_, que podem ser de qualquer tipo disponível, incluindo outros [tipos definidos pelo usuário](./04_09_tipagem_do_sistema.md#tipos-definidos-pelo-usuário).
 
-A função [request.security()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.security) pode recuperar os IDs de [objetos](https://br.tradingview.com/pine-script-docs/language/objects) produzidos por [UDTs](./04_09_tipagem_do_sistema.md#tipos-definidos-pelo-usuário) de outros contextos se seus campos consistirem em:
+A função [request.security()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.security) pode recuperar os IDs de [objetos](./04_12_objetos.md) produzidos por [UDTs](./04_09_tipagem_do_sistema.md#tipos-definidos-pelo-usuário) de outros contextos se seus campos consistirem em:
 
-- [Tipos fundamentais](./04_09_tipagem_do_sistema.md#tipos)
-- [Pontos do gráfico](./04_09_tipagem_do_sistema.md#chart-points-pontos-do-gráfico)
-- [Coleções](./04_09_tipagem_do_sistema.md#coleções) que atendem aos critérios listados na [seção acima](https://br.tradingview.com/pine-script-docs/concepts/other-timeframes-and-data#collections)
-- Outros [UDTs](./04_09_tipagem_do_sistema.md#tipos-definidos-pelo-usuário) cujos campos consistem em qualquer um desses tipos
+- [Tipos fundamentais](./04_09_tipagem_do_sistema.md#tipos).
+- [Pontos do gráfico](./04_09_tipagem_do_sistema.md#chart-points-pontos-do-gráfico).
+- [Coleções](./04_09_tipagem_do_sistema.md#coleções) que atendem aos critérios listados na [seção acima](./05_14_outros_timeframes_e_dados.md#coleções).
+- Outros [UDTs](./04_09_tipagem_do_sistema.md#tipos-definidos-pelo-usuário) cujos campos consistem em qualquer um desses tipos.
 
-O exemplo a seguir solicita um ID de [objeto](https://br.tradingview.com/pine-script-docs/language/objects) usando um `symbol` especificado e exibe seus valores de campo em um painel do gráfico.
+O exemplo a seguir solicita um ID de [objeto](./04_12_objetos.md) usando um `symbol` especificado e exibe seus valores de campo em um painel do gráfico.
 
-O script contém um UDT `TickerInfo` com campos
+O script contém um UDT `TickerInfo` com campos "string" para valores `syminfo.*`, um campo [array](https://br.tradingview.com/pine-script-reference/v5/#type_array) para armazenar dados de preço recentes "float", e um campo "int" para manter o valor de [bar_index](https://br.tradingview.com/pine-script-reference/v5/#var_bar_index) do ticker solicitado. Ele atribui um novo ID `TickerInfo` a uma variável `info` em cada barra e usa essa variável como `expression` em [request.security()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.security) para recuperar o ID de um [objeto](./04_12_objetos.md) representando o `info` calculado do `symbol` especificado.
 
- "string" para valores `syminfo.*`, um campo [array](https://br.tradingview.com/pine-script-reference/v5/#type_array) para armazenar dados de preço recentes "float", e um campo "int" para manter o valor de [bar_index](https://br.tradingview.com/pine-script-reference/v5/#var_bar_index) do ticker solicitado. Ele atribui um novo ID `TickerInfo` a uma variável `info` em cada barra e usa essa variável como `expression` em [request.security()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.security) para recuperar o ID de um [objeto](https://br.tradingview.com/pine-script-docs/language/objects) representando o `info` calculado do `symbol` especificado.
+O script exibe os valores `description`, `tickerType`, `currency` e `barIndex` do objeto `requestedInfo` em um [label](https://br.tradingview.com/pine-script-reference/v5/#type_label) e usa [plotcandle()](https://br.tradingview.com/pine-script-reference/v5/#fun_plotcandle) para exibir os valores de seu array `prices`:
 
-O script exibe os valores `description`, `tickerType`, `currency` e `barIndex` do objeto `requestedInfo` em um [rótulo](https://br.tradingview.com/pine-script-reference/v5/#type_label) e usa [plotcandle()](https://br.tradingview.com/pine-script-reference/v5/#fun_plotcandle) para exibir os valores de seu array `prices`:
+![Tipos definidos pelo usuário](./imgs/Other-timeframes-and-data-Request-security-Requestable-data-User-defined-types-1.D90DRv4r_1OUO19.webp)
 
 ```c
 //@version=5
-indicator("Demonstração de solicitação de tipos definidos pelo usuário", "Informações do Ticker")
+indicator("Requesting user-defined types demo", "Ticker info")
 
-//@variable O símbolo para solicitar informações.
-string symbol = input.symbol("NASDAQ:AAPL", "Símbolo")
+//@variable The symbol to request information from.
+string symbol = input.symbol("NASDAQ:AAPL", "Symbol")
 
-//@type Um tipo personalizado contendo informações sobre um ticker.
-//@field description A descrição do símbolo.
-//@field tickerType O tipo de ticker.
-//@field currency A moeda do símbolo.
-//@field prices Um array dos preços atuais do símbolo.
-//@field barIndex O `bar_index` do ticker.
+//@type               A custom type containing information about a ticker.
+//@field description  The symbol's description.
+//@field tickerType   The type of ticker.
+//@field currency     The symbol's currency.
+//@field prices       An array of the symbol's current prices.
+//@field barIndex     The ticker's `bar_index`.
 type TickerInfo
-    string description
-    string tickerType
-    string currency
+    string       description
+    string       tickerType
+    string       currency
     array<float> prices
-    int barIndex
+    int          barIndex
 
-//@variable Um objeto `TickerInfo` contendo dados atuais.
+//@variable A `TickerInfo` object containing current data.
 info = TickerInfo.new(
-    syminfo.description, syminfo.type, syminfo.currency, array.from(open, high, low, close), bar_index
-)
-//@variable O `info` solicitado do `symbol` especificado.
-``` -->
+     syminfo.description, syminfo.type, syminfo.currency, array.from(open, high, low, close), bar_index
+ )
+//@variable The `info` requested from the specified `symbol`.
+TickerInfo requestedInfo = request.security(symbol, timeframe.period, info)
+// Assign a new `TickerInfo` instance to `requestedInfo` if one wasn't retrieved.
+if na(requestedInfo)
+    requestedInfo := TickerInfo.new(prices = array.new<float>(4))
 
+//@variable A label displaying information from the `requestedInfo` object.
+var infoLabel = label.new(
+     na, na, "", color = color.purple, style = label.style_label_left, textcolor = color.white, size = size.large
+ )
+//@variable The text to display inside the `infoLabel`.
+string infoText = na(requestedInfo) ? "" : str.format(
+     "{0}\nType: {1}\nCurrency: {2}\nBar Index: {3}",
+     requestedInfo.description, requestedInfo.tickerType, requestedInfo.currency, requestedInfo.barIndex
+ )
+
+// Set the `point` and `text` of the `infoLabel`.
+label.set_point(infoLabel, chart.point.now(array.last(requestedInfo.prices)))
+label.set_text(infoLabel, infoText)
+// Plot candles using the values from the `prices` array of the `requestedInfo`.
+plotcandle(
+     requestedInfo.prices.get(0), requestedInfo.prices.get(1), requestedInfo.prices.get(2), requestedInfo.prices.get(3),
+     "Requested Prices"
+ )
+```
+
+__Note que:__
+
+- As variáveis `syminfo.*` usadas neste script retornam tipos qualificados como "string simples". Contudo, os [objetos](./04_12_objetos.md) no Pine são _sempre_ qualificados como "series". Consequentemente, todos os valores atribuídos aos campos do objeto `info` automaticamente adotam o [qualificativo](./04_09_tipagem_do_sistema.md#qualificadores) "series".
+- A chamada [request.security()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.security) pode retornar [na](https://br.tradingview.com/pine-script-reference/v5/#var_na) devido a diferenças entre os dados solicitados do `symbol` e o gráfico principal. Este script atribui um novo objeto `TickerInfo` ao `requestedInfo` nesse caso para evitar erros de execução.
+
+<!-- ## `request.security_lower_tf()`
+
+A função [request.security_lower_tf()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.security_lower_tf) é uma alternativa à [request.security()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.security) projetada para solicitar informações de contextos de menor período (LTF) de forma confiável.
+
+Enquanto [request.security()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.security) pode recuperar dados de uma _única_ barra intradiária em cada barra do gráfico, [request.security_lower_tf()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.security_lower_tf) recupera dados de _todas_ as barras intradiárias disponíveis em cada barra do gráfico, que o script pode acessar e usar em cálculos adicionais. Cada chamada pode recuperar até 100.000 intrabarras de um período menor. Consulte [esta seção](https://br.tradingview.com/pine-script-docs/writing/limitations#request-calls) da página de [Limitações](https://br.tradingview.com/pine-script-docs/writing/limitations) para mais informações.
+
+__Atenção!__ Trabalhar com [request.security_lower_tf()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.security_lower_tf) envolve o uso frequente de [arrays](https://br.tradingview.com/pine-script-docs/language/arrays), pois sempre retorna resultados como [arrays](https://br.tradingview.com/pine-script-reference/v5/#type_array). Portanto, recomenda-se se familiarizar com [arrays](https://br.tradingview.com/pine-script-docs/language/arrays) para aproveitar ao máximo essa função em seus scripts.
+
+Abaixo está a assinatura da função, semelhante à [request.security()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.security):
+```plaintext
+request.security_lower_tf(symbol, timeframe, expression, ignore_invalid_symbol, currency, ignore_invalid_timeframe, calc_bars_count) → array<type>
+```
+
+Essa função **somente** solicita dados de períodos menores ou iguais ao período do gráfico. Se o `timeframe` da solicitação representar um período maior que o [período do gráfico](https://br.tradingview.com/pine-script-reference/v5/#var_timeframe.period), a função gerará um erro de execução ou retornará valores [na](https://br.tradingview.com/pine-script-reference/v5/#var_na) dependendo do argumento `ignore_invalid_timeframe` na chamada. O valor padrão para este parâmetro é `false`, o que significa que ele gerará um erro e interromperá a execução do script ao tentar solicitar dados de um período maior.
+
+### Solicitando dados intrabar
+
+Os dados intrabar podem fornecer informações adicionais que podem não ser óbvias ou acessíveis apenas analisando os dados amostrados no período do gráfico. A função [request.security_lower_tf()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.security_lower_tf) pode recuperar muitos tipos de dados de um contexto intrabar.
+
+Antes de prosseguir nesta seção, recomenda-se explorar a seção [Dados Solicitáveis](https://br.tradingview.com/pine-script-docs/concepts/other-timeframes-and-data#requestable-data) da seção [request.security()](https://br.tradingview.com/pine-script-docs/concepts/other-timeframes-and-data#request-security) acima, que fornece informações básicas sobre os tipos de dados que podem ser solicitados. O parâmetro `expression` em [request.security_lower_tf()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.security_lower_tf) aceita a maioria dos mesmos argumentos discutidos nessa seção, excluindo referências diretas a [coleções](https://br.tradingview.com/pine-script-docs/language/type-system#collections) e variáveis mutáveis declaradas no escopo principal do script. Embora aceite muitos dos mesmos tipos de argumentos, essa função retorna resultados como [arrays](https://br.tradingview.com/pine-script-reference/v5/#type_array), o que traz algumas diferenças na interpretação e manipulação, conforme explicado abaixo.
+
+__Atenção!__ Assim como a [request.security()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.security), a [request.security_lower_tf()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.security_lower_tf) duplica os escopos e operações necessárias para calcular a `expression` de outro contexto. Os escopos de [request.security_lower_tf()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.security_lower_tf) aumentam o consumo de memória em tempo de execução e contam para os limites de compilação do script. Consulte a seção [Contagem de Escopos](https://br.tradingview.com/pine-script-docs/writing/limitations#scope-count) da página de [Limitações](https://br.tradingview.com/pine-script-docs/writing/limitations) para saber mais.
+
+### Arrays de dados intrabar
+
+Períodos menores contêm mais pontos de dados que períodos maiores, à medida que novos valores entram em uma _frequência maior_. Por exemplo, ao comparar um gráfico de 1 minuto com um gráfico horário, o gráfico de 1 minuto terá até 60 vezes o número de barras por hora, dependendo dos dados disponíveis.
+
+Para lidar com o fato de que múltiplas intrabarras existem dentro de uma barra do gráfico, a [request.security_lower_tf()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.security_lower_tf) sempre retorna seus resultados como [arrays](https://br.tradingview.com/pine-script-docs/language/arrays). Os elementos nos [arrays](https://br.tradingview.com/pine-script-docs/language/arrays) retornados representam os valores da `expression` recuperados do período menor, classificados em ordem ascendente com base no timestamp de cada intrabarra.
+
+O [template de tipo](https://br.tradingview.com/pine-script-docs/language/type-system#type-templates) atribuído aos [arrays](https://br.tradingview.com
+
+/pine-script-docs/language/arrays) retornados corresponde aos tipos de valores passados na chamada [request.security_lower_tf()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.security_lower_tf). Por exemplo, usar um "int" como `expression` produzirá uma instância de `array<int>`, um "bool" como `expression` produzirá uma instância de `array<bool>`, etc.
+
+O script a seguir usa informações intrabar para decompor as mudanças de preço de fechamento a fechamento do gráfico em partes positivas e negativas. Ele chama [request.security_lower_tf()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.security_lower_tf) para buscar um [array](https://br.tradingview.com/pine-script-reference/v5/#type_array) de "float" de valores de [ta.change(close)](https://br.tradingview.com/pine-script-reference/v5/#fun_ta.change) do `lowerTimeframe` em cada barra do gráfico, em seguida, acessa todos os elementos do array usando um loop [for…in](https://br.tradingview.com/pine-script-reference/v5/#kw_for...in) para acumular as somas de `positiveChange` e `negativeChange`. O script adiciona os valores acumulados para calcular o `netChange`, depois [plota](https://br.tradingview.com/pine-script-docs/concepts/plots) os resultados no gráfico ao lado do `priceChange` para comparação:
+
+![Arrays de dados intrabar](./imgs/Other-timeframes-and-data-Request-security-lower-tf-Intrabar-data-arrays-1.BFy5KmoZ_CQoK9.webp)
+
+```pinescript
+//@version=5
+indicator("Demonstração de arrays intrabar", "Mudanças de preço intrabar")
+
+//@variable O período menor dos dados solicitados.
+string lowerTimeframe = input.timeframe("1", "Período")
+
+//@variable A mudança de preço de fechamento a fechamento.
+float priceChange = ta.change(close)
+
+//@variable Um array de valores `close` das intrabarras disponíveis no `lowerTimeframe`.
+array<float> intrabarChanges = request.security_lower_tf(syminfo.tickerid, lowerTimeframe, priceChange)
+
+//@variable O movimento total positivo de `close` intrabar na barra do gráfico.
+float positiveChange = 0.0
+//@variable O movimento total negativo de `close` intrabar na barra do gráfico.
+float negativeChange = 0.0
+
+// Loop para calcular totais, começando pela primeira intrabar disponível na barra do gráfico.
+for change in intrabarChanges
+    // Adiciona o `change` a `positiveChange` se seu sinal for 1, e adiciona a `negativeChange` se seu sinal for -1.
+    switch math.sign(change)
+        1 => positiveChange += change
+        -1 => negativeChange += change
+
+//@variable A soma de `positiveChange` e `negativeChange`. Igual ao `priceChange` em barras com intrabarras disponíveis.
+float netChange = positiveChange + negativeChange
+
+// Plota o `positiveChange`, `negativeChange` e `netChange`.
+plot(positiveChange, "Mudança intrabar positiva", color.teal, style = plot.style_area)
+plot(negativeChange, "Mudança intrabar negativa", color.maroon, style = plot.style_area)
+``` -->
 
 # Comportamento Histórico e Tempo Real
 
