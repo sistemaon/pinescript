@@ -7,7 +7,7 @@ O Pine Script utiliza [tipos](./04_09_tipagem_do_sistema.md#tipos) para classifi
 
 A tipagem do Sistema está intimamente entrelaçado com o [modelo de execução](./04_01_modelo_de_execucao.md) do Pine e os conceitos de [séries temporais](./04_02_series_temporais.md). Compreender os três é essencial para aproveitar ao máximo o poder do Pine Script.
 
-> ## Note
+> __Observação!__\
 > Para simplificar, muitas vezes usamos "tipo" para nos referirmos a um "tipo qualificado".
 
 
@@ -83,7 +83,7 @@ plot(close)
 
 Valores qualificados como "input" são estabelecidos após a inicialização por meio das funções `input.*()`. Essas funções produzem valores que os usuários podem modificar na aba "Inputs" das configurações do script. Quando se altera qualquer um dos valores nesta guia, o script é re-executado desde o início do histórico do gráfico para garantir que seus valores de entrada sejam consistentes ao longo de sua execução.
 
-> ## Note
+> __Observação!__\
 > A função [input.source()](https://br.tradingview.com/pine-script-reference/v5/#fun_input.source) é uma exceção no espaço de nomes (_namespace_) `input.*()`, pois ela retorna valores qualificados como "series" em vez de "input", uma vez que variáveis integradas como [open](https://br.tradingview.com/pine-script-reference/v5/#var_open), [close](https://br.tradingview.com/pine-script-reference/v5/#var_close), etc., assim como os valores de outros plots de script, são qualificados como "series".
 
 O script a seguir plota o valor de `sourceInput` do `symbolInput` e contexto do `timeframeInput`. A chamada [request.security()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.security) é válida neste script, pois seus parâmetros `symbol` e `timeframe` permitem argumentos do tipo "simple string", o que significa que também podem aceitar valores do tipo "input string", pois o qualificador "input" é _inferior_ na hierarquia:
@@ -161,8 +161,8 @@ plot(lowest, "Lowest source", color.red)
 
 Os _tipos_ do Pine Script classificam os valores e determinam as funções e operações com as quais eles são compatíveis. Isto incluem:
 
-- Os tipos fundamentais: [int](./04_09_tipagem_do_sistema.md#int), [float](./04_09_tipagem_do_sistema.md#float), [bool](./04_09_tipagem_do_sistema.md#bool), [color](./04_09_tipagem_do_sistema.md#color) e [string](./04_09_tipagem_do_sistema.md#string).
-- Os tipos especiais: [plot](./04_09_tipagem_do_sistema.md#plot-e-hline), [hline](./04_09_tipagem_do_sistema.md#plot-e-hline), [line](./04_09_tipagem_do_sistema.md#tipos-de-desenho), [linefill](./04_09_tipagem_do_sistema.md#tipos-de-desenho), [box](./04_09_tipagem_do_sistema.md#tipos-de-desenho), [polyline](./04_09_tipagem_do_sistema.md#tipos-de-desenho), [label](./04_09_tipagem_do_sistema.md#tipos-de-desenho), [table](./04_09_tipagem_do_sistema.md#tipos-de-desenho), [chart.point](./04_09_tipagem_do_sistema.md#chart-points-pontos-do-gráfico), [array](./04_09_tipagem_do_sistema.md#coleções), [matrix](./04_09_tipagem_do_sistema.md#coleções) e [map](./04_09_tipagem_do_sistema.md#coleções).
+- Os __tipos fundamentais__: [int](./04_09_tipagem_do_sistema.md#int), [float](./04_09_tipagem_do_sistema.md#float), [bool](./04_09_tipagem_do_sistema.md#bool), [color](./04_09_tipagem_do_sistema.md#color) e [string](./04_09_tipagem_do_sistema.md#string).
+- Os __tipos especiais__: [plot](./04_09_tipagem_do_sistema.md#plot-e-hline), [hline](./04_09_tipagem_do_sistema.md#plot-e-hline), [line](./04_09_tipagem_do_sistema.md#tipos-de-desenho), [linefill](./04_09_tipagem_do_sistema.md#tipos-de-desenho), [box](./04_09_tipagem_do_sistema.md#tipos-de-desenho), [polyline](./04_09_tipagem_do_sistema.md#tipos-de-desenho), [label](./04_09_tipagem_do_sistema.md#tipos-de-desenho), [table](./04_09_tipagem_do_sistema.md#tipos-de-desenho), [chart.point](./04_09_tipagem_do_sistema.md#chart-points-pontos-do-gráfico), [array](./04_09_tipagem_do_sistema.md#coleções), [matrix](./04_09_tipagem_do_sistema.md#coleções) e [map](./04_09_tipagem_do_sistema.md#coleções).
 - [Tipos definidos pelo usuário](./04_09_tipagem_do_sistema.md#tipos-definidos-pelo-usuário) (_User-defined types (UDTs)_).
 - [vazio](./04_09_tipagem_do_sistema.md#void) (_void_).
 
