@@ -280,7 +280,7 @@ O valor `symbol` é o identificador do ticker que representa o símbolo de onde 
 
 O valor `timeframe` especifica o timeframe dos dados solicitados. Este parâmetro aceita valores "string" no formato de [especificação de timeframe](./05_22_timeframes.md#especificações-de-string-do-timeframe) (por exemplo, um valor de "1D" representa o timeframe diário). Para solicitar dados do mesmo timeframe do gráfico em que o script é executado, use a variável [timeframe.period](https://br.tradingview.com/pine-script-reference/v5/#var_timeframe.period) ou uma string vazia.
 
-O parâmetro `expression` da função [request.security()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.security) determina os dados que ela recupera do contexto especificado. Este parâmetro versátil aceita valores "series" dos tipos [int](./04_09_tipagem_do_sistema.md#int), [float](./04_09_tipagem_do_sistema.md#float), [bool](./04_09_tipagem_do_sistema.md#bool), [color](./04_09_tipagem_do_sistema.md#color), [string](./04_09_tipagem_do_sistema.md#string), e [chart.point](./04_09_tipagem_do_sistema.md#chart-points-pontos-do-gráfico). Também pode aceitar [tuplas](./04_09_tipagem_do_sistema.md#tuples), [coleções](./04_09_tipagem_do_sistema.md#coleções), [tipos definidos pelo usuário](./04_09_tipagem_do_sistema.md#tipos-definidos-pelo-usuário), e as saídas de chamadas de funções e [métodos](./04_13_metodos.md). Para mais detalhes sobre os dados que podem ser recuperados, veja a seção de [Dados Solicitáveis](./05_14_outros_timeframes_e_dados.md#dados-solicitáveis) abaixo.
+O parâmetro `expression` da função [request.security()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.security) determina os dados que ela recupera do contexto especificado. Este parâmetro versátil aceita valores "series" dos tipos [int](./04_09_tipagem_do_sistema.md#int), [float](./04_09_tipagem_do_sistema.md#float), [bool](./04_09_tipagem_do_sistema.md#bool), [color](./04_09_tipagem_do_sistema.md#color), [string](./04_09_tipagem_do_sistema.md#string), e [chart.point](./04_09_tipagem_do_sistema.md#chart-points-pontos-do-gráfico). Também pode aceitar [tuplas](./04_09_tipagem_do_sistema.md#tuples-tuplas), [coleções](./04_09_tipagem_do_sistema.md#coleções), [tipos definidos pelo usuário](./04_09_tipagem_do_sistema.md#tipos-definidos-pelo-usuário), e as saídas de chamadas de funções e [métodos](./04_13_metodos.md). Para mais detalhes sobre os dados que podem ser recuperados, veja a seção de [Dados Solicitáveis](./05_14_outros_timeframes_e_dados.md#dados-solicitáveis) abaixo.
 
 > __Observação!__\
 > Ao usar o valor de uma chamada [input.source()](https://br.tradingview.com/pine-script-reference/v5/#fun_input.source) no argumento `expression` e a entrada referenciar uma série de outro indicador, as funções `request.*()` calculam os resultados desse valor usando o __símbolo do gráfico__, independentemente do argumento `symbol` fornecido, pois não podem avaliar os escopos exigidos por uma série externa. Portanto, não se recomenda tentar solicitar dados de entrada de fonte externa de outros contextos.
@@ -386,13 +386,13 @@ __Note que:__
 
 A função [request.security()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.security) é bastante versátil, pois pode recuperar valores de qualquer tipo fundamental ([int](./04_09_tipagem_do_sistema.md#int), [float](./04_09_tipagem_do_sistema.md#float), [bool](./04_09_tipagem_do_sistema.md#bool), [color](./04_09_tipagem_do_sistema.md#color), ou [string](./04_09_tipagem_do_sistema.md#string)). Ela também pode solicitar IDs de estruturas de dados e tipos embutidos ou [definidos pelo usuário](./04_09_tipagem_do_sistema.md#tipos-definidos-pelo-usuário) que referenciam tipos fundamentais. Os dados que essa função solicita dependem do parâmetro `expression`, que aceita qualquer um dos seguintes argumentos:
 
-- [Variáveis incorporadas e chamadas de função](./05_14_outros_timeframes_e_dados.md#variáveis-e-funções-embutidas)
-- [Variáveis calculadas pelo script](./05_14_outros_timeframes_e_dados.md#variáveis-calculadas)
-- [Tuplas](./05_14_outros_timeframes_e_dados.md#tuples-tuplas)
-- [Chamadas de funções definidas pelo usuário](./05_14_outros_timeframes_e_dados.md#funções-definidas-pelo-usuário)
-- [Pontos do gráfico](./05_14_outros_timeframes_e_dados.md#pontos-do-gráfico)
-- [Coleções](./05_14_outros_timeframes_e_dados.md#coleções)
-- [Tipos definidos pelo usuário](./05_14_outros_timeframes_e_dados.md#tipos-definidos-pelo-usuário)
+- [Variáveis incorporadas e chamadas de função.](./05_14_outros_timeframes_e_dados.md#variáveis-e-funções-embutidas)
+- [Variáveis calculadas pelo script.](./05_14_outros_timeframes_e_dados.md#variáveis-calculadas)
+- [Tuplas.](./05_14_outros_timeframes_e_dados.md#tuples-tuplas)
+- [Chamadas de funções definidas pelo usuário.](./05_14_outros_timeframes_e_dados.md#funções-definidas-pelo-usuário)
+- [Pontos do gráfico.](./05_14_outros_timeframes_e_dados.md#pontos-do-gráfico)
+- [Coleções.](./05_14_outros_timeframes_e_dados.md#coleções)
+- [Tipos definidos pelo usuário.](./05_14_outros_timeframes_e_dados.md#tipos-definidos-pelo-usuário)
 
 > __Observação!__\
 > A função [request.security()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.security) duplica os escopos e operações necessários para a `expression` calcular os valores solicitados em outro contexto, o que aumenta o consumo de memória em tempo de execução. Além disso, os escopos adicionais produzidos por cada chamada de [request.security()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.security) contam para os _limites de compilação_ do script. Consulte a seção [Contagem de escopos](./06_05_limitacoes.md#contagem-de-escopos) da página de [Limitações](./06_05_limitacoes.md) para mais informações.
@@ -512,7 +512,102 @@ __Note que:__
 
 ## Tuples (_Tuplas_)
 
-<!-- [Tuplas](https://br.tradingview.com/pine-script-docs/language/type-system#tuples) no Pine Script™ são conjuntos de expressões separados por vírgula, delimitados por colchetes, que podem conter múltiplos valores de qualquer tipo disponível. Usam-se tuplas ao criar funções que... -->
+[Tuplas](./04_09_tipagem_do_sistema.md#tuples-tuplas) no Pine Script são conjuntos de expressões separados por vírgula, delimitados por colchetes, que podem conter múltiplos valores de qualquer tipo disponível. Usam-se tuplas ao criar funções ou outros blocos locais que retornam mais de um valor.
+
+A função [request.security()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.security) pode aceitar uma tupla como seu argumento `expression`, permitindo que scripts solicitem múltiplas séries de diferentes tipos em uma única chamada de função. As expressões dentro das tuplas solicitadas podem ser de qualquer tipo descrito na seção [Dados Solicitáveis](./05_14_outros_timeframes_e_dados.md#dados-solicitáveis) desta página, excluindo outras tuplas.
+
+> __Observação!__\
+> O tamanho combinado de todas as tuplas retornadas pelas chamadas `request.*()` em um script não pode exceder 127 elementos. Veja [esta seção](./06_05_limitacoes.md#limite-de-elementos-da-tupla) da página de [Limitações](./06_05_limitacoes.md) para mais informações.
+
+As tuplas são especialmente úteis quando um script precisa recuperar mais de um valor de um contexto específico.
+
+Por exemplo, este script calcula o [percentual de ranking](https://br.tradingview.com/pine-script-reference/v5/#fun_ta.percentrank) do preço de [fechamento](https://br.tradingview.com/pine-script-reference/v5/#var_close) ao longo de `length` barras e atribui a expressão à variável `rank`. Em seguida, chama [request.security()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.security) para solicitar uma tupla contendo os valores de `rank`, [ta.crossover(rank, 50)](https://br.tradingview.com/pine-script-reference/v5/#fun_ta.crossover) e [ta.crossunder(rank, 50)](https://br.tradingview.com/pine-script-reference/v5/#fun_ta.crossunder) do `timeframe` especificado. O script [plota](./05_15_plots.md) o `requestedRank` e usa os valores "bool" `crossOver` e `crossUnder` dentro de [bgcolor()](https://br.tradingview.com/pine-script-reference/v5/#fun_bgcolor) para destacar condicionalmente o fundo do painel do gráfico:
+
+![Tuples tuplas](./imgs/Other-timeframes-and-data-Request-security-Requestable-data-Tuples-1.DfMFJD2A_22M4RL.webp)
+
+```c
+//@version=5
+indicator("Requesting tuples demo", "Percent rank cross")
+
+//@variable The timeframe of the request.
+string timeframe = input.timeframe("240", "Timeframe")
+//@variable The number of bars in the calculation.
+int length = input.int(20, "Length")
+
+//@variable The previous bar's percent rank of the `close` price over `length` bars.
+float rank = ta.percentrank(close, length)[1]
+
+// Request the `rank` value from another `timeframe`, and two "bool" values indicating the `rank` from the `timeframe`
+// crossed over or under 50.
+[requestedRank, crossOver, crossUnder] = request.security(
+     syminfo.tickerid, timeframe, [rank, ta.crossover(rank, 50), ta.crossunder(rank, 50)],
+     lookahead = barmerge.lookahead_on
+ )
+
+// Plot the `requestedRank` and create a horizontal line at 50.
+plot(requestedRank, "Percent Rank", linewidth = 3)
+hline(50, "Cross line", linewidth = 2)
+// Highlight the background of all bars where the `timeframe`'s `crossOver` or `crossUnder` value is `true`.
+bgcolor(crossOver ? color.new(color.green, 50) : crossUnder ? color.new(color.red, 50) : na)
+```
+
+__Note que:__
+
+- A expressão da variável `rank` foi deslocada por uma barra usando o operador de referência de histórico [[]](https://br.tradingview.com/pine-script-reference/v5/#op_%5B%5D) e incluído [barmerge.lookahead_on](https://br.tradingview.com/pine-script-reference/v5/#var_barmerge.lookahead_on) na chamada [request.security()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.security) para garantir que os valores nas barras em tempo real não sejam repintados após se tornarem barras históricas. Veja a seção [Evitando Repintura](./05_14_outros_timeframes_e_dados.md#evitando-repintura) para mais informações.
+- A chamada [request.security()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.security) retorna uma tupla, portanto, é usada uma _declaração de tupla_ para declarar as variáveis `requestedRank`, `crossOver` e `crossUnder`. Para saber mais sobre o uso de tuplas, veja [esta seção](./04_09_tipagem_do_sistema.md#tuples-tuplas) sobre o [sistema de tipos](./04_09_tipagem_do_sistema.md).
+
+<!-- #### Funções definidas pelo usuário
+
+[Funções definidas pelo usuário](https://br.tradingview.com/pine-script-docs/language/user-defined-functions) e [métodos](https://br.tradingview.com/pine-script-docs/language/methods#user-defined-methods) são funções personalizadas escritas por usuários. Elas permitem definir sequências de operações associadas a um identificador que os scripts podem chamar convenientemente durante sua execução (por exemplo, `minhaFuncao()`).
+
+A função [request.security()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.security) pode solicitar os resultados de [funções definidas pelo usuário](https://br.tradingview.com/pine-script-docs/language/user-defined-functions) e [métodos](https://br.tradingview.com/pine-script-docs/language/methods#user-defined-methods) cujos escopos consistem em qualquer tipo descrito na seção [Dados solicitáveis](https://br.tradingview.com/pine-script-docs/concepts/other-timeframes-and-data#requestable-data) desta página.
+
+Por exemplo, este script contém uma função definida pelo usuário `weightedBB()` que calcula Bandas de Bollinger com a base média ponderada por uma série `weight` especificada. A função retorna uma [tupla](./04_09_tipagem_do_sistema.md#tuples) de valores personalizados das bandas. O script chama `weightedBB()` como o argumento `expression` em [request.security()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.security) para recuperar uma [tupla](https://br.tradingview.com/pine-script-docs/concepts/other-timeframes-and-data#tuples) de valores das bandas calculados no `timeframe` especificado e [plota](./05_15_plots.md) os resultados no gráfico:
+
+```c
+//@version=5
+indicator("Requesting user-defined functions demo", "Weighted Bollinger Bands", true)
+
+//@variable O período da solicitação.
+string timeframe = input.timeframe("480", "Período")
+
+//@function Calcula Bandas de Bollinger com uma base ponderada personalizada.
+//@param source A série de valores a ser processada.
+//@param length O número de barras no cálculo.
+//@param mult O multiplicador de desvio padrão.
+//@param weight A série de pesos correspondente a cada valor `source`.
+//@returns Uma tupla contendo a base, a banda superior e a banda inferior, respectivamente.
+weightedBB(float source, int length, float mult = 2.0, float weight = 1.0) =>
+    //@variable A base das bandas.
+    float ma = math.sum(source * weight, length) / math.sum(weight, length)
+    //@variable O desvio padrão em relação a `ma`.
+    float dev = 0.0
+    // Loop para acumular erro quadrático.
+    for i = 0 to length - 1
+        difference = source[i] - ma
+        dev += difference * difference
+    // Divide `dev` pelo `length`, tira a raiz quadrada e multiplica por `mult`.
+    dev := math.sqrt(dev / length) * mult
+    // Retorna as bandas.
+    [ma, ma + dev, ma - dev]
+
+// Solicita bandas ponderadas calculadas nos preços do símbolo do gráfico em 20 barras a partir da
+// última barra confirmada no `timeframe`.
+[basis, highBand, lowBand] = request.security(
+    syminfo.tickerid, timeframe, weightedBB(close[1], 20, 2.0, (high - low)[1]),
+    lookahead = barmerge.lookahead_on
+)
+
+// Plota os valores.
+basisPlot = plot(basis, "Base", color.orange, 2)
+upperPlot = plot(highBand, "Superior", color.teal, 2)
+lowerPlot = plot(lowBand, "Inferior", color.maroon, 2)
+fill(upperPlot, lowerPlot, color.new(color.gray, 90), "Fundo")
+```
+
+__Note que:__
+
+- Os argumentos `source` e `weight` na chamada `weightedBB()` usada como `expression` em [request.security()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.security) são deslocados, e é utilizado [barmerge.lookahead_on](https://br.tradingview.com/pine-script-reference/v5/#var_barmerge.look -->
 
 ## Funções Definidas pelo Usuário
 

@@ -11,7 +11,7 @@ Programadores experientes podem pensar nos _UDTs_ como classes sem métodos. Per
 
 # Criando Objetos
 
-Antes que um objeto possa ser criado, seu tipo deve ser definido. A seção [Tipos Definidos pelo Usuário](./04_09_tipagem_do_sistema.md#tipos-definidos-pelo-usuário) do [Sistema de Tipos](./04_09_tipagem_do_sistema.md) explica como deve ser feito.
+Antes que um objeto possa ser criado, seu tipo deve ser definido. A seção [Tipos Definidos pelo Usuário](./04_09_tipagem_do_sistema.md#tipos-definidos-pelo-usuário) do [sistema de tipos](./04_09_tipagem_do_sistema.md) explica como deve ser feito.
 
 Definindo um tipo `pivotPoint` para armazenar informações de ponto de pivô:
 

@@ -732,7 +732,7 @@ myLabel = label(na)
 ```
 
 
-# Tuples
+# Tuples (_Tuplas_)
 
 Uma _tupla_ é um conjunto de expressões separadas por vírgulas, envolvidas por colchetes. Quando uma função, [método](./04_13_metodos.md) ou outro bloco local retorna mais de um valor, os scripts retornam esses valores na forma de uma tupla.
 
