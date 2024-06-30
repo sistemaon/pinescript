@@ -610,7 +610,7 @@ __Note que:__
 
 - Os argumentos `source` e `weight` na chamada `weightedBB()` usada como `expression` em [request.security()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.security) são deslocados, e é utilizado [barmerge.lookahead_on](https://br.tradingview.com/pine-script-reference/v5/#var_barmerge.lookahead_on) para garantir que os resultados solicitados reflitam os últimos valores confirmados do `timeframe` nas barras em tempo real. Consulte [esta seção](./05_14_outros_timeframes_e_dados.md#evitando-repintura) para saber mais.
 
-<!-- ## Pontos do Gráfico
+## Pontos do Gráfico
 
 [Pontos do gráfico](./04_09_tipagem_do_sistema.md#chart-points-pontos-do-gráfico) são tipos de referência que representam coordenadas no gráfico. As [linhas](./05_12_lines_e_boxes.md#lines-linhas), [caixas](./05_12_lines_e_boxes.md#boxes-caixas), [polilinhas](./05_12_lines_e_boxes.md#polylines-polilinhas) e [labels](./05_20_text_e_shapes.md#labels) usam objetos [chart.point](https://br.tradingview.com/pine-script-reference/v5/#type_chart.point) para definir suas localizações de exibição.
 
@@ -656,7 +656,7 @@ __Note que:__
 
 - Este exemplo é projetado especificamente para timeframes maiores, é incluso um [erro de execução](https://br.tradingview.com/pine-script-reference/v5/#fun_runtime.error) personalizado que o script gera quando o [timeframe.in_seconds()](https://br.tradingview.com/pine-script-reference/v5/#fun_timeframe.in_seconds) do `higherTimeframe` é menor que o [timeframe do gráfico](https://br.tradingview.com/pine-script-reference/v5/#var_timeframe.period).
 
-## Coleções
+<!-- ## Coleções
 
 As _coleções_ do Pine Script ([arrays](./04_14_arrays.md) e [mapas](./04_16_mapas.md)) são estruturas de dados que contêm um número arbitrário de elementos com tipos especificados. A função [request.security()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.security) pode recuperar os IDs de [coleções](./04_09_tipagem_do_sistema.md#coleções) cujos elementos consistem em:
 
