@@ -656,7 +656,7 @@ __Note que:__
 
 - Este exemplo é projetado especificamente para timeframes maiores, é incluso um [erro de execução](https://br.tradingview.com/pine-script-reference/v5/#fun_runtime.error) personalizado que o script gera quando o [timeframe.in_seconds()](https://br.tradingview.com/pine-script-reference/v5/#fun_timeframe.in_seconds) do `higherTimeframe` é menor que o [timeframe do gráfico](https://br.tradingview.com/pine-script-reference/v5/#var_timeframe.period).
 
-<!-- ## Coleções
+## Coleções
 
 As _coleções_ do Pine Script ([arrays](./04_14_arrays.md) e [mapas](./04_16_mapas.md)) são estruturas de dados que contêm um número arbitrário de elementos com tipos especificados. A função [request.security()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.security) pode recuperar os IDs de [coleções](./04_09_tipagem_do_sistema.md#coleções) cujos elementos consistem em:
 
@@ -705,7 +705,7 @@ plot(ratio, "Range Ratio", ratioColor, 3, plot.style_area)
 
 __Note que:__
 
-- A chamada [request.security()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.security) neste script pode retornar [na](https://br.tradingview.com/pine-script-reference/v5/#var_na) se não houver dados disponíveis do contexto especificado. Como não é possível chamar [métodos](./04_13_metodos.md) em uma variável [map](https://br.tradingview.com/pine-script-reference/v5/#type_map) quando seu valor é [na](https://br.tradingview.com/pine-script-reference/v5/#var_na), foi adicionada uma estrutura [if](https://br.tradingview.com/pine-script-reference/v5/#kw_if) para calcular um novo valor de `ratio` apenas quando `otherData` referencia um ID [map](https://br.tradingview.com/pine-script-reference/v5/#type_map) válido. -->
+- A chamada [request.security()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.security) neste script pode retornar [na](https://br.tradingview.com/pine-script-reference/v5/#var_na) se não houver dados disponíveis do contexto especificado. Como não é possível chamar [métodos](./04_13_metodos.md) em uma variável [map](https://br.tradingview.com/pine-script-reference/v5/#type_map) quando seu valor é [na](https://br.tradingview.com/pine-script-reference/v5/#var_na), foi adicionada uma estrutura [if](https://br.tradingview.com/pine-script-reference/v5/#kw_if) para calcular um novo valor de `ratio` apenas quando `otherData` referencia um ID [map](https://br.tradingview.com/pine-script-reference/v5/#type_map) válido.
 
 <!-- ## Tipos Definidos pelo Usuário
 
