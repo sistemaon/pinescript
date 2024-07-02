@@ -861,16 +861,14 @@ __Note que:__
 - O número de intrabarras por barra de gráfico pode variar dependendo dos dados disponíveis no contexto e no gráfico em que o script é executado. Por exemplo, o feed de dados de 1 minuto de um provedor pode não incluir dados para cada minuto dentro do timeframe de 60 minutos devido à falta de atividade de negociação em alguns intervalos de 1 minuto. Para verificar o número de intrabarras recuperadas para uma barra de gráfico, pode-se usar [array.size()](https://br.tradingview.com/pine-script-reference/v5/#fun_array.size) no [array](https://br.tradingview.com/pine-script-reference/v5/#type_array) resultante.
 - Se o valor de `lowerTimeframe` for maior que o timeframe do gráfico, o script gerará um _erro de execução_, pois não foi fornecido um argumento `ignore_invalid_timeframe` na chamada [request.security_lower_tf()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.security_lower_tf).
 
-
-<!-- 
 ### Tuplas de dados intrabar
 
-Ao passar uma tupla ou uma chamada de função que retorna uma tupla como argumento `expression` em [request.security_lower_tf()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.security_lower_tf), o resultado é uma tupla de [arrays](https://br.tradingview.com/pine-script-docs/language/arrays) com [templates de tipo](https://br.tradingview.com/pine-script-docs/language/type-system#type-templates) correspondentes aos tipos dentro do argumento. Por exemplo, usar uma tupla `[float, string, color]` como `expression` resultará em dados `[array<float>, array<string>, array<color>]` retornados pela função. Usar uma tupla `expression` permite que um script busque vários [arrays](https://br.tradingview.com/pine-script-docs/language/arrays) de dados intrabar com uma única chamada de função [request.security_lower_tf()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.security_lower_tf).
+Ao passar uma tupla ou uma chamada de função que retorna uma tupla como argumento `expression` em [request.security_lower_tf()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.security_lower_tf), o resultado é uma tupla de [arrays](./04_14_arrays.md) com [templates de tipo](./04_09_tipagem_do_sistema.md#templates-de-tipo) correspondentes aos tipos dentro do argumento. Por exemplo, usar uma tupla `[float, string, color]` como `expression` resultará em dados `[array<float>, array<string>, array<color>]` retornados pela função. Usar uma tupla `expression` permite que um script busque vários [arrays](./04_14_arrays.md) de dados intrabar com uma única chamada de função [request.security_lower_tf()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.security_lower_tf).
 
 > __Observação!__\
-> O tamanho combinado de todas as tuplas retornadas pelas chamadas `request.*()` em um script é limitado a 127 elementos. Consulte [esta seção](https://br.tradingview.com/pine-script-docs/writing/limitations#tuple-element-limit) da página de [Limitações](https://br.tradingview.com/pine-script-docs/writing/limitations) para mais informações.
+> O tamanho combinado de todas as tuplas retornadas pelas chamadas `request.*()` em um script é limitado a 127 elementos. Consulte [esta seção](./06_05_limitacoes.md#limite-de-elementos-da-tupla) da página de [Limitações](./06_05_limitacoes.md) para mais informações.
 
-O exemplo a seguir solicita dados OHLC de um timeframe menor e visualiza as intrabarras da barra atual no gráfico usando [linhas e caixas](https://br.tradingview.com/pine-script-docs/concepts/lines-and-boxes). O script chama [request.security_lower_tf()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.security_lower_tf) com a tupla `[open, high, low, close]` como `expression` para recuperar uma tupla de [arrays](https://br.tradingview.com/pine-script-docs/language/arrays) representando informações OHLC de um `lowerTimeframe` calculado. Em seguida, usa um loop [for](https://br.tradingview.com/pine-script-reference/v5/#kw_for) para definir as coordenadas das linhas com os dados recuperados e índices de barras atuais para exibir os resultados ao lado da barra de gráfico atual, fornecendo uma “visão ampliada” do movimento de preço dentro do candle mais recente. Também desenha uma [caixa](https://br.tradingview.com/pine-script-reference/v5/#type_box) ao redor das [linhas](https://br.tradingview.com/pine-script-docs/concepts/lines-and-boxes#lines) para indicar a região do gráfico ocupada pelos desenhos intrabar:
+O exemplo a seguir solicita dados OHLC de um timeframe menor e visualiza as intrabarras da barra atual no gráfico usando [linhas e caixas](./05_12_lines_e_boxes.md). O script chama [request.security_lower_tf()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.security_lower_tf) com a tupla `[open, high, low, close]` como `expression` para recuperar uma tupla de [arrays](./04_14_arrays.md) representando informações OHLC de um `lowerTimeframe` calculado. Em seguida, usa um loop [for](https://br.tradingview.com/pine-script-reference/v5/#kw_for) para definir as coordenadas das linhas com os dados recuperados e índices de barras atuais para exibir os resultados ao lado da barra de gráfico atual, fornecendo uma "visão ampliada" do movimento de preço dentro do candle mais recente. Também desenha uma [caixa](./05_12_lines_e_boxes.md#boxes-caixas) ao redor das [linhas](./05_12_lines_e_boxes.md#lines) para indicar a região do gráfico ocupada pelos desenhos intrabar:
 
 ![Tuplas de dados intrabar](./imgs/Other-timeframes-and-data-Request-security-lower-tf-Tuples-of-intrabar-data-1.C8-f9Sez_Z96QYf.webp)
 
@@ -887,7 +885,7 @@ int candleWidth = input.int(20, "Candle width", 2)
 string lowerTimeframe = timeframe.from_seconds(math.ceil(timeframe.in_seconds() / maxIntrabars))
 
 //@variable An array of lines to represent intrabar wicks.
-var array<line> wicks = array.new<line>()
+var array<line> wicks  = array.new<line>()
 //@variable An array of lines to represent intrabar bodies.
 var array<line> bodies = array.new<line>()
 //@variable A box that surrounds the displayed intrabars.
@@ -934,10 +932,10 @@ if numIntrabars > 0
 
 __Note que:__
 
-- O script desenha cada candle usando duas [linhas](https://br.tradingview.com/pine-script-docs/concepts/lines-and-boxes#lines): uma para representar as sombras e outra para representar o corpo. Como o script pode exibir até 500 linhas no gráfico, o valor de entrada `maxIntrabars` foi limitado a 250.
-- O valor de `lowerTimeframe` é o resultado do cálculo de [math.ceil()](https://br.tradingview.com/pine-script-reference/v5/#fun_math.ceil) de [timeframe.in_seconds()](https://br.tradingview.com/pine-script-reference/v5/#fun_timeframe.in_seconds) dividido por `maxIntrabars` e convertido para uma [string de timeframe válida](https://br.tradingview.com/pine-script-docs/concepts/timeframes#timeframe-string-specifications) com [timeframe.from_seconds()](https://br.tradingview.com/pine-script-reference/v5/#fun_timeframe.from_seconds).
+- O script desenha cada candle usando duas [linhas](./05_12_lines_e_boxes.md#lines-linhas): uma para representar as sombras e outra para representar o corpo. Como o script pode exibir até 500 linhas no gráfico, o valor de entrada `maxIntrabars` foi limitado a 250.
+- O valor de `lowerTimeframe` é o resultado do cálculo de [math.ceil()](https://br.tradingview.com/pine-script-reference/v5/#fun_math.ceil) de [timeframe.in_seconds()](https://br.tradingview.com/pine-script-reference/v5/#fun_timeframe.in_seconds) dividido por `maxIntrabars` e convertido para uma [string de timeframe válida](./05_22_timeframes.md#especificações-de-string-do-timeframe) com [timeframe.from_seconds()](https://br.tradingview.com/pine-script-reference/v5/#fun_timeframe.from_seconds).
 - O script define o topo do desenho da caixa usando o [array.max()](https://br.tradingview.com/pine-script-reference/v5/#fun_array.max) do array `hData` solicitado, e define a parte inferior da caixa usando o [array.min()](https://br.tradingview.com/pine-script-reference/v5/#fun_array.min) do array `lData` solicitado. Como visto no gráfico, esses valores correspondem ao [high](https://br.tradingview.com/pine-script-reference/v5/#var_high) e [low](https://br.tradingview.com/pine-script-reference/v5/#var_low) da barra do gráfico.
- -->
+
 
 # Comportamento Histórico e Tempo Real
 
