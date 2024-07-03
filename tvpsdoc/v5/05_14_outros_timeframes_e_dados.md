@@ -1155,13 +1155,87 @@ plot(renkoOpen)
 plot(renkoClose)
 ```
 
+## Comportamento Histórico e Tempo Real
 
-# Comportamento Histórico e Tempo Real
+As funções no namespace `request.*()` podem se comportar de maneira diferente em barras históricas e em tempo real. Esse comportamento está intimamente relacionado ao [modelo de execução](./04_01_modelo_de_execucao.md) do Pine.
 
+Considere como um script se comporta dentro do contexto principal. Ao longo da história do gráfico, o script calcula os valores necessários uma vez e _comete_ esses valores para aquela barra, de modo que seus estados estejam acessíveis posteriormente na execução. Em uma barra não confirmada, no entanto, o script recalcula seus valores em _cada atualização_ dos dados da barra para alinhar com as mudanças em tempo real. Antes de recalcular os valores nessa barra, ele reverte os valores calculados para seus últimos estados confirmados, o que é conhecido como _rollback_, e só comete valores para aquela barra quando ela fecha.
 
-# Evitando Repintura
+Agora, considere o comportamento das solicitações de dados de outros contextos com [request.security()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.security). Assim como ao avaliar barras históricas no contexto principal, [request.security()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.security) só retorna novos valores históricos quando confirma uma barra em seu contexto especificado. Ao executar em barras em tempo real, ela retorna valores recalculados em cada barra do gráfico, semelhante a como um script recalcula valores no contexto principal na barra aberta do gráfico.
 
-## Dados Higher-Timeframe (HTF) _Timeframe Superior_
+No entanto, a função só _confirma_ os valores solicitados quando uma barra do seu contexto fecha. Quando o script reinicia sua execução, o que anteriormente eram barras _em tempo real_ tornam-se barras _históricas_. Portanto, [request.security()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.security) retornará apenas os valores que confirmou nessas barras. Essencialmente, esse comportamento significa que os dados solicitados podem _repintar_ (_repaint_) quando seus valores flutuam em barras em tempo real sem confirmação do contexto.
+
+> __Observação!__\
+> É frequentemente útil distinguir barras históricas de barras em tempo real ao trabalhar com funções `request.*()`. Scripts podem determinar se as barras têm estados históricos ou em tempo real através das variáveis [barstate.ishistory](https://br.tradingview.com/pine-script-reference/v5/#var_barstate.ishistory) e [barstate.isrealtime](https://br.tradingview.com/pine-script-reference/v5/#var_barstate.isrealtime).
+
+Na maioria das circunstâncias em que um script solicita dados de um contexto mais amplo, normalmente são necessários valores confirmados e estáveis que _não_ flutuam em barras em tempo real. A [seção abaixo](./05_14_outros_timeframes_e_dados.md#evitando-repintura) explica como alcançar esse resultado e evitar repaint nas solicitações de dados.
+
+<!-- ### Evitando Repintura
+
+#### Dados Higher-Timeframe (HTF) _Timeframe Superior_
+
+Ao solicitar valores de um timeframe superior, eles estão sujeitos a repaint, pois barras em tempo real podem conter informações _não confirmadas_ de barras em desenvolvimento no timeframe superior, e o script pode ajustar os horários em que novos valores chegam em barras históricas. Para evitar repaint de dados de timeframe superior, é necessário garantir que a função retorne apenas valores confirmados com tempo consistente em todas as barras, independentemente do estado da barra.
+
+A abordagem mais confiável para obter resultados sem repaint é usar um argumento `expression` que referencia apenas barras passadas (por exemplo, `close[1]`) enquanto usa [barmerge.lookahead_on](https://br.tradingview.com/pine-script-reference/v5/#var_barmerge.lookahead_on) como valor de `lookahead`.
+
+Usar [barmerge.lookahead_on](https://br.tradingview.com/pine-script-reference/v5/#var_barmerge.lookahead_on) com solicitações de dados de timeframe superior não deslocados é desencorajado, pois isso faz com que [request.security()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.security) "olhe adiante" para os valores finais de uma barra de timeframe superior, recuperando valores confirmados _antes_ de estarem realmente disponíveis no histórico do script. No entanto, se os valores usados na `expression` forem deslocados por pelo menos uma barra, os dados "futuros" que a função recupera não são mais do futuro. Em vez disso, os dados representam valores confirmados de barras de timeframe superior estabelecidas e _disponíveis_. Em outras palavras, aplicar um deslocamento à `expression` efetivamente impede que os dados solicitados façam repaint quando o script reinicia sua execução e elimina o viés de lookahead na série histórica.
+
+O exemplo a seguir demonstra uma solicitação de dados de timeframe superior que faz repaint. O script usa [request.security()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.security) sem modificações de deslocamento ou argumentos adicionais para recuperar os resultados de uma chamada [ta.wma()](https://br.tradingview.com/pine-script-reference/v5/#fun_ta.wma) de um timeframe superior. Ele também destaca o fundo para indicar quais barras estavam em um estado de tempo real durante seus cálculos.
+
+Como mostrado no gráfico abaixo, o [plot](https://br.tradingview.com/pine-script-reference/v5/#fun_plot) da WMA solicitada só muda em barras históricas quando barras de timeframe superior fecham, enquanto flutua em todas as barras em tempo real, pois os dados incluem valores não confirmados do timeframe superior:
+
+![Evitando Repaint](./imgs/Other-timeframes-and-data-Historical-and-realtime-behavior-Avoiding-repainting-Higher-timeframe-data-1.BaZM3HDu_2k78Ln.webp)
+
+```pinescript
+//@version=5
+indicator("Avoiding HTF repainting demo", overlay = true)
+
+//@variable The multiplier applied to the chart's timeframe.
+int tfMultiplier = input.int(10, "Timeframe multiplier", 1)
+//@variable The number of bars in the moving average.
+int length = input.int(5, "WMA smoothing length")
+
+//@variable The valid timeframe string closest to `tfMultiplier` times larger than the chart timeframe.
+string timeframe = timeframe.from_seconds(timeframe.in_seconds() * tfMultiplier)
+
+//@variable The weighted MA of `close` prices over `length` bars on the `timeframe`.
+// This request repaints because it includes unconfirmed HTF data on realtime bars and it may offset the
+// times of its historical results.
+float requestedWMA = request.security(syminfo.tickerid, timeframe, ta.wma(close, length))
+
+// Plot the requested series.
+plot(requestedWMA, "HTF WMA", color.purple, 3)
+// Highlight the background on realtime bars.
+bgcolor(barstate.isrealtime ? color.new(color.orange, 70) : na, title = "Realtime bar highlight")
+```
+
+Para evitar repaint neste script, pode-se adicionar `lookahead = barmerge.lookahead_on` à chamada [request.security()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.security) e deslocar o histórico da chamada [ta.wma()](https://br.tradingview.com/pine-script-reference/v5/#fun_ta.wma) em uma barra com o operador de referência de histórico [\[ \]](https://br.tradingview.com/pine-script-reference/v5/#op_%5B%5D), garantindo que a solicitação sempre recupere o WMA da última barra confirmada do timeframe superior no início de cada novo `timeframe`. Diferente do script anterior, esta versão tem comportamento consistente em estados de barras históricas e em tempo real, como vemos abaixo:
+
+![Evitando Repaint](./imgs/Other-timeframes-and-data-Historical-and-realtime-behavior-Avoiding-repainting-Higher-timeframe-data-2.DgoLhl8Y_1sHSHG.webp)
+
+```pinescript
+//@version=5
+indicator("Avoiding HTF repainting demo", overlay = true)
+
+//@variable The multiplier applied to the chart's timeframe.
+int tfMultiplier = input.int(10, "Timeframe multiplier", 1)
+//@variable The number of bars in the moving average.
+int length = input.int(5, "WMA smoothing length")
+
+//@variable The valid timeframe string closest to `tfMultiplier` times larger than the chart timeframe.
+string timeframe = timeframe.from_seconds(timeframe.in_seconds() * tfMultiplier)
+
+//@variable The weighted MA of `close` prices over `length` bars on the `timeframe`.
+// This request does not repaint, as it always references the last confirmed WMA value on all bars.
+float requestedWMA = request.security(
+    syminfo.tickerid, timeframe, ta.wma(close, length)[1], lookahead = barmerge.lookahead_on
+)
+
+// Plot the requested value.
+plot(requestedWMA, "HTF WMA", color.purple, 3)
+// Highlight the background on realtime bars.
+bgcolor(barstate.isrealtime ? color.new(color.orange, 70) : na, title = "Realtime bar highlight")
+``` -->
 
 ## Dados Lower-Timeframe (LTF) _Timeframe Inferior_
 
