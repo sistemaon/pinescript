@@ -861,14 +861,14 @@ __Note que:__
 - O número de intrabarras por barra de gráfico pode variar dependendo dos dados disponíveis no contexto e no gráfico em que o script é executado. Por exemplo, o feed de dados de 1 minuto de um provedor pode não incluir dados para cada minuto dentro do timeframe de 60 minutos devido à falta de atividade de negociação em alguns intervalos de 1 minuto. Para verificar o número de intrabarras recuperadas para uma barra de gráfico, pode-se usar [array.size()](https://br.tradingview.com/pine-script-reference/v5/#fun_array.size) no [array](https://br.tradingview.com/pine-script-reference/v5/#type_array) resultante.
 - Se o valor de `lowerTimeframe` for maior que o timeframe do gráfico, o script gerará um _erro de execução_, pois não foi fornecido um argumento `ignore_invalid_timeframe` na chamada [request.security_lower_tf()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.security_lower_tf).
 
-### Tuplas de dados intrabar
+### Tuplas de dados Intrabar
 
 Ao passar uma tupla ou uma chamada de função que retorna uma tupla como argumento `expression` em [request.security_lower_tf()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.security_lower_tf), o resultado é uma tupla de [arrays](./04_14_arrays.md) com [templates de tipo](./04_09_tipagem_do_sistema.md#templates-de-tipo) correspondentes aos tipos dentro do argumento. Por exemplo, usar uma tupla `[float, string, color]` como `expression` resultará em dados `[array<float>, array<string>, array<color>]` retornados pela função. Usar uma tupla `expression` permite que um script busque vários [arrays](./04_14_arrays.md) de dados intrabar com uma única chamada de função [request.security_lower_tf()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.security_lower_tf).
 
 > __Observação!__\
 > O tamanho combinado de todas as tuplas retornadas pelas chamadas `request.*()` em um script é limitado a 127 elementos. Consulte [esta seção](./06_05_limitacoes.md#limite-de-elementos-da-tupla) da página de [Limitações](./06_05_limitacoes.md) para mais informações.
 
-O exemplo a seguir solicita dados OHLC de um timeframe menor e visualiza as intrabarras da barra atual no gráfico usando [linhas e caixas](./05_12_lines_e_boxes.md). O script chama [request.security_lower_tf()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.security_lower_tf) com a tupla `[open, high, low, close]` como `expression` para recuperar uma tupla de [arrays](./04_14_arrays.md) representando informações OHLC de um `lowerTimeframe` calculado. Em seguida, usa um loop [for](https://br.tradingview.com/pine-script-reference/v5/#kw_for) para definir as coordenadas das linhas com os dados recuperados e índices de barras atuais para exibir os resultados ao lado da barra de gráfico atual, fornecendo uma "visão ampliada" do movimento de preço dentro do candle mais recente. Também desenha uma [caixa](./05_12_lines_e_boxes.md#boxes-caixas) ao redor das [linhas](./05_12_lines_e_boxes.md#lines) para indicar a região do gráfico ocupada pelos desenhos intrabar:
+O exemplo a seguir solicita dados OHLC de um timeframe menor e visualiza as intrabarras da barra atual no gráfico usando [linhas e caixas](./05_12_lines_e_boxes.md). O script chama [request.security_lower_tf()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.security_lower_tf) com a tupla `[open, high, low, close]` como `expression` para recuperar uma tupla de [arrays](./04_14_arrays.md) representando informações OHLC de um `lowerTimeframe` calculado. Em seguida, usa um loop [for](https://br.tradingview.com/pine-script-reference/v5/#kw_for) para definir as coordenadas das linhas com os dados recuperados e índices de barras atuais para exibir os resultados ao lado da barra de gráfico atual, fornecendo uma "visão ampliada" do movimento de preço dentro do candle mais recente. Também desenha uma [caixa](./05_12_lines_e_boxes.md#boxes-caixas) ao redor das [linhas](./05_12_lines_e_boxes.md#lines-linhas) para indicar a região do gráfico ocupada pelos desenhos intrabar:
 
 ![Tuplas de dados intrabar](./imgs/Other-timeframes-and-data-Request-security-lower-tf-Tuples-of-intrabar-data-1.C8-f9Sez_Z96QYf.webp)
 
@@ -935,6 +935,86 @@ __Note que:__
 - O script desenha cada candle usando duas [linhas](./05_12_lines_e_boxes.md#lines-linhas): uma para representar as sombras e outra para representar o corpo. Como o script pode exibir até 500 linhas no gráfico, o valor de entrada `maxIntrabars` foi limitado a 250.
 - O valor de `lowerTimeframe` é o resultado do cálculo de [math.ceil()](https://br.tradingview.com/pine-script-reference/v5/#fun_math.ceil) de [timeframe.in_seconds()](https://br.tradingview.com/pine-script-reference/v5/#fun_timeframe.in_seconds) dividido por `maxIntrabars` e convertido para uma [string de timeframe válida](./05_22_timeframes.md#especificações-de-string-do-timeframe) com [timeframe.from_seconds()](https://br.tradingview.com/pine-script-reference/v5/#fun_timeframe.from_seconds).
 - O script define o topo do desenho da caixa usando o [array.max()](https://br.tradingview.com/pine-script-reference/v5/#fun_array.max) do array `hData` solicitado, e define a parte inferior da caixa usando o [array.min()](https://br.tradingview.com/pine-script-reference/v5/#fun_array.min) do array `lData` solicitado. Como visto no gráfico, esses valores correspondem ao [high](https://br.tradingview.com/pine-script-reference/v5/#var_high) e [low](https://br.tradingview.com/pine-script-reference/v5/#var_low) da barra do gráfico.
+
+### Solicitando Coleções
+
+Em alguns casos, um script pode precisar solicitar os IDs de [coleções](./04_09_tipagem_do_sistema.md#coleções) de um contexto intrabar. No entanto, ao contrário de [request.security()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.security), não se pode passar [coleções](./04_09_tipagem_do_sistema.md#coleções) ou chamadas de funções que as retornem como argumento `expression` em uma chamada [request.security_lower_tf()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.security_lower_tf), pois [arrays](./04_14_arrays.md) não podem referenciar diretamente outras [coleções](./04_09_tipagem_do_sistema.md#coleções).
+
+Apesar dessas limitações, é possível solicitar [coleções](./04_09_tipagem_do_sistema.md#coleções) de timeframes menores, se necessário, com a ajuda de tipos _wrapper_.
+
+> __Observação!__\
+> O caso de uso descrito abaixo é __avançado__ e __não__ é recomendado para iniciantes. Antes de explorar essa abordagem, recomenda-se entender como [tipos definidos pelo usuário](./04_09_tipagem_do_sistema.md#tipos-definidos-pelo-usuário) e [coleções](./04_09_tipagem_do_sistema.md#coleções) funcionam no Pine Script. Quando possível, recomenda-se usar métodos _mais simples_ para gerenciar solicitações de LTF, e usar essa abordagem apenas quando _nada mais_ for suficiente.
+
+Para tornar [coleções](./04_09_tipagem_do_sistema.md#coleções) solicitáveis com [request.security_lower_tf()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.security_lower_tf), é necessário criar um [UDT](./04_09_tipagem_do_sistema.md#tipos-definidos-pelo-usuário) com um campo para referenciar um ID de coleção. Esse passo é necessário, pois [arrays](./04_14_arrays.md) não podem referenciar diretamente outras [coleções](./04_09_tipagem_do_sistema.md#coleções), mas _podem_ referenciar UDTs com campos de coleção:
+
+```c
+//@type A "wrapper" type to hold an `array<float>` instance.
+type Wrapper
+    array<float> collection
+```
+
+Com o UDT `Wrapper` definido, agora é possível passar os IDs de [objetos](./04_12_objetos.md) do UDT para o parâmetro `expression` em [request.security_lower_tf()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.security_lower_tf).
+
+Uma abordagem direta é chamar a função embutida `*.new()` como `expression`. Por exemplo, esta linha de código chama `Wrapper.new()` com [array.from(close)](https://br.tradingview.com/pine-script-reference/v5/#fun_array.from) como sua `collection` dentro de [request.security_lower_tf()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.security_lower_tf):
+
+```c
+//@variable An array of `Wrapper` IDs requested from the 1-minute timeframe.
+array<Wrapper> wrappers = request.security_lower_tf(syminfo.tickerid, "1", Wrapper.new(array.from(close)))
+```
+
+Alternativamente, pode-se criar uma [função definida pelo usuário](./04_11_funcoes_definida_pelo_usuario.md) ou [método](./04_13_metodos.md#métodos-definidos-pelo-usuário) que retorna um [objeto](./04_12_objetos.md) do [UDT](./04_09_tipagem_do_sistema.md#tipos-definidos-pelo-usuário) e chamar essa função dentro de [request.security_lower_tf()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.security_lower_tf). Por exemplo, este código chama uma função personalizada `newWrapper()` que retorna um ID `Wrapper` como argumento `expression`:
+
+```c
+//@function Creates a new `Wrapper` instance to wrap the specified `collection`.
+newWrapper(array<float> collection) =>
+    Wrapper.new(collection)
+
+//@variable An array of `Wrapper` IDs requested from the 1-minute timeframe.
+array<Wrapper> wrappers = request.security_lower_tf(syminfo.tickerid, "1", newWrapper(array.from(close)))
+```
+
+O resultado com qualquer um dos métodos acima é um [array](https://br.tradingview.com/pine-script-reference/v5/#type_array) contendo IDs `Wrapper` de todas as intrabarras disponíveis na barra do gráfico, que o script pode usar para referenciar instâncias `Wrapper` de intrabarras específicas e usar seus campos `collection` em operações adicionais.
+
+O script abaixo utiliza essa abordagem para coletar [arrays](./04_14_arrays.md) de dados intrabar de um `lowerTimeframe` e usá-los para exibir dados de uma intrabar específica. Seu tipo personalizado `Prices` contém um único campo `data` para referenciar instâncias de `array<float>` que mantêm dados de preço, e a função definida pelo usuário `newPrices()` retorna o ID de um objeto `Prices`.
+
+O script chama [request.security_lower_tf()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.security_lower_tf) com uma chamada `newPrices()` como argumento `expression` para recuperar um [array](https://br.tradingview.com/pine-script-reference/v5/#type_array) de IDs `Prices` de cada intrabar na barra do gráfico, em seguida, usa [array.get()](https://br.tradingview.com/pine-script-reference/v5/#fun_array.get) para obter o ID de uma intrabar específica disponível, se existir. Por fim, usa [array.get()](https://br.tradingview.com/pine-script-reference/v5/#fun_array.get) no array `data` atribuído a essa instância e chama [plotcandle()](https://br.tradingview.com/pine-script-reference/v5/#fun_plotcandle) para exibir seus valores no gráfico:
+
+![Solicitando coleções](./imgs/Other-timeframes-and-data-Request-security-lower-tf-Requesting-collections-1.D61W65Jj_gcc0V.webp)
+
+```c
+//@version=5
+indicator("Requesting LTF collections demo", "Intrabar viewer", true)
+
+//@variable The timeframe of the LTF data request.
+string lowerTimeframe = input.timeframe("1", "Timeframe")
+//@variable The index of the intrabar to show on each chart bar. 0 is the first available intrabar.
+int intrabarIndex = input.int(0, "Intrabar to show", 0)
+
+//@variable A custom type to hold an array of price `data`.
+type Prices
+    array<float> data
+
+//@function Returns a new `Prices` instance containing current `open`, `high`, `low`, and `close` prices.
+newPrices() =>
+    Prices.new(array.from(open, high, low, close))
+
+//@variable An array of `Prices` requested from the `lowerTimeframe`.
+array<Prices> requestedPrices = request.security_lower_tf(syminfo.tickerid, lowerTimeframe, newPrices())
+
+//@variable The `Prices` ID from the `requestedPrices` array at the `intrabarIndex`, or `na` if not available.
+Prices intrabarPrices = array.size(requestedPrices) > intrabarIndex ? array.get(requestedPrices, intrabarIndex) : na
+//@variable The `data` array from the `intrabarPrices`, or an array of `na` values if `intrabarPrices` is `na`.
+array<float> intrabarData = na(intrabarPrices) ? array.new<float>(4, na) : intrabarPrices.data
+
+// Plot the `intrabarData` values as candles.
+plotcandle(intrabarData.get(0), intrabarData.get(1), intrabarData.get(2), intrabarData.get(3))
+```
+
+__Note que:__
+
+- A variável `intrabarPrices` apenas referencia um ID `Prices` se o [tamanho](https://br.tradingview.com/pine-script-reference/v5/#fun_array.size) do array `requestedPrices` for maior que o `intrabarIndex`, pois tentar usar [array.get()](https://br.tradingview.com/pine-script-reference/v5/#fun_array.get) para obter um elemento que não existe resultará em um [erro de limite](./04_14_arrays.md#index-xx-está-fora-dos-limites-tamanho-do-array-é-yy) (_out of bounds error_).
+- A variável `intrabarData` apenas referencia o campo `data` de `intrabarPrices` se um ID `Prices` válido existir, pois um script não pode referenciar campos de um valor [na](https://br.tradingview.com/pine-script-reference/v5/#var_na).
+- O processo usado neste exemplo _não_ é necessário para alcançar o resultado pretendido. Pode-se, em vez disso, evitar usar [UDTs](./04_09_tipagem_do_sistema.md#tipos-definidos-pelo-usuário) e passar uma tupla `[open, high, low, close]` para o parâmetro `expression` para recuperar uma tupla de [arrays](./04_14_arrays.md) para operações adicionais, conforme explicado na [seção anterior](./05_14_outros_timeframes_e_dados.md#tuplas-de-dados-intrabar).
 
 
 # Comportamento Histórico e Tempo Real
