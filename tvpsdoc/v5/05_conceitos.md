@@ -35,6 +35,8 @@
 
 ## 17 [Sessões](./05_17_sessoes.md)
 
+## 18 [Estratégias](./05_18_estrategias.md)
+
 ## 19 [Tables (_Tabelas_)](./05_19_tables.md)
 
 ## 20 [Text e Shapes (_Texto e Formas_)](./05_20_text_e_shapes.md)

@@ -1016,6 +1016,145 @@ __Note que:__
 - A variável `intrabarData` apenas referencia o campo `data` de `intrabarPrices` se um ID `Prices` válido existir, pois um script não pode referenciar campos de um valor [na](https://br.tradingview.com/pine-script-reference/v5/#var_na).
 - O processo usado neste exemplo _não_ é necessário para alcançar o resultado pretendido. Pode-se, em vez disso, evitar usar [UDTs](./04_09_tipagem_do_sistema.md#tipos-definidos-pelo-usuário) e passar uma tupla `[open, high, low, close]` para o parâmetro `expression` para recuperar uma tupla de [arrays](./04_14_arrays.md) para operações adicionais, conforme explicado na [seção anterior](./05_14_outros_timeframes_e_dados.md#tuplas-de-dados-intrabar).
 
+## Contextos Personalizados
+
+Pine Script inclui várias funções `ticker.*()` que permitem aos scripts construir IDs de ticker _personalizados_ que especificam configurações adicionais para solicitações de dados quando usados como argumento `symbol` em [request.security()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.security) e [request.security_lower_tf()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.security_lower_tf):
+
+- [ticker.new()](https://br.tradingview.com/pine-script-reference/v5/#fun_ticker.new) constrói um ID de ticker personalizado a partir de um `prefix` e `ticker` especificados com configurações adicionais de `session` e `adjustment`.
+- [ticker.modify()](https://br.tradingview.com/pine-script-reference/v5/#fun_ticker.modify) constrói uma forma modificada de um `tickerid` especificado com configurações adicionais de `session` e `adjustment`.
+- [ticker.heikinashi()](https://br.tradingview.com/pine-script-reference/v5/#fun_ticker.heikinashi), [ticker.renko()](https://br.tradingview.com/pine-script-reference/v5/#fun_ticker.renko), [ticker.pointfigure()](https://br.tradingview.com/pine-script-reference/v5/#fun_ticker.pointfigure), [ticker.kagi()](https://br.tradingview.com/pine-script-reference/v5/#fun_ticker.kagi), e [ticker.linebreak()](https://br.tradingview.com/pine-script-reference/v5/#fun_ticker.linebreak) constroem uma forma modificada de um `symbol` com configurações de [gráfico não padrão](./05_13_dados_de_graficos_nao_padronizados.md).
+- [ticker.inherit()](https://br.tradingview.com/pine-script-reference/v5/#fun_ticker.inherit) constrói um novo ID de ticker para um `symbol` com parâmetros adicionais herdados do `from_tickerid` especificado na chamada da função, permitindo que scripts solicitem dados do `symbol` com os mesmos modificadores do `from_tickerid`, incluindo sessão, ajuste de dividendos, conversão de moeda, tipo de gráfico não padrão, ajuste retroativo, liquidação como fechamento, etc.
+- [ticker.standard()](https://br.tradingview.com/pine-script-reference/v5/#fun_ticker.standard) constrói um ID de ticker padrão representando o `symbol` _sem_ modificadores adicionais.
+
+Veja alguns exemplos práticos de aplicação das funções `ticker.*()` para solicitar dados de contextos personalizados.
+
+Suponha que seja necessário incluir o ajuste de dividendos nos preços de um símbolo de ação sem habilitar a opção "Ajustar dados para dividendos" (_Adjust data for dividends_) na seção "Símbolo" (_Symbol_) das configurações do gráfico. Isso pode ser alcançado em um script construindo um ID de ticker personalizado para o instrumento usando [ticker.new()](https://br.tradingview.com/pine-script-reference/v5/#fun_ticker.new) ou [ticker.modify()](https://br.tradingview.com/pine-script-reference/v5/#fun_ticker.modify) com um valor `adjustment` de [adjustment.dividends](https://br.tradingview.com/pine-script-reference/v5/#var_adjustment.dividends).
+
+Este script cria um `adjustedTickerID` usando [ticker.modify()](https://br.tradingview.com/pine-script-reference/v5/#fun_ticker.modify), usa esse ID de ticker como `symbol` em [request.security()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.security) para recuperar uma [tupla](./05_14_outros_timeframes_e_dados.md#tuples-tuplas) de valores de preços ajustados, e então plota o resultado como [candles](https://br.tradingview.com/pine-script-reference/v5/#fun_plotcandle) no gráfico. Ele também destaca o fundo quando os preços solicitados diferem dos preços sem ajuste de dividendos.
+
+Como pode ser visto no gráfico "NYSE:XOM", habilitar o ajuste de dividendos resulta em valores históricos diferentes antes da data do último dividendo:
+
+![Contextos personalizados 01](./imgs/Other-timeframes-and-data-Custom-contexts-1.BPiSCB0G_ZpUr3u.webp)
+
+```c
+//@version=5
+indicator("Custom contexts demo 1", "Adjusted prices", true)
+
+//@variable A custom ticker ID representing the chart's symbol with the dividend adjustment modifier.
+string adjustedTickerID = ticker.modify(syminfo.tickerid, adjustment = adjustment.dividends)
+
+// Request the adjusted prices for the chart's symbol.
+[o, h, l, c] = request.security(adjustedTickerID, timeframe.period, [open, high, low, close])
+
+//@variable The color of the candles on the chart.
+color candleColor = c > o ? color.teal : color.maroon
+
+// Plot the adjusted prices.
+plotcandle(o, h, l, c, "Adjusted Prices", candleColor)
+// Highlight the background when `c` is different from `close`.
+bgcolor(c != close ? color.new(color.orange, 80) : na)
+```
+
+__Note que:__
+
+- Se um modificador incluído em um ID de ticker construído não se aplicar ao símbolo, o script irá _ignorar_ esse modificador ao solicitar dados. Por exemplo, este script exibirá os mesmos valores do gráfico principal em símbolos de forex, como "EURUSD".
+
+Embora o exemplo acima demonstre uma maneira simples de modificar o símbolo do gráfico, um caso de uso mais frequente para as funções `ticker.*()` é aplicar modificadores personalizados a outro símbolo ao solicitar dados. Se um ID de ticker referenciado em um script já possuir os modificadores que se deseja aplicar (por exemplo, configurações de ajuste, tipo de sessão, etc.), pode-se usar [ticker.inherit()](https://br.tradingview.com/pine-script-reference/v5/#fun_ticker.inherit) para adicionar rapidamente e eficientemente esses modificadores a outro símbolo.
+
+No exemplo abaixo, o script foi editado para solicitar dados para um `symbolInput` usando modificadores herdados do `adjustedTickerID`. Este script chama [ticker.inherit()](https://br.tradingview.com/pine-script-reference/v5/#fun_ticker.inherit) para construir um `inheritedTickerID` e usa esse ID de ticker em uma chamada [request.security()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.security). Ele também solicita dados para o `symbolInput` sem modificadores adicionais e plota [candles](https://br.tradingview.com/pine-script-reference/v5/#fun_plotcandle) para ambos os IDs de ticker em um painel de gráfico separado para comparar a diferença.
+
+Como mostrado no gráfico, os dados solicitados usando o `inheritedTickerID` incluem ajuste de dividendos, enquanto os dados solicitados usando o `symbolInput` diretamente não incluem:
+
+![Contextos personalizados 02](./imgs/Other-timeframes-and-data-Custom-contexts-2.DR5Qn5x1_Z1F3irE.webp)
+
+```c
+//@version=5
+indicator("Custom contexts demo 2", "Inherited adjustment")
+
+//@variable The symbol to request data from.
+string symbolInput = input.symbol("NYSE:PFE", "Symbol")
+
+//@variable A custom ticker ID representing the chart's symbol with the dividend adjustment modifier.
+string adjustedTickerID = ticker.modify(syminfo.tickerid, adjustment = adjustment.dividends)
+//@variable A custom ticker ID representing the `symbolInput` with modifiers inherited from the `adjustedTickerID`.
+string inheritedTickerID = ticker.inherit(adjustedTickerID, symbolInput)
+
+// Request prices using the `symbolInput`.
+[o1, h1, l1, c1] = request.security(symbolInput, timeframe.period, [open, high, low, close])
+// Request prices using the `inheritedTickerID`.
+[o2, h2, l2, c2] = request.security(inheritedTickerID, timeframe.period, [open, high, low, close])
+
+//@variable The color of the candles that use the `inheritedTickerID` prices.
+color candleColor = c2 > o2 ? color.teal : color.maroon
+
+// Plot the `symbol` prices.
+plotcandle(o1, h1, l1, c1, "Symbol", color.gray, color.gray, bordercolor = color.gray)
+// Plot the `inheritedTickerID` prices.
+plotcandle(o2, h2, l2, c2, "Symbol With Modifiers", candleColor)
+// Highlight the background when `c1` is different from `c2`.
+bgcolor(c1 != c2 ? color.new(color.orange, 80) : na)
+```
+
+__Note que:__
+
+- Como o `adjustedTickerID` representa uma forma modificada do [syminfo.tickerid](https://br.tradingview.com/pine-script-reference/v5/#var_syminfo.tickerid), se o contexto do gráfico for modificado de outras maneiras, como alterar o tipo de gráfico ou habilitar horas de negociação estendidas nas configurações do gráfico, esses modificadores também se aplicarão ao `adjustedTickerID` e `inheritedTickerID`. No entanto, eles _não_ se aplicarão ao `symbolInput` já que ele representa um ID de ticker _padrão_.
+
+Outro caso de uso frequente para solicitar contextos personalizados é recuperar dados que utilizam cálculos de [gráficos não padrão](./05_13_dados_de_graficos_nao_padronizados.md). Por exemplo, suponha que seja necessário usar valores de preço [Renko](https://br.tradingview.com/support/solutions/43000502284/) para calcular sinais de trade em um script de [strategy()](https://br.tradingview.com/pine-script-reference/v5/#fun_strategy). Se simplesmente for alterado o tipo de gráfico para "Renko" para obter os preços, a [estratégia](./05_18_estrategias.md) também simulará seus trades com base nesses preços sintéticos, produzindo [resultados enganosos](https://br.tradingview.com/support/solutions/43000481029):
+
+![Contextos personalizados 03](./imgs/Other-timeframes-and-data-Custom-contexts-3.Fi6i41m5_Z15B7Id.webp)
+
+```c
+//@version=5
+strategy(
+     "Custom contexts demo 3", "Renko strategy", true, default_qty_type = strategy.percent_of_equity,
+     default_qty_value = 2, initial_capital = 50000, slippage = 2,
+     commission_type = strategy.commission.cash_per_contract, commission_value = 1, margin_long = 100,
+     margin_short = 100
+ )
+
+//@variable When `true`, the strategy places a long market order.
+bool longEntry = ta.crossover(close, open)
+//@variable When `true`, the strategy places a short market order.
+bool shortEntry = ta.crossunder(close, open)
+
+if longEntry
+    strategy.entry("Long Entry", strategy.long)
+if shortEntry
+    strategy.entry("Short Entry", strategy.short)
+```
+
+Para garantir que a estratégia mostre resultados baseados em preços _reais_, pode-se criar um ID de ticker Renko usando [ticker.renko()](https://br.tradingview.com/pine-script-reference/v5/#fun_ticker.renko) enquanto mantém o gráfico em um _tipo padrão_, permitindo que o script solicite e use preços [Renko](https://br.tradingview.com/support/solutions/43000502284) para calcular seus sinais sem calcular os resultados da estratégia sobre eles:
+
+![Contextos personalizados 04](./imgs/Other-timeframes-and-data-Custom-contexts-4.DB0_6eO1_Z2gBlFY.webp)
+
+```c
+//@version=5
+strategy(
+     "Custom contexts demo 3", "Renko strategy", true, default_qty_type = strategy.percent_of_equity,
+     default_qty_value = 2, initial_capital = 50000, slippage = 1,
+     commission_type = strategy.commission.cash_per_contract, commission_value = 1, margin_long = 100,
+     margin_short = 100
+ )
+
+//@variable A Renko ticker ID.
+string renkoTickerID = ticker.renko(syminfo.tickerid, "ATR", 14)
+// Request the `open` and `close` prices using the `renkoTickerID`.
+[renkoOpen, renkoClose] = request.security(renkoTickerID, timeframe.period, [open, close])
+
+//@variable When `true`, the strategy places a long market order.
+bool longEntry = ta.crossover(renkoClose, renkoOpen)
+//@variable When `true`, the strategy places a short market order.
+bool shortEntry = ta.crossunder(renkoClose, renkoOpen)
+
+if longEntry
+    strategy.entry("Long Entry", strategy.long)
+if shortEntry
+    strategy.entry("Short Entry", strategy.short)
+
+plot(renkoOpen)
+plot(renkoClose)
+```
+
 
 # Comportamento Histórico e Tempo Real
 
