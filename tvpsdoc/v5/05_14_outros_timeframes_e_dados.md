@@ -778,7 +778,7 @@ plotcandle(
 
 __Note que:__
 
-- As variáveis `syminfo.*` usadas neste script retornam tipos qualificados como "string simples". Contudo, os [objetos](./04_12_objetos.md) no Pine são _sempre_ qualificados como "series". Consequentemente, todos os valores atribuídos aos campos do objeto `info` automaticamente adotam o [qualificativo](./04_09_tipagem_do_sistema.md#qualificadores) "series".
+- As variáveis `syminfo.*` usadas neste script retornam tipos qualificados como "simple string". Contudo, os [objetos](./04_12_objetos.md) no Pine são _sempre_ qualificados como "series". Consequentemente, todos os valores atribuídos aos campos do objeto `info` automaticamente adotam o [qualificativo](./04_09_tipagem_do_sistema.md#qualificadores) "series".
 - A chamada [request.security()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.security) pode retornar [na](https://br.tradingview.com/pine-script-reference/v5/#var_na) devido a diferenças entre os dados solicitados do `symbol` e o gráfico principal. Este script atribui um novo objeto `TickerInfo` ao `requestedInfo` nesse caso para evitar erros de execução.
 
 ## `request.security_lower_tf()`
@@ -1358,7 +1358,7 @@ request.earnings(ticker, field, gaps, lookahead, ignore_invalid_symbol, currency
 
 Cada função tem os mesmos parâmetros em sua assinatura, com exceção de [request.splits()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.splits), que não possui um parâmetro `currency`.
 
-Note que, ao contrário do parâmetro `symbol` em outras funções `request.*()`, o parâmetro `ticker` nessas funções aceita apenas um _"Exchange:Symbol" pair_, como "NASDAQ:AAPL". A variável incorporada [syminfo.ticker](https://br.tradingview.com/pine-script-reference/v5/#var_syminfo.ticker) não funciona com essas funções, pois não contém informações sobre a bolsa. Em vez disso, deve-se usar [syminfo.tickerid](https://br.tradingview.com/pine-script-reference/v5/#var_syminfo.tickerid) nesses casos.
+Note que, ao contrário do parâmetro `symbol` em outras funções `request.*()`, o parâmetro `ticker` nessas funções aceita apenas um _par "Exchange:Symbol"_, como "NASDAQ:AAPL". A variável incorporada [syminfo.ticker](https://br.tradingview.com/pine-script-reference/v5/#var_syminfo.ticker) não funciona com essas funções, pois não contém informações sobre a bolsa. Em vez disso, deve-se usar [syminfo.tickerid](https://br.tradingview.com/pine-script-reference/v5/#var_syminfo.tickerid) nesses casos.
 
 O parâmetro `field` determina os dados que a função irá recuperar. Cada uma dessas funções aceita diferentes variáveis embutidas como argumento `field`, pois cada uma solicita informações diferentes sobre uma ação (_stock_):
 
@@ -1444,7 +1444,7 @@ request.quandl(ticker, gaps, index, ignore_invalid_symbol) → series float
 
 O parâmetro `ticker` aceita uma "simple string" representando o ID do banco de dados publicado no Nasdaq Data Link e seu código de _time series_, separado pelo delimitador "/". Por exemplo, o código "FRED/DFF" representa a _time series_ "Effective Federal Funds Rate" do banco de dados "Federal Reserve Economic Data".
 
-O parâmetro `index` aceita um "int simples" representando o _índice da coluna_ dos dados solicitados, onde 0 é a primeira coluna disponível. Consulte a documentação do banco de dados no site do Nasdaq Data Link para ver as colunas disponíveis.
+O parâmetro `index` aceita um "simple int" representando o _índice da coluna_ dos dados solicitados, onde 0 é a primeira coluna disponível. Consulte a documentação do banco de dados no site do Nasdaq Data Link para ver as colunas disponíveis.
 
 Para detalhes sobre os parâmetros `gaps` e `ignore_invalid_symbol`, veja a seção [Características Comuns](./05_14_outros_timeframes_e_dados.md#características-comuns) desta página.
 
@@ -1475,9 +1475,9 @@ color plotColor = color.from_gradient(hashRate, minHashRate, maxHashRate, color.
 plot(hashRate, "Hash Rate Estimate", plotColor, style = plot.style_area)
 ```
 
-<!-- ## request.financial()
+## `request.financial()`
 
-Métricas financeiras fornecem aos investidores insights sobre a saúde econômica e financeira de uma empresa que não são tangíveis apenas analisando seus preços de ações. O TradingView oferece uma ampla variedade de métricas financeiras da [FactSet](https://www.factset.com/) que os traders podem acessar via a aba "Financeiros" no menu "Indicadores" do gráfico. Os scripts podem acessar as métricas disponíveis para um instrumento diretamente através da função [request.financial()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.financial).
+Métricas financeiras fornecem aos investidores insights sobre a saúde econômica e financeira de uma empresa que não são tangíveis apenas analisando seus preços de ações. O TradingView oferece uma ampla variedade de métricas financeiras da [FactSet](https://www.factset.com/) que os traders podem acessar via a aba "Financeiros" (_Financials_) no menu "Indicadores" (_Indicators_) do gráfico. Os scripts podem acessar as métricas disponíveis para um instrumento diretamente através da função [request.financial()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.financial).
 
 Esta é a assinatura da função:
 
@@ -1487,9 +1487,9 @@ request.financial(symbol, financial_id, period, gaps, ignore_invalid_symbol, cur
 
 Assim como o primeiro parâmetro em [request.dividends()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.dividends), [request.splits()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.splits) e [request.earnings()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.earnings), o parâmetro `symbol` em [request.financial()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.financial) requer um _par "Exchange:Symbol"_. Para solicitar informações financeiras para o ID do ticker do gráfico, use [syminfo.tickerid](https://br.tradingview.com/pine-script-reference/v5/#var_syminfo.tickerid), pois [syminfo.ticker](https://br.tradingview.com/pine-script-reference/v5/#var_syminfo.ticker) não funcionará.
 
-O parâmetro `financial_id` aceita uma "string simples" representando o ID da métrica financeira solicitada. O TradingView possui várias métricas financeiras para escolher. Consulte a seção [IDs Financeiros](./05_14_outros_timeframes_e_dados.md#ids-financeiros) abaixo para uma visão geral de todas as métricas acessíveis e seus identificadores de "string".
+O parâmetro `financial_id` aceita uma "simple string" representando o ID da métrica financeira solicitada. O TradingView possui várias métricas financeiras para escolher. Consulte a seção [IDs Financeiros](./05_14_outros_timeframes_e_dados.md#ids-financeiros) abaixo para uma visão geral de todas as métricas acessíveis e seus identificadores de "string".
 
-O parâmetro `period` especifica o período fiscal para o qual novos dados solicitados são obtidos. Aceita um dos seguintes argumentos: **"FQ" (trimestral), "FH" (semestral), "FY" (anual) ou "TTM" (últimos doze meses)**. Nem todos os períodos fiscais estão disponíveis para todas as métricas ou instrumentos. Para confirmar quais períodos estão disponíveis para métricas específicas, consulte a segunda coluna das tabelas na seção [IDs Financeiros](./05_14_outros_timeframes_e_dados.md#ids-financeiros).
+O parâmetro `period` especifica o período fiscal para o qual novos dados solicitados são obtidos. Aceita um dos seguintes argumentos: __"FQ" (trimestral), "FH" (semestral), "FY" (anual) ou "TTM" (últimos doze meses)__. Nem todos os períodos fiscais estão disponíveis para todas as métricas ou instrumentos. Para confirmar quais períodos estão disponíveis para métricas específicas, consulte a segunda coluna das tabelas na seção [IDs Financeiros](./05_14_outros_timeframes_e_dados.md#ids-financeiros).
 
 Veja a seção [Características Comuns](./05_14_outros_timeframes_e_dados.md#características-comuns) desta página para uma explicação detalhada dos parâmetros `gaps`, `ignore_invalid_symbol` e `currency` desta função.
 
@@ -1497,7 +1497,7 @@ Veja a seção [Características Comuns](./05_14_outros_timeframes_e_dados.md#ca
 
 Este script usa [request.financial()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.financial) para recuperar informações sobre a receita e despesas da empresa emissora de uma ação e visualizar a lucratividade de suas operações comerciais típicas. Solicita os "OPER_INCOME", "TOTAL_REVENUE" e "TOTAL_OPER_EXPENSE" [IDs Financeiros](./05_14_outros_timeframes_e_dados.md#ids-financeiros) para o [syminfo.tickerid](https://br.tradingview.com/pine-script-reference/v5/#var_syminfo.tickerid) durante o último `período fiscal`, e então [plota](./05_15_plots.md) os resultados no gráfico:
 
-![Gráfico de dados financeiros](./imgs/Other-timeframes-and-data-Request-financial-1.B9cESm-h_ZhOVcV.webp)
+![request.financial()](./imgs/Other-timeframes-and-data-Request-financial-1.B9cESm-h_ZhOVcV.webp)
 
 ```c
 //@version=5
@@ -1514,9 +1514,7 @@ float totalRevenue = request.financial(syminfo.tickerid, "TOTAL_REVENUE", fiscal
 float totalExpenses = request.financial(syminfo.tickerid, "TOTAL_OPER_EXPENSE", fiscalPeriod)
 
 //@variable Is aqua when the `totalRevenue` exceeds the `totalExpenses`, fuchsia otherwise.
-color incomeColor = operatingIncome > 0 ? color.new(color.a
-
-qua, 50) : color.new(color.fuchsia, 50)
+color incomeColor = operatingIncome > 0 ? color.new(color.aqua, 50) : color.new(color.fuchsia, 50)
 
 // Display the requested data.
 plot(operatingIncome, "Operating income", incomeColor, 1, plot.style_area)
@@ -1526,4 +1524,8 @@ plot(totalExpenses, "Total operating expenses", color.red, 3)
 
 __Note que:__
 
-- Nem todas as opções de `período fiscal` estão disponíveis para cada ID de ticker. Por exemplo, empresas nos EUA normalmente publicam relatórios _trimestrais_, enquanto muitas empresas europeias publicam relatórios _semestrais_. Consulte [esta página](https://www.tradingview.com/support/solutions/43000540147) no nosso Centro de Ajuda para mais informações. -->
+- Nem todas as opções de `fiscalPeriod` estão disponíveis para cada ID de ticker. Por exemplo, empresas nos EUA normalmente publicam relatórios _trimestrais_, enquanto muitas empresas europeias publicam relatórios _semestrais_. Consulte [esta página](https://br.tradingview.com/support/solutions/43000540147) no nosso Centro de Ajuda para mais informações.
+
+
+
+## IDs Financeiros
