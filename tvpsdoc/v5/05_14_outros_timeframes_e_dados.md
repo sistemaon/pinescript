@@ -1375,7 +1375,7 @@ Para uma explicação detalhada dos parâmetros `gaps`, `lookahead` e `ignore_in
 
 Aqui, foi adicionado um exemplo que exibe uma prática [tabela](https://br.tradingview.com/pine-script-reference/v5/#type_table) contendo os dados mais recentes de dividendos, desdobramentos e EPS. O script chama as funções `request.*()` discutidas nesta seção para recuperar os dados, depois converte os valores em "strings" com funções `str.*()` e exibe os resultados na `infoTable` com [table.cell()](https://br.tradingview.com/pine-script-reference/v5/#fun_table.cell):
 
-![`request.dividends()`, `request.splits()` e `request.earnings()`](./imgs/Other-timeframes-and-data-Request-dividends-request-splits-and-request-earnings-1.DVVI7Tee_yVHYk.webp)
+![request.dividends(), request.splits() e request.earnings()](./imgs/Other-timeframes-and-data-Request-dividends-request-splits-and-request-earnings-1.DVVI7Tee_yVHYk.webp)
 
 ```c
 //@version=5
@@ -1432,5 +1432,98 @@ __Note que:__
 - O script atribui um ID de [tabela](https://br.tradingview.com/pine-script-reference/v5/#type_table) à variável `infoTable` na primeira barra do gráfico. Nas barras subsequentes, atualiza as células necessárias com novas informações sempre que os dados estiverem disponíveis.
 - Se não houver informações disponíveis de nenhuma das chamadas `request.*()` ao longo da história do gráfico (por exemplo, se o `ticker` não tiver informações de dividendos), o script não inicializa as células correspondentes, pois não é necessário.
 
+## `request.quandl()`
 
-# Contextos Personalizados
+O TradingView forma parcerias com muitas empresas fintech para fornecer aos usuários acesso a informações extensas sobre instrumentos financeiros, dados econômicos e mais. Um dos nossos muitos parceiros é o [Nasdaq Data Link](https://data.nasdaq.com/) (anteriormente Quandl), que fornece múltiplos feeds de dados _externos_ que os scripts podem acessar via a função [request.quandl()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.quandl).
+
+Aqui está a assinatura da função:
+
+```c
+request.quandl(ticker, gaps, index, ignore_invalid_symbol) → series float
+```
+
+O parâmetro `ticker` aceita uma "simple string" representando o ID do banco de dados publicado no Nasdaq Data Link e seu código de _time series_, separado pelo delimitador "/". Por exemplo, o código "FRED/DFF" representa a _time series_ "Effective Federal Funds Rate" do banco de dados "Federal Reserve Economic Data".
+
+O parâmetro `index` aceita um "int simples" representando o _índice da coluna_ dos dados solicitados, onde 0 é a primeira coluna disponível. Consulte a documentação do banco de dados no site do Nasdaq Data Link para ver as colunas disponíveis.
+
+Para detalhes sobre os parâmetros `gaps` e `ignore_invalid_symbol`, veja a seção [Características Comuns](./05_14_outros_timeframes_e_dados.md#características-comuns) desta página.
+
+> __Observação!__\
+> A função [request.quandl()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.quandl) só pode solicitar dados __gratuitos__ do Nasdaq Data Link. Nenhum dado que exija uma assinatura paga dos serviços deles é acessível com esta função. O Nasdaq Data Link pode alterar os dados que fornece ao longo do tempo e pode não atualizar os conjuntos de dados disponíveis regularmente. Portanto, cabe aos programadores pesquisar os dados suportados disponíveis para solicitação e revisar a documentação fornecida para cada conjunto de dados. Você pode procurar dados gratuitos [aqui](https://data.nasdaq.com/search?filters=%5B%22Free%22%5D).
+
+Este script solicita informações sobre a taxa de hash do Bitcoin ("HRATE") do banco de dados "Bitcoin Data Insights" ("BCHAIN") e [plota](./05_15_plots.md) a série temporal recuperada no gráfico. Ele usa [color.from_gradient()](https://br.tradingview.com/pine-script-reference/v5/#fun_color.from_gradient) para colorir o gráfico de [área](https://br.tradingview.com/pine-script-reference/v5/#var_plot.style_area) com base na distância da taxa de hash atual até sua [máxima histórica](https://br.tradingview.com/pine-script-reference/v5/#fun_ta.max):
+
+![request.quandl()](./imgs/Other-timeframes-and-data-Request-quandl-1.WXplEe1P_1WvLGp.webp)
+
+```c
+//@version=5
+indicator("Quandl demo", "BTC hash rate")
+
+//@variable The estimated hash rate for the Bitcoin network.
+float hashRate = request.quandl("BCHAIN/HRATE", barmerge.gaps_off, 0)
+//@variable The percentage threshold from the all-time highest `hashRate`.
+float dropThreshold = input.int(40, "Drop threshold", 0, 100)
+
+//@variable The all-time highest `hashRate`.
+float maxHashRate = ta.max(hashRate)
+//@variable The value `dropThreshold` percent below the `maxHashRate`.
+float minHashRate = maxHashRate * (100 - dropThreshold) / 100
+//@variable The color of the plot based on the `minHashRate` and `maxHashRate`.
+color plotColor = color.from_gradient(hashRate, minHashRate, maxHashRate, color.orange, color.blue)
+
+// Plot the `hashRate`.
+plot(hashRate, "Hash Rate Estimate", plotColor, style = plot.style_area)
+```
+
+<!-- ## request.financial()
+
+Métricas financeiras fornecem aos investidores insights sobre a saúde econômica e financeira de uma empresa que não são tangíveis apenas analisando seus preços de ações. O TradingView oferece uma ampla variedade de métricas financeiras da [FactSet](https://www.factset.com/) que os traders podem acessar via a aba "Financeiros" no menu "Indicadores" do gráfico. Os scripts podem acessar as métricas disponíveis para um instrumento diretamente através da função [request.financial()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.financial).
+
+Esta é a assinatura da função:
+
+```c
+request.financial(symbol, financial_id, period, gaps, ignore_invalid_symbol, currency) → series float
+```
+
+Assim como o primeiro parâmetro em [request.dividends()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.dividends), [request.splits()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.splits) e [request.earnings()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.earnings), o parâmetro `symbol` em [request.financial()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.financial) requer um _par "Exchange:Symbol"_. Para solicitar informações financeiras para o ID do ticker do gráfico, use [syminfo.tickerid](https://br.tradingview.com/pine-script-reference/v5/#var_syminfo.tickerid), pois [syminfo.ticker](https://br.tradingview.com/pine-script-reference/v5/#var_syminfo.ticker) não funcionará.
+
+O parâmetro `financial_id` aceita uma "string simples" representando o ID da métrica financeira solicitada. O TradingView possui várias métricas financeiras para escolher. Consulte a seção [IDs Financeiros](./05_14_outros_timeframes_e_dados.md#ids-financeiros) abaixo para uma visão geral de todas as métricas acessíveis e seus identificadores de "string".
+
+O parâmetro `period` especifica o período fiscal para o qual novos dados solicitados são obtidos. Aceita um dos seguintes argumentos: **"FQ" (trimestral), "FH" (semestral), "FY" (anual) ou "TTM" (últimos doze meses)**. Nem todos os períodos fiscais estão disponíveis para todas as métricas ou instrumentos. Para confirmar quais períodos estão disponíveis para métricas específicas, consulte a segunda coluna das tabelas na seção [IDs Financeiros](./05_14_outros_timeframes_e_dados.md#ids-financeiros).
+
+Veja a seção [Características Comuns](./05_14_outros_timeframes_e_dados.md#características-comuns) desta página para uma explicação detalhada dos parâmetros `gaps`, `ignore_invalid_symbol` e `currency` desta função.
+
+É importante notar que os dados recuperados por esta função chegam em uma _frequência fixa_, independentemente da data precisa em que os dados são disponibilizados dentro de um período fiscal. Para informações sobre dividendos, desdobramentos e lucro por ação (EPS) de uma empresa, pode-se solicitar dados relatados em datas exatas via [request.dividends()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.dividends), [request.splits()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.splits) e [request.earnings()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.earnings).
+
+Este script usa [request.financial()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.financial) para recuperar informações sobre a receita e despesas da empresa emissora de uma ação e visualizar a lucratividade de suas operações comerciais típicas. Solicita os "OPER_INCOME", "TOTAL_REVENUE" e "TOTAL_OPER_EXPENSE" [IDs Financeiros](./05_14_outros_timeframes_e_dados.md#ids-financeiros) para o [syminfo.tickerid](https://br.tradingview.com/pine-script-reference/v5/#var_syminfo.tickerid) durante o último `período fiscal`, e então [plota](./05_15_plots.md) os resultados no gráfico:
+
+![Gráfico de dados financeiros](./imgs/Other-timeframes-and-data-Request-financial-1.B9cESm-h_ZhOVcV.webp)
+
+```c
+//@version=5
+indicator("Requesting financial data demo", format = format.volume)
+
+//@variable The size of the fiscal reporting period. Some options may not be available, depending on the instrument.
+string fiscalPeriod = input.string("FQ", "Period", ["FQ", "FH", "FY", "TTM"])
+
+//@variable The operating income after expenses reported for the stock's issuing company.
+float operatingIncome = request.financial(syminfo.tickerid, "OPER_INCOME", fiscalPeriod)
+//@variable The total revenue reported for the stock's issuing company.
+float totalRevenue = request.financial(syminfo.tickerid, "TOTAL_REVENUE", fiscalPeriod)
+//@variable The total operating expenses reported for the stock's issuing company.
+float totalExpenses = request.financial(syminfo.tickerid, "TOTAL_OPER_EXPENSE", fiscalPeriod)
+
+//@variable Is aqua when the `totalRevenue` exceeds the `totalExpenses`, fuchsia otherwise.
+color incomeColor = operatingIncome > 0 ? color.new(color.a
+
+qua, 50) : color.new(color.fuchsia, 50)
+
+// Display the requested data.
+plot(operatingIncome, "Operating income", incomeColor, 1, plot.style_area)
+plot(totalRevenue, "Total revenue", color.green, 3)
+plot(totalExpenses, "Total operating expenses", color.red, 3)
+```
+
+__Note que:__
+
+- Nem todas as opções de `período fiscal` estão disponíveis para cada ID de ticker. Por exemplo, empresas nos EUA normalmente publicam relatórios _trimestrais_, enquanto muitas empresas europeias publicam relatórios _semestrais_. Consulte [esta página](https://www.tradingview.com/support/solutions/43000540147) no nosso Centro de Ajuda para mais informações. -->
