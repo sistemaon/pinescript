@@ -66,3 +66,7 @@ O link para o "See [this section]" não encaminha para o destino correto. O link
 IN Other timeframes and data > Calculated variables = The script colors the plot with a gradient based on the correlation value. To learn more about color gradients in Pine, see [this](https://www.tradingview.com/pine-script-docs/concepts/colors/#colors) section of our User Manual’s page on colors.
 O link do [this] deveria referenciar a parte do link sobre cores de gradiente.
 [this](https://www.tradingview.com/pine-script-docs/concepts/colors/#colorfrom_gradient)
+
+
+
+**No link https://br.tradingview.com/pine-script-reference/v5/#var_currency.KRW (é para referir a moeda sul coreana won, e não venceu)**

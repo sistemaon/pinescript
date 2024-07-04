@@ -1292,37 +1292,35 @@ __Note que:__
 - Embora [request.security_lower_tf()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.security_lower_tf) seja mais otimizado para lidar com intrabarras históricas e em tempo real, ainda é possível em alguns casos que ocorra uma _repintura_ menor devido a diferenças de dados do provedor, conforme descrito acima.
 - Este código pode não mostrar dados intrabar em todas as barras do gráfico disponíveis, dependendo de quantas intrabarras cada barra do gráfico contém, pois as funções `request.*()` podem recuperar até 100.000 intrabarras de um contexto LTF. Consulte [esta seção](./06_05_limitacoes.md#chamadas-request) da página de [Limitações](./06_05_limitacoes.md) para mais informações.
 
-<!-- ## `request.currency_rate()`
+## `request.currency_rate()`
 
-Quando um script precisa converter valores expressos em uma moeda para outra, pode-se usar [request.currency_rate()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.currency_rate). Esta função solicita uma _taxa diária_ para cálculos de conversão de moeda com base nos dados "FX_IDC", fornecendo uma alternativa mais simples para buscar pares específicos ou [spreads](https://www.tradingview.com/support/solutions/43000502298/) com [request.security()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.security).
+Quando um script precisa converter valores expressos em uma moeda para outra, pode-se usar [request.currency_rate()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.currency_rate). Esta função solicita uma _taxa diária_ (_daily rate_) para cálculos de conversão de moeda com base nos dados "FX_IDC", fornecendo uma alternativa mais simples para buscar pares específicos ou [spreads](https://br.tradingview.com/support/solutions/43000502298) com [request.security()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.security).
 
-Embora seja possível usar [request.security()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.security) para recuperar taxas diárias de câmbio, seu caso de uso é mais complexo do que [request.currency_rate()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.currency_rate), pois é necessário fornecer um _ticker ID_ válido para um par de moedas ou spread para solicitar a taxa. Além disso, um deslocamento histórico e [barmerge.lookahead_on](https://br.tradingview.com/pine-script-reference/v5/#var_barmerge.lookahead_on) são necessários para evitar que os resultados façam repaint, conforme explicado [nesta seção](https://br.tradingview.com/pine-script-docs/concepts/other-timeframes-and-data#evitando-repaint).
+Embora seja possível usar [request.security()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.security) para recuperar taxas diárias de câmbio, seu caso de uso é mais complexo do que [request.currency_rate()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.currency_rate), pois é necessário fornecer um _ticker ID_ válido para um par de moedas ou spread para solicitar a taxa. Além disso, um deslocamento histórico e [barmerge.lookahead_on](https://br.tradingview.com/pine-script-reference/v5/#var_barmerge.lookahead_on) são necessários para evitar que os resultados façam repaint, conforme explicado [nesta seção](./05_14_outros_timeframes_e_dados.md#evitando-repintura).
 
-A função [request.currency_rate()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.currency_rate), por outro lado, requer apenas _códigos de moeda_. Não é necessário um ticker ID ao solicitar taxas com essa função, e ela garante resultados sem _repintar_ sem exigir especificações adicionais.
+A função [request.currency_rate()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.currency_rate), por outro lado, requer apenas _códigos de moeda_ (_currency codes_). Não é necessário um ticker ID ao solicitar taxas com essa função, e ela garante resultados sem _repintar_ sem exigir especificações adicionais.
 
 A assinatura da função é a seguinte:
 
-```pinescript
+```c
 request.currency_rate(from, to, ignore_invalid_currency) → series float
 ```
 
-O parâmetro `from` especifica a moeda a ser convertida, e o parâmetro `to` especifica a moeda de destino. Ambos os parâmetros aceitam valores "string" no formato [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217#Active_codes) (por exemplo, "USD") ou qualquer variável embutida `currency.*` (por exemplo, [currency.USD](https://br.tradingview.com/pine-script-reference/v5/#var_currency.USD)).
+O parâmetro `from` especifica a moeda a ser convertida, e o parâmetro `to` especifica a moeda de destino. Ambos os parâmetros aceitam valores "string" no formato [ISO 4217](https://pt.wikipedia.org/wiki/ISO_4217) (por exemplo, "USD") ou qualquer variável embutida `currency.*` (por exemplo, [currency.USD](https://br.tradingview.com/pine-script-reference/v5/#var_currency.USD)).
 
 Quando a função não consegue calcular uma taxa de conversão válida entre as moedas `from` e `to` fornecidas na chamada, pode-se decidir se ela gerará um erro de execução ou retornará [na](https://br.tradingview.com/pine-script-reference/v5/#var_na) através do parâmetro `ignore_invalid_currency`. O valor padrão é `false`, o que significa que a função gerará um erro de execução e interromperá a execução do script.
 
 O exemplo a seguir demonstra um caso de uso simples para [request.currency_rate()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.currency_rate). Suponha que se deseje converter valores expressos em lira turca ([currency.TRY](https://br.tradingview.com/pine-script-reference/v5/#var_currency.TRY)) para won sul-coreano ([currency.KRW](https://br.tradingview.com/pine-script-reference/v5/#var_currency.KRW)) usando uma taxa de conversão diária. Se usarmos [request.security()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.security) para recuperar a taxa, é necessário fornecer um ticker ID válido e solicitar o último [close](https://br.tradingview.com/pine-script-reference/v5/#var_close) confirmado do dia anterior.
 
-Neste caso, não existe um símbolo "FX_IDC" que permita recuperar diretamente uma taxa de conversão com [request.security()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.security). Portanto, primeiro é necessário um ticker ID para um [spread](https
-
-://www.tradingview.com/support/solutions/43000502298/) que converta TRY para uma moeda intermediária, como USD, e depois converta a moeda intermediária para KRW. Em seguida, podemos usar esse ticker ID dentro de [request.security()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.security) com `close[1]` como `expression` e [barmerge.lookahead_on](https://br.tradingview.com/pine-script-reference/v5/#var_barmerge.lookahead_on) como valor de `lookahead` para solicitar uma taxa diária sem _repintar_.
+Neste caso, não existe um símbolo "FX_IDC" que permita recuperar diretamente uma taxa de conversão com [request.security()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.security). Portanto, primeiro é necessário um ticker ID para um [spread](https://br.tradingview.com/support/solutions/43000502298) que converta TRY para uma moeda intermediária, como USD, e depois converta a moeda intermediária para KRW. Em seguida, pode-se usar esse ticker ID dentro de [request.security()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.security) com `close[1]` como `expression` e [barmerge.lookahead_on](https://br.tradingview.com/pine-script-reference/v5/#var_barmerge.lookahead_on) como valor de `lookahead` para solicitar uma _taxa diária sem repintar_ (_non-repainting daily rate_).
 
 Alternativamente, pode-se alcançar o mesmo resultado de forma mais simples chamando [request.currency_rate()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.currency_rate). Esta função faz todo o trabalho pesado para nós, exigindo apenas argumentos `from` e `to` de moeda para realizar seu cálculo.
 
-Como vemos abaixo, ambas as abordagens retornam a mesma taxa diária:
+Como pode ser visto abaixo, ambas as abordagens retornam a mesma taxa diária:
 
-![Taxa de Câmbio](./imgs/Other-timeframes-and-data-Request-currency-rate-1.C1rKgV4h_1dBAP1.webp)
+![request.currency_rate()](./imgs/Other-timeframes-and-data-Request-currency-rate-1.C1rKgV4h_1dBAP1.webp)
 
-```pinescript
+```c
 //@version=5
 indicator("Requesting currency rates demo")
 
@@ -1342,7 +1340,7 @@ float nonSecurityRequestedRate = request.currency_rate(fromCurrency, toCurrency)
 // Plot the requested rates. We can multiply TRY values by these rates to convert them to KRW.
 plot(securityRequestedRate, "`request.security()` value", color.purple, 5)
 plot(nonSecurityRequestedRate, "`request.currency_rate()` value", color.yellow, 2)
-``` -->
+```
 
 
 # Contextos Personalizados
