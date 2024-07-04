@@ -1184,7 +1184,7 @@ O exemplo a seguir demonstra uma solicitação de dados de timeframe superior qu
 
 Como mostrado no gráfico abaixo, o [plot](https://br.tradingview.com/pine-script-reference/v5/#fun_plot) da WMA solicitada só muda em barras históricas quando barras de timeframe superior fecham, enquanto flutua em todas as barras em tempo real, pois os dados incluem valores não confirmados do timeframe superior:
 
-![Evitando repintura 01](./imgs/Other-timeframes-and-data-Historical-and-realtime-behavior-Avoiding-repainting-Higher-timeframe-data-1.BaZM3HDu_2k78Ln.webp)
+![Dados higher-timeframe 01](./imgs/Other-timeframes-and-data-Historical-and-realtime-behavior-Avoiding-repainting-Higher-timeframe-data-1.BaZM3HDu_2k78Ln.webp)
 
 ```c
 //@version=5
@@ -1211,7 +1211,7 @@ bgcolor(barstate.isrealtime ? color.new(color.orange, 70) : na, title = "Realtim
 
 Para evitar _repintura_ neste script, pode-se adicionar `lookahead = barmerge.lookahead_on` à chamada [request.security()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.security) e deslocar o histórico da chamada [ta.wma()](https://br.tradingview.com/pine-script-reference/v5/#fun_ta.wma) em uma barra com o operador de referência de histórico [[]](https://br.tradingview.com/pine-script-reference/v5/#op_%5B%5D), garantindo que a solicitação sempre recupere o WMA da última barra confirmada do timeframe superior no início de cada novo `timeframe`. Diferente do script anterior, esta versão tem comportamento consistente em estados de barras históricas e em tempo real, como vemos abaixo:
 
-![Evitando repintura 02](./imgs/Other-timeframes-and-data-Historical-and-realtime-behavior-Avoiding-repainting-Higher-timeframe-data-2.DgoLhl8Y_1sHSHG.webp)
+![Dados higher-timeframe 02](./imgs/Other-timeframes-and-data-Historical-and-realtime-behavior-Avoiding-repainting-Higher-timeframe-data-2.DgoLhl8Y_1sHSHG.webp)
 
 ```c
 //@version=5
@@ -1237,7 +1237,112 @@ plot(requestedWMA, "HTF WMA", color.purple, 3)
 bgcolor(barstate.isrealtime ? color.new(color.orange, 70) : na, title = "Realtime bar highlight")
 ```
 
-## Dados Lower-Timeframe (LTF) _Timeframe Inferior_
+#### Dados Lower-Timeframe (LTF) _Timeframe Inferior_
+
+As funções [request.security()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.security) e [request.security_lower_tf()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.security_lower_tf) podem recuperar dados de contextos de timeframe inferior. A função [request.security()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.security) pode recuperar dados de uma _única_ intrabar em cada barra do gráfico, enquanto [request.security_lower_tf()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.security_lower_tf) recupera dados de _todas_ as intrabarras disponíveis.
+
+Ao usar essas funções para recuperar dados intrabar, é importante notar que tais solicitações __não__ são imunes ao comportamento de _repintar_. Séries históricas e em tempo real frequentemente dependem de feeds de dados _separados_. Os provedores de dados podem modificar retroativamente os dados em tempo real, e é possível que ocorram corridas nos feeds de dados em tempo real, conforme explicado na seção [Feeds de Dados](./05_14_outros_timeframes_e_dados.md#feeds-de-dados) desta página. Qualquer um desses casos pode resultar em dados intrabar recuperados em barras em tempo real fazendo _repintar_ após o script reiniciar sua execução.
+
+Além disso, um caso particular que _causará_ solicitações de LTF fazendo _repintar_ é usar [request.security()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.security) com [barmerge.lookahead_on](https://br.tradingview.com/pine-script-reference/v5/#var_barmerge.lookahead_on) para recuperar dados da primeira intrabar em cada barra do gráfico. Embora geralmente funcione como esperado em barras históricas, ele rastreará apenas a intrabar mais recente em barras em tempo real, pois [request.security()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.security) não retém todas as informações intrabar, e as intrabarras recuperadas pela função em barras em tempo real não são ordenadas até reiniciar a execução do script:
+
+![Dados lower-timeframe 01](./imgs/Other-timeframes-and-data-Historical-and-realtime-behavior-Avoiding-repainting-Lower-timeframe-data-1.CBTFrSjr_3y4ey.webp)
+
+```c
+//@version=5
+indicator("Avoiding LTF repainting demo", overlay = true)
+
+//@variable The lower timeframe of the requested data.
+string lowerTimeframe = input.timeframe("1", "Timeframe")
+
+//@variable The first intrabar `close` requested from the `lowerTimeframe` on each bar.
+//          Only works as intended on historical bars.
+float requestedClose = request.security(syminfo.tickerid, lowerTimeframe, close, lookahead = barmerge.lookahead_on)
+
+// Plot the `requestedClose`.
+plot(requestedClose, "First intrabar close", linewidth = 3)
+// Highlight the background on realtime bars.
+bgcolor(barstate.isrealtime ? color.new(color.orange, 60) : na, title = "Realtime bar Highlight")
+```
+
+Pode-se mitigar esse comportamento e rastrear os valores da primeira intrabar, ou de qualquer intrabar disponível na barra do gráfico, usando [request.security_lower_tf()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.security_lower_tf) já que ele mantém um [array](https://br.tradingview.com/pine-script-reference/v5/#type_array) de valores intrabar ordenados pelos tempos em que chegam. Aqui é invocado [array.first()](https://br.tradingview.com/pine-script-reference/v5/#fun_array.first) em um [array](https://br.tradingview.com/pine-script-reference/v5/#type_array) de dados intrabar solicitados para recuperar o preço de [close](https://br.tradingview.com/pine-script-reference/v5/#var_close) da primeira intrabar disponível em cada barra do gráfico:
+
+![Dados lower-timeframe 02](./imgs/Other-timeframes-and-data-Historical-and-realtime-behavior-Avoiding-repainting-Lower-timeframe-data-2.6WrbL0Kk_wVrfM.webp)
+
+```c
+//@version=5
+indicator("Avoiding LTF repainting demo", overlay = true)
+
+//@variable The lower timeframe of the requested data.
+string lowerTimeframe = input.timeframe("1", "Timeframe")
+
+//@variable An array of intrabar `close` values requested from the `lowerTimeframe` on each bar.
+array<float> requestedCloses = request.security_lower_tf(syminfo.tickerid, lowerTimeframe, close)
+
+//@variable The first intrabar `close` on each bar with available data.
+float firstClose = requestedCloses.size() > 0 ? requestedCloses.first() : na
+
+// Plot the `firstClose`.
+plot(firstClose, "First intrabar close", linewidth = 3)
+// Highlight the background on realtime bars.
+bgcolor(barstate.isrealtime ? color.new(color.orange, 60) : na, title = "Realtime bar Highlight")
+```
+
+__Note que:__
+
+- Embora [request.security_lower_tf()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.security_lower_tf) seja mais otimizado para lidar com intrabarras históricas e em tempo real, ainda é possível em alguns casos que ocorra uma _repintura_ menor devido a diferenças de dados do provedor, conforme descrito acima.
+- Este código pode não mostrar dados intrabar em todas as barras do gráfico disponíveis, dependendo de quantas intrabarras cada barra do gráfico contém, pois as funções `request.*()` podem recuperar até 100.000 intrabarras de um contexto LTF. Consulte [esta seção](./06_05_limitacoes.md#chamadas-request) da página de [Limitações](./06_05_limitacoes.md) para mais informações.
+
+<!-- ## `request.currency_rate()`
+
+Quando um script precisa converter valores expressos em uma moeda para outra, pode-se usar [request.currency_rate()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.currency_rate). Esta função solicita uma _taxa diária_ para cálculos de conversão de moeda com base nos dados "FX_IDC", fornecendo uma alternativa mais simples para buscar pares específicos ou [spreads](https://www.tradingview.com/support/solutions/43000502298/) com [request.security()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.security).
+
+Embora seja possível usar [request.security()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.security) para recuperar taxas diárias de câmbio, seu caso de uso é mais complexo do que [request.currency_rate()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.currency_rate), pois é necessário fornecer um _ticker ID_ válido para um par de moedas ou spread para solicitar a taxa. Além disso, um deslocamento histórico e [barmerge.lookahead_on](https://br.tradingview.com/pine-script-reference/v5/#var_barmerge.lookahead_on) são necessários para evitar que os resultados façam repaint, conforme explicado [nesta seção](https://br.tradingview.com/pine-script-docs/concepts/other-timeframes-and-data#evitando-repaint).
+
+A função [request.currency_rate()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.currency_rate), por outro lado, requer apenas _códigos de moeda_. Não é necessário um ticker ID ao solicitar taxas com essa função, e ela garante resultados sem _repintar_ sem exigir especificações adicionais.
+
+A assinatura da função é a seguinte:
+
+```pinescript
+request.currency_rate(from, to, ignore_invalid_currency) → series float
+```
+
+O parâmetro `from` especifica a moeda a ser convertida, e o parâmetro `to` especifica a moeda de destino. Ambos os parâmetros aceitam valores "string" no formato [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217#Active_codes) (por exemplo, "USD") ou qualquer variável embutida `currency.*` (por exemplo, [currency.USD](https://br.tradingview.com/pine-script-reference/v5/#var_currency.USD)).
+
+Quando a função não consegue calcular uma taxa de conversão válida entre as moedas `from` e `to` fornecidas na chamada, pode-se decidir se ela gerará um erro de execução ou retornará [na](https://br.tradingview.com/pine-script-reference/v5/#var_na) através do parâmetro `ignore_invalid_currency`. O valor padrão é `false`, o que significa que a função gerará um erro de execução e interromperá a execução do script.
+
+O exemplo a seguir demonstra um caso de uso simples para [request.currency_rate()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.currency_rate). Suponha que se deseje converter valores expressos em lira turca ([currency.TRY](https://br.tradingview.com/pine-script-reference/v5/#var_currency.TRY)) para won sul-coreano ([currency.KRW](https://br.tradingview.com/pine-script-reference/v5/#var_currency.KRW)) usando uma taxa de conversão diária. Se usarmos [request.security()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.security) para recuperar a taxa, é necessário fornecer um ticker ID válido e solicitar o último [close](https://br.tradingview.com/pine-script-reference/v5/#var_close) confirmado do dia anterior.
+
+Neste caso, não existe um símbolo "FX_IDC" que permita recuperar diretamente uma taxa de conversão com [request.security()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.security). Portanto, primeiro é necessário um ticker ID para um [spread](https
+
+://www.tradingview.com/support/solutions/43000502298/) que converta TRY para uma moeda intermediária, como USD, e depois converta a moeda intermediária para KRW. Em seguida, podemos usar esse ticker ID dentro de [request.security()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.security) com `close[1]` como `expression` e [barmerge.lookahead_on](https://br.tradingview.com/pine-script-reference/v5/#var_barmerge.lookahead_on) como valor de `lookahead` para solicitar uma taxa diária sem _repintar_.
+
+Alternativamente, pode-se alcançar o mesmo resultado de forma mais simples chamando [request.currency_rate()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.currency_rate). Esta função faz todo o trabalho pesado para nós, exigindo apenas argumentos `from` e `to` de moeda para realizar seu cálculo.
+
+Como vemos abaixo, ambas as abordagens retornam a mesma taxa diária:
+
+![Taxa de Câmbio](./imgs/Other-timeframes-and-data-Request-currency-rate-1.C1rKgV4h_1dBAP1.webp)
+
+```pinescript
+//@version=5
+indicator("Requesting currency rates demo")
+
+//@variable The currency to convert.
+simple string fromCurrency = currency.TRY
+//@variable The resulting currency.
+simple string toCurrency = currency.KRW
+
+//@variable The spread symbol to request. Required in `request.security()` since no direct "FX_IDC" rate exists.
+simple string spreadSymbol = str.format("FX_IDC:{0}{2} * FX_IDC:{2}{1}", fromCurrency, toCurrency, currency.USD)
+
+//@variable The non-repainting conversion rate from `request.security()` using the `spreadSymbol`.
+float securityRequestedRate = request.security(spreadSymbol, "1D", close[1], lookahead = barmerge.lookahead_on)
+//@variable The non-repainting conversion rate from `request.currency_rate()`.
+float nonSecurityRequestedRate = request.currency_rate(fromCurrency, toCurrency)
+
+// Plot the requested rates. We can multiply TRY values by these rates to convert them to KRW.
+plot(securityRequestedRate, "`request.security()` value", color.purple, 5)
+plot(nonSecurityRequestedRate, "`request.currency_rate()` value", color.yellow, 2)
+``` -->
 
 
 # Contextos Personalizados
