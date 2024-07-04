@@ -1342,5 +1342,95 @@ plot(securityRequestedRate, "`request.security()` value", color.purple, 5)
 plot(nonSecurityRequestedRate, "`request.currency_rate()` value", color.yellow, 2)
 ```
 
+## `request.dividends()`, `request.splits()` e `request.earnings()`
+
+Analisar os dados de lucros e ações corporativas de uma ação fornece informações valiosas sobre sua força financeira subjacente. Pine Script oferece a capacidade de recuperar informações essenciais sobre ações aplicáveis por meio de [request.dividends()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.dividends), [request.splits()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.splits) e [request.earnings()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.earnings).
+
+Estas são as assinaturas das funções:
+
+```c
+request.dividends(ticker, field, gaps, lookahead, ignore_invalid_symbol, currency) → series float
+
+request.splits(ticker, field, gaps, lookahead, ignore_invalid_symbol) → series float
+
+request.earnings(ticker, field, gaps, lookahead, ignore_invalid_symbol, currency) → series float
+```
+
+Cada função tem os mesmos parâmetros em sua assinatura, com exceção de [request.splits()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.splits), que não possui um parâmetro `currency`.
+
+Note que, ao contrário do parâmetro `symbol` em outras funções `request.*()`, o parâmetro `ticker` nessas funções aceita apenas um _"Exchange:Symbol" pair_, como "NASDAQ:AAPL". A variável incorporada [syminfo.ticker](https://br.tradingview.com/pine-script-reference/v5/#var_syminfo.ticker) não funciona com essas funções, pois não contém informações sobre a bolsa. Em vez disso, deve-se usar [syminfo.tickerid](https://br.tradingview.com/pine-script-reference/v5/#var_syminfo.tickerid) nesses casos.
+
+O parâmetro `field` determina os dados que a função irá recuperar. Cada uma dessas funções aceita diferentes variáveis embutidas como argumento `field`, pois cada uma solicita informações diferentes sobre uma ação (_stock_):
+
+- A função [request.dividends()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.dividends) recupera informações atuais de dividendos para uma ação, ou seja, o valor por ação que a empresa emissora pagou aos investidores que compraram ações antes da data ex-dividendo. Passar as variáveis embutidas [dividends.gross](https://br.tradingview.com/pine-script-reference/v5/#var_dividends.gross) ou [dividends.net](https://br.tradingview.com/pine-script-reference/v5/#var_dividends.net) para o parâmetro `field` especifica se o valor retornado representa dividendos antes ou depois de considerar as despesas que a empresa deduz de seus pagamentos.
+- A função [request.splits()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.splits) recupera informações atuais de desdobramento e desdobramento reverso para uma ação. Um desdobramento ocorre quando uma empresa aumenta suas ações em circulação para promover liquidez. Um desdobramento reverso ocorre quando uma empresa consolida suas ações e as oferece a um preço mais alto para atrair investidores específicos ou manter sua listagem em um mercado que tem um preço mínimo por ação. As empresas expressam suas informações de desdobramento como _ratios_. Por exemplo, um desdobramento de 5:1 significa que a empresa emitiu ações adicionais aos seus acionistas para que eles tenham cinco vezes o número de ações que tinham antes do desdobramento, e o preço bruto de cada ação torna-se um quinto do preço anterior. Passar [splits.numerator](https://br.tradingview.com/pine-script-reference/v5/#var_splits.numerator) ou [splits.denominator](https://br.tradingview.com/pine-script-reference/v5/#var_splits.denominator) para o parâmetro `field` de [request.splits()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.splits) determina se ele retorna o numerador ou o denominador do _ratio_ de desdobramento.
+- A função [request.earnings()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.earnings) recupera informações de lucro por ação (EPS) para a empresa emissora do `ticker` da ação. O valor do EPS é o _ratio_ entre o lucro líquido de uma empresa e o número de ações em circulação, que os investidores consideram um indicador da lucratividade da empresa. Passar [earnings.actual](https://br.tradingview.com/pine-script-reference/v5/#var_earnings.actual), [earnings.estimate](https://br.tradingview.com/pine-script-reference/v5/#var_earnings.estimate) ou [earnings.standardized](https://br.tradingview.com/pine-script-reference/v5/#var_earnings.standardized) como argumento `field` em [request.earnings()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.earnings) determina respectivamente se a função solicita o valor real, estimado ou padronizado do EPS.
+
+Para uma explicação detalhada dos parâmetros `gaps`, `lookahead` e `ignore_invalid_symbol` dessas funções, consulte a seção [Características Comuns](./05_14_outros_timeframes_e_dados.md#características-comuns) no topo desta página.
+
+É importante notar que os valores retornados por essas funções refletem os dados disponíveis à medida que chegam. Esse comportamento difere dos dados financeiros originados de uma chamada [request.financial()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.financial) em que os dados subjacentes se tornam disponíveis de acordo com o período de relatório fiscal da empresa.
+
+> __Observação!__\
+> Scripts também podem recuperar informações sobre lucros e dividendos futuros para um instrumento por meio das variáveis embutidas `earnings.future_*` e `dividends.future_*`.
+
+Aqui, foi adicionado um exemplo que exibe uma prática [tabela](https://br.tradingview.com/pine-script-reference/v5/#type_table) contendo os dados mais recentes de dividendos, desdobramentos e EPS. O script chama as funções `request.*()` discutidas nesta seção para recuperar os dados, depois converte os valores em "strings" com funções `str.*()` e exibe os resultados na `infoTable` com [table.cell()](https://br.tradingview.com/pine-script-reference/v5/#fun_table.cell):
+
+![`request.dividends()`, `request.splits()` e `request.earnings()`](./imgs/Other-timeframes-and-data-Request-dividends-request-splits-and-request-earnings-1.DVVI7Tee_yVHYk.webp)
+
+```c
+//@version=5
+indicator("Dividends, splits, and earnings demo", overlay = true)
+
+//@variable The size of the table's text.
+string tableSize = input.string(
+     size.large, "Table size", [size.auto, size.tiny, size.small, size.normal, size.large, size.huge]
+ )
+
+//@variable The color of the table's text and frame.
+var color tableColor = chart.fg_color
+//@variable A `table` displaying the latest dividend, split, and EPS information.
+var table infoTable = table.new(position.top_right, 3, 4, frame_color = tableColor, frame_width = 1)
+
+// Add header cells on the first bar.
+if barstate.isfirst
+    table.cell(infoTable, 0, 0, "Field", text_color = tableColor, text_size = tableSize)
+    table.cell(infoTable, 1, 0, "Value", text_color = tableColor, text_size = tableSize)
+    table.cell(infoTable, 2, 0, "Date", text_color = tableColor, text_size = tableSize)
+    table.cell(infoTable, 0, 1, "Dividend", text_color = tableColor, text_size = tableSize)
+    table.cell(infoTable, 0, 2, "Split", text_color = tableColor, text_size = tableSize)
+    table.cell(infoTable, 0, 3, "EPS", text_color = tableColor, text_size = tableSize)
+
+//@variable The amount of the last reported dividend as of the current bar.
+float latestDividend = request.dividends(syminfo.tickerid, dividends.gross, barmerge.gaps_on)
+//@variable The numerator of that last reported split ratio as of the current bar.
+float latestSplitNum = request.splits(syminfo.tickerid, splits.numerator, barmerge.gaps_on)
+//@variable The denominator of the last reported split ratio as of the current bar.
+float latestSplitDen = request.splits(syminfo.tickerid, splits.denominator, barmerge.gaps_on)
+//@variable The last reported earnings per share as of the current bar.
+float latestEPS = request.earnings(syminfo.tickerid, earnings.actual, barmerge.gaps_on)
+
+// Update the "Value" and "Date" columns when new values come in.
+if not na(latestDividend)
+    table.cell(
+         infoTable, 1, 1, str.tostring(math.round(latestDividend, 3)), text_color = tableColor, text_size = tableSize
+     )
+    table.cell(infoTable, 2, 1, str.format_time(time, "yyyy-MM-dd"), text_color = tableColor, text_size = tableSize)
+if not na(latestSplitNum)
+    table.cell(
+         infoTable, 1, 2, str.format("{0}-for-{1}", latestSplitNum, latestSplitDen), text_color = tableColor,
+         text_size = tableSize
+     )
+    table.cell(infoTable, 2, 2, str.format_time(time, "yyyy-MM-dd"), text_color = tableColor, text_size = tableSize)
+if not na(latestEPS)
+    table.cell(infoTable, 1, 3, str.tostring(latestEPS), text_color = tableColor, text_size = tableSize)
+    table.cell(infoTable, 2, 3, str.format_time(time, "yyyy-MM-dd"), text_color = tableColor, text_size = tableSize)
+```
+
+__Note que:__
+
+- Incluso [barmerge.gaps_on](https://br.tradingview.com/pine-script-reference/v5/#var_barmerge.gaps_on) nas chamadas `request.*()`, para que só retornem valores quando novos dados estiverem disponíveis. Caso contrário, retornam [na](https://br.tradingview.com/pine-script-reference/v5/#var_na).
+- O script atribui um ID de [tabela](https://br.tradingview.com/pine-script-reference/v5/#type_table) à variável `infoTable` na primeira barra do gráfico. Nas barras subsequentes, atualiza as células necessárias com novas informações sempre que os dados estiverem disponíveis.
+- Se não houver informações disponíveis de nenhuma das chamadas `request.*()` ao longo da história do gráfico (por exemplo, se o `ticker` não tiver informações de dividendos), o script não inicializa as células correspondentes, pois não é necessário.
+
 
 # Contextos Personalizados
