@@ -688,7 +688,7 @@ if bar_index == last_bar_index - 1
 
 # Escopo e Histórico
 
-Variáveis de _matrix_ registram trilhas históricas em cada barra, permitindo que scripts utilizem o operador de referência histórica [[]](https://br.tradingview.com/pine-script-reference/v5/#op_[]) para interagir com instâncias passadas das _matrices_ previamente atribuídas a uma variável. Adicionalmente, é possível modificar _matrices_ atribuídas a variáveis globais dentro dos escopos de [funções](./04_11_funcoes_definida_pelo_usuario.md), [métodos](./04_13_metodos.md) e [estruturas condicionais](./04_07_estruturas_condicionais.md).
+Variáveis de _matrix_ registram trilhas históricas em cada barra, permitindo que scripts utilizem o operador de referência histórica [[]](https://br.tradingview.com/pine-script-reference/v5/#op_[]) para interagir com instâncias passadas das _matrices_ previamente atribuídas a uma variável. Adicionalmente, é possível modificar _matrices_ atribuídas a variáveis globais dentro dos escopos de [funções](./04_11_funcoes_definidas_pelo_usuario.md), [métodos](./04_13_metodos.md) e [estruturas condicionais](./04_07_estruturas_condicionais.md).
 
 Este script calcula as _médias das proporções_ (_average ratios_) entre as distâncias dos corpos e dos pavios em relação ao alcanve/intervalo da barra ao longo de `length` barras. Os dados são exibidos junto com valores `length` das barras anteriores em uma tabela. A função definida pelo usuário `addData()` adiciona colunas de proporções atuais e históricas à `globalMatrix`, e a função `calcAvg()` referencia à _matrices_ anteriores `previous` atribuídas à `globalMatrix` usando o operador [[]](https://br.tradingview.com/pine-script-reference/v5/#op_[]) para calcular uma _matrix_ de médias:
 

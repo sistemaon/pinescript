@@ -267,7 +267,7 @@ label.new(bar_index, high, text = labelText)
 
 # Escopo
 
-É possível declarar arrays tanto no escopo global de um script quanto nos escopos locais de [functions](./04_11_funcoes_definida_pelo_usuario.md) ([@function](https://br.tradingview.com/pine-script-reference/v5/#an_@function)), [methods](./04_13_metodos.md) ([method](https://br.tradingview.com/pine-script-reference/v5/#kw_method)) e [conditional structures](./04_07_estruturas_condicionais.md). Diferentemente de alguns outros tipos incorporados, especificamente os tipos _fundamental_ (_fundamentais_), é possível modificar arrays atribuídos globalmente a partir de escopos locais, permitindo a implementação de variáveis globais com as quais qualquer função no script pode interagir diretamente.
+É possível declarar arrays tanto no escopo global de um script quanto nos escopos locais de [functions](./04_11_funcoes_definidas_pelo_usuario.md) ([@function](https://br.tradingview.com/pine-script-reference/v5/#an_@function)), [methods](./04_13_metodos.md) ([method](https://br.tradingview.com/pine-script-reference/v5/#kw_method)) e [conditional structures](./04_07_estruturas_condicionais.md). Diferentemente de alguns outros tipos incorporados, especificamente os tipos _fundamental_ (_fundamentais_), é possível modificar arrays atribuídos globalmente a partir de escopos locais, permitindo a implementação de variáveis globais com as quais qualquer função no script pode interagir diretamente.
 
 Essa funcionalidade é utilizada aqui para calcular níveis de preços progressivamente menores ou maiores:
 

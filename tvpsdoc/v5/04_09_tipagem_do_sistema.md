@@ -736,7 +736,7 @@ myLabel = label(na)
 
 Uma _tupla_ é um conjunto de expressões separadas por vírgulas, envolvidas por colchetes. Quando uma função, [método](./04_13_metodos.md) ou outro bloco local retorna mais de um valor, os scripts retornam esses valores na forma de uma tupla.
 
-Por exemplo, a seguinte [função definida pelo usuário](./04_11_funcoes_definida_pelo_usuario.md) retorna a soma e o produto de dois valores "float":
+Por exemplo, a seguinte [função definida pelo usuário](./04_11_funcoes_definidas_pelo_usuario.md) retorna a soma e o produto de dois valores "float":
 
 ```c
 //@function Calculates the sum and product of two values.

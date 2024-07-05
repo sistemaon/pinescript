@@ -21,7 +21,7 @@
 
 ## 10 [Built-ins (_Incorporados_)](./04_10_incorporados.md)
 
-## 11 [Funções Definida pelo Usuário](./04_11_funcoes_definida_pelo_usuario.md)
+## 11 [Funções Definidas pelo Usuário](./04_11_funcoes_definidas_pelo_usuario.md)
 
 ## 12 [Objetos](./04_12_objetos.md)
 

@@ -55,7 +55,7 @@ Todas as funções `request.*()` retornam resultados "series", o que significa q
 
 Em essência, Pine Script deve determinar os valores da maioria dos argumentos passados para uma função `request.*()` na compilação do script ou na primeira barra do gráfico, dependendo do [tipo qualificado](./04_09_tipagem_do_sistema.md#qualificadores) que cada parâmetro aceita, e esses valores não podem mudar durante a execução do script. A única exceção é o parâmetro `expression` em [request.security()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.security), [request.security_lower_tf()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.security_lower_tf), e [request.seed()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.seed), que aceita argumentos "series".
 
-Chamadas para funções `request.*()` são executadas em cada barra do gráfico, e scripts não podem desativá-las seletivamente durante sua execução. Scripts não podem chamar funções `request.*()` dentro dos escopos locais de [estruturas condicionais](./04_07_estruturas_condicionais.md), ou funções e métodos exportados por [bibliotecas](./05_11_libraries.md), mas podem usar essas chamadas de função dentro dos corpos de [funções definidas pelo usuário](./04_11_funcoes_definida_pelo_usuario.md) e [métodos](./04_13_metodos.md#métodos-definidos-pelo-usuário) não exportados.
+Chamadas para funções `request.*()` são executadas em cada barra do gráfico, e scripts não podem desativá-las seletivamente durante sua execução. Scripts não podem chamar funções `request.*()` dentro dos escopos locais de [estruturas condicionais](./04_07_estruturas_condicionais.md), ou funções e métodos exportados por [bibliotecas](./05_11_libraries.md), mas podem usar essas chamadas de função dentro dos corpos de [funções definidas pelo usuário](./04_11_funcoes_definidas_pelo_usuario.md) e [métodos](./04_13_metodos.md#métodos-definidos-pelo-usuário) não exportados.
 
 Ao usar qualquer função `request.*()` dentro de um script, a performance de execução é uma consideração importante. Essas funções podem ter um impacto significativo na performance do script. Enquanto scripts podem conter um máximo de 40 chamadas para o namespace `request.*()`, é recomendável minimizar o número de chamadas nos scripts para manter o consumo de recursos o mais baixo possível. Para mais informações sobre as limitações dessas funções, veja [esta seção](./06_05_limitacoes.md#chamadas-request) da página do Manual do Usuário sobre as [limitações](./06_05_limitacoes.md) do Pine.
 
@@ -107,7 +107,7 @@ O parâmetro `ignore_invalid_symbol` das funções `request.*()` determina como 
 
 Uma chamada de função `request.*()` produzirá um _erro de tempo de execução_ e interromperá a execução do script ao fazer uma solicitação errônea se o parâmetro `ignore_invalid_symbol` for `false`. Quando o valor deste parâmetro é `true`, a função retornará valores [na](https://br.tradingview.com/pine-script-reference/v5/#var_na) nesse caso, em vez de gerar um erro.
 
-Este exemplo usa chamadas `request.*()` dentro de uma [função definida pelo usuário](./04_11_funcoes_definida_pelo_usuario.md) para recuperar dados para estimar a capitalização de mercado (market cap) de um instrumento. A função definida pelo usuário `calcMarketCap()` chama [request.financial()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.financial) para recuperar o total de ações em circulação para um símbolo e [request.security()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.security) para recuperar uma tupla contendo o preço de [fechamento](https://br.tradingview.com/pine-script-reference/v5/#var_close) do símbolo e o [currency](https://br.tradingview.com/pine-script-reference/v5/#var_syminfo.currency) (_moeda_). Foi incluído `ignore_invalid_symbol = true` em ambas as chamadas `request.*()` para evitar erros de tempo de execução para solicitações inválidas.
+Este exemplo usa chamadas `request.*()` dentro de uma [função definida pelo usuário](./04_11_funcoes_definidas_pelo_usuario.md) para recuperar dados para estimar a capitalização de mercado (market cap) de um instrumento. A função definida pelo usuário `calcMarketCap()` chama [request.financial()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.financial) para recuperar o total de ações em circulação para um símbolo e [request.security()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.security) para recuperar uma tupla contendo o preço de [fechamento](https://br.tradingview.com/pine-script-reference/v5/#var_close) do símbolo e o [currency](https://br.tradingview.com/pine-script-reference/v5/#var_syminfo.currency) (_moeda_). Foi incluído `ignore_invalid_symbol = true` em ambas as chamadas `request.*()` para evitar erros de tempo de execução para solicitações inválidas.
 
 O script exibe uma [string formatada](https://br.tradingview.com/pine-script-reference/v5/#fun_str.format) representando o valor estimado da capitalização de mercado do símbolo e a moeda em uma [tabela](https://br.tradingview.com/pine-script-reference/v5/#type_table) no gráfico e usa um [plot](https://br.tradingview.com/pine-script-reference/v5/#fun_plot) para visualizar o histórico de `marketCap`:
 
@@ -558,9 +558,9 @@ __Note que:__
 
 ## Funções Definidas pelo Usuário
 
-[Funções Definida pelo Usuário](./04_11_funcoes_definida_pelo_usuario.md) e [métodos](./04_13_metodos.md#métodos-definidos-pelo-usuário) são funções personalizadas escritas por usuários. Elas permitem definir sequências de operações associadas a um identificador que os scripts podem chamar convenientemente durante sua execução (por exemplo, `myUDF()`).
+[Funções Definidas pelo Usuário](./04_11_funcoes_definidas_pelo_usuario.md) e [métodos](./04_13_metodos.md#métodos-definidos-pelo-usuário) são funções personalizadas escritas por usuários. Elas permitem definir sequências de operações associadas a um identificador que os scripts podem chamar convenientemente durante sua execução (por exemplo, `myUDF()`).
 
-A função [request.security()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.security) pode solicitar os resultados de [Funções Definida pelo Usuário](./04_11_funcoes_definida_pelo_usuario.md) e [métodos](./04_13_metodos.md#métodos-definidos-pelo-usuário) cujos escopos consistem em qualquer tipo descrito na seção [Dados Solicitáveis](./05_14_outros_timeframes_e_dados.md#dados-solicitáveis) desta página.
+A função [request.security()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.security) pode solicitar os resultados de [Funções Definidas pelo Usuário](./04_11_funcoes_definidas_pelo_usuario.md) e [métodos](./04_13_metodos.md#métodos-definidos-pelo-usuário) cujos escopos consistem em qualquer tipo descrito na seção [Dados Solicitáveis](./05_14_outros_timeframes_e_dados.md#dados-solicitáveis) desta página.
 
 Por exemplo, este script contém uma função definida pelo usuário `weightedBB()` que calcula Bandas de Bollinger com a base média ponderada por uma série `weight` especificada. A função retorna uma [tupla](./04_09_tipagem_do_sistema.md#tuples-tuplas) de valores personalizados das bandas. O script chama `weightedBB()` como o argumento `expression` em [request.security()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.security) para recuperar uma [tupla](./05_14_outros_timeframes_e_dados.md#tuples-tuplas) de valores das bandas calculados no `timeframe` especificado e [plota](./05_15_plots.md) os resultados no gráfico:
 
@@ -962,7 +962,7 @@ Uma abordagem direta é chamar a função embutida `*.new()` como `expression`. 
 array<Wrapper> wrappers = request.security_lower_tf(syminfo.tickerid, "1", Wrapper.new(array.from(close)))
 ```
 
-Alternativamente, pode-se criar uma [função definida pelo usuário](./04_11_funcoes_definida_pelo_usuario.md) ou [método](./04_13_metodos.md#métodos-definidos-pelo-usuário) que retorna um [objeto](./04_12_objetos.md) do [UDT](./04_09_tipagem_do_sistema.md#tipos-definidos-pelo-usuário) e chamar essa função dentro de [request.security_lower_tf()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.security_lower_tf). Por exemplo, este código chama uma função personalizada `newWrapper()` que retorna um ID `Wrapper` como argumento `expression`:
+Alternativamente, pode-se criar uma [função definida pelo usuário](./04_11_funcoes_definidas_pelo_usuario.md) ou [método](./04_13_metodos.md#métodos-definidos-pelo-usuário) que retorna um [objeto](./04_12_objetos.md) do [UDT](./04_09_tipagem_do_sistema.md#tipos-definidos-pelo-usuário) e chamar essa função dentro de [request.security_lower_tf()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.security_lower_tf). Por exemplo, este código chama uma função personalizada `newWrapper()` que retorna um ID `Wrapper` como argumento `expression`:
 
 ```c
 //@function Creates a new `Wrapper` instance to wrap the specified `collection`.
@@ -1495,7 +1495,7 @@ Veja a seção [Características Comuns](./05_14_outros_timeframes_e_dados.md#ca
 
 É importante notar que os dados recuperados por esta função chegam em uma _frequência fixa_, independentemente da data precisa em que os dados são disponibilizados dentro de um período fiscal. Para informações sobre dividendos, desdobramentos e lucro por ação (EPS) de uma empresa, pode-se solicitar dados relatados em datas exatas via [request.dividends()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.dividends), [request.splits()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.splits) e [request.earnings()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.earnings).
 
-Este script usa [request.financial()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.financial) para recuperar informações sobre a receita e despesas da empresa emissora de uma ação e visualizar a lucratividade de suas operações comerciais típicas. Solicita os "OPER_INCOME", "TOTAL_REVENUE" e "TOTAL_OPER_EXPENSE" [IDs Financeiros](./05_14_outros_timeframes_e_dados.md#ids-financeiros) para o [syminfo.tickerid](https://br.tradingview.com/pine-script-reference/v5/#var_syminfo.tickerid) durante o último `período fiscal`, e então [plota](./05_15_plots.md) os resultados no gráfico:
+Este script usa [request.financial()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.financial) para recuperar informações sobre a receita e despesas da empresa emissora de uma ação e visualizar a lucratividade de suas operações comerciais típicas. Solicita os "OPER_INCOME", "TOTAL_REVENUE" e "TOTAL_OPER_EXPENSE" [IDs Financeiros](./05_14_outros_timeframes_e_dados.md#ids-financeiros) para o [syminfo.tickerid](https://br.tradingview.com/pine-script-reference/v5/#var_syminfo.tickerid) durante o último `fiscalPeriod`, e então [plota](./05_15_plots.md) os resultados no gráfico:
 
 ![request.financial()](./imgs/Other-timeframes-and-data-Request-financial-1.B9cESm-h_ZhOVcV.webp)
 
@@ -1525,6 +1525,145 @@ plot(totalExpenses, "Total operating expenses", color.red, 3)
 __Note que:__
 
 - Nem todas as opções de `fiscalPeriod` estão disponíveis para cada ID de ticker. Por exemplo, empresas nos EUA normalmente publicam relatórios _trimestrais_, enquanto muitas empresas europeias publicam relatórios _semestrais_. Consulte [esta página](https://br.tradingview.com/support/solutions/43000540147) no nosso Centro de Ajuda para mais informações.
+
+## Calculando Métricas Financeiras
+
+A função [request.financial()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.financial) pode fornecer scripts com inúmeras métricas financeiras úteis que não requerem cálculos adicionais. No entanto, algumas estimativas financeiras comumente usadas exigem a combinação do preço de mercado atual de um instrumento com os dados financeiros solicitados. Este é o caso de:
+
+- Capitalização de mercado (preço de mercado * total de ações em circulação)
+- Rendimento de lucros (EPS de 12 meses / preço de mercado)
+- Índice Preço/Valor Patrimonial (preço de mercado / BVPS)
+- Índice Preço/Lucro (preço de mercado / EPS)
+- Índice Preço/Vendas (capitalização de mercado / receita total de 12 meses)
+
+O script a seguir contém [funções definidas pelo usuário](./04_11_funcoes_definidas_pelo_usuario.md) que calculam as métricas financeiras acima para o [syminfo.tickerid](https://br.tradingview.com/pine-script-reference/v5/#var_syminfo.tickerid). Criamos essas funções para que os usuários possam copiá-las facilmente para seus scripts. Este exemplo as utiliza dentro de uma chamada [str.format()](https://br.tradingview.com/pine-script-reference/v5/#fun_str.format) para construir um `tooltipText`, que é exibido em tooltips no gráfico usando [labels](./05_20_text_e_shapes.md#labels). Ao passar o mouse sobre qualquer barra do [label](https://br.tradingview.com/pine-script-reference/v5/#type_label), o tooltip contendo as métricas calculadas naquela barra será exibido:
+
+![Calculando métricas financeiras](./imgs/Other-timeframes-and-data-Request-financial-Calculating-financial-metrics-1.BXp-EVdL_Z2nJnG7.webp)
+
+
+```c
+//@version=5
+indicator("Calculating financial metrics demo", overlay = true, max_labels_count = 500)
+
+//@function Calculates the market capitalization (market cap) for the chart's symbol.
+marketCap() =>
+    //@variable The most recent number of outstanding shares reported for the symbol.
+    float totalSharesOutstanding = request.financial(syminfo.tickerid, "TOTAL_SHARES_OUTSTANDING", "FQ")
+    // Return the market cap value.
+    totalSharesOutstanding * close
+
+//@function Calculates the Earnings Yield for the chart's symbol.
+earningsYield() =>
+    //@variable The most recent 12-month earnings per share reported for the symbol.
+    float eps = request.financial(syminfo.tickerid, "EARNINGS_PER_SHARE", "TTM")
+    //Return the Earnings Yield percentage.
+    100.0 * eps / close
+
+//@function Calculates the Price-to-Book (P/B) ratio for the chart's symbol.
+priceBookRatio() =>
+    //@variable The most recent Book Value Per Share (BVPS) reported for the symbol.
+    float bookValuePerShare = request.financial(syminfo.tickerid, "BOOK_VALUE_PER_SHARE", "FQ")
+    // Return the P/B ratio.
+    close / bookValuePerShare
+
+//@function Calculates the Price-to-Earnings (P/E) ratio for the chart's symbol.
+priceEarningsRatio() =>
+    //@variable The most recent 12-month earnings per share reported for the symbol.
+    float eps = request.financial(syminfo.tickerid, "EARNINGS_PER_SHARE", "TTM")
+    // Return the P/E ratio.
+    close / eps
+
+//@function Calculates the Price-to-Sales (P/S) ratio for the chart's symbol.
+priceSalesRatio() =>
+    //@variable The most recent number of outstanding shares reported for the symbol.
+    float totalSharesOutstanding = request.financial(syminfo.tickerid, "TOTAL_SHARES_OUTSTANDING", "FQ")
+    //@variable The most recent 12-month total revenue reported for the symbol.
+    float totalRevenue = request.financial(syminfo.tickerid, "TOTAL_REVENUE", "TTM")
+    // Return the P/S ratio.
+    totalSharesOutstanding * close / totalRevenue
+
+//@variable The text to display in label tooltips.
+string tooltipText = str.format(
+     "Market Cap: {0} {1}\nEarnings Yield: {2}%\nP/B Ratio: {3}\nP/E Ratio: {4}\nP/S Ratio: {5}",
+     str.tostring(marketCap(), format.volume), syminfo.currency, earningsYield(), priceBookRatio(),
+     priceEarningsRatio(), priceSalesRatio()
+ )
+
+//@variable Displays a blank label with a tooltip containing the `tooltipText`.
+label info = label.new(chart.point.now(high), tooltip = tooltipText)
+```
+
+__Note que:__
+
+- Como nem todas as empresas publicam relatórios financeiros trimestrais, pode ser necessário alterar o "FQ" nessas funções para corresponder ao período mínimo de relatório para uma empresa específica, pois as chamadas [request.financial()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.financial) retornarão [na](https://br.tradingview.com/pine-script-reference/v5/#var_na) quando os dados "FQ" não estiverem disponíveis.
+
+## IDs Financeiros
+
+Abaixo está uma visão geral de todas as métricas financeiras que podem ser solicitadas via [request.financial()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.financial), juntamente com os períodos em que os relatórios podem estar disponíveis. Dividimos essas informações em quatro tabelas correspondentes às categorias exibidas na seção "Financeiros" do menu "Indicadores":
+
+- [Demonstrações de resultados](./05_14_outros_timeframes_e_dados.md#income-statements)
+- [Balanço patrimonial](./05_14_outros_timeframes_e_dados.md#balance-sheet)
+- [Fluxo de caixa](./05_14_outros_timeframes_e_dados.md#cash-flow)
+- [Estatísticas](./05_14_outros_timeframes_e_dados.md#statistics)
+
+Cada tabela possui as seguintes três colunas:
+
+- A primeira coluna contém descrições de cada métrica com links para páginas do Centro de Ajuda para informações adicionais.
+- A segunda coluna lista os possíveis argumentos `period` permitidos para a métrica. Observe que todos os valores disponíveis podem não ser compatíveis com IDs de ticker específicos, por exemplo, enquanto "FQ" pode ser um argumento possível, não funcionará se a empresa emissora não publicar dados trimestrais.
+- A terceira coluna lista os IDs "string" para o argumento `financial_id` em [request.financial()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.financial).
+
+> __Observação!__\
+> As tabelas nestas seções são bastante extensas, pois existem muitos argumentos `financial_id` disponíveis. Use a opção **“Clique para mostrar/ocultar”** acima de cada tabela para alternar sua visibilidade.
+
+### Demonstrações de resultados
+
+Esta tabela lista as métricas disponíveis que fornecem informações sobre a renda, custos, lucros e perdas de uma empresa.
+
+Clique para mostrar/ocultar
+
+| Métrica Financeira                                                                                         | Período              | ID Financeiro               |
+| ---------------------------------------------------------------------------------------------------------- | -------------------- | --------------------------- |
+| [Renda/despesa de outras operações após impostos](https://www.tradingview.com/support/solutions/43000563497) | FQ, FH, FY, TTM      | AFTER_TAX_OTHER_INCOME      |
+| [Média de ações básicas em circulação](https://www.tradingview.com/support/solutions/43000670320)           | FQ, FH, FY           | BASIC_SHARES_OUTSTANDING    |
+| [Lucro básico por ação (EPS básico)](https://www.tradingview.com/support/solutions/43000563520)             | FQ, FH, FY, TTM      | EARNINGS_PER_SHARE_BASIC    |
+| [Custo dos produtos vendidos](https://www.tradingview.com/support/solutions/43000553618)                    | FQ, FH, FY, TTM      | COST_OF_GOODS               |
+| [Depreciação e amortização](https://www.tradingview.com/support/solutions/43000563477)                      | FQ, FH, FY, TTM      | DEP_AMORT_EXP_INCOME_S      |
+| [Lucro diluído por ação (EPS diluído)](https://www.tradingview.com/support/solutions/43000553616)           | FQ, FH, FY, TTM      | EARNINGS_PER_SHARE_DILUTED  |
+| [Lucro líquido diluído disponível para acionistas comuns](https://www.tradingview.com/support/solutions/43000563516) | FQ, FH, FY, TTM      | DILUTED_NET_INCOME          |
+| [Ações diluídas em circulação](https://www.tradingview.com/support/solutions/43000670322)                   | FQ, FH, FY           | DILUTED_SHARES_OUTSTANDING  |
+| [Ajuste de dil
+
+uição](https://www.tradingview.com/support/solutions/43000563504)                             | FQ, FH, FY, TTM      | DILUTION_ADJUSTMENT         |
+| [Operações descontinuadas](https://www.tradingview.com/support/solutions/43000563502)                       | FQ, FH, FY, TTM      | DISCONTINUED_OPERATIONS     |
+| [EBIT](https://www.tradingview.com/support/solutions/43000670329)                                           | FQ, FH, FY, TTM      | EBIT                        |
+| [EBITDA](https://www.tradingview.com/support/solutions/43000553610)                                         | FQ, FH, FY, TTM      | EBITDA                      |
+| [Equity em lucros](https://www.tradingview.com/support/solutions/43000563487)                               | FQ, FH, FY, TTM      | EQUITY_IN_EARNINGS          |
+| [Lucro bruto](https://www.tradingview.com/support/solutions/43000553611)                                    | FQ, FH, FY, TTM      | GROSS_PROFIT                |
+| [Juros capitalizados](https://www.tradingview.com/support/solutions/43000563468)                            | FQ, FH, FY, TTM      | INTEREST_CAPITALIZED        |
+| [Despesa de juros sobre dívida](https://www.tradingview.com/support/solutions/43000563467)                  | FQ, FH, FY, TTM      | INTEREST_EXPENSE_ON_DEBT    |
+| [Despesa de juros, líquida de juros capitalizados](https://www.tradingview.com/support/solutions/43000563466) | FQ, FH, FY, TTM      | NON_OPER_INTEREST_EXP       |
+| [Despesa não operacional diversa](https://www.tradingview.com/support/solutions/43000563479)                | FQ, FH, FY, TTM      | OTHER_INCOME                |
+| [Lucro líquido](https://www.tradingview.com/support/solutions/43000553617)                                  | FQ, FH, FY, TTM      | NET_INCOME                  |
+| [Lucro líquido antes de operações descontinuadas](https://www.tradingview.com/support/solutions/43000563500) | FQ, FH, FY, TTM      | NET_INCOME_BEF_DISC_OPER    |
+| [Interesse minoritário/não controlador](https://www.tradingview.com/support/solutions/43000563495)          | FQ, FH, FY, TTM      | MINORITY_INTEREST_EXP       |
+| [Renda não operacional, excl. despesas de juros](https://www.tradingview.com/support/solutions/43000563471) | FQ, FH, FY, TTM      | NON_OPER_INCOME             |
+| [Renda não operacional, total](https://www.tradingview.com/support/solutions/43000563465)                   | FQ, FH, FY, TTM      | TOTAL_NON_OPER_INCOME       |
+| [Renda de juros não operacionais](https://www.tradingview.com/support/solutions/43000563473)                | FQ, FH, FY, TTM      | NON_OPER_INTEREST_INCOME    |
+| [Despesas operacionais (excl. COGS)](https://www.tradingview.com/support/solutions/43000563463)             | FQ, FH, FY, TTM      | OPERATING_EXPENSES          |
+| [Lucro operacional](https://www.tradingview.com/support/solutions/43000563464)                              | FQ, FH, FY, TTM      | OPER_INCOME                 |
+| [Outros custos de bens vendidos](https://www.tradingview.com/support/solutions/43000563478)                 | FQ, FH, FY, TTM      | COST_OF_GOODS_EXCL_DEP_AMORT |
+| [Outras despesas operacionais, total](https://www.tradingview.com/support/solutions/43000563483)            | FQ, FH, FY, TTM      | OTHER_OPER_EXPENSE_TOTAL    |
+| [Dividendos preferenciais](https://www.tradingview.com/support/solutions/43000563506)                       | FQ, FH, FY, TTM      | PREFERRED_DIVIDENDS         |
+| [Equity em lucros antes dos impostos](https://www.tradingview.com/support/solutions/43000563474)            | FQ, FH, FY, TTM      | PRETAX_EQUITY_IN_EARNINGS   |
+| [Lucro antes dos impostos](https://www.tradingview.com/support/solutions/43000563462)                       | FQ, FH, FY, TTM      | PRETAX_INCOME               |
+| [Pesquisa e desenvolvimento](https://www.tradingview.com/support/solutions/43000553612)                     | FQ, FH, FY, TTM      | RESEARCH_AND_DEV            |
+| [Despesas administrativas/comerciais gerais, outras](https://www.tradingview.com/support/solutions/43000553614) | FQ, FH, FY, TTM      | SELL_GEN_ADMIN_EXP_OTHER    |
+| [Despesas administrativas/comerciais gerais, total](https://www.tradingview.com/support/solutions/43000553613) | FQ, FH, FY, TTM      | SELL_GEN_ADMIN_EXP_TOTAL    |
+| [Impostos](https://www.tradingview.com/support/solutions/43000563492)                                        | FQ, FH, FY, TTM      | INCOME_TAX                  |
+| [Despesas operacionais totais](https://www.tradingview.com/support/solutions/43000553615)                   | FQ, FH, FY, TTM      | TOTAL_OPER_EXPENSE          |
+| [Receita total](https://www.tradingview.com/support/solutions/43000553619)                                  | FQ, FH, FY, TTM      | TOTAL_REVENUE               |
+| [Renda/despesa incomum](https://www.tradingview.com/support/solutions/43000563476)                          | FQ, FH, FY, TTM      | UNUSUAL_EXPENSE_INC         |
+
 
 
 

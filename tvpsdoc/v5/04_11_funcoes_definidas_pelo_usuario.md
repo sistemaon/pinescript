@@ -1,5 +1,5 @@
 
-# Funções Definida pelo Usuário
+# Funções Definidas pelo Usuário
 
 Funções definidas pelo usuário são funções que se cria, ao contrário das funções incorporadas no Pine Script. São úteis para definir cálculos que precisa fazer repetidamente ou que deseja isolar da seção principal de cálculos do script. Pense em funções definidas pelo usuário como uma forma de estender as capacidades do Pine Script quando nenhuma função integrada fizer o que precisa ser feito.
 
