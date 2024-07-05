@@ -1601,10 +1601,10 @@ __Note que:__
 
 Abaixo está uma visão geral de todas as métricas financeiras que podem ser solicitadas via [request.financial()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.financial), juntamente com os períodos em que os relatórios podem estar disponíveis. Dividimos essas informações em quatro tabelas correspondentes às categorias exibidas na seção "Financeiros" do menu "Indicadores":
 
-- [Demonstrações de resultados](./05_14_outros_timeframes_e_dados.md#income-statements)
-- [Balanço patrimonial](./05_14_outros_timeframes_e_dados.md#balance-sheet)
-- [Fluxo de caixa](./05_14_outros_timeframes_e_dados.md#cash-flow)
-- [Estatísticas](./05_14_outros_timeframes_e_dados.md#statistics)
+- [Demonstrações de resultados](./05_14_outros_timeframes_e_dados.md#demonstrações-de-resultados)
+- [Balanço patrimonial](./05_14_outros_timeframes_e_dados.md#balanço-patrimonial)
+- [Fluxo de caixa](./05_14_outros_timeframes_e_dados.md#fluxo-de-caixa)
+- [Estatísticas](./05_14_outros_timeframes_e_dados.md#estatísticas)
 
 Cada tabela possui as seguintes três colunas:
 
@@ -1613,9 +1613,9 @@ Cada tabela possui as seguintes três colunas:
 - A terceira coluna lista os IDs "string" para o argumento `financial_id` em [request.financial()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.financial).
 
 > __Observação!__\
-> As tabelas nestas seções são bastante extensas, pois existem muitos argumentos `financial_id` disponíveis. Use a opção **“Clique para mostrar/ocultar”** acima de cada tabela para alternar sua visibilidade.
+> As tabelas nestas seções são bastante extensas, pois existem muitos argumentos `financial_id` disponíveis. Use a opção __"Clique para mostrar/ocultar" ("_Click to show/hide_")__ acima de cada tabela para alternar sua visibilidade.
 
-### Demonstrações de resultados
+<!-- ### Demonstrações de Resultados
 
 Esta tabela lista as métricas disponíveis que fornecem informações sobre a renda, custos, lucros e perdas de uma empresa.
 
@@ -1631,9 +1631,7 @@ Clique para mostrar/ocultar
 | [Lucro diluído por ação (EPS diluído)](https://www.tradingview.com/support/solutions/43000553616)           | FQ, FH, FY, TTM      | EARNINGS_PER_SHARE_DILUTED  |
 | [Lucro líquido diluído disponível para acionistas comuns](https://www.tradingview.com/support/solutions/43000563516) | FQ, FH, FY, TTM      | DILUTED_NET_INCOME          |
 | [Ações diluídas em circulação](https://www.tradingview.com/support/solutions/43000670322)                   | FQ, FH, FY           | DILUTED_SHARES_OUTSTANDING  |
-| [Ajuste de dil
-
-uição](https://www.tradingview.com/support/solutions/43000563504)                             | FQ, FH, FY, TTM      | DILUTION_ADJUSTMENT         |
+| [Ajuste de diluição](https://www.tradingview.com/support/solutions/43000563504)                             | FQ, FH, FY, TTM      | DILUTION_ADJUSTMENT         |
 | [Operações descontinuadas](https://www.tradingview.com/support/solutions/43000563502)                       | FQ, FH, FY, TTM      | DISCONTINUED_OPERATIONS     |
 | [EBIT](https://www.tradingview.com/support/solutions/43000670329)                                           | FQ, FH, FY, TTM      | EBIT                        |
 | [EBITDA](https://www.tradingview.com/support/solutions/43000553610)                                         | FQ, FH, FY, TTM      | EBITDA                      |
@@ -1662,9 +1660,4 @@ uição](https://www.tradingview.com/support/solutions/43000563504)             
 | [Impostos](https://www.tradingview.com/support/solutions/43000563492)                                        | FQ, FH, FY, TTM      | INCOME_TAX                  |
 | [Despesas operacionais totais](https://www.tradingview.com/support/solutions/43000553615)                   | FQ, FH, FY, TTM      | TOTAL_OPER_EXPENSE          |
 | [Receita total](https://www.tradingview.com/support/solutions/43000553619)                                  | FQ, FH, FY, TTM      | TOTAL_REVENUE               |
-| [Renda/despesa incomum](https://www.tradingview.com/support/solutions/43000563476)                          | FQ, FH, FY, TTM      | UNUSUAL_EXPENSE_INC         |
-
-
-
-
-## IDs Financeiros
+| [Renda/despesa incomum](https://www.tradingview.com/support/solutions/43000563476)                          | FQ, FH, FY, TTM      | UNUSUAL_EXPENSE_INC         | -->
