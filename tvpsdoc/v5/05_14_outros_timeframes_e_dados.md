@@ -1660,7 +1660,7 @@ Esta tabela lista as métricas disponíveis que fornecem informações sobre a r
 | [Receita total](https://br.tradingview.com/support/solutions/43000553619)                                  | FQ, FH, FY, TTM      | TOTAL_REVENUE               |
 | [Renda/despesa incomum](https://br.tradingview.com/support/solutions/43000563476)                          | FQ, FH, FY, TTM      | UNUSUAL_EXPENSE_INC         |
 
-## Balanço Patrimonial
+### Balanço Patrimonial
 
 Esta tabela lista as métricas que fornecem informações sobre a estrutura de capital de uma empresa.
 
@@ -1733,3 +1733,55 @@ Esta tabela lista as métricas que fornecem informações sobre a estrutura de c
 | [Passivos não correntes totais](https://br.tradingview.com/support/solutions/43000557436) | FQ, FH, FY | TOTAL_NON_CURRENT_LIABILITIES |
 | [Recebíveis totais, líquido](https://br.tradingview.com/support/solutions/43000563738) | FQ, FH, FY | TOTAL_RECEIVABLES_NET |
 | [Ações em tesouraria - comum](https://br.tradingview.com/support/solutions/43000563875) | FQ, FH, FY | TREASURY_STOCK_COMMON |
+
+### Fluxo de Caixa
+
+Esta tabela lista as métricas disponíveis que fornecem informações sobre como o caixa flui através de uma empresa.
+
+| Métrica Financeira | Período | ID Financeiro |
+| --- | --- | --- |
+| [Amortização](https://br.tradingview.com/support/solutions/43000564143) | FQ, FH, FY, TTM | AMORTIZATION |
+| [Despesas de capital](https://br.tradingview.com/support/solutions/43000564166) | FQ, FH, FY, TTM | CAPITAL_EXPENDITURES |
+| [Despesas de capital - ativos fixos](https://br.tradingview.com/support/solutions/43000564167) | FQ, FH, FY, TTM | CAPITAL_EXPENDITURES_FIXED_ASSETS |
+| [Despesas de capital - outros ativos](https://br.tradingview.com/support/solutions/43000564168) | FQ, FH, FY, TTM | CAPITAL_EXPENDITURES_OTHER_ASSETS |
+| [Caixa das atividades de financiamento](https://br.tradingview.com/support/solutions/43000553629) | FQ, FH, FY, TTM | CASH_F_FINANCING_ACTIVITIES |
+| [Caixa das atividades de investimento](https://br.tradingview.com/support/solutions/43000553628) | FQ, FH, FY, TTM | CASH_F_INVESTING_ACTIVITIES |
+| [Caixa das atividades operacionais](https://br.tradingview.com/support/solutions/43000553627) | FQ, FH, FY, TTM | CASH_F_OPERATING_ACTIVITIES |
+| [Alteração em contas a pagar](https://br.tradingview.com/support/solutions/43000564150) | FQ, FH, FY, TTM | CHANGE_IN_ACCOUNTS_PAYABLE |
+| [Alteração em contas a receber](https://br.tradingview.com/support/solutions/43000564148) | FQ, FH, FY, TTM | CHANGE_IN_ACCOUNTS_RECEIVABLE |
+| [Alteração em despesas acumuladas](https://br.tradingview.com/support/solutions/43000564151) | FQ, FH, FY, TTM | CHANGE_IN_ACCRUED_EXPENSES |
+| [Alteração em inventários](https://br.tradingview.com/support/solutions/43000564153) | FQ, FH, FY, TTM | CHANGE_IN_INVENTORIES |
+| [Alteração em outros ativos/passivos](https://br.tradingview.com/support/solutions/43000564154) | FQ, FH, FY, TTM | CHANGE_IN_OTHER_ASSETS |
+| [Alteração em impostos a pagar](https://br.tradingview.com/support/solutions/43000564149) | FQ, FH, FY, TTM | CHANGE_IN_TAXES_PAYABLE |
+| [Alterações no capital de giro](https://br.tradingview.com/support/solutions/43000564147) | FQ, FH, FY, TTM | CHANGES_IN_WORKING_CAPITAL |
+| [Dividendos comuns pagos](https://br.tradingview.com/support/solutions/43000564185) | FQ, FH, FY, TTM | COMMON_DIVIDENDS_CASH_FLOW |
+| [Impostos diferidos (fluxo de caixa)](https://br.tradingview.com/support/solutions/43000564144) | FQ, FH, FY, TTM | CASH_FLOW_DEFERRED_TAXES |
+| [Depreciação e amortização (fluxo de caixa)](https://br.tradingview.com/support/solutions/43000563892) | FQ, FH, FY, TTM | CASH_FLOW_DEPRECATION_N_AMORTIZATION |
+| [Depreciação/exaustão](https://br.tradingview.com/support/solutions/43000564142) | FQ, FH, FY, TTM | DEPRECIATION_DEPLETION |
+| [Atividades de financiamento - outras fontes](https://br.tradingview.com/support/solutions/43000564181) | FQ, FH, FY, TTM | OTHER_FINANCING_CASH_FLOW_SOURCES |
+| [Atividades de financiamento - outros usos](https://br.tradingview.com/support/solutions/43000564182) | FQ, FH, FY, TTM | OTHER_FINANCING_CASH_FLOW_USES |
+| [Fluxo de caixa livre](https://br.tradingview.com/support/solutions/43000553630) | FQ, FH, FY, TTM | FREE_CASH_FLOW |
+| [Fundos das operações](https://br.tradingview.com/support/solutions/43000563886) | FQ, FH, FY, TTM | FUNDS_F_OPERATIONS |
+| [Atividades de investimento - outras fontes](https://br.tradingview.com/support/solutions/43000564164) | FQ, FH, FY, TTM | OTHER_INVESTING_CASH_FLOW_SOURCES |
+| [Atividades de investimento - outros usos](https://br.tradingview.com/support/solutions/43000564165) | FQ, FH, FY | OTHER_INVESTING_CASH_FLOW_USES |
+| [Emissão de dívida de longo prazo](https://br.tradingview.com/support/solutions/43000564176) | FQ, FH, FY, TTM | SUPPLYING_OF_LONG_TERM_DEBT |
+| [Emissão/redução de dívida, líquido](https://br.tradingview.com/support/solutions/43000564172) | FQ, FH, FY, TTM | ISSUANCE_OF_DEBT_NET |
+| [Emissão/redução de dívida de longo prazo](https://br.tradingview.com/support/solutions/43000564175) | FQ, FH, FY, TTM | ISSUANCE_OF_LONG_TERM_DEBT |
+| [Emissão/redução de outras dívidas](https://br.tradingview.com/support/solutions/43000564178) | FQ, FH, FY, TTM | ISSUANCE_OF_OTHER_DEBT |
+| [Emissão/redução de dívida de curto prazo](https://br.tradingview.com/support/solutions/43000564173) | FQ, FH, FY, TTM | ISSUANCE_OF_SHORT_TERM_DEBT |
+| [Emissão/redução de ações, líquido](https://br.tradingview.com/support/solutions/43000564169) | FQ, FH, FY, TTM | ISSUANCE_OF_STOCK_NET |
+| [Lucro líquido (fluxo de caixa)](https://br.tradingview.com/support/solutions/43000563888) | FQ, FH, FY, TTM | NET_INCOME_STARTING_LINE |
+| [Itens não monetários](https://br.tradingview.com/support/solutions/43000564146) | FQ, FH, FY, TTM | NON_CASH_ITEMS |
+| [Outros itens de fluxo de caixa de financiamento, total](https://br.tradingview.com/support/solutions/43000564179) | FQ, FH, FY, TTM | OTHER_FINANCING_CASH_FLOW_ITEMS_TOTAL |
+| [Outros itens de fluxo de caixa de investimento, total](https://br.tradingview.com/support/solutions/43000564163) | FQ, FH, FY | OTHER_INVESTING_CASH_FLOW_ITEMS_TOTAL |
+| [Dividendos preferenciais pagos](https://br.tradingview.com/support/solutions/43000564186) | FQ, FH, FY | PREFERRED_DIVIDENDS_CASH_FLOW |
+| [Compra de investimentos](https://br.tradingview.com/support/solutions/43000564162) | FQ, FH, FY, TTM | PURCHASE_OF_INVESTMENTS |
+| [Compra/aquisição de negócios](https://br.tradingview.com/support/solutions/43000564159) | FQ, FH, FY, TTM | PURCHASE_OF_BUSINESS |
+| [Compra/venda de negócios, líquido](https://br.tradingview.com/support/solutions/43000564156) | FQ, FH, FY | PURCHASE_SALE_BUSINESS |
+| [Compra/venda de investimentos, líquido](https://br.tradingview.com/support/solutions/43000564160) | FQ, FH, FY, TTM | PURCHASE_SALE_INVESTMENTS |
+| [Redução da dívida de longo prazo](https://br.tradingview.com/support/solutions/43000564177) | FQ, FH, FY, TTM | REDUCTION_OF_LONG_TERM_DEBT |
+| [Recompra de ações comuns e preferenciais](https://br.tradingview.com/support/solutions/43000564171) | FQ, FH, FY, TTM | PURCHASE_OF_STOCK |
+| [Venda de ações comuns e preferenciais](https://br.tradingview.com/support/solutions/43000564170) | FQ, FH, FY, TTM | SALE_OF_STOCK |
+| [Venda de ativos fixos e negócios](https://br.tradingview.com/support/solutions/43000564158) | FQ, FH, FY, TTM | SALES_OF_BUSINESS |
+| [Venda/vencimento de investimentos](https://br.tradingview.com/support/solutions/43000564161) | FQ, FH, FY | SALES_OF_INVESTMENTS |
+| [Total de dividendos em dinheiro pagos](https://br.tradingview.com/support/solutions/43000564183) | FQ, FH, FY, TTM | TOTAL_CASH_DIVIDENDS_PAID |
