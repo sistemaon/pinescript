@@ -1619,8 +1619,6 @@ Cada tabela possui as seguintes três colunas:
 
 Esta tabela lista as métricas disponíveis que fornecem informações sobre a renda, custos, lucros e perdas de uma empresa.
 
-Clique para mostrar/ocultar
-
 | Métrica Financeira                                                                                         | Período              | ID Financeiro               |
 | ---------------------------------------------------------------------------------------------------------- | -------------------- | --------------------------- |
 | [Renda/despesa de outras operações após impostos](https://br.tradingview.com/support/solutions/43000563497) | FQ, FH, FY, TTM      | AFTER_TAX_OTHER_INCOME      |
@@ -1660,4 +1658,78 @@ Clique para mostrar/ocultar
 | [Impostos](https://br.tradingview.com/support/solutions/43000563492)                                        | FQ, FH, FY, TTM      | INCOME_TAX                  |
 | [Despesas operacionais totais](https://br.tradingview.com/support/solutions/43000553615)                   | FQ, FH, FY, TTM      | TOTAL_OPER_EXPENSE          |
 | [Receita total](https://br.tradingview.com/support/solutions/43000553619)                                  | FQ, FH, FY, TTM      | TOTAL_REVENUE               |
-| [Renda/despesa incomum](https://br.tradingview.com/support/solutions/43000563476)                          | FQ, FH, FY, TTM      | UNUSUAL_EXPENSE_INC         | -->
+| [Renda/despesa incomum](https://br.tradingview.com/support/solutions/43000563476)                          | FQ, FH, FY, TTM      | UNUSUAL_EXPENSE_INC         |
+
+## Balanço Patrimonial
+
+Esta tabela lista as métricas que fornecem informações sobre a estrutura de capital de uma empresa.
+
+| Métrica Financeira | Período | ID Financeiro |
+| --- | --- | --- |
+| [Contas a pagar](https://br.tradingview.com/support/solutions/43000563619) | FQ, FH, FY | ACCOUNTS_PAYABLE |
+| [Contas a receber - comércio, líquido](https://br.tradingview.com/support/solutions/43000563740) | FQ, FH, FY | ACCOUNTS_RECEIVABLES_NET |
+| [Folha de pagamento acumulada](https://br.tradingview.com/support/solutions/43000563628) | FQ, FH, FY | ACCRUED_PAYROLL |
+| [Depreciação acumulada, total](https://br.tradingview.com/support/solutions/43000563673) | FQ, FH, FY | ACCUM_DEPREC_TOTAL |
+| [Capital adicional integralizado/Excedente de capital](https://br.tradingview.com/support/solutions/43000563874) | FQ, FH, FY | ADDITIONAL_PAID_IN_CAPITAL |
+| [Valor contábil por ação](https://br.tradingview.com/support/solutions/43000670330) | FQ, FH, FY | BOOK_VALUE_PER_SHARE |
+| [Obrigações de arrendamento capital e operacional](https://br.tradingview.com/support/solutions/43000563522) | FQ, FH, FY | CAPITAL_OPERATING_LEASE_OBLIGATIONS |
+| [Obrigações de arrendamento capitalizado](https://br.tradingview.com/support/solutions/43000563527) | FQ, FH, FY | CAPITAL_LEASE_OBLIGATIONS |
+| [Caixa e equivalentes](https://br.tradingview.com/support/solutions/43000563709) | FQ, FH, FY | CASH_N_EQUIVALENTS |
+| [Caixa e investimentos de curto prazo](https://br.tradingview.com/support/solutions/43000563702) | FQ, FH, FY | CASH_N_SHORT_TERM_INVEST |
+| [Capital comum, total](https://br.tradingview.com/support/solutions/43000563866) | FQ, FH, FY | COMMON_EQUITY_TOTAL |
+| [Valor nominal/Contábil das ações ordinárias](https://br.tradingview.com/support/solutions/43000563873) | FQ, FH, FY | COMMON_STOCK_PAR |
+| [Porção atual da dívida de longo prazo e arrendamentos de capital](https://br.tradingview.com/support/solutions/43000563557) | FQ, FH, FY | CURRENT_PORT_DEBT_CAPITAL_LEASES |
+| [Renda diferida, atual](https://br.tradingview.com/support/solutions/43000563631) | FQ, FH, FY | DEFERRED_INCOME_CURRENT |
+| [Renda diferida, não atual](https://br.tradingview.com/support/solutions/43000563540) | FQ, FH, FY | DEFERRED_INCOME_NON_CURRENT |
+| [Ativos fiscais diferidos](https://br.tradingview.com/support/solutions/43000563683) | FQ, FH, FY | DEFERRED_TAX_ASSESTS |
+| [Passivos fiscais diferidos](https://br.tradingview.com/support/solutions/43000563536) | FQ, FH, FY | DEFERRED_TAX_LIABILITIES |
+| [Dividendos a pagar](https://br.tradingview.com/support/solutions/43000563624) | FY | DIVIDENDS_PAYABLE |
+| [Goodwill, líquido](https://br.tradingview.com/support/solutions/43000563688) | FQ, FH, FY | GOODWILL |
+| [Propriedade/planta/equipamento bruto](https://br.tradingview.com/support/solutions/43000563667) | FQ, FH, FY | PPE_TOTAL_GROSS |
+| [Imposto de renda a pagar](https://br.tradingview.com/support/solutions/43000563621) | FQ, FH, FY | INCOME_TAX_PAYABLE |
+| [Estoques - produtos acabados](https://br.tradingview.com/support/solutions/43000563749) | FQ, FH, FY | INVENTORY_FINISHED_GOODS |
+| [Estoques - pagamentos em progresso e outros](https://br.tradingview.com/support/solutions/43000563748) | FQ, FH, FY | INVENTORY_PROGRESS_PAYMENTS |
+| [Estoques - matérias-primas](https://br.tradingview.com/support/solutions/43000563753) | FQ, FH, FY | INVENTORY_RAW_MATERIALS |
+| [Estoques - trabalho em progresso](https://br.tradingview.com/support/solutions/43000563746) | FQ, FH, FY | INVENTORY_WORK_IN_PROGRESS |
+| [Investimentos em subsidiárias não consolidadas](https://br.tradingview.com/support/solutions/43000563645) | FQ, FH, FY | INVESTMENTS_IN_UNCONCSOLIDATE |
+| [Dívida de longo prazo](https://br.tradingview.com/support/solutions/43000553621) | FQ, FH, FY | LONG_TERM_DEBT |
+| [Dívida de longo prazo exceto passivos de arrendamento](https://br.tradingview.com/support/solutions/43000563521) | FQ, FH, FY | LONG_TERM_DEBT_EXCL_CAPITAL_LEASE |
+| [Investimentos de longo prazo](https://br.tradingview.com/support/solutions/43000563639) | FQ, FH, FY | LONG_TERM_INVESTMENTS |
+| [Interesse minoritário](https://br.tradingview.com/support/solutions/43000563884) | FQ, FH, FY | MINORITY_INTEREST |
+| [Dívida líquida](https://br.tradingview.com/support/solutions/43000665310) | FQ, FH, FY | NET_DEBT |
+| [Ativos intangíveis líquidos](https://br.tradingview.com/support/solutions/43000563686) | FQ, FH, FY | INTANGIBLES_NET |
+| [Propriedade/planta/equipamento líquido](https://br.tradingview.com/support/solutions/43000563657) | FQ, FH, FY | PPE_TOTAL_NET |
+| [Nota a receber - longo prazo](https://br.tradingview.com/support/solutions/43000563641) | FQ, FH, FY | LONG_TERM_NOTE_RECEIVABLE |
+| [Notas a pagar](https://br.tradingview.com/support/solutions/43000563600) | FY | NOTES_PAYABLE_SHORT_TERM_DEBT |
+| [Passivos de arrendamento operacional](https://br.tradingview.com/support/solutions/43000563532) | FQ, FH, FY | OPERATING_LEASE_LIABILITIES |
+| [Outros capitais comuns](https://br.tradingview.com/support/solutions/43000563877) | FQ, FH, FY | OTHER_COMMON_EQUITY |
+| [Outros ativos correntes, total](https://br.tradingview.com/support/solutions/43000563761) | FQ, FH, FY | OTHER_CURRENT_ASSETS_TOTAL |
+| [Outros passivos correntes](https://br.tradingview.com/support/solutions/43000563635) | FQ, FH, FY | OTHER_CURRENT_LIABILITIES |
+| [Outros intangíveis, líquidos](https://br.tradingview.com/support/solutions/43000563689) | FQ, FH, FY | OTHER_INTANGIBLES_NET |
+| [Outros investimentos](https://br.tradingview.com/support/solutions/43000563649) | FQ, FH, FY | OTHER_INVESTMENTS |
+| [Outros ativos de longo prazo, total](https://br.tradingview.com/support/solutions/43000563693) | FQ, FH, FY | LONG_TERM_OTHER_ASSETS_TOTAL |
+| [Outros passivos não correntes, total](https://br.tradingview.com/support/solutions/43000563545) | FQ, FH, FY | OTHER_LIABILITIES_TOTAL |
+| [Outros recebíveis](https://br.tradingview.com/support/solutions/43000563741) | FQ, FH, FY | OTHER_RECEIVABLES |
+| [Outras dívidas de curto prazo](https://br.tradingview.com/support/solutions/43000563614) | FY | OTHER_SHORT_TERM_DEBT |
+| [Capital integralizado](https://br.tradingview.com/support/solutions/43000563871) | FQ, FH, FY | PAID_IN_CAPITAL |
+| [Ações preferenciais, valor contábil](https://br.tradingview.com/support/solutions/43000563879) | FQ, FH, FY | PREFERRED_STOCK_CARRYING_VALUE |
+| [Despesas pré-pagas](https://br.tradingview.com/support/solutions/43000563757) | FQ, FH, FY | PREPAID_EXPENSES |
+| [Provisão para riscos e encargos](https://br.tradingview.com/support/solutions/43000563535) | FQ, FH, FY | PROVISION_F_RISKS |
+| [Lucros acumulados](https://br.tradingview.com/support/solutions/43000563867) | FQ, FH, FY | RETAINED_EARNINGS |
+| [Patrimônio dos acionistas](https://br.tradingview.com/support/solutions/43000557442) | FQ, FH, FY | SHRHLDRS_EQUITY |
+| [Dívida de curto prazo](https://br.tradingview.com/support/solutions/43000563554) | FQ, FH, FY | SHORT_TERM_DEBT |
+| [Dívida de curto prazo exceto porção atual da dívida de longo prazo](https://br.tradingview.com/support/solutions/43000563563) | FQ, FH, FY | SHORT_TERM_DEBT_EXCL_CURRENT_PORT |
+| [Investimentos de curto prazo](https://br.tradingview.com/support/solutions/43000563716) | FQ, FH, FY | SHORT_TERM_INVEST |
+| [Valor contábil tangível por ação](https://br.tradingview.com/support/solutions/43000597072) | FQ, FH, FY | BOOK_TANGIBLE_PER_SHARE |
+| [Ativos totais](https://br.tradingview.com/support/solutions/43000553623) | FQ, FH, FY | TOTAL_ASSETS |
+| [Ativos correntes totais](https://br.tradingview.com/support/solutions/43000557441) | FQ, FH, FY | TOTAL_CURRENT_ASSETS |
+| [Passivos correntes totais](https://br.tradingview.com/support/solutions/43000557437) | FQ, FH, FY | TOTAL_CURRENT_LIABILITIES |
+| [Dívida total](https://br.tradingview.com/support/solutions/43000553622) | FQ, FH, FY | TOTAL_DEBT |
+| [Patrimônio total](https://br.tradingview.com/support/solutions/43000553625) | FQ, FH, FY | TOTAL_EQUITY |
+| [Inventário total](https://br.tradingview.com/support/solutions/43000563745) | FQ, FH, FY | TOTAL_INVENTORY |
+| [Passivos totais](https://br.tradingview.com/support/solutions/43000553624) | FQ, FH, FY | TOTAL_LIABILITIES |
+| [Passivos totais & patrimônio dos acionistas](https://br.tradingview.com/support/solutions/43000553626) | FQ, FH, FY | TOTAL_LIABILITIES_SHRHLDRS_EQUITY |
+| [Ativos não correntes totais](https://br.tradingview.com/support/solutions/43000557440) | FQ, FH, FY | TOTAL_NON_CURRENT_ASSETS |
+| [Passivos não correntes totais](https://br.tradingview.com/support/solutions/43000557436) | FQ, FH, FY | TOTAL_NON_CURRENT_LIABILITIES |
+| [Recebíveis totais, líquido](https://br.tradingview.com/support/solutions/43000563738) | FQ, FH, FY | TOTAL_RECEIVABLES_NET |
+| [Ações em tesouraria - comum](https://br.tradingview.com/support/solutions/43000563875) | FQ, FH, FY | TREASURY_STOCK_COMMON |
