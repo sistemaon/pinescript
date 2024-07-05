@@ -1599,7 +1599,7 @@ __Note que:__
 
 ## IDs Financeiros
 
-Abaixo está uma visão geral de todas as métricas financeiras que podem ser solicitadas via [request.financial()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.financial), juntamente com os períodos em que os relatórios podem estar disponíveis. Dividimos essas informações em quatro tabelas correspondentes às categorias exibidas na seção "Financeiros" do menu "Indicadores":
+Abaixo está uma visão geral de todas as métricas financeiras que podem ser solicitadas via [request.financial()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.financial), juntamente com os períodos em que os relatórios podem estar disponíveis. Dividimos essas informações em quatro tabelas correspondentes às categorias exibidas na seção "Financeiros" ("_Financials_") do menu "Indicadores" ("_Indicators_"):
 
 - [Demonstrações de resultados](./05_14_outros_timeframes_e_dados.md#demonstrações-de-resultados)
 - [Balanço patrimonial](./05_14_outros_timeframes_e_dados.md#balanço-patrimonial)
@@ -1615,7 +1615,7 @@ Cada tabela possui as seguintes três colunas:
 > __Observação!__\
 > As tabelas nestas seções são bastante extensas, pois existem muitos argumentos `financial_id` disponíveis. Use a opção __"Clique para mostrar/ocultar" ("_Click to show/hide_")__ acima de cada tabela para alternar sua visibilidade.
 
-<!-- ### Demonstrações de Resultados
+### Demonstrações de Resultados
 
 Esta tabela lista as métricas disponíveis que fornecem informações sobre a renda, custos, lucros e perdas de uma empresa.
 
@@ -1623,41 +1623,41 @@ Clique para mostrar/ocultar
 
 | Métrica Financeira                                                                                         | Período              | ID Financeiro               |
 | ---------------------------------------------------------------------------------------------------------- | -------------------- | --------------------------- |
-| [Renda/despesa de outras operações após impostos](https://www.tradingview.com/support/solutions/43000563497) | FQ, FH, FY, TTM      | AFTER_TAX_OTHER_INCOME      |
-| [Média de ações básicas em circulação](https://www.tradingview.com/support/solutions/43000670320)           | FQ, FH, FY           | BASIC_SHARES_OUTSTANDING    |
-| [Lucro básico por ação (EPS básico)](https://www.tradingview.com/support/solutions/43000563520)             | FQ, FH, FY, TTM      | EARNINGS_PER_SHARE_BASIC    |
-| [Custo dos produtos vendidos](https://www.tradingview.com/support/solutions/43000553618)                    | FQ, FH, FY, TTM      | COST_OF_GOODS               |
-| [Depreciação e amortização](https://www.tradingview.com/support/solutions/43000563477)                      | FQ, FH, FY, TTM      | DEP_AMORT_EXP_INCOME_S      |
-| [Lucro diluído por ação (EPS diluído)](https://www.tradingview.com/support/solutions/43000553616)           | FQ, FH, FY, TTM      | EARNINGS_PER_SHARE_DILUTED  |
-| [Lucro líquido diluído disponível para acionistas comuns](https://www.tradingview.com/support/solutions/43000563516) | FQ, FH, FY, TTM      | DILUTED_NET_INCOME          |
-| [Ações diluídas em circulação](https://www.tradingview.com/support/solutions/43000670322)                   | FQ, FH, FY           | DILUTED_SHARES_OUTSTANDING  |
-| [Ajuste de diluição](https://www.tradingview.com/support/solutions/43000563504)                             | FQ, FH, FY, TTM      | DILUTION_ADJUSTMENT         |
-| [Operações descontinuadas](https://www.tradingview.com/support/solutions/43000563502)                       | FQ, FH, FY, TTM      | DISCONTINUED_OPERATIONS     |
-| [EBIT](https://www.tradingview.com/support/solutions/43000670329)                                           | FQ, FH, FY, TTM      | EBIT                        |
-| [EBITDA](https://www.tradingview.com/support/solutions/43000553610)                                         | FQ, FH, FY, TTM      | EBITDA                      |
-| [Equity em lucros](https://www.tradingview.com/support/solutions/43000563487)                               | FQ, FH, FY, TTM      | EQUITY_IN_EARNINGS          |
-| [Lucro bruto](https://www.tradingview.com/support/solutions/43000553611)                                    | FQ, FH, FY, TTM      | GROSS_PROFIT                |
-| [Juros capitalizados](https://www.tradingview.com/support/solutions/43000563468)                            | FQ, FH, FY, TTM      | INTEREST_CAPITALIZED        |
-| [Despesa de juros sobre dívida](https://www.tradingview.com/support/solutions/43000563467)                  | FQ, FH, FY, TTM      | INTEREST_EXPENSE_ON_DEBT    |
-| [Despesa de juros, líquida de juros capitalizados](https://www.tradingview.com/support/solutions/43000563466) | FQ, FH, FY, TTM      | NON_OPER_INTEREST_EXP       |
-| [Despesa não operacional diversa](https://www.tradingview.com/support/solutions/43000563479)                | FQ, FH, FY, TTM      | OTHER_INCOME                |
-| [Lucro líquido](https://www.tradingview.com/support/solutions/43000553617)                                  | FQ, FH, FY, TTM      | NET_INCOME                  |
-| [Lucro líquido antes de operações descontinuadas](https://www.tradingview.com/support/solutions/43000563500) | FQ, FH, FY, TTM      | NET_INCOME_BEF_DISC_OPER    |
-| [Interesse minoritário/não controlador](https://www.tradingview.com/support/solutions/43000563495)          | FQ, FH, FY, TTM      | MINORITY_INTEREST_EXP       |
-| [Renda não operacional, excl. despesas de juros](https://www.tradingview.com/support/solutions/43000563471) | FQ, FH, FY, TTM      | NON_OPER_INCOME             |
-| [Renda não operacional, total](https://www.tradingview.com/support/solutions/43000563465)                   | FQ, FH, FY, TTM      | TOTAL_NON_OPER_INCOME       |
-| [Renda de juros não operacionais](https://www.tradingview.com/support/solutions/43000563473)                | FQ, FH, FY, TTM      | NON_OPER_INTEREST_INCOME    |
-| [Despesas operacionais (excl. COGS)](https://www.tradingview.com/support/solutions/43000563463)             | FQ, FH, FY, TTM      | OPERATING_EXPENSES          |
-| [Lucro operacional](https://www.tradingview.com/support/solutions/43000563464)                              | FQ, FH, FY, TTM      | OPER_INCOME                 |
-| [Outros custos de bens vendidos](https://www.tradingview.com/support/solutions/43000563478)                 | FQ, FH, FY, TTM      | COST_OF_GOODS_EXCL_DEP_AMORT |
-| [Outras despesas operacionais, total](https://www.tradingview.com/support/solutions/43000563483)            | FQ, FH, FY, TTM      | OTHER_OPER_EXPENSE_TOTAL    |
-| [Dividendos preferenciais](https://www.tradingview.com/support/solutions/43000563506)                       | FQ, FH, FY, TTM      | PREFERRED_DIVIDENDS         |
-| [Equity em lucros antes dos impostos](https://www.tradingview.com/support/solutions/43000563474)            | FQ, FH, FY, TTM      | PRETAX_EQUITY_IN_EARNINGS   |
-| [Lucro antes dos impostos](https://www.tradingview.com/support/solutions/43000563462)                       | FQ, FH, FY, TTM      | PRETAX_INCOME               |
-| [Pesquisa e desenvolvimento](https://www.tradingview.com/support/solutions/43000553612)                     | FQ, FH, FY, TTM      | RESEARCH_AND_DEV            |
-| [Despesas administrativas/comerciais gerais, outras](https://www.tradingview.com/support/solutions/43000553614) | FQ, FH, FY, TTM      | SELL_GEN_ADMIN_EXP_OTHER    |
-| [Despesas administrativas/comerciais gerais, total](https://www.tradingview.com/support/solutions/43000553613) | FQ, FH, FY, TTM      | SELL_GEN_ADMIN_EXP_TOTAL    |
-| [Impostos](https://www.tradingview.com/support/solutions/43000563492)                                        | FQ, FH, FY, TTM      | INCOME_TAX                  |
-| [Despesas operacionais totais](https://www.tradingview.com/support/solutions/43000553615)                   | FQ, FH, FY, TTM      | TOTAL_OPER_EXPENSE          |
-| [Receita total](https://www.tradingview.com/support/solutions/43000553619)                                  | FQ, FH, FY, TTM      | TOTAL_REVENUE               |
-| [Renda/despesa incomum](https://www.tradingview.com/support/solutions/43000563476)                          | FQ, FH, FY, TTM      | UNUSUAL_EXPENSE_INC         | -->
+| [Renda/despesa de outras operações após impostos](https://br.tradingview.com/support/solutions/43000563497) | FQ, FH, FY, TTM      | AFTER_TAX_OTHER_INCOME      |
+| [Média de ações básicas em circulação](https://br.tradingview.com/support/solutions/43000670320)           | FQ, FH, FY           | BASIC_SHARES_OUTSTANDING    |
+| [Lucro básico por ação (EPS básico)](https://br.tradingview.com/support/solutions/43000563520)             | FQ, FH, FY, TTM      | EARNINGS_PER_SHARE_BASIC    |
+| [Custo dos produtos vendidos](https://br.tradingview.com/support/solutions/43000553618)                    | FQ, FH, FY, TTM      | COST_OF_GOODS               |
+| [Depreciação e amortização](https://br.tradingview.com/support/solutions/43000563477)                      | FQ, FH, FY, TTM      | DEP_AMORT_EXP_INCOME_S      |
+| [Lucro diluído por ação (EPS diluído)](https://br.tradingview.com/support/solutions/43000553616)           | FQ, FH, FY, TTM      | EARNINGS_PER_SHARE_DILUTED  |
+| [Lucro líquido diluído disponível para acionistas comuns](https://br.tradingview.com/support/solutions/43000563516) | FQ, FH, FY, TTM      | DILUTED_NET_INCOME          |
+| [Ações diluídas em circulação](https://br.tradingview.com/support/solutions/43000670322)                   | FQ, FH, FY           | DILUTED_SHARES_OUTSTANDING  |
+| [Ajuste de diluição](https://br.tradingview.com/support/solutions/43000563504)                             | FQ, FH, FY, TTM      | DILUTION_ADJUSTMENT         |
+| [Operações descontinuadas](https://br.tradingview.com/support/solutions/43000563502)                       | FQ, FH, FY, TTM      | DISCONTINUED_OPERATIONS     |
+| [EBIT](https://br.tradingview.com/support/solutions/43000670329)                                           | FQ, FH, FY, TTM      | EBIT                        |
+| [EBITDA](https://br.tradingview.com/support/solutions/43000553610)                                         | FQ, FH, FY, TTM      | EBITDA                      |
+| [Equity em lucros](https://br.tradingview.com/support/solutions/43000563487)                               | FQ, FH, FY, TTM      | EQUITY_IN_EARNINGS          |
+| [Lucro bruto](https://br.tradingview.com/support/solutions/43000553611)                                    | FQ, FH, FY, TTM      | GROSS_PROFIT                |
+| [Juros capitalizados](https://br.tradingview.com/support/solutions/43000563468)                            | FQ, FH, FY, TTM      | INTEREST_CAPITALIZED        |
+| [Despesa de juros sobre dívida](https://br.tradingview.com/support/solutions/43000563467)                  | FQ, FH, FY, TTM      | INTEREST_EXPENSE_ON_DEBT    |
+| [Despesa de juros, líquida de juros capitalizados](https://br.tradingview.com/support/solutions/43000563466) | FQ, FH, FY, TTM      | NON_OPER_INTEREST_EXP       |
+| [Despesa não operacional diversa](https://br.tradingview.com/support/solutions/43000563479)                | FQ, FH, FY, TTM      | OTHER_INCOME                |
+| [Lucro líquido](https://br.tradingview.com/support/solutions/43000553617)                                  | FQ, FH, FY, TTM      | NET_INCOME                  |
+| [Lucro líquido antes de operações descontinuadas](https://br.tradingview.com/support/solutions/43000563500) | FQ, FH, FY, TTM      | NET_INCOME_BEF_DISC_OPER    |
+| [Interesse minoritário/não controlador](https://br.tradingview.com/support/solutions/43000563495)          | FQ, FH, FY, TTM      | MINORITY_INTEREST_EXP       |
+| [Renda não operacional, excl. despesas de juros](https://br.tradingview.com/support/solutions/43000563471) | FQ, FH, FY, TTM      | NON_OPER_INCOME             |
+| [Renda não operacional, total](https://br.tradingview.com/support/solutions/43000563465)                   | FQ, FH, FY, TTM      | TOTAL_NON_OPER_INCOME       |
+| [Renda de juros não operacionais](https://br.tradingview.com/support/solutions/43000563473)                | FQ, FH, FY, TTM      | NON_OPER_INTEREST_INCOME    |
+| [Despesas operacionais (excl. COGS)](https://br.tradingview.com/support/solutions/43000563463)             | FQ, FH, FY, TTM      | OPERATING_EXPENSES          |
+| [Lucro operacional](https://br.tradingview.com/support/solutions/43000563464)                              | FQ, FH, FY, TTM      | OPER_INCOME                 |
+| [Outros custos de bens vendidos](https://br.tradingview.com/support/solutions/43000563478)                 | FQ, FH, FY, TTM      | COST_OF_GOODS_EXCL_DEP_AMORT |
+| [Outras despesas operacionais, total](https://br.tradingview.com/support/solutions/43000563483)            | FQ, FH, FY, TTM      | OTHER_OPER_EXPENSE_TOTAL    |
+| [Dividendos preferenciais](https://br.tradingview.com/support/solutions/43000563506)                       | FQ, FH, FY, TTM      | PREFERRED_DIVIDENDS         |
+| [Equity em lucros antes dos impostos](https://br.tradingview.com/support/solutions/43000563474)            | FQ, FH, FY, TTM      | PRETAX_EQUITY_IN_EARNINGS   |
+| [Lucro antes dos impostos](https://br.tradingview.com/support/solutions/43000563462)                       | FQ, FH, FY, TTM      | PRETAX_INCOME               |
+| [Pesquisa e desenvolvimento](https://br.tradingview.com/support/solutions/43000553612)                     | FQ, FH, FY, TTM      | RESEARCH_AND_DEV            |
+| [Despesas administrativas/comerciais gerais, outras](https://br.tradingview.com/support/solutions/43000553614) | FQ, FH, FY, TTM      | SELL_GEN_ADMIN_EXP_OTHER    |
+| [Despesas administrativas/comerciais gerais, total](https://br.tradingview.com/support/solutions/43000553613) | FQ, FH, FY, TTM      | SELL_GEN_ADMIN_EXP_TOTAL    |
+| [Impostos](https://br.tradingview.com/support/solutions/43000563492)                                        | FQ, FH, FY, TTM      | INCOME_TAX                  |
+| [Despesas operacionais totais](https://br.tradingview.com/support/solutions/43000553615)                   | FQ, FH, FY, TTM      | TOTAL_OPER_EXPENSE          |
+| [Receita total](https://br.tradingview.com/support/solutions/43000553619)                                  | FQ, FH, FY, TTM      | TOTAL_REVENUE               |
+| [Renda/despesa incomum](https://br.tradingview.com/support/solutions/43000563476)                          | FQ, FH, FY, TTM      | UNUSUAL_EXPENSE_INC         | -->
