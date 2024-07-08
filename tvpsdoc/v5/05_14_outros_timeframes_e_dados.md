@@ -1601,10 +1601,10 @@ __Note que:__
 
 Abaixo está uma visão geral de todas as métricas financeiras que podem ser solicitadas via [request.financial()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.financial), juntamente com os períodos em que os relatórios podem estar disponíveis. Dividimos essas informações em quatro tabelas correspondentes às categorias exibidas na seção "Financeiros" ("_Financials_") do menu "Indicadores" ("_Indicators_"):
 
-- [Demonstrações de resultados](./05_14_outros_timeframes_e_dados.md#demonstrações-de-resultados)
-- [Balanço patrimonial](./05_14_outros_timeframes_e_dados.md#balanço-patrimonial)
-- [Fluxo de caixa](./05_14_outros_timeframes_e_dados.md#fluxo-de-caixa)
-- [Estatísticas](./05_14_outros_timeframes_e_dados.md#estatísticas)
+- [Demonstrações de resultados](./05_14_outros_timeframes_e_dados.md#demonstrações-de-resultados).
+- [Balanço patrimonial](./05_14_outros_timeframes_e_dados.md#balanço-patrimonial).
+- [Fluxo de caixa](./05_14_outros_timeframes_e_dados.md#fluxo-de-caixa).
+- [Estatísticas](./05_14_outros_timeframes_e_dados.md#estatísticas).
 
 Cada tabela possui as seguintes três colunas:
 
@@ -2447,3 +2447,52 @@ A tabela nesta seção lista os códigos de campo disponíveis para uso com [req
 | WS | [Vendas no Atacado](https://br.tradingview.com/support/solutions/43000651210) |
 | YUR | [Taxa de Desemprego Juvenil](https://br.tradingview.com/support/solutions/43000651211) |
 | ZCC | [Condições Atuais ZEW](https://br.tradingview.com/support/solutions/43000651212) |
+
+## `request.seed()`
+
+O TradingView agrega uma vasta quantidade de dados de seus muitos provedores, incluindo informações de preço e volume sobre instrumentos negociáveis, dados financeiros, econômicos e muito mais, que os usuários podem recuperar no Pine Script usando as funções discutidas nas seções anteriores, bem como várias variáveis embutidas.
+
+Para expandir ainda mais os horizontes dos dados que podem ser analisados no TradingView, existe o [Pine Seeds](https://github.com/tradingview-pine-seeds/docs), que permite aos usuários fornecer feeds de dados _EOD_ personalizados mantidos por usuários via GitHub para uso nos gráficos do TradingView e dentro do código do Pine Script.
+
+> __Observação!__\
+> Esta seção contém apenas uma visão _breve_ do Pine Seeds. Para informações detalhadas sobre a funcionalidade do Pine Seeds, configuração de um repositório, formatos de dados e mais, consulte a documentação [aqui](https://github.com/tradingview-pine-seeds/docs/blob/main/README.md).
+
+Para recuperar dados de um feed de dados do Pine Seeds dentro de um script, pode-se usar a função [request.seed()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.seed).
+
+Abaixo está a assinatura da função:
+```c
+request.seed(source, symbol, expression, ignore_invalid_symbol, calc_bars_count) → series <type>
+```
+
+O parâmetro `source` especifica o nome único do repositório GitHub mantido pelo usuário que contém o feed de dados. Para detalhes sobre a criação de um repositório, veja [esta página](https://github.com/tradingview-pine-seeds/docs/blob/main/repo.md).
+
+O parâmetro `symbol` representa o nome do arquivo no diretório "data/" do repositório `source`, excluindo a extensão ".csv". Veja [esta página](https://github.com/tradingview-pine-seeds/docs/blob/main/data.md) para informações sobre a estrutura dos dados armazenados em repositórios.
+
+O parâmetro `expression` é a série a ser avaliada usando os dados extraídos do contexto solicitado. É similar ao equivalente em [request.security()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.security) e [request.security_lower_tf()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.security_lower_tf). Os feeds de dados armazenados em repositórios mantidos por usuários contêm informações de [time](https://br.tradingview.com/pine-script-reference/v5/#var_time), [open](https://br.tradingview.com/pine-script-reference/v5/#var_open), [high](https://br.tradingview.com/pine-script-reference/v5/#var_high), [low](https://br.tradingview.com/pine-script-reference/v5/#var_low), [close](https://br.tradingview.com/pine-script-reference/v5/#var_close) e [volume](https://br.tradingview.com/pine-script-reference/v5/#var_volume), o que significa que expressões usadas como argumento `expression` podem usar as variáveis embutidas correspondentes, incluindo variáveis derivadas delas (por exemplo, [bar_index](https://br.tradingview.com/pine-script-reference/v5/#var_bar_index), [ohlc4](https://br.tradingview.com/pine-script-reference/v5/#var_ohlc4), etc.) para solicitar seus valores do contexto dos dados personalizados.
+
+> __Observação!__\
+> Assim como [request.security()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.security) e [request.security_lower_tf()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.security_lower_tf), [request.seed()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.seed) duplica os escopos necessários para avaliar sua `expression` em outro contexto, o que contribui para os limites de compilação e demandas de memória do script. Veja a seção sobre [contagem de escopos](./06_05_limitacoes.md#contagem-de-escopos) na página de [Limitações](./06_05_limitacoes.md) para mais informações.
+
+O script abaixo visualiza dados de exemplo do repositório de demonstração [seed_crypto_santiment](https://github.com/tradingview-pine-seeds/seed_crypto_santiment). Ele usa duas chamadas para [request.seed()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.seed) para recuperar os valores de [close](https://br.tradingview.com/pine-script-reference/v5/#var_close) dos feeds de dados [BTC_SENTIMENT_POSITIVE_TOTAL](https://github.com/tradingview-pine-seeds/seed_crypto_santiment/blob/master/data/BTC_SENTIMENT_POSITIVE_TOTAL.csv) e [BTC_SENTIMENT_NEGATIVE_TOTAL](https://github.com/tradingview-pine-seeds/seed_crypto_santiment/blob/master/data/BTC_SENTIMENT_NEGATIVE_TOTAL.csv) do repositório e [plota](./05_15_plots.md) os resultados no gráfico como [_step line_](https://br.tradingview.com/pine-script-reference/v5/#var_plot.style_stepline):
+
+![request.seed()](./imgs/Other-timeframes-and-data-Request-seed-1.8Jb0VyN__ZS6XAH.webp)
+
+```c
+//@version=5
+indicator("Pine Seeds demo", format=format.volume)
+
+//@variable The total positive sentiment for BTC extracted from the "seed_crypto_santiment" repository.
+float positiveTotal = request.seed("seed_crypto_santiment", "BTC_SENTIMENT_POSITIVE_TOTAL", close)
+//@variable The total negative sentiment for BTC extracted from the "seed_crypto_santiment" repository.
+float negativeTotal = request.seed("seed_crypto_santiment", "BTC_SENTIMENT_NEGATIVE_TOTAL", close)
+
+// Plot the data.
+plot(positiveTotal, "Positive sentiment", color.teal, 2, plot.style_stepline)
+plot(negativeTotal, "Negative sentiment", color.maroon, 2, plot.style_stepline)
+```
+
+__Note que:__
+
+- Este exemplo solicita dados do repositório destacado na [documentação do Pine Seeds](https://github.com/tradingview-pine-seeds/docs/blob/main/README.md). Ele existe apenas para fins de exemplo, e seus dados _não_ são atualizados regularmente.
+- Ao contrário da maioria das outras funções `request.*()`, [request.seed()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.seed) não possui um parâmetro `gaps`. Ela sempre retornará valores [na](https://br.tradingview.com/pine-script-reference/v5/#var_na) quando não houver novos dados.
+- Os dados do Pine Seeds são pesquisáveis na barra de pesquisa de símbolos do gráfico. Para carregar um feed de dados no gráfico, insira o _"par Repo:File"_, semelhante a pesquisar um "par Exchange:Symbol".
