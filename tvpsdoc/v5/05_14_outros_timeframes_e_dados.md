@@ -1915,4 +1915,212 @@ __Note que:__
 
 ## Códigos de País/Região
 
+A tabela nesta seção lista todos os códigos de país/região disponíveis para uso com [request.economic()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.economic). A primeira coluna da tabela contém os valores "string" que representam o código do país ou região, e a segunda coluna contém os nomes correspondentes dos países/regiões.
+
+É importante notar que o valor usado como argumento `country_code` determina quais [códigos de campo](./05_14_outros_timeframes_e_dados.md#códigos-de-campos) são acessíveis para a função.
+
+| `country_code` | Nome do país/região |
+| --- | --- |
+| AF | Afeganistão |
+| AL | Albânia |
+| DZ | Argélia |
+| AD | Andorra |
+| AO | Angola |
+| AG | Antígua e Barbuda |
+| AR | Argentina |
+| AM | Armênia |
+| AW | Aruba |
+| AU | Austrália |
+| AT | Áustria |
+| AZ | Azerbaijão |
+| BS | Bahamas |
+| BH | Bahrein |
+| BD | Bangladesh |
+| BB | Barbados |
+| BY | Bielorrússia |
+| BE | Bélgica |
+| BZ | Belize |
+| BJ | Benin |
+| BM | Bermudas |
+| BT | Butão |
+| BO | Bolívia |
+| BA | Bósnia e Herzegovina |
+| BW | Botsuana |
+| BR | Brasil |
+| BN | Brunei |
+| BG | Bulgária |
+| BF | Burkina Faso |
+| BI | Burundi |
+| KH | Camboja |
+| CM | Camarões |
+| CA | Canadá |
+| CV | Cabo Verde |
+| KY | Ilhas Cayman |
+| CF | República Centro-Africana |
+| TD | Chade |
+| CL | Chile |
+| CN | China |
+| CO | Colômbia |
+| KM | Comores |
+| CG | Congo |
+| CR | Costa Rica |
+| HR | Croácia |
+| CU | Cuba |
+| CY | Chipre |
+| CZ | República Tcheca |
+| DK | Dinamarca |
+| DJ | Djibuti |
+| DM | Dominica |
+| DO | República Dominicana |
+| TL | Timor-Leste |
+| EC | Equador |
+| EG | Egito |
+| SV | El Salvador |
+| GQ | Guiné Equatorial |
+| ER | Eritreia |
+| EE | Estônia |
+| ET | Etiópia |
+| EU | Zona do Euro |
+| FO | Ilhas Faroé |
+| FJ | Fiji |
+| FI | Finlândia |
+| FR | França |
+| GA | Gabão |
+| GM | Gâmbia |
+| GE | Geórgia |
+| DE | Alemanha |
+| GH | Gana |
+| GR | Grécia |
+| GL | Groenlândia |
+| GD | Granada |
+| GT | Guatemala |
+| GN | Guiné |
+| GW | Guiné-Bissau |
+| GY | Guiana |
+| HT | Haiti |
+| HN | Honduras |
+| HK | Hong Kong |
+| HU | Hungria |
+| IS | Islândia |
+| IN | Índia |
+| ID | Indonésia |
+| IR | Irã |
+| IQ | Iraque |
+| IE | Irlanda |
+| IM | Ilha de Man |
+| IL | Israel |
+| IT | Itália |
+| CI | Costa do Marfim |
+| JM | Jamaica |
+| JP | Japão |
+| JO | Jordânia |
+| KZ | Cazaquistão |
+| KE | Quênia |
+| KI | Kiribati |
+| XK | Kosovo |
+| KW | Kuwait |
+| KG | Quirguistão |
+| LA | Laos |
+| LV | Letônia |
+| LB | Líbano |
+| LS | Lesoto |
+| LR | Libéria |
+| LY | Líbia |
+| LI | Liechtenstein |
+| LT | Lituânia |
+| LU | Luxemburgo |
+| MO | Macau |
+| MK | Macedônia |
+| MG | Madagascar |
+| MW | Malaui |
+| MY | Malásia |
+| MV | Maldivas |
+| ML | Mali |
+| MT | Malta |
+| MR | Mauritânia |
+| MU | Maurício |
+| MX | México |
+| MD | Moldávia |
+| MC | Mônaco |
+| MN | Mongólia |
+| ME | Montenegro |
+| MA | Marrocos |
+| MZ | Moçambique |
+| MM | Mianmar |
+| NA | Namíbia |
+| NP | Nepal |
+| NL | Países Baixos |
+| NC | Nova Caledônia |
+| NZ | Nova Zelândia |
+| NI | Nicarágua |
+| NE | Níger |
+| NG | Nigéria |
+| KP | Coreia do Norte |
+| NO | Noruega |
+| OM | Omã |
+| PK | Paquistão |
+| PS | Palestina |
+| PA | Panamá |
+| PG | Papua Nova Guiné |
+| PY | Paraguai |
+| PE | Peru |
+| PH | Filipinas |
+| PL | Polônia |
+| PT | Portugal |
+| PR | Porto Rico |
+| QA | Catar |
+| CD | República Democrática do Congo |
+| RO | Romênia |
+| RU | Rússia |
+| RW | Ruanda |
+| WS | Samoa |
+| SM | San Marino |
+| ST | São Tomé e Príncipe |
+| SA | Arábia Saudita |
+| SN | Senegal |
+| RS | Sérvia |
+| SC | Seicheles |
+| SL | Serra Leoa |
+| SG | Singapura |
+| SK | Eslováquia |
+| SI | Eslovênia |
+| SB | Ilhas Salomão |
+| SO | Somália |
+| ZA | África do Sul |
+| KR | Coreia do Sul |
+| SS | Sudão do Sul |
+| ES | Espanha |
+| LK | Sri Lanka |
+| LC | Santa Lúcia |
+| VC | São Vicente e Granadinas |
+| SD | Sudão |
+| SR | Suriname |
+| SZ | Suazilândia |
+| SE | Suécia |
+| CH | Suíça |
+| SY | Síria |
+| TW | Taiwan |
+| TJ | Tajiquistão |
+| TZ | Tanzânia |
+| TH | Tailândia |
+| TG | Togo |
+| TO | Tonga |
+| TT | Trinidad e Tobago |
+| TN | Tunísia |
+| TR | Turquia |
+| TM | Turcomenistão |
+| UG | Uganda |
+| UA | Ucrânia |
+| AE | Emirados Árabes Unidos |
+| GB | Reino Unido |
+| US | Estados Unidos |
+| UY | Uruguai |
+| UZ | Uzbequistão |
+| VU | Vanuatu |
+| VE | Venezuela |
+| VN | Vietnã |
+| YE | Iêmen |
+| ZM | Zâmbia |
+| ZW | Zimbábue |
+
 ## Códigos de Campos
