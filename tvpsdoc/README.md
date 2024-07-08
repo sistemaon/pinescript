@@ -67,6 +67,8 @@ IN Other timeframes and data > Calculated variables = The script colors the plot
 O link do [this] deveria referenciar a parte do link sobre cores de gradiente.
 [this](https://www.tradingview.com/pine-script-docs/concepts/colors/#colorfrom_gradient)
 
+IN  Other timeframes and data > request.economic() = See the [Country/region codes]() section for a complete list of codes this function supports.
+O [Country/region codes]() deveria referenciar a parte do "Country/region codes" para o link "https://www.tradingview.com/pine-script-docs/concepts/other-timeframes-and-data/#countryregion-codes" e não para o "https://www.tradingview.com/pine-script-docs/concepts/other-timeframes-and-data/#other-timeframes-and-data"
+[Country/region codes](https://www.tradingview.com/pine-script-docs/concepts/other-timeframes-and-data/#countryregion-codes)
 
-
-**No link https://br.tradingview.com/pine-script-reference/v5/#var_currency.KRW (é para referir a moeda sul coreana won, e não venceu)**
+**No link sobre a constante CURRENCY.KRW https://br.tradingview.com/pine-script-reference/v5/#var_currency.KRW (é para referir a moeda sul coreana won, e não venceu)**

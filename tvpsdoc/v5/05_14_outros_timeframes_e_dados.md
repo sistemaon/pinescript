@@ -1613,7 +1613,7 @@ Cada tabela possui as seguintes três colunas:
 - A terceira coluna lista os IDs "string" para o argumento `financial_id` em [request.financial()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.financial).
 
 > __Observação!__\
-> As tabelas nestas seções são bastante extensas, pois existem muitos argumentos `financial_id` disponíveis. Use a opção __"Clique para mostrar/ocultar" ("_Click to show/hide_")__ acima de cada tabela para alternar sua visibilidade.
+> As tabelas nestas seções são bastante extensas, pois existem muitos argumentos `financial_id` disponíveis.
 
 ### Demonstrações de Resultados
 
@@ -1790,8 +1790,6 @@ Esta tabela lista as métricas disponíveis que fornecem informações sobre com
 
 Esta tabela contém uma variedade de métricas estatísticas, incluindo índices financeiros comumente usados.
 
-Clique para mostrar/ocultar
-
 | Métrica Financeira | Período | ID Financeiro |
 | --- | --- | --- |
 | [Acréscimos](https://br.tradingview.com/support/solutions/43000597073) | FQ, FH, FY | ACCRUALS_RATIO |
@@ -1867,7 +1865,7 @@ Clique para mostrar/ocultar
 | [Total de ações ordinárias em circulação](https://br.tradingview.com/support/solutions/43000670331) | FQ, FH, FY | TOTAL_SHARES_OUTSTANDING |
 | [Índice Zmijewski](https://br.tradingview.com/support/solutions/43000597850) | FQ, FY | ZMIJEWSKI_SCORE |
 
-<!-- ## `request.economic()`
+## `request.economic()`
 
 A função [request.economic()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.economic) fornece aos scripts a capacidade de recuperar dados econômicos para um país ou região especificado, incluindo informações sobre o estado da economia (PIB, taxa de inflação, etc.) ou de uma indústria específica (produção de aço, leitos de UTI, etc.).
 
@@ -1877,7 +1875,7 @@ Abaixo está a assinatura desta função:
 request.economic(country_code, field, gaps, ignore_invalid_symbol) → series float
 ```
 
-O parâmetro `country_code` aceita uma "string simples" representando o identificador do país ou região para o qual solicitar dados econômicos (por exemplo, "US", "EU", etc.). Consulte a seção [Códigos de País/Região](./05_14_outros_timeframes_e_dados.md#códigos-de-país-região) para uma lista completa de códigos que esta função suporta. Note que as métricas econômicas disponíveis dependem do país ou região especificado na chamada da função.
+O parâmetro `country_code` aceita uma "string simples" representando o identificador do país ou região para o qual solicitar dados econômicos (por exemplo, "US", "EU", etc.). Consulte a seção [Códigos de País/Região](./05_14_outros_timeframes_e_dados.md#códigos-de-paísregião) para uma lista completa de códigos que esta função suporta. Note que as métricas econômicas disponíveis dependem do país ou região especificado na chamada da função.
 
 O parâmetro `field` especifica a métrica que a função irá solicitar. A seção [Códigos de Campos](./05_14_outros_timeframes_e_dados.md#códigos-de-campos) cobre todas as métricas acessíveis e os países/regiões para os quais estão disponíveis.
 
@@ -1902,7 +1900,7 @@ float minRate = ta.min(gdpqq)
 //@variable The color of the `gdpqq` plot.
 color rateColor = switch
     gdpqq >= 0 => color.from_gradient(gdpqq, 0, maxRate, color.purple, color.blue)
-    => color.from_gradient(gdpqq, minRate, 0, color.red, color.purple)
+    =>            color.from_gradient(gdpqq, minRate, 0, color.red, color.purple)
 
 // Plot the results.
 plot(gdpqq, "US GDP Growth Rate", rateColor, style = plot.style_area)
@@ -1913,4 +1911,8 @@ __Note que:__
 - Este exemplo não inclui um argumento `gaps` na chamada [request.economic()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.economic), então a função usa o padrão [barmerge.gaps_off](https://br.tradingview.com/pine-script-reference/v5/#var_barmerge.gaps_off). Em outras palavras, ela retorna o último valor recuperado quando novos dados ainda não estão disponíveis.
 
 > __Observação!__\
-> As tabelas nas seções abaixo são bastante grandes, pois existem muitos argumentos `country_code` e `field` disponíveis. Use a opção **"Clique para mostrar/ocultar"** acima de cada tabela para alternar sua visibilidade. -->
+> As tabelas nas seções abaixo são bastante grandes, pois existem muitos argumentos `country_code` e `field` disponíveis.
+
+## Códigos de País/Região
+
+## Códigos de Campos
