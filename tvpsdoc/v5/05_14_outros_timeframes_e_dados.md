@@ -1877,7 +1877,7 @@ request.economic(country_code, field, gaps, ignore_invalid_symbol) → series fl
 
 O parâmetro `country_code` aceita uma "string simples" representando o identificador do país ou região para o qual solicitar dados econômicos (por exemplo, "US", "EU", etc.). Consulte a seção [Códigos de País/Região](./05_14_outros_timeframes_e_dados.md#códigos-de-paísregião) para uma lista completa de códigos que esta função suporta. Note que as métricas econômicas disponíveis dependem do país ou região especificado na chamada da função.
 
-O parâmetro `field` especifica a métrica que a função irá solicitar. A seção [Códigos de Campos](./05_14_outros_timeframes_e_dados.md#códigos-de-campos) cobre todas as métricas acessíveis e os países/regiões para os quais estão disponíveis.
+O parâmetro `field` especifica a métrica que a função irá solicitar. A seção [Códigos de Campos](./05_14_outros_timeframes_e_dados.md#códigos-de-campo) cobre todas as métricas acessíveis e os países/regiões para os quais estão disponíveis.
 
 Para uma explicação detalhada dos dois últimos parâmetros desta função, consulte a seção [Características Comuns](./05_14_outros_timeframes_e_dados.md#características-comuns) no topo desta página.
 
@@ -1917,7 +1917,7 @@ __Note que:__
 
 A tabela nesta seção lista todos os códigos de país/região disponíveis para uso com [request.economic()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.economic). A primeira coluna da tabela contém os valores "string" que representam o código do país ou região, e a segunda coluna contém os nomes correspondentes dos países/regiões.
 
-É importante notar que o valor usado como argumento `country_code` determina quais [códigos de campo](./05_14_outros_timeframes_e_dados.md#códigos-de-campos) são acessíveis para a função.
+É importante notar que o valor usado como argumento `country_code` determina quais [códigos de campo](./05_14_outros_timeframes_e_dados.md#códigos-de-campo) são acessíveis para a função.
 
 | `country_code` | Nome do país/região |
 | --- | --- |
@@ -2123,4 +2123,327 @@ A tabela nesta seção lista todos os códigos de país/região disponíveis par
 | ZM | Zâmbia |
 | ZW | Zimbábue |
 
-## Códigos de Campos
+## Códigos de Campo
+
+A tabela nesta seção lista os códigos de campo disponíveis para uso com [request.economic()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.economic). A primeira coluna contém os valores "string" usados como argumento `field`, e a segunda coluna contém os nomes de cada métrica e links para o nosso Centro de Ajuda com informações adicionais, incluindo os países/regiões para os quais estão disponíveis.
+
+| `field` | Nome da métrica |
+| --- | --- |
+| AA | [Pedidos de Asilo](https://br.tradingview.com/support/solutions/43000650926) |
+| ACR | [API Crude Runs](https://br.tradingview.com/support/solutions/43000650920) |
+| AE | [Exportações de Automóveis](https://br.tradingview.com/support/solutions/43000650927) |
+| AHE | [Ganho Médio por Hora](https://br.tradingview.com/support/solutions/43000650928) |
+| AHO | [API Heating Oil](https://br.tradingview.com/support/solutions/43000650924) |
+| AWH | [Horas Semanais Médias](https://br.tradingview.com/support/solutions/43000650929) |
+| BBS | [Balanço Patrimonial dos Bancos](https://br.tradingview.com/support/solutions/43000650932) |
+| BCLI | [Indicador de Clima de Negócios](https://br.tradingview.com/support/solutions/43000650935) |
+| BCOI | [Índice de Confiança Empresarial](https://br.tradingview.com/support/solutions/43000650936) |
+| BI | [Inventários de Negócios](https://br.tradingview.com/support/solutions/43000650937) |
+| BLR | [Taxa de Empréstimo Bancário](https://br.tradingview.com/support/solutions/43000650933) |
+| BOI | [Índice de Otimismo Empresarial NFIB](https://br.tradingview.com/support/solutions/43000651133) |
+| BOT | [Balança Comercial](https://br.tradingview.com/support/solutions/43000650930) |
+| BP | [Licenças de Construção](https://br.tradingview.com/support/solutions/43000650934) |
+| BR | [Falências](https://br.tradingview.com/support/solutions/43000650931) |
+| CA | [Conta Corrente](https://br.tradingview.com/support/solutions/43000650988) |
+| CAG | [Conta Corrente para PIB](https://br.tradingview.com/support/solutions/43000650987) |
+| CAP | [Produção de Carros](https://br.tradingview.com/support/solutions/43000650945) |
+| CAR | [Registros de Carros](https://br.tradingview.com/support/solutions/43000650946) |
+| CBBS | [Balanço do Banco Central](https://br.tradingview.com/support/solutions/43000650952) |
+| CCC | [Mudança na Contagem de Requerentes](https://br.tradingview.com/support/solutions/43000650959) |
+| CCI | [Índice de Confiança do Consumidor](https://br.tradingview.com/support/solutions/43000650966) |
+| CCOS | [Estoques de Petróleo Bruto de Cushing](https://br.tradingview.com/support/solutions/43000650989) |
+| CCP | [Preços ao Consumidor Núcleo](https://br.tradingview.com/support/solutions/43000650974) |
+| CCPI | [CPI Núcleo](https://br.tradingview.com/support/solutions/43000650973) |
+| CCPT | [Tendências de Preços de Confiança do Consumidor](https://br.tradingview.com/support/solutions/43000650967) |
+| CCR | [Crédito ao Consumidor](https://br.tradingview.com/support/solutions/43000650968) |
+| CCS | [Gastos com Cartão de Crédito](https://br.tradingview.com/support/solutions/43000650982) |
+| CEP | [Produção de Cimento](https://br.tradingview.com/support/solutions/43000650951) |
+| CF | [Fluxos de Capital](https://br.tradingview.com/support/solutions/43000650944) |
+| CFNAI | [Índice de Atividade Nacional do Fed de Chicago](https://br.tradingview.com/support/solutions/43000650957) |
+| CI | [Importações de Petróleo Bruto API](https://br.tradingview.com/support/solutions/43000650918) |
+| CIND | [Índice Coincidente](https://br.tradingview.com/support/solutions/43000650960) |
+| CIR | [Taxa de Inflação Núcleo, YoY](https://br.tradingview.com/support/solutions/43000650975) |
+| CJC | [Reivindicações Continuadas de Desemprego](https://br.tradingview.com/support/solutions/43000650971) |
+| CN | [Número de Cushing API](https://br.tradingview.com/support/solutions/43000650921) |
+| COI | [Importações de Petróleo Bruto](https://br.tradingview.com/support/solutions/43000650983) |
+| COIR | [Importações de Petróleo Bruto da Rússia](https://br.tradingview.com/support/solutions/43000679670) |
+| CONSTS | [Gastos com Construção](https://br.tradingview.com/support/solutions/43000650965) |
+| COP | [Produção de Petróleo Bruto](https://br.tradingview.com/support/solutions/43000650984) |
+| COR | [Plataformas de Petróleo Bruto](https://br.tradingview.com/support/solutions/43000650985) |
+| CORD | [Pedidos de Construção, YoY](https://br.tradingview.com/support/solutions/43000650963) |
+| CORPI | [Índice de Corrupção](https://br.tradingview.com/support/solutions/43000650980) |
+| CORR | [Ranking de Corrupção](https://br.tradingview.com/support/solutions/43000650981) |
+| COSC | [Mudança nos Estoques de Petróleo Bruto](https://br.tradingview.com/support/solutions/43000650986) |
+| COUT | [Produção da Construção, YoY](https://br.tradingview.com/support/solutions/43000650964) |
+| CP | [Produção de Cobre](https://br.tradingview.com/support/solutions/43000650972) |
+| CPCEPI | [Índice de Preços PCE Núcleo](https://br.tradingview.com/support/solutions/43000650976) |
+| CPI | [Índice de Preços ao Consumidor](https://br.tradingview.com/support/solutions/43000650969) |
+| CPIHU | [CPI Habitação Utilidades](https://br.tradingview.com/support/solutions/43000650939) |
+| CPIM | [CPI Mediano](https://br.tradingview.com/support/solutions/43000650940) |
+| CPIT | [CPI Transporte](https://br.tradingview.com/support/solutions/43000650941) |
+| CPITM | [CPI Média Aparada](https://br.tradingview.com/support/solutions/43000650942) |
+| CPMI | [PMI de Chicago](https://br.tradingview.com/support/solutions/43000650958) |
+| CPPI | [Índice de Preços ao Produtor Núcleo](https://br.tradingview.com/support/solutions/43000650977) |
+| CPR | [Lucros Corporativos](https://br.tradingview.com/support/solutions/43000650978) |
+| CRLPI | [Índice de Preços de Cereais](https://br.tradingview.com/support/solutions/43000679669) |
+| CRR | [Razão de Reserva em Dinheiro](https://br.tradingview.com/support/solutions/43000650950) |
+| CS | [Gastos do Consumidor](https://br.tradingview.com/support/solutions/43000650970) |
+| CSC | [Mudança nos Estoques de Petróleo Bruto API](https://br.tradingview.com/support/solutions/43000650919) |
+| CSHPI | [Índice de Preços de Casas Case Shiller](https://br.tradingview.com/support/solutions/43000650947) |
+| CSHPIMM | [Índice de Preços de Casas Case Shiller, MoM](https://br.tradingview.com/support/solutions/43000650948) |
+| CSHPIYY | [Índice de Preços de Casas Case Shiller, YoY](https://br.tradingview.com/support/solutions/43000650949) |
+| CSS | [Vendas em Cadeias de Lojas](https://br.tradingview.com/support/solutions/43000650954) |
+| CTR | [Taxa de Imposto Corporativo](https://br.tradingview.com/support/solutions/43000650979) |
+| CU | [Utilização da Capacidade](https://br.tradingview.com/support/solutions/43000650943) |
+| DFMI | [Índice de Manufatura do Fed de Dallas](https://br.tradingview.com/support/solutions/43000650990) |
+| DFP | [Produção de Combustível Destilado](https://br.tradingview.com/support/solutions/43000650996) |
+| DFS | [Estoques de Destilados](https://br.tradingview.com/support/solutions/43000650997) |
+| DFSI | [Índice de Serviços do Fed de Dallas](https://br.tradingview.com/support/solutions/43000650991) |
+| DFSRI | [Índice de Receitas de Serviços do Fed de Dallas](https://br.tradingview.com/support/solutions/43000650992) |
+| DG | [Crescimento de Depósitos](https://br.tradingview.com/support/solutions/43000650993) |
+| DGO | [Pedidos de Bens Duráveis](https://br.tradingview.com/support/solutions/43000651000) |
+| DGOED | [Pedidos de Bens Duráveis Excluindo Defesa](https://br.tradingview.com/support/solutions/43000650998) |
+| DGOET | [Pedidos de Bens Duráveis Excluindo Transporte](https://br.tradingview.com/support/solutions/43000650999) |
+| DIR | [Taxa de Juros de Depósitos](https://br.tradingview.com/support/solutions/43000650994) |
+| DPI | [Renda Pessoal Disponível](https://br.tradingview.com/support/solutions/43000650995) |
+| DRPI | [Índice de Preços de Laticínios](https://br.tradingview.com/support/solutions/43000679668) |
+| DS | [Estoques de Destilados API](https://br.tradingview.com/support/solutions/43000650922) |
+| DT | [Comércio de Distribuição CBI](https://br.tradingview.com/support/solutions/43000650938) |
+| EC | [Mudança no Emprego ADP](https://br.tradingview.com/support/solutions/43000650917) |
+| ED | [Dívida Externa](https://br.tradingview.com/support/solutions/43000651012) |
+| EDBR | [Ranking de Facilidade para Fazer Negócios](https://br.tradingview.com/support/solutions/43000651001) |
+| EHS | [Vendas de Casas Existentes](https://br.tradingview.com/support/solutions/43000651009) |
+| ELP | [Produção de Eletricidade](https://br.tradingview.com/support/solutions/43000651004) |
+| EMC | [Mudança no Emprego](https://br.tradingview.com/support/solutions/43000651006) |
+| EMCI | [Índice de Custo do Emprego](https://br.tradingview.com/support/solutions/43000651007) |
+| EMP | [Pessoas Empregadas](https://br.tradingview.com/support/solutions/43000651005) |
+| EMR | [Taxa de Emprego](https://br.tradingview.com/support/solutions/43000651008) |
+| EOI | [Índice de Otimismo Econômico](https://br.tradingview.com/support/solutions/43000651002) |
+| EP | [Preços de Exportação](https://br.tradingview.com/support/solutions/43000651011) |
+| ESI | [Índice de Sentimento Econômico ZEW](https://br.tradingview.com/support/solutions/43000651213) |
+| EWS | [Pesquisa dos Observadores da Economia](https://br.tradingview.com/support/solutions/43000651003) |
+| EXP | [Exportações](https://br.tradingview.com/support/solutions/43000651010) |
+| EXPYY | [Exportações, YoY](https://br.tradingview.com/support/solutions/43000679671) |
+| FAI | [Investimento em Ativos Fixos](https://br.tradingview.com/support/solutions/43000651016) |
+| FBI | [Investimento Estrangeiro em Títulos](https://br.tradingview.com/support/solutions/43000651018) |
+| FDI | [Investimento Direto Estrangeiro](https://br.tradingview.com/support/solutions/43000651019) |
+| FE | [Despesa Fiscal](https://br.tradingview.com/support/solutions/43000651015) |
+| FER | [Reservas de Câmbio Estrangeiro](https://br.tradingview.com/support/solutions/43000651020) |
+| FI | [Inflação de Alimentos, YoY](https://br.tradingview.com/support/solutions/43000651017) |
+| FO | [Pedidos de Fábrica](https://br.tradingview.com/support/solutions/43000651014) |
+| FOET | [Pedidos de Fábrica Excluindo Transporte](https://br.tradingview.com/support/solutions/43000651013) |
+| FPI | [Índice de Preços de Alimentos](https://br.tradingview.com/support/solutions/43000679667) |
+| FSI | [Investimento Estrangeiro em Ações](https://br.tradingview.com/support/solutions/43000651021) |
+| FTE | [Emprego em Tempo Integral](https://br.tradingview.com/support/solutions/43000651022) |
+| FYGDPG | [Crescimento do PIB Anual Completo](https://br.tradingview.com/support/solutions/43000679672) |
+| GASP | [Preços da Gasolina](https://br.tradingview.com/support/solutions/43000651040) |
+| GBP | [Orçamento do Governo](https://br.tradingview.com/support/solutions/43000651050) |
+| GBV | [Valor do Orçamento do Governo](https://br.tradingview.com/support/solutions/43000651049) |
+| GCI | [Índice de Competitividade](https://br.tradingview.com/support/solutions/43000650961) |
+| GCR | [Classificação de Competitividade](https://br.tradingview.com/support/solutions/43000650962) |
+| GD | [Dívida do Governo](https://br.tradingview.com/support/solutions/43000651052) |
+| GDG | [Dívida do Governo em Relação ao PIB](https://br.tradingview.com/support/solutions/43000651051) |
+| GDP | [Produto Interno Bruto](https://br.tradingview.com/support/solutions/43000651038) |
+| GDPA | [PIB da Agricultura](https://br.tradingview.com/support/solutions/43000651025) |
+| GDPC | [PIB da Construção](https://br.tradingview.com/support/solutions/43000651026) |
+| GDPCP | [PIB a Preços Constantes](https://br.tradingview.com/support/solutions/43000651023) |
+| GDPD | [Deflator do PIB](https://br.tradingview.com/support/solutions/43000651024) |
+| GDPGA | [Crescimento Anualizado do PIB](https://br.tradingview.com/support/solutions/43000651033) |
+| GDPMAN | [PIB da Manufatura](https://br.tradingview.com/support/solutions/43000651027) |
+| GDPMIN | [PIB da Mineração](https://br.tradingview.com/support/solutions/43000651028) |
+| GDPPA | [PIB da Administração Pública](https://br.tradingview.com/support/solutions/43000651029) |
+| GDPPC | [PIB Per Capita](https://br.tradingview.com/support/solutions/43000651035) |
+| GDPPCP | [PIB Per Capita, PPP](https://br.tradingview.com/support/solutions/43000651036) |
+| GDPQQ | [Taxa de Crescimento do PIB](https://br.tradingview.com/support/solutions/43000651034) |
+| GDPS | [PIB dos Serviços](https://br.tradingview.com/support/solutions/43000651030) |
+| GDPSA | [Vendas do PIB](https://br.tradingview.com/support/solutions/43000651037) |
+| GDPT | [PIB dos Transportes](https://br.tradingview.com/support/solutions/43000651031) |
+| GDPU | [PIB das Utilidades](https://br.tradingview.com/support/solutions/43000651032) |
+| GDPYY | [PIB, YoY](https://br.tradingview.com/support/solutions/43000651039) |
+| GDTPI | [Índice de Preços do Comércio Global de Laticínios](https://br.tradingview.com/support/solutions/43000651043) |
+| GFCF | [Formação Bruta de Capital Fixo](https://br.tradingview.com/support/solutions/43000651060) |
+| GNP | [Produto Nacional Bruto](https://br.tradingview.com/support/solutions/43000651061) |
+| GP | [Produção de Ouro](https://br.tradingview.com/support/solutions/43000651044) |
+| GPA | [Folhas de Pagamento do Governo](https://br.tradingview.com/support/solutions/43000651053) |
+| GPRO | [Produção de Gasolina](https://br.tradingview.com/support/solutions/43000651041) |
+| GR | [Receitas do Governo](https://br.tradingview.com/support/solutions/43000651054) |
+| GRES | [Reservas de Ouro](https://br.tradingview.com/support/solutions/43000651045) |
+| GS | [Estoques de Gasolina API](https://br.tradingview.com/support/solutions/43000650923) |
+| GSC | [Estoque de Grãos Milho](https://br.tradingview.com/support/solutions/43000651057) |
+| GSCH | [Mudança nos Estoques de Gasolina](https://br.tradingview.com/support/solutions/43000651042) |
+| GSG | [Gastos do Governo para o PIB](https://br.tradingview.com/support/solutions/43000651055) |
+| GSP | [Gastos do Governo](https://br.tradingview.com/support/solutions/43000651056) |
+| GSS | [Estoque de Grãos Soja](https://br.tradingview.com/support/solutions/43000651058) |
+| GSW | [Estoque de Grãos Trigo](https://br.tradingview.com/support/solutions/43000651059) |
+| GTB | [Balança Comercial de Bens](https://br.tradingview.com/support/solutions/43000651046) |
+| HB | [Leitos Hospitalares](https://br.tradingview.com/support/solutions/43000651067) |
+| HDG | [Dívida das Famílias para o PIB](https://br.tradingview.com/support/solutions/43000651068) |
+| HDI | [Dívida das Famílias para Renda](https://br.tradingview.com/support/solutions/43000651069) |
+| HICP | [Índice Harmonizado de Preços ao Consumidor](https://br.tradingview.com/support/solutions/43000651062) |
+| HIRMM | [Taxa de Inflação Harmonizada, MoM](https://br.tradingview.com/support/solutions/43000679673) |
+| HIRYY | [Taxa de Inflação Harmonizada, YoY](https://br.tradingview.com/support/solutions/43000679674) |
+| HMI | [Índice de Mercado Imobiliário NAHB](https://br.tradingview.com/support/solutions/43000651132) |
+| HOR | [Taxa de Propriedade de Casas](https://br.tradingview.com/support/solutions/43000651065) |
+| HOS | [Estoques de Óleo de Aquecimento](https://br.tradingview.com/support/solutions/43000651063) |
+| HOSP | [Hospitais](https://br.tradingview.com/support/solutions/43000651066) |
+| HPI | [Índice de Preços de Casas](https://br.tradingview.com/support/solutions/43000651071) |
+| HPIMM | [Índice de Preços de Casas, MoM](https://br.tradingview.com/support/solutions/43000679678) |
+| HPIYY | [Índice de Preços de Casas, YoY](https://br.tradingview.com/support/solutions/43000679679) |
+| HS | [Empréstimos Habitacionais](https://br.tradingview.com/support/solutions/43000651064) |
+| HSP | [Gastos das Famílias](https://br.tradingview.com/support/solutions/43000651070) |
+| HST | [Inícios de Construção de Casas](https://br.tradingview.com/support/solutions/43000651072) |
+| IC | [Mudanças nos Inventários](https://br.tradingview.com/support/solutions/43000650956) |
+| ICUB | [Leitos de UTI](https://br.tradingview.com/support/solutions/43000651073) |
+| IE | [Expectativas de Inflação](https://br.tradingview.com/support/solutions/43000651081) |
+| IFOCC | [IFO Avaliação da Situação Empresarial](https://br.tradingview.com/support/solutions/43000651074) |
+| IFOE | [IFO Expectativas de Desenvolvimento Empresarial](https://br.tradingview.com/support/solutions/43000651075) |
+| IJC | [Reivindicações Iniciais de Desemprego](https://br.tradingview.com/support/solutions/43000651084) |
+| IMP | [Importações](https://br.tradingview.com/support/solutions/43000651076) |
+| IMPYY | [Importações, YoY](https://br.tradingview.com/support/solutions/43000679681) |
+| INBR | [Taxa Interbancária](https://br.tradingview.com/support/solutions/43000651085) |
+| INTR | [Taxa de Juros](https://br.tradingview.com/support/solutions/43000651086) |
+| IPA | [Endereços IP](https://br.tradingview.com/support/solutions/43000651088) |
+| IPMM | [Produção Industrial, MoM](https://br.tradingview.com/support/solutions/43000651078) |
+| IPRI | [Preços de Importação](https://br.tradingview.com/support/solutions/43000651077) |
+| IPYY | [Produção Industrial, YoY](https://br.tradingview.com/support/solutions/43000651079) |
+| IRMM | [Taxa de Inflação, MoM](https://br.tradingview.com/support/solutions/43000651082) |
+| IRYY | [Taxa de Inflação, YoY](https://br.tradingview.com/support/solutions/43000651083) |
+| IS | [Sentimento Industrial](https://br.tradingview.com/support/solutions/43000651080) |
+| ISP | [Velocidade da Internet](https://br.tradingview.com/support/solutions/43000651087) |
+| JA | [Anúncios de Emprego](https://br.tradingview.com/support/solutions/43000651091) |
+| JAR | [Relação de Empregos para Candidaturas](https://br.tradingview.com/support/solutions/43000651090) |
+| JC | [Cortes de Empregos Challenger](https://br.tradingview.com/support/solutions/43000650955) |
+| JC4W | [Média de 4 Semanas de Reivindicações de Desemprego](https://br.tradingview.com/support/solutions/43000651089) |
+| JO | [Ofertas de Emprego](https://br.tradingview.com/support/solutions/43000651092) |
+| JV | [Vagas de Emprego](https://br.tradingview.com/support/solutions/43000651093) |
+| KFMI | [Índice de Manufatura do Fed de Kansas](https://br.tradingview.com/support/solutions/43000651094) |
+| LB | [Empréstimos para Bancos](https://br.tradingview.com/support/solutions/43000651104) |
+| LC | [Custos Laborais](https://br.tradingview.com/support/solutions/43000651101) |
+| LEI | [Índice Econômico Líder](https://br.tradingview.com/support/solutions/43000651102) |
+| LFPR | [Taxa de Participação na Força de Trabalho](https://br.tradingview.com/support/solutions/43000651100) |
+| LG | [Crescimento de Empréstimos, YoY](https://br.tradingview.com/support/solutions/43000651106) |
+| LIVRR | [Injeções de Liquidez via Repo Reverso](https://br.tradingview.com/support/solutions/43000651103) |
+| LMIC | [Índice de Gestores de Logística - Atual](https://br.tradingview.com/support/solutions/43000651096) |
+| LMICI | [Custos de Inventário do Índice de Gestores de Logística](https://br.tradingview.com/support/solutions/43000651095) |
+| LMIF | [Índice de Gestores de Logística - Futuro](https://br.tradingview.com/support/solutions/43000651097) |
+| LMITP | [Preços de Transporte do Índice de Gestores de Logística](https://br.tradingview.com/support/solutions/43000651098) |
+| LMIWP | [Preços de Armazém do Índice de Gestores de Logística](https://br.tradingview.com/support/solutions/43000651099) |
+| LPS | [Empréstimos para o Setor Privado](https://br.tradingview.com/support/solutions/43000651105) |
+| LR | [Taxa de Empréstimo do Banco Central](https://br.tradingview.com/support/solutions/43000650953) |
+| LTUR | [Taxa de Desemprego de Longo Prazo](https://br.tradingview.com/support/solutions/43000651107) |
+| LWF | [Salário Mínimo Familiar](https://br.tradingview.com/support/solutions/43000679691) |
+| LWI | [Salário Mínimo Individual](https://br.tradingview.com/support/solutions/43000679702) |
+| M0 | [Oferta Monetária M0](https://br.tradingview.com/support/solutions/43000651125) |
+| M1 | [Oferta Monetária M1](https://br.tradingview.com/support/solutions/43000651126) |
+| M2 | [Oferta Monetária M2](https://br.tradingview.com/support/solutions/43000651127) |
+| M3 | [Oferta Monetária M3](https://br.tradingview.com/support/solutions/43000651128) |
+| MA | [Aprovações de Hipotecas](https://br.tradingview.com/support/solutions/43000651130) |
+| MAPL | [Aplicações de Hipotecas](https://br.tradingview.com/support/solutions/43000651129) |
+| MCE | [Expectativas do Consumidor de Michigan](https://br.tradingview.com/support/solutions/43000651119) |
+| MCEC | [Condições Econômicas Atuais de Michigan](https://br.tradingview.com/support/solutions/43000651120) |
+| MD | [Médicos](https://br.tradingview.com/support/solutions/43000651117) |
+| ME | [Despesa Militar](https://br.tradingview.com/support/solutions/43000651122) |
+| MGDPYY | [PIB Mensal, YoY](https://br.tradingview.com/support/solutions/43000679714) |
+| MIE1Y | [Expectativas de Inflação de Michigan](https://br.tradingview.com/support/solutions/43000651121) |
+| MIE5Y | [Expectativas de Inflação de Michigan a 5 Anos](https://br.tradingview.com/support/solutions/43000651118) |
+| MIP | [Produção de Mineração, YoY](https://br.tradingview.com/support/solutions/43000651124) |
+| MMI | [Índice de Mercado de Hipotecas MBA](https://br.tradingview.com/support/solutions/43000651108) |
+| MO | [Pedidos de Máquinas](https://br.tradingview.com/support/solutions/43000651111) |
+| MP | [Folhas de Pagamento de Manufatura](https://br.tradingview.com/support/solutions/43000651113) |
+| MPI | [Índice de Preços de Carnes](https://br.tradingview.com/support/solutions/43000679666) |
+| MPRMM | [Produção de Manufatura, MoM](https://br.tradingview.com/support/solutions/43000651114) |
+| MPRYY | [Produção de Manufatura, YoY](https://br.tradingview.com/support/solutions/43000651115) |
+| MR | [Taxa de Hipoteca](https://br.tradingview.com/support/solutions/43000651131) |
+| MRI | [Índice de Refinanceamento de Hipotecas MBA](https://br.tradingview.com/support/solutions/43000651109) |
+| MS | [Vendas de Manufatura](https://br.tradingview.com/support/solutions/43000651116) |
+| MTO | [Pedidos de Ferramentas de Máquinas](https://br.tradingview.com/support/solutions/43000651112) |
+| MW | [Salários Mínimos](https://br.tradingview.com/support/solutions/43000651123) |
+| NDCGOEA | [Pedidos de Bens de Capital Não-Defensivos Excluindo Aeronaves](https://br.tradingview.com/support/solutions/43000651148) |
+| NEGTB | [Déficit Comercial de Bens com Países Fora da UE](https://br.tradingview.com/support/solutions/43000651047) |
+| NFP | [Folhas de Pagamento Não-Agrícolas](https://br.tradingview.com/support/solutions/43000651141) |
+| NGI | [Importações de Gás Natural](https://br.tradingview.com/support/solutions/43000679719) |
+| NGIR | [Importações de Gás Natural da Rússia](https://br.tradingview.com/support/solutions/43000679721) |
+| NGSC | [Mudança nos Estoques de Gás Natural](https://br.tradingview.com/support/solutions/43000651136) |
+| NHPI | [Índice de Preços de Casas Nacionais](https://br.tradingview.com/support/solutions/43000651135) |
+| NHS | [Vendas de Casas Novas](https://br.tradingview.com/support/solutions/43000651137) |
+| NHSMM | [Vendas de Casas Novas, MoM](https://br.tradingview.com/support/solutions/43000651138) |
+| NMPMI | [PMI Não-Manufatureiro](https://br.tradingview.com/support/solutions/43000651143) |
+| NO | [Novos Pedidos](https://br.tradingview.com/support/solutions/43000651139) |
+| NODXMM | [Exportações Domésticas Não-Petrolíferas, MoM](https://br.tradingview.com/support/solutions/43000651144) |
+| NODXYY | [Exportações Domésticas Não-Petrolíferas, YoY](https://br.tradingview.com/support/solutions/43000651145) |
+| NOE | [Exportações Não-Petrolíferas](https://br.tradingview.com/support/solutions/43000651142) |
+| NPP | [Folhas de Pagamento Não-Agrícolas Privadas](https://br.tradingview.com/support/solutions/43000651140) |
+| NURS | [Enfermeiros](https://br.tradingview.com/support/solutions/43000651146) |
+| NYESMI | [Índice de Manufatura do Empire State de Nova York](https://br.tradingview.com/support/solutions/43000651134) |
+| OE | [Exportações de Petróleo](https://br.tradingview.com/support/solutions/43000651147) |
+| OPI | [Índice de Preços de Óleos](https://br.tradingview.com/support/solutions/43000679665) |
+| PCEPI | [Índice de Preços PCE](https://br.tradingview.com/support/solutions/43000651149) |
+| PDG | [Dívida Privada em Relação ao PIB](https://br.tradingview.com/support/solutions/43000651160) |
+| PFMI | [Índice de Manufatura do Fed da Filadélfia](https://br.tradingview.com/support/solutions/43000651158) |
+| PHSIMM | [Índice de Vendas de Casas Pendentes, MoM](https://br.tradingview.com/support/solutions/43000651152) |
+| PHSIYY | [Índice de Vendas de Casas Pendentes, YoY](https://br.tradingview.com/support/solutions/43000651153) |
+| PI | [Renda Pessoal](https://br.tradingview.com/support/solutions/43000651155) |
+| PIN | [Investimento Privado](https://br.tradingview.com/support/solutions/43000651161) |
+| PIND | [Índice de Compras MBA](https://br.tradingview.com/support/solutions/43000651110) |
+| PITR | [Taxa de Imposto de Renda Pessoal](https://br.tradingview.com/support/solutions/43000651154) |
+| POP | [População](https://br.tradingview.com/support/solutions/43000651159) |
+| PPI | [Índice de Preços ao Produtor](https://br.tradingview.com/support/solutions/43000651165) |
+| PPII | [Índice de Preços ao Produtor de Insumos](https://br.tradingview.com/support/solutions/43000651164) |
+| PPIMM | [Inflação de Preços ao Produtor, MoM](https://br.tradingview.com/support/solutions/43000679724) |
+| PPIYY | [Índice de Preços ao Produtor, YoY](https://br.tradingview.com/support/solutions/43000651163) |
+| PRI | [Importações de Produtos API](https://br.tradingview.com/support/solutions/43000650925) |
+| PROD | [Produtividade](https://br.tradingview.com/support/solutions/43000651166) |
+| PS | [Poupança Pessoal](https://br.tradingview.com/support/solutions/43000651156) |
+| PSC | [Crédito ao Setor Privado](https://br.tradingview.com/support/solutions/43000651162) |
+| PSP | [Gastos Pessoais](https://br.tradingview.com/support/solutions/43000651157) |
+| PTE | [Emprego em Tempo Parcial](https://br.tradingview.com/support/solutions/43000651151) |
+| PUAC | [Reivindicações de Assistência ao Desemprego Pandêmico](https://br.tradingview.com/support/solutions/43000651150) |
+| RAM | [Idade de Aposentadoria dos Homens](https://br.tradingview.com/support/solutions/43000651177) |
+| RAW | [Idade de Aposentadoria das Mulheres](https://br.tradingview.com/support/solutions/43000651178) |
+| RCR | [Execuções de Refino de Petróleo Bruto](https://br.tradingview.com/support/solutions/43000651168) |
+| REM | [Remessas](https://br.tradingview.com/support/solutions/43000651169) |
+| RFMI | [Índice de Manufatura do Fed de Richmond](https://br.tradingview.com/support/solutions/43000651181) |
+| RFMSI | [Índice de Remessas de Manufatura do Fed de Richmond](https://br.tradingview.com/support/solutions/43000651182) |
+| RFSI | [Índice de Serviços do Fed de Richmond](https://br.tradingview.com/support/solutions/43000651183) |
+| RI | [Índice Redbook](https://br.tradingview.com/support/solutions/43000651167) |
+| RIEA | [Inventários de Varejo Excluindo Automóveis](https://br.tradingview.com/support/solutions/43000651171) |
+| RPI | [Índice de Preços de Varejo](https://br.tradingview.com/support/solutions/43000651172) |
+| RR | [Taxa de Recompra](https://br.tradingview.com/support/solutions/43000651170) |
+| RRR | [Taxa de Recompra Reversa](https://br.tradingview.com/support/solutions/43000651180) |
+| RSEA | [Vendas no Varejo Excluindo Automóveis](https://br.tradingview.com/support/solutions/43000651173) |
+| RSEF | [Vendas no Varejo Excluindo Combustível](https://br.tradingview.com/support/solutions/43000651174) |
+| RSMM | [Vendas no Varejo, MoM](https://br.tradingview.com/support/solutions/43000651175) |
+| RSYY | [Vendas no Varejo, YoY](https://br.tradingview.com/support/solutions/43000651176) |
+| RTI | [Índice Tankan da Reuters](https://br.tradingview.com/support/solutions/43000651179) |
+| SBSI | [Índice de Sentimento de Pequenas Empresas](https://br.tradingview.com/support/solutions/43000651187) |
+| SFHP | [Preços de Casas Unifamiliares](https://br.tradingview.com/support/solutions/43000651186) |
+| SP | [Produção de Aço](https://br.tradingview.com/support/solutions/43000651191) |
+| SPI | [Índice de Preços do Açúcar](https://br.tradingview.com/support/solutions/43000679563) |
+| SS | [Sentimento de Serviços](https://br.tradingview.com/support/solutions/43000651185) |
+| SSR | [Taxa de Seguridade Social](https://br.tradingview.com/support/solutions/43000651190) |
+| SSRC | [Taxa de Seguridade Social para Empresas](https://br.tradingview.com/support/solutions/43000651188) |
+| SSRE | [Taxa de Seguridade Social para Empregados](https://br.tradingview.com/support/solutions/43000651189) |
+| STR | [Taxa de Imposto sobre Vendas](https://br.tradingview.com/support/solutions/43000651184) |
+| TA | [Chegadas de Turistas](https://br.tradingview.com/support/solutions/43000651199) |
+| TAXR | [Receita Fiscal](https://br.tradingview.com/support/solutions/43000651192) |
+| TCB | [Saldo de Caixa do Tesouro](https://br.tradingview.com/support/solutions/43000651200) |
+| TCPI | [CPI de Tóquio](https://br.tradingview.com/support/solutions/43000651196) |
+| TI | [Índice de Terrorismo](https://br.tradingview.com/support/solutions/43000651194) |
+| TII | [Índice de Indústria Terciária](https://br.tradingview.com/support/solutions/43000651195) |
+| TOT | [Termos de Troca](https://br.tradingview.com/support/solutions/43000651193) |
+| TR | [Receitas do Turismo](https://br.tradingview.com/support/solutions/43000651198) |
+| TVS | [Vendas Totais de Veículos](https://br.tradingview.com/support/solutions/43000651197) |
+| UC | [Mudança no Desemprego](https://br.tradingview.com/support/solutions/43000651202) |
+| UP | [Pessoas Desempregadas](https://br.tradingview.com/support/solutions/43000651201) |
+| UR | [Taxa de Desemprego](https://br.tradingview.com/support/solutions/43000651203) |
+| WAG | [Salários](https://br.tradingview.com/support/solutions/43000651205) |
+| WES | [Vendas de Armas](https://br.tradingview.com/support/solutions/43000651207) |
+| WG | [Crescimento dos Salários, YoY](https://br.tradingview.com/support/solutions/43000651206) |
+| WHS | [Salários de Alta Qualificação](https://br.tradingview.com/support/solutions/43000679725) |
+| WI | [Inventários no Atacado](https://br.tradingview.com/support/solutions/43000651208) |
+| WLS | [Salários de Baixa Qualificação](https://br.tradingview.com/support/solutions/43000679727) |
+| WM | [Salários na Manufatura](https://br.tradingview.com/support/solutions/43000651204) |
+| WPI | [Índice de Preços no Atacado](https://br.tradingview.com/support/solutions/43000651209) |
+| WS | [Vendas no Atacado](https://br.tradingview.com/support/solutions/43000651210) |
+| YUR | [Taxa de Desemprego Juvenil](https://br.tradingview.com/support/solutions/43000651211) |
+| ZCC | [Condições Atuais ZEW](https://br.tradingview.com/support/solutions/43000651212) |
