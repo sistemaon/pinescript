@@ -1785,3 +1785,132 @@ Esta tabela lista as métricas disponíveis que fornecem informações sobre com
 | [Venda de ativos fixos e negócios](https://br.tradingview.com/support/solutions/43000564158) | FQ, FH, FY, TTM | SALES_OF_BUSINESS |
 | [Venda/vencimento de investimentos](https://br.tradingview.com/support/solutions/43000564161) | FQ, FH, FY | SALES_OF_INVESTMENTS |
 | [Total de dividendos em dinheiro pagos](https://br.tradingview.com/support/solutions/43000564183) | FQ, FH, FY, TTM | TOTAL_CASH_DIVIDENDS_PAID |
+
+### Estatísticas
+
+Esta tabela contém uma variedade de métricas estatísticas, incluindo índices financeiros comumente usados.
+
+Clique para mostrar/ocultar
+
+| Métrica Financeira | Período | ID Financeiro |
+| --- | --- | --- |
+| [Acréscimos](https://br.tradingview.com/support/solutions/43000597073) | FQ, FH, FY | ACCRUALS_RATIO |
+| [Altman Z-score](https://br.tradingview.com/support/solutions/43000597092) | FQ, FH, FY | ALTMAN_Z_SCORE |
+| [Giro de ativos](https://br.tradingview.com/support/solutions/43000597022) | FQ, FH, FY | ASSET_TURNOVER |
+| [Beneish M-score](https://br.tradingview.com/support/solutions/43000597835) | FQ, FH, FY | BENEISH_M_SCORE |
+| [Rendimento de recompra %](https://br.tradingview.com/support/solutions/43000597088) | FQ, FH, FY | BUYBACK_YIELD |
+| [Índice COGS para receita](https://br.tradingview.com/support/solutions/43000597026) | FQ, FH, FY | COGS_TO_REVENUE |
+| [Ciclo de conversão de caixa](https://br.tradingview.com/support/solutions/43000597089) | FQ, FY | CASH_CONVERSION_CYCLE |
+| [Rácio de caixa para dívida](https://br.tradingview.com/support/solutions/43000597023) | FQ, FH, FY | CASH_TO_DEBT |
+| [Índice de liquidez corrente](https://br.tradingview.com/support/solutions/43000597051) | FQ, FH, FY | CURRENT_RATIO |
+| [Dias de inventário](https://br.tradingview.com/support/solutions/43000597028) | FQ, FY | DAYS_INVENT |
+| [Dias a pagar](https://br.tradingview.com/support/solutions/43000597029) | FQ, FY | DAYS_PAY |
+| [Dias de vendas pendentes](https://br.tradingview.com/support/solutions/43000597030) | FQ, FY | DAY_SALES_OUT |
+| [Dívida para EBITDA](https://br.tradingview.com/support/solutions/43000597032) | FQ, FH, FY | DEBT_TO_EBITDA |
+| [Rácio de dívida para ativos](https://br.tradingview.com/support/solutions/43000597031) | FQ, FH, FY | DEBT_TO_ASSET |
+| [Rácio de dívida para patrimônio](https://br.tradingview.com/support/solutions/43000597078) | FQ, FH, FY | DEBT_TO_EQUITY |
+| [Rácio de dívida para receita](https://br.tradingview.com/support/solutions/43000597033) | FQ, FH, FY | DEBT_TO_REVENUE |
+| [Índice de pagamento de dividendos %](https://br.tradingview.com/support/solutions/43000597738) | FQ, FH, FY, TTM | DIVIDEND_PAYOUT_RATIO |
+| [Rendimento de dividendos %](https://br.tradingview.com/support/solutions/43000597817) | FQ, FH, FY | DIVIDENDS_YIELD |
+| [Dividendos por ação - emissão primária de ações ordinárias](https://br.tradingview.com/support/solutions/43000670334) | FQ, FH, FY, TTM | DPS_COMMON_STOCK_PRIM_ISSUE |
+| [Margem EBITDA %](https://br.tradingview.com/support/solutions/43000597075) | FQ, FH, FY, TTM | EBITDA_MARGIN |
+| [Crescimento básico do EPS em um ano](https://br.tradingview.com/support/solutions/43000597069) | FQ, FH, FY, TTM | EARNINGS_PER_SHARE_BASIC_ONE_YEAR_GROWTH |
+| [Crescimento diluído do EPS em um ano](https://br.tradingview.com/support/solutions/43000597071) | FQ, FH, FY | EARNINGS_PER_SHARE_DILUTED_ONE_YEAR_GROWTH |
+| [Estimativas de EPS](https://br.tradingview.com/support/solutions/43000597066) | FQ, FH, FY | EARNINGS_ESTIMATE |
+| [Taxa de juros efetiva sobre dívida %](https://br.tradingview.com/support/solutions/43000597034) | FQ, FH, FY | EFFECTIVE_INTEREST_RATE_ON_DEBT |
+| [Valor empresarial](https://br.tradingview.com/support/solutions/43000597077) | FQ, FH, FY | ENTERPRISE_VALUE |
+| [Rácio de valor empresarial para EBIT](https://br.tradingview.com/support/solutions/43000597063) | FQ, FH, FY | EV_EBIT |
+| [Rácio de valor empresarial para EBITDA](https://br.tradingview.com/support/solutions/43000597064) | FQ, FH, FY | ENTERPRISE_VALUE_EBITDA |
+| [Rácio de valor empresarial para receita](https://br.tradingview.com/support/solutions/43000597065) | FQ, FH, FY | EV_REVENUE |
+| [Rácio de patrimônio para ativos](https://br.tradingview.com/support/solutions/43000597035) | FQ, FH, FY | EQUITY_TO_ASSET |
+| [Ações flutuantes em circulação](https://br.tradingview.com/support/solutions/43000670341) | FY | FLOAT_SHARES_OUTSTANDING |
+| [Margem de fluxo de caixa livre %](https://br.tradingview.com/support/solutions/43000597813) | FQ, FH, FY | FREE_CASH_FLOW_MARGIN |
+| [Fator Fulmer H](https://br.tradingview.com/support/solutions/43000597847) | FQ, FY | FULMER_H_FACTOR |
+| [Rácio de goodwill para ativos](https://br.tradingview.com/support/solutions/43000597036) | FQ, FH, FY | GOODWILL_TO_ASSET |
+| [Número de Graham](https://br.tradingview.com/support/solutions/43000597084) | FQ, FY | GRAHAM_NUMBERS |
+| [Margem bruta %](https://br.tradingview.com/support/solutions/43000597811) | FQ, FH, FY, TTM | GROSS_MARGIN |
+| [Rácio de lucro bruto para ativos](https://br.tradingview.com/support/solutions/43000597087) | FQ, FY | GROSS_PROFIT_TO_ASSET |
+| [Cobertura de juros](https://br.tradingview.com/support/solutions/43000597037) | FQ, FH, FY | INTERST_COVER |
+| [Rácio de inventário para receita](https://br.tradingview.com/support/solutions/43000597047) | FQ, FH, FY | INVENT_TO_REVENUE |
+| [Rotatividade de inventário](https://br.tradingview.com/support/solutions/43000597046) | FQ, FH, FY | INVENT_TURNOVER |
+| [Índice KZ](https://br.tradingview.com/support/solutions/43000597844) | FY | KZ_INDEX |
+| [Rácio de dívida de longo prazo para ativos totais](https://br.tradingview.com/support/solutions/43000597048) | FQ, FH, FY | LONG_TERM_DEBT_TO_ASSETS |
+| [Valor atual líquido por ação](https://br.tradingview.com/support/solutions/43000597085) | FQ, FY | NCAVPS_RATIO |
+| [Lucro líquido por empregado](https://br.tradingview.com/support/solutions/43000597082) | FY | NET_INCOME_PER_EMPLOYEE |
+| [Margem líquida %](https://br.tradingview.com/support/solutions/43000597074) | FQ, FH, FY, TTM | NET_MARGIN |
+| [Número de empregados](https://br.tradingview.com/support/solutions/43000597080) | FY | NUMBER_OF_EMPLOYEES |
+| [Rendimento operacional %](https://br.tradingview.com/support/solutions/43000684072) | FQ, FH, FY | OPERATING_EARNINGS_YIELD |
+| [Margem operacional %](https://br.tradingview.com/support/solutions/43000597076) | FQ, FH, FY | OPERATING_MARGIN |
+| [Índice PEG](https://br.tradingview.com/support/solutions/43000597090) | FQ, FY | PEG_RATIO |
+| [Piotroski F-score](https://br.tradingview.com/support/solutions/43000597734) | FQ, FH, FY | PIOTROSKI_F_SCORE |
+| [Rácio preço/lucro futuro](https://br.tradingview.com/support/solutions/43000597831) | FQ, FY | PRICE_EARNINGS_FORWARD |
+| [Rácio preço/vendas futuro](https://br.tradingview.com/support/solutions/43000597832) | FQ, FY | PRICE_SALES_FORWARD |
+| [Índice de qualidade](https://br.tradingview.com/support/solutions/43000597086) | FQ, FH, FY | QUALITY_RATIO |
+| [Índice rápido](https://br.tradingview.com/support/solutions/43000597050) | FQ, FH, FY | QUICK_RATIO |
+| [Rácio de P&D para receita](https://br.tradingview.com/support/solutions/43000597739) | FQ, FH, FY | RESEARCH_AND_DEVELOP_TO_REVENUE |
+| [Retorno sobre ativos %](https://br.tradingview.com/support/solutions/43000597054) | FQ, FH, FY | RETURN_ON_ASSETS |
+| [Retorno sobre patrimônio comum %](https://br.tradingview.com/support/solutions/43000656797) | FQ, FH, FY | RETURN_ON_COMMON_EQUITY |
+| [Retorno sobre patrimônio %](https://br.tradingview.com/support/solutions/43000597021) | FQ, FH, FY | RETURN_ON_EQUITY |
+| [Retorno sobre patrimônio ajustado ao valor contábil %](https://br.tradingview.com/support/solutions/43000597055) | FQ, FH, FY | RETURN_ON_EQUITY_ADJUST_TO_BOOK |
+| [Retorno sobre capital investido %](https://br.tradingview.com/support/solutions/43000597056) | FQ, FH, FY | RETURN_ON_INVESTED_CAPITAL |
+| [Retorno sobre ativos tangíveis %](https://br.tradingview.com/support/solutions/43000597052) | FQ, FH, FY | RETURN_ON_TANG_ASSETS |
+| [Retorno sobre patrimônio tangível %](https://br.tradingview.com/support/solutions/43000597053) | FQ, FH, FY | RETURN_ON_TANG_EQUITY |
+| [Estimativas de receita](https://br.tradingview.com/support/solutions/43000597067) | FQ, FH, FY | SALES_ESTIMATES |
+| [Crescimento de receita em um ano](https://br.tradingview.com/support/solutions/43000597068) | FQ, FH, FY, TTM | REVENUE_ONE_YEAR_GROWTH |
+| [Receita por empregado](https://br.tradingview.com/support/solutions/43000597081) | FY | REVENUE_PER_EMPLOYEE |
+| [Rácio de recompra de ações %](https://br.tradingview.com/support/solutions/43000597057) | FQ, FH, FY | SHARE_BUYBACK_RATIO |
+| [Índice Sloan %](https://br.tradingview.com/support/solutions/43000597058) | FQ, FH, FY | SLOAN_RATIO |
+| [Índice Springate](https://br.tradingview.com/support/solutions/43000597848) | FQ, FY | SPRINGATE_SCORE |
+| [Taxa de crescimento sustentável](https://br.tradingview.com/support/solutions/43000597736) | FQ, FY | SUSTAINABLE_GROWTH_RATE |
+| [Rácio de patrimônio comum tangível](https://br.tradingview.com/support/solutions/43000597079) | FQ, FH, FY | TANGIBLE_COMMON_EQUITY_RATIO |
+| [Q de Tobin (aproximado)](https://br.tradingview.com/support/solutions/43000597834) | FQ, FH, FY | TOBIN_Q_RATIO |
+| [Total de ações ordinárias em circulação](https://br.tradingview.com/support/solutions/43000670331) | FQ, FH, FY | TOTAL_SHARES_OUTSTANDING |
+| [Índice Zmijewski](https://br.tradingview.com/support/solutions/43000597850) | FQ, FY | ZMIJEWSKI_SCORE |
+
+<!-- ## `request.economic()`
+
+A função [request.economic()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.economic) fornece aos scripts a capacidade de recuperar dados econômicos para um país ou região especificado, incluindo informações sobre o estado da economia (PIB, taxa de inflação, etc.) ou de uma indústria específica (produção de aço, leitos de UTI, etc.).
+
+Abaixo está a assinatura desta função:
+
+```c
+request.economic(country_code, field, gaps, ignore_invalid_symbol) → series float
+```
+
+O parâmetro `country_code` aceita uma "string simples" representando o identificador do país ou região para o qual solicitar dados econômicos (por exemplo, "US", "EU", etc.). Consulte a seção [Códigos de País/Região](./05_14_outros_timeframes_e_dados.md#códigos-de-país-região) para uma lista completa de códigos que esta função suporta. Note que as métricas econômicas disponíveis dependem do país ou região especificado na chamada da função.
+
+O parâmetro `field` especifica a métrica que a função irá solicitar. A seção [Códigos de Campos](./05_14_outros_timeframes_e_dados.md#códigos-de-campos) cobre todas as métricas acessíveis e os países/regiões para os quais estão disponíveis.
+
+Para uma explicação detalhada dos dois últimos parâmetros desta função, consulte a seção [Características Comuns](./05_14_outros_timeframes_e_dados.md#características-comuns) no topo desta página.
+
+Este exemplo simples solicita a taxa de crescimento do Produto Interno Bruto ("GDPQQ") para os Estados Unidos ("US") usando [request.economic()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.economic), e então [plota](./05_15_plots.md) seu valor no gráfico com uma [cor gradiente](https://br.tradingview.com/pine-script-reference/v5/#fun_color.from_gradient):
+
+![request.economic()](./imgs/Other-timeframes-and-data-Request-economic-1.B5XiS4A4_2mUcAV.webp)
+
+```c
+//@version=5
+indicator("Requesting economic data demo")
+
+//@variable The GDP growth rate for the US economy.
+float gdpqq = request.economic("US", "GDPQQ")
+
+//@variable The all-time maximum growth rate.
+float maxRate = ta.max(gdpqq)
+//@variable The all-time minimum growth rate.
+float minRate = ta.min(gdpqq)
+
+//@variable The color of the `gdpqq` plot.
+color rateColor = switch
+    gdpqq >= 0 => color.from_gradient(gdpqq, 0, maxRate, color.purple, color.blue)
+    => color.from_gradient(gdpqq, minRate, 0, color.red, color.purple)
+
+// Plot the results.
+plot(gdpqq, "US GDP Growth Rate", rateColor, style = plot.style_area)
+```
+
+__Note que:__
+
+- Este exemplo não inclui um argumento `gaps` na chamada [request.economic()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.economic), então a função usa o padrão [barmerge.gaps_off](https://br.tradingview.com/pine-script-reference/v5/#var_barmerge.gaps_off). Em outras palavras, ela retorna o último valor recuperado quando novos dados ainda não estão disponíveis.
+
+> __Observação!__\
+> As tabelas nas seções abaixo são bastante grandes, pois existem muitos argumentos `country_code` e `field` disponíveis. Use a opção **"Clique para mostrar/ocultar"** acima de cada tabela para alternar sua visibilidade. -->
