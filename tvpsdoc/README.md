@@ -71,4 +71,8 @@ IN  Other timeframes and data > request.economic() = See the [Country/region cod
 O [Country/region codes]() deveria referenciar a parte do "Country/region codes" para o link "https://www.tradingview.com/pine-script-docs/concepts/other-timeframes-and-data/#countryregion-codes" e não para o "https://www.tradingview.com/pine-script-docs/concepts/other-timeframes-and-data/#other-timeframes-and-data"
 [Country/region codes](https://www.tradingview.com/pine-script-docs/concepts/other-timeframes-and-data/#countryregion-codes)
 
+IN Plots > Introduction > Calls to plot() can, however, be designed to plot conditionally in two ways, which we cover in the [Conditional plots]() section of this page.
+Deveria referenciar com (https://www.tradingview.com/pine-script-docs/concepts/plots/#plotting-conditionally)
+e não com (https://www.tradingview.com/pine-script-docs/concepts/plots/#plots).
+
 **No link sobre a constante CURRENCY.KRW https://br.tradingview.com/pine-script-reference/v5/#var_currency.KRW (é para referir a moeda sul coreana won, e não venceu)**
