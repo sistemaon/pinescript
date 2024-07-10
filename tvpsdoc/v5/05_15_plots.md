@@ -331,7 +331,7 @@ plot(close, color = close > open ? color.green : color.red) //🠆 "series color
 plot(close, color = color.new(color.silver, close > open ? 40 : 0)) //🠆 "series color"
 ```
 
-<!-- ## Escala
+## Escala
 
 Nem todos os valores podem ser plotados em qualquer lugar. O espaço visual do seu script é sempre limitado por limites superiores e inferiores que são ajustados dinamicamente com os valores plotados. Um indicador [RSI](https://br.tradingview.com/support/solutions/43000502338) plotará valores entre 0 e 100, por isso geralmente é exibido em um _painel_ distinto — ou área — acima ou abaixo do gráfico. Se os valores do RSI fossem plotados como uma sobreposição no gráfico, o efeito seria distorcer a escala de preço normal do símbolo, a menos que estivesse próximo do intervalo de 0 a 100 do RSI. Este exemplo mostra uma linha de sinal RSI e uma linha central no nível 50, com o script rodando em um painel separado:
 
@@ -362,7 +362,7 @@ Isto é o que acontece:
 
 O gráfico está no símbolo BTCUSD, cujos preços de [fechamento](https://br.tradingview.com/pine-script-reference/v5/#var_close) estão em torno de 40000 durante este período. Plotar valores na faixa de 40000 torna as plotagens de RSI na faixa de 0 a 100 indiscerníveis. As mesmas plotagens distorcidas ocorreriam se colocasse o indicador [RSI](https://br.tradingview.com/support/solutions/43000502338) no gráfico como uma sobreposição.
 
-### Mesclando dois indicadores
+<!-- ### Mesclando dois indicadores
 
 Se planeja mesclar dois sinais em um script, primeiro considere a escala de cada um. É impossível, por exemplo, plotar corretamente um [RSI](https://br.tradingview.com/support/solutions/43000502338) e um [MACD](https://br.tradingview.com/support/solutions/43000502344) no mesmo espaço visual do script, pois o RSI tem uma faixa fixa (0 a 100), enquanto o MACD não tem, pois plota médias móveis calculadas sobre o preço.
 
