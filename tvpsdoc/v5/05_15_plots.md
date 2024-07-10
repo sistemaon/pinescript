@@ -165,7 +165,7 @@ Se `true`, os resultados plotados serão exibidos no painel principal do gráfic
 ## Plotagem Condicional
 
 Chamadas de [plot()](https://br.tradingview.com/pine-script-reference/v5/#fun_plot) não podem ser usadas em estruturas condicionais como [if](https://br.tradingview.com/pine-script-reference/v5/#kw_if), mas podem ser controladas variando seus valores plotados ou suas cores. Quando nenhuma plotagem é necessária, é possível plotar valores [na](https://br.tradingview.com/pine-script-reference/v5/#var_na) ou usar a cor [na](https://br.tradingview.com/pine-script-reference/v5/#var_na) ou qualquer cor com 100 de transparência (o que também a torna invisível).
-<!-- 
+
 ### Controle de Valor
 
 Uma maneira de controlar a exibição das plotagens é plotar valores [na](https://br.tradingview.com/pine-script-reference/v5/#var_na) quando nenhuma plotagem é necessária. Às vezes, valores retornados por funções como [request.security()](https://br.tradingview.com/pine-script-reference/v5/#fun_request%7Bdot%7Dsecurity) retornarão valores [na](https://br.tradingview.com/pine-script-reference/v5/#var_na), quando `gaps = barmerge.gaps_on` é usado, por exemplo. Em ambos os casos, às vezes é útil plotar linhas descontínuas. Este script mostra algumas maneiras de fazer isso:
@@ -269,7 +269,7 @@ __Note que:__
 - A última plotagem está plotando um valor contínuo, mas está definindo a cor da plotagem para [na](https://br.tradingview.com/pine-script-reference/v5/#var_na) quando o valor do pivô muda, então a plotagem não é visível então. Por causa disso, uma plotagem visível só aparecerá na barra seguinte àquela em que plotou usando a cor [na](https://br.tradingview.com/pine-script-reference/v5/#var_na).
 - O ponto azul indica quando um novo pivô alto é detectado e nenhuma plotagem é desenhada entre a barra anterior e aquela. Note como o pivô na barra indicada pela seta acabou de ser detectado na barra em tempo real, três barras depois, e como nenhuma plotagem é desenhada. A plotagem só aparecerá na próxima barra, tornando a plotagem visível __quatro barras__ após o pivô real.
 
-## Levels (_Níveis_)
+<!-- ## Levels (_Níveis_)
 
 O Pine Script tem uma função [hline()](https://br.tradingview.com/pine-script-reference/v5/#fun_hline) para plotar linhas horizontais (veja a página sobre [Níveis](./05_10_levels.md)). A [hline()](https://br.tradingview.com/pine-script-reference/v5/#fun_hline) é útil porque tem alguns estilos de linha indisponíveis com [plot()](https://br.tradingview.com/pine-script-reference/v5/#fun_plot), mas também tem algumas limitações, nomeadamente que não aceita "series color" e que seu parâmetro `price` requer um "input int/float", então não pode variar durante a execução do script.
 
