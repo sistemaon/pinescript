@@ -75,7 +75,7 @@ Chamadas de [plot()](https://br.tradingview.com/pine-script-reference/v5/#fun_pl
 
 Um script só pode plotar no seu próprio espaço visual, seja em um painel ou no gráfico como uma sobreposição. Scripts que rodam em um painel podem apenas [colorir barras](./05_03_coloracao_de_barras.md) na área do gráfico.
 
-<!-- ## Parâmetros de `plot()`
+## Parâmetros de `plot()`
 
 A função [plot()](https://br.tradingview.com/pine-script-reference/v5/#fun_plot) tem a seguinte assinatura:
 
@@ -161,7 +161,7 @@ alertcondition(xUp, "xUp alert", message = 'RSI is bullish at: {{plot("RSI")}}')
 `force_overlay`
 
 Se `true`, os resultados plotados serão exibidos no painel principal do gráfico, mesmo quando o script ocupar um painel separado. Opcional. O valor padrão é `false`.
-
+<!-- 
 ## Plotagem Condicional
 
 Chamadas de [plot()](https://br.tradingview.com/pine-script-reference/v5/#fun_plot) não podem ser usadas em estruturas condicionais como [if](https://br.tradingview.com/pine-script-reference/v5/#kw_if), mas podem ser controladas variando seus valores plotados ou suas cores. Quando nenhuma plotagem é necessária, é possível plotar valores [na](https://br.tradingview.com/pine-script-reference/v5/#var_na) ou usar a cor [na](https://br.tradingview.com/pine-script-reference/v5/#var_na) ou qualquer cor com 100 de transparência (o que também a torna invisível).
@@ -199,10 +199,200 @@ Este script mostra como restringir a plotagem para barras após uma data definid
 indicator("", "", true)
 startInput = input.time(timestamp("2021-01-01"))
 plot(time > startInput ? close : na)
-``` -->
+```
 
-## Controle de Cor
+### Controle de Cor
 
-# Levels (_Níveis_)
+A seção [Coloração Condicional](./05_07_cores.md#coloração-condicional) da página sobre cores discute o controle de cor para plotagens. Veja alguns exemplos.
 
-# Plotagem Condicional
+O valor do parâmetro `color` na [plot()](https://br.tradingview.com/pine-script-reference/v5/#fun_plot) pode ser uma constante, como uma das [cores constantes](./05_07_cores.md#constante-de-cores) incorporadas ou um [literal de cor](./04_09_tipagem_do_sistema.md#color). No Pine Script, o tipo qualificado de tais cores é chamado de __"const color"__ (veja a página do [Sistema de Tipos](./04_09_tipagem_do_sistema.md)). Elas são conhecidas em tempo de compilação:
+
+```c
+//@version=5
+indicator("", "", true)
+plot(close, color = color.gray)
+```
+
+A cor de uma plotagem também pode ser determinada usando informações que são conhecidas apenas quando o script começa a execução na primeira barra histórica de um gráfico (barra zero, ou seja, `bar_index == 0` ou `barstate.isfirst == true`), como será o caso quando as informações necessárias para determinar uma cor dependem do gráfico em que o script está sendo executado. Aqui, calcula-se uma cor de plotagem usando a variável incorporada [syminfo.type](https://br.tradingview.com/pine-script-reference/v5/#var_syminfo%7Bdot%7Dtype), que retorna o tipo do símbolo do gráfico. O tipo qualificado de `plotColor` neste caso será __"simple color"__:
+
+```c
+//@version=5
+indicator("", "", true)
+plotColor = switch syminfo.type
+    "stock"     => color.purple
+    "futures"   => color.red
+    "index"     => color.gray
+    "forex"     => color.fuchsia
+    "crypto"    => color.lime
+    "fund"      => color.orange
+    "dr"        => color.aqua
+    "cfd"       => color.blue
+plot(close, color = plotColor)
+printTable(txt) => var table t = table.new(position.middle_right, 1, 1), table.cell(t, 0, 0, txt, bgcolor = color.yellow)
+printTable(syminfo.type)
+```
+
+As cores das plotagens também podem ser escolhidas através das entradas de um script. Neste caso, a variável `lineColorInput` é do tipo __"input color"__:
+
+```c
+//@version=5
+indicator("", "", true)
+color lineColorInput = input(#1848CC, "Line color")
+plot(close, color = lineColorInput)
+```
+
+Finalmente, as cores das plotagens também podem ser valores _dinâmicos_, ou seja, valores calculados que podem mudar a cada barra. Esses valores são do tipo __"series color"__:
+
+```c
+//@version=5
+indicator("", "", true)
+plotColor = close >= open ? color.lime : color.red
+plot(close, color = plotColor)
+```
+
+Ao plotar níveis de pivô, um requisito comum é evitar a plotagem de transições de níveis. Usar [linhas](./05_12_lines_e_boxes.md) é uma alternativa, mas você também pode usar [plot()](https://br.tradingview.com/pine-script-reference/v5/#fun_plot) desta maneira:
+
+![Controle de cor](./imgs/Plots-PlottingConditionally-02.Dgz5RTVC_Z2npVgz.webp)
+
+```c
+//@version=5
+indicator("Pivot plots", "", true)
+pivotHigh = fixnan(ta.pivothigh(3,3))
+plot(pivotHigh, "High pivot", ta.change(pivotHigh) ? na : color.olive, 3)
+plotchar(ta.change(pivotHigh), "ta.change(pivotHigh)", "•", location.top, size = size.small)
+```
+
+__Note que:__
+
+- É usado `pivotHigh = fixnan(ta.pivothigh(3,3))` para manter os valores de pivô. Como [ta.pivothigh()](https://br.tradingview.com/pine-script-reference/v5/#fun_ta%7Bdot%7Dpivothigh) só retorna um valor quando um novo pivô é encontrado, utiliza [fixnan()](https://br.tradingview.com/pine-script-reference/v5/#fun_fixnan) para preencher as lacunas com o último valor de pivô retornado. As lacunas aqui se referem aos valores [na](https://br.tradingview.com/pine-script-reference/v5/#var_na) que [ta.pivothigh()](https://br.tradingview.com/pine-script-reference/v5/#fun_ta%7Bdot%7Dpivothigh) retorna quando nenhum novo pivô é encontrado.
+- Os pivôs são detectados três barras após ocorrerem pois usam o argumento `3` para ambos os parâmetros `leftbars` e `rightbars` na chamada [ta.pivothigh()](https://br.tradingview.com/pine-script-reference/v5/#fun_ta%7Bdot%7Dpivothigh).
+- A última plotagem está plotando um valor contínuo, mas está definindo a cor da plotagem para [na](https://br.tradingview.com/pine-script-reference/v5/#var_na) quando o valor do pivô muda, então a plotagem não é visível então. Por causa disso, uma plotagem visível só aparecerá na barra seguinte àquela em que plotou usando a cor [na](https://br.tradingview.com/pine-script-reference/v5/#var_na).
+- O ponto azul indica quando um novo pivô alto é detectado e nenhuma plotagem é desenhada entre a barra anterior e aquela. Note como o pivô na barra indicada pela seta acabou de ser detectado na barra em tempo real, três barras depois, e como nenhuma plotagem é desenhada. A plotagem só aparecerá na próxima barra, tornando a plotagem visível __quatro barras__ após o pivô real.
+
+## Levels (_Níveis_)
+
+O Pine Script tem uma função [hline()](https://br.tradingview.com/pine-script-reference/v5/#fun_hline) para plotar linhas horizontais (veja a página sobre [Níveis](./05_10_levels.md)). A [hline()](https://br.tradingview.com/pine-script-reference/v5/#fun_hline) é útil porque tem alguns estilos de linha indisponíveis com [plot()](https://br.tradingview.com/pine-script-reference/v5/#fun_plot), mas também tem algumas limitações, nomeadamente que não aceita "series color" e que seu parâmetro `price` requer um "input int/float", então não pode variar durante a execução do script.
+
+Consegue-se plotar níveis com [plot()](https://br.tradingview.com/pine-script-reference/v5/#fun_plot) de algumas maneiras diferentes. Este mostra um indicador [CCI](https://br.tradingview.com/support/solutions/43000502001) com níveis plotados usando [plot()](https://br.tradingview.com/pine-script-reference/v5/#fun_plot):
+
+![Levels](./imgs/Plots-Levels-01.jio4KIpw_Z2s6Io2.webp)
+
+```c
+//@version=5
+indicator("CCI levels with `plot()`")
+plot(ta.cci(close, 20))
+plot(0,  "Zero", color.gray, 1, plot.style_circles)
+plot(bar_index % 2 == 0 ?  100 : na,  "100", color.lime, 1, plot.style_linebr)
+plot(bar_index % 2 == 0 ? -100 : na, "-100", color.fuchsia, 1, plot.style_linebr)
+plot( 200,  "200", color.green, 2, trackprice = true, show_last = 1, offset = -99999)
+plot(-200, "-200", color.red,   2, trackprice = true, show_last = 1, offset = -99999)
+plot( 300,  "300", color.new(color.green, 50), 1)
+plot(-300, "-300", color.new(color.red, 50),   1)
+```
+
+__Note que:__
+
+- O nível zero é plotado usando [plot.style_circles](https://br.tradingview.com/pine-script-reference/v5/#const_plot%7Bdot%7Dstyle_circles).
+- Os níveis 100 são plotados usando um valor condicional que só plota a cada segunda barra. Para evitar que os valores [na](https://br.tradingview.com/pine-script-reference/v5/#var_na) sejam conectados, o estilo de linha [plot.style_linebr](https://br.tradingview.com/pine-script-reference/v5/#const_plot%7Bdot%7Dstyle_linebr) é usado.
+- Os níveis 200 são plotados usando `trackprice = true` para plotar um padrão distinto de pequenos quadrados que se estendem por toda a largura do espaço visual do script. O `show_last = 1` exibe apenas o último valor plotado, que apareceria como uma linha reta de uma barra se o próximo truque não fosse usado: o `offset = -99999` empurra esse segmento de uma barra para muito longe no passado, de modo que nunca é visível.
+- Os níveis 300 são plotados usando uma linha contínua, mas uma transparência mais leve é usada para torná-los menos proeminentes.
+
+### Offsets
+
+O parâmetro `offset` especifica o deslocamento usado quando a linha é plotada (valores negativos deslocam para o passado, valores positivos deslocam para o futuro). Por exemplo:
+
+```c
+//@version=5
+indicator("", "", true)
+plot(close, color = color.red, offset = -5)
+plot(close, color = color.lime, offset = 5)
+```
+
+![Offsets](./imgs/Plots-Offsets-01.CBzf5b6H_1aubfP.webp)
+
+Como pode ser visto na captura de tela, a série _vermelha_ foi deslocada para a esquerda (já que o valor do argumento é negativo), enquanto a série _verde_ foi deslocada para a direita (seu valor é positivo).
+
+## Limite de Contagem de Plotagem
+
+Cada script é limitado a um máximo de 64 plotagens. Todas as chamadas de `plot*()` e [alertcondition()](https://br.tradingview.com/pine-script-reference/v5/#fun_alertcondition) contam na contagem de plotagens de um script. Alguns tipos de chamadas contam mais de uma vez no total de plotagens.
+
+Chamadas de [plot()](https://br.tradingview.com/pine-script-reference/v5/#fun_plot) contam como uma na contagem total de plotagens se usarem um argumento "const color" para o parâmetro `color`, o que significa que é conhecido em tempo de compilação, por exemplo:
+
+```c
+plot(close, color = color.green)
+```
+
+Quando usam outro tipo qualificado, como qualquer um destes, contam como duas na contagem total de plotagens:
+
+```c
+plot(close, color = syminfo.mintick > 0.0001 ? color.green : color.red) //🠆 "simple color"
+plot(close, color = input.color(color.purple)) //🠆 "input color"
+plot(close, color = close > open ? color.green : color.red) //🠆 "series color"
+plot(close, color = color.new(color.silver, close > open ? 40 : 0)) //🠆 "series color"
+```
+
+## Escala
+
+Nem todos os valores podem ser plotados em qualquer lugar. O espaço visual do seu script é sempre limitado por limites superiores e inferiores que são ajustados dinamicamente com os valores plotados. Um indicador [RSI](https://br.tradingview.com/support/solutions/43000502338) plotará valores entre 0 e 100, por isso geralmente é exibido em um _painel_ distinto — ou área — acima ou abaixo do gráfico. Se os valores do RSI fossem plotados como uma sobreposição no gráfico, o efeito seria distorcer a escala de preço normal do símbolo, a menos que estivesse próximo do intervalo de 0 a 100 do RSI. Este exemplo mostra uma linha de sinal RSI e uma linha central no nível 50, com o script rodando em um painel separado:
+
+![Escala 01](./imgs/Plots-Scale-01.CE6dQl_T_1UEEw.webp)
+
+```c
+//@version=5
+indicator("RSI")
+myRSI = ta.rsi(close, 20)
+bullColor = color.from_gradient(myRSI, 50, 80, color.new(color.lime, 70), color.new(color.lime, 0))
+bearColor = color.from_gradient(myRSI, 20, 50, color.new(color.red,   0), color.new(color.red, 70))
+myRSIColor = myRSI > 50 ? bullColor : bearColor
+plot(myRSI, "RSI", myRSIColor, 3)
+hline(50)
+```
+
+Note que o eixo _y_ do espaço visual do script é dimensionado automaticamente usando a faixa de valores plotados, ou seja, os valores do RSI. Veja a página sobre [Cores](./05_07_cores.md) para mais informações sobre a função [color.from_gradient()](https://br.tradingview.com/pine-script-reference/v5/#fun_color%7Bdot%7Dfrom_gradient) usada no script.
+
+Ao tentar plotar os valores de [fechamento](https://br.tradingview.com/pine-script-reference/v5/#var_close) do símbolo no mesmo espaço adicionando a seguinte linha ao nosso script:
+
+```c
+plot(close)
+```
+
+Isto é o que acontece:
+
+![Escala 02](./imgs/Plots-Scale-02.D8wP6yEJ_Z1txJ3M.webp)
+
+O gráfico está no símbolo BTCUSD, cujos preços de [fechamento](https://br.tradingview.com/pine-script-reference/v5/#var_close) estão em torno de 40000 durante este período. Plotar valores na faixa de 40000 torna as plotagens de RSI na faixa de 0 a 100 indiscerníveis. As mesmas plotagens distorcidas ocorreriam se colocasse o indicador [RSI](https://br.tradingview.com/support/solutions/43000502338) no gráfico como uma sobreposição.
+
+### Mesclando dois indicadores
+
+Se planeja mesclar dois sinais em um script, primeiro considere a escala de cada um. É impossível, por exemplo, plotar corretamente um [RSI](https://br.tradingview.com/support/solutions/43000502338) e um [MACD](https://br.tradingview.com/support/solutions/43000502344) no mesmo espaço visual do script, pois o RSI tem uma faixa fixa (0 a 100), enquanto o MACD não tem, pois plota médias móveis calculadas sobre o preço.
+
+Se ambos os indicadores usarem faixas fixas, pode-se deslocar os valores de um deles para que não se sobreponham. Poderia, por exemplo, plotar tanto o [RSI](https://br.tradingview.com/support/solutions/43000502338) (0 a 100) quanto o [Indicador de Força Verdadeira (TSI)](https://br.tradingview.com/support/solutions/43000592290) _True Strength Index_ (-100 a +100) deslocando um deles. A estratégia aqui será comprimir e deslocar os valores do [TSI](https://br.tradingview.com/support/solutions/43000592290) para que plotem sobre o [RSI](https://br.tradingview.com/support/solutions/43000502338):
+
+![Mesclando dois indicadores](./imgs/Plots-Scale-03.D9mEXIxt_ZtI6jd.webp)
+
+```c
+//@version=5
+indicator("RSI and TSI")
+myRSI = ta.rsi(close, 20)
+bullColor = color.from_gradient(myRSI, 50, 80, color.new(color.lime, 70), color.new(color.lime, 0))
+bearColor = color.from_gradient(myRSI, 20, 50, color.new(color.red,   0), color.new(color.red, 70))
+myRSIColor = myRSI > 50 ? bullColor : bearColor
+plot(myRSI, "RSI", myRSIColor, 3)
+hline(100)
+hline(50)
+hline(0)
+
+// 1. Compress TSI's range from -100/100 to -50/50.
+// 2. Shift it higher by 150, so its -50 min value becomes 100.
+myTSI = 150 + (100 * ta.tsi(close, 13, 25) / 2)
+plot(myTSI, "TSI", color.blue, 2)
+plot(ta.ema(myTSI, 13), "TSI EMA", #FF006E)
+hline(200)
+hline(150)
+```
+
+__Note que:__
+
+- Foram adicionados níveis usando [hline](https://br.tradingview.com/pine-script-reference/v5/#fun_hline) para situar ambos os sinais.
+- Para que ambas as linhas de sinal oscilem na mesma faixa de 100, divide-se o valor do [TSI](https://br.tradingview.com/pine-script-reference/v5/#fun_ta.tsi) por 2, pois tem uma faixa de 200 (-100 a +100). Em seguida, desloca-se esse valor para cima em 150 para que oscile entre 100 e 200, fazendo de 150 sua linha central.
+- As manipulações feitas aqui são típicas dos compromissos necessários para trazer dois indicadores com escalas diferentes no mesmo espaço visual, mesmo quando seus valores, ao contrário do [MACD](https://br.tradingview.com/pine-script-reference/v5/#fun_ta.macd), estão limitados a uma faixa fixa. -->
