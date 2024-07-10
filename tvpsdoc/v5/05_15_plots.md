@@ -269,7 +269,7 @@ __Note que:__
 - A última plotagem está plotando um valor contínuo, mas está definindo a cor da plotagem para [na](https://br.tradingview.com/pine-script-reference/v5/#var_na) quando o valor do pivô muda, então a plotagem não é visível então. Por causa disso, uma plotagem visível só aparecerá na barra seguinte àquela em que plotou usando a cor [na](https://br.tradingview.com/pine-script-reference/v5/#var_na).
 - O ponto azul indica quando um novo pivô alto é detectado e nenhuma plotagem é desenhada entre a barra anterior e aquela. Note como o pivô na barra indicada pela seta acabou de ser detectado na barra em tempo real, três barras depois, e como nenhuma plotagem é desenhada. A plotagem só aparecerá na próxima barra, tornando a plotagem visível __quatro barras__ após o pivô real.
 
-<!-- ## Levels (_Níveis_)
+## Levels (_Níveis_)
 
 O Pine Script tem uma função [hline()](https://br.tradingview.com/pine-script-reference/v5/#fun_hline) para plotar linhas horizontais (veja a página sobre [Níveis](./05_10_levels.md)). A [hline()](https://br.tradingview.com/pine-script-reference/v5/#fun_hline) é útil porque tem alguns estilos de linha indisponíveis com [plot()](https://br.tradingview.com/pine-script-reference/v5/#fun_plot), mas também tem algumas limitações, nomeadamente que não aceita "series color" e que seu parâmetro `price` requer um "input int/float", então não pode variar durante a execução do script.
 
@@ -297,7 +297,7 @@ __Note que:__
 - Os níveis 200 são plotados usando `trackprice = true` para plotar um padrão distinto de pequenos quadrados que se estendem por toda a largura do espaço visual do script. O `show_last = 1` exibe apenas o último valor plotado, que apareceria como uma linha reta de uma barra se o próximo truque não fosse usado: o `offset = -99999` empurra esse segmento de uma barra para muito longe no passado, de modo que nunca é visível.
 - Os níveis 300 são plotados usando uma linha contínua, mas uma transparência mais leve é usada para torná-los menos proeminentes.
 
-### Offsets
+<!-- ### Offsets
 
 O parâmetro `offset` especifica o deslocamento usado quando a linha é plotada (valores negativos deslocam para o passado, valores positivos deslocam para o futuro). Por exemplo:
 
