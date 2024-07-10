@@ -362,7 +362,7 @@ Isto é o que acontece:
 
 O gráfico está no símbolo BTCUSD, cujos preços de [fechamento](https://br.tradingview.com/pine-script-reference/v5/#var_close) estão em torno de 40000 durante este período. Plotar valores na faixa de 40000 torna as plotagens de RSI na faixa de 0 a 100 indiscerníveis. As mesmas plotagens distorcidas ocorreriam se colocasse o indicador [RSI](https://br.tradingview.com/support/solutions/43000502338) no gráfico como uma sobreposição.
 
-<!-- ### Mesclando dois indicadores
+### Mesclando Dois Indicadores
 
 Se planeja mesclar dois sinais em um script, primeiro considere a escala de cada um. É impossível, por exemplo, plotar corretamente um [RSI](https://br.tradingview.com/support/solutions/43000502338) e um [MACD](https://br.tradingview.com/support/solutions/43000502344) no mesmo espaço visual do script, pois o RSI tem uma faixa fixa (0 a 100), enquanto o MACD não tem, pois plota médias móveis calculadas sobre o preço.
 
@@ -395,4 +395,4 @@ __Note que:__
 
 - Foram adicionados níveis usando [hline](https://br.tradingview.com/pine-script-reference/v5/#fun_hline) para situar ambos os sinais.
 - Para que ambas as linhas de sinal oscilem na mesma faixa de 100, divide-se o valor do [TSI](https://br.tradingview.com/pine-script-reference/v5/#fun_ta.tsi) por 2, pois tem uma faixa de 200 (-100 a +100). Em seguida, desloca-se esse valor para cima em 150 para que oscile entre 100 e 200, fazendo de 150 sua linha central.
-- As manipulações feitas aqui são típicas dos compromissos necessários para trazer dois indicadores com escalas diferentes no mesmo espaço visual, mesmo quando seus valores, ao contrário do [MACD](https://br.tradingview.com/pine-script-reference/v5/#fun_ta.macd), estão limitados a uma faixa fixa. -->
+- As manipulações feitas aqui são típicas dos compromissos necessários para trazer dois indicadores com escalas diferentes no mesmo espaço visual, mesmo quando seus valores, ao contrário do [MACD](https://br.tradingview.com/pine-script-reference/v5/#fun_ta.macd), estão limitados a uma faixa fixa.
