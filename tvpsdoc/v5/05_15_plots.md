@@ -297,7 +297,7 @@ __Note que:__
 - Os níveis 200 são plotados usando `trackprice = true` para plotar um padrão distinto de pequenos quadrados que se estendem por toda a largura do espaço visual do script. O `show_last = 1` exibe apenas o último valor plotado, que apareceria como uma linha reta de uma barra se o próximo truque não fosse usado: o `offset = -99999` empurra esse segmento de uma barra para muito longe no passado, de modo que nunca é visível.
 - Os níveis 300 são plotados usando uma linha contínua, mas uma transparência mais leve é usada para torná-los menos proeminentes.
 
-### Offsets
+## Offsets
 
 O parâmetro `offset` especifica o deslocamento usado quando a linha é plotada (valores negativos deslocam para o passado, valores positivos deslocam para o futuro). Por exemplo:
 
