@@ -161,11 +161,11 @@ alertcondition(xUp, "xUp alert", message = 'RSI is bullish at: {{plot("RSI")}}')
 `force_overlay`
 
 Se `true`, os resultados plotados serão exibidos no painel principal do gráfico, mesmo quando o script ocupar um painel separado. Opcional. O valor padrão é `false`.
-<!-- 
+
 ## Plotagem Condicional
 
 Chamadas de [plot()](https://br.tradingview.com/pine-script-reference/v5/#fun_plot) não podem ser usadas em estruturas condicionais como [if](https://br.tradingview.com/pine-script-reference/v5/#kw_if), mas podem ser controladas variando seus valores plotados ou suas cores. Quando nenhuma plotagem é necessária, é possível plotar valores [na](https://br.tradingview.com/pine-script-reference/v5/#var_na) ou usar a cor [na](https://br.tradingview.com/pine-script-reference/v5/#var_na) ou qualquer cor com 100 de transparência (o que também a torna invisível).
-
+<!-- 
 ### Controle de Valor
 
 Uma maneira de controlar a exibição das plotagens é plotar valores [na](https://br.tradingview.com/pine-script-reference/v5/#var_na) quando nenhuma plotagem é necessária. Às vezes, valores retornados por funções como [request.security()](https://br.tradingview.com/pine-script-reference/v5/#fun_request%7Bdot%7Dsecurity) retornarão valores [na](https://br.tradingview.com/pine-script-reference/v5/#var_na), quando `gaps = barmerge.gaps_on` é usado, por exemplo. Em ambos os casos, às vezes é útil plotar linhas descontínuas. Este script mostra algumas maneiras de fazer isso:
