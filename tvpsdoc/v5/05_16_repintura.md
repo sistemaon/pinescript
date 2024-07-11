@@ -52,7 +52,7 @@ Esta página cobre três amplas categorias de causas de _repainting_:
 - [Plotagem no passado](./05_16_repintura.md#plotagem-no-passado)
 - [Variações no conjunto de dados](./05_16_repintura.md#variações-no-conjunto-de-dados)
 
-<!-- ## Cálculos Históricos vs em Tempo Real
+## Cálculos Históricos vs em Tempo Real
 
 ### Valores de Dados Fluidos
 
@@ -133,8 +133,7 @@ plot(ma, "MA", color.black, 2)
 bgcolor(xUp ? color.new(color.lime, 80) : xDn ? color.new(color.fuchsia, 80) : na)
 ```
 
-__Todos esses métodos têm uma coisa em comum: enquanto evitam o _repainting_, eles também acionarão sinais mais tarde do que scripts que fazem repintura. Este é um compromisso inevitável se se deseja evitar o _repainting_. Você não pode ter o melhor dos dois mundos.__ -->
-
+__Todos esses métodos têm uma coisa em comum: enquanto evitam o _repainting_, eles também acionarão sinais mais tarde do que scripts que fazem repintura. Este é um compromisso inevitável se se deseja evitar o _repainting_. Você não pode ter o melhor dos dois mundos.__
 
 
 # Plotagem no Passado
