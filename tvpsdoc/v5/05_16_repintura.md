@@ -40,7 +40,7 @@ Perguntar simplesmente se um script faz repintura é relativamente insignificant
 
 O importante é que entenda como as ferramentas funcionam e se o comportamento delas é compatível com seus objetivos, independentemente de fazerem repintura ou não. Como aprenderá ao ler esta página, _repainting_ é um assunto complexo. Ele tem muitas faces e muitas causas. Mesmo se você não programar em Pine Script, esta página o ajudará a entender a gama de causas que podem levar ao repintura e, possibilitará discussões mais significativas com os autores de scripts.
 
-<!-- ## Para Programadores de Pine Script
+## Para Programadores de Pine Script
 
 Conforme discutido acima, nem todas as formas de comportamento de _repainting_ devem ser evitadas a todo custo, nem todo comportamento potencial de repintura é necessariamente evitável. Esta página o ajude a entender melhor as dinâmicas em jogo para que possa projetar suas ferramentas de negociação com esses comportamentos em mente. O conteúdo desta página deve ajudar a conscientizá-lo sobre erros de codificação comuns que produzem resultados de repintura enganosos.
 
@@ -52,7 +52,7 @@ Esta página cobre três amplas categorias de causas de _repainting_:
 - [Plotagem no passado](./05_16_repintura.md#plotagem-no-passado)
 - [Variações no conjunto de dados](./05_16_repintura.md#variações-no-conjunto-de-dados)
 
-## Cálculos Históricos vs em Tempo Real
+<!-- ## Cálculos Históricos vs em Tempo Real
 
 ### Valores de Dados Fluidos
 
