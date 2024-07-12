@@ -193,7 +193,7 @@ __Note que:__
 - O deslocamento `[1]` na série e o uso de `lookahead = barmerge.lookahead_on` são interdependentes. Um __não__ pode ser removido sem comprometer a integridade da função.
 - Ao contrário de uma chamada simples de [request.security()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.security), essa função wrapper não pode aceitar argumentos de expressão de tupla. Para casos de uso com múltiplos elementos, pode-se passar um [tipo definido pelo usuário](./04_09_tipagem_do_sistema.md#tipos-definidos-pelo-usuário) cujos campos contenham os elementos desejados para solicitação.
 
-<!-- ### Usando `request.security()` em Períodos Menores
+### Usando `request.security()` em Períodos Menores
 
 Alguns scripts usam [request.security()](https://br.tradingview.com/pine-script-reference/v5/#fun_request%7Bdot%7Dsecurity) para solicitar dados de um período __menor__ que o período do gráfico. Isso pode ser útil quando funções especificamente projetadas para lidar com intrabarras em períodos menores são enviadas para baixo no período de tempo. Quando esse tipo de função definida pelo usuário requer a detecção da primeira barra das intrabarras, como a maioria faz, a técnica só funcionará em barras históricas. Isso se deve ao fato de que as intrabarras em tempo real ainda não estão ordenadas. O impacto disso é que esses scripts não podem reproduzir em tempo real seu comportamento em barras históricas. Qualquer lógica que gere alertas, por exemplo, será falha, e uma atualização constante será necessária para recalcular as barras de tempo real passadas como barras históricas.
 
@@ -201,7 +201,7 @@ Quando usados em períodos menores que o gráfico sem funções especializadas c
 
 Por todas essas razões, a menos que entenda as sutilezas de usar [request.security()](https://br.tradingview.com/pine-script-reference/v5/#fun_request%7Bdot%7Dsecurity) em períodos menores que o do gráfico, é melhor evitar usar a função nesses períodos. Scripts de maior qualidade terão lógica para detectar tais anomalias e impedir a exibição de resultados que seriam inválidos quando um período menor é usado.
 
-Para solicitações de dados de períodos menores mais confiáveis, use [request.security_lower_tf()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.security_lower_tf), conforme explicado [nesta](./05_14_outros_timeframes_e_dados.md#dados-lower-timeframe-ltf-timeframe-inferior) seção da página [Outros períodos e dados](./05_14_outros_timeframes_e_dados.md). -->
+Para solicitações de dados de períodos menores mais confiáveis, use [request.security_lower_tf()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.security_lower_tf), conforme explicado [nesta](./05_14_outros_timeframes_e_dados.md#dados-lower-timeframe-ltf-timeframe-inferior) seção da página [Outros períodos e dados](./05_14_outros_timeframes_e_dados.md).
 
 
 # Plotagem no Passado
