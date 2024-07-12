@@ -135,6 +135,74 @@ bgcolor(xUp ? color.new(color.lime, 80) : xDn ? color.new(color.fuchsia, 80) : n
 
 __Todos esses métodos têm uma coisa em comum: enquanto evitam o _repainting_, eles também acionarão sinais mais tarde do que scripts que fazem repintura. Este é um compromisso inevitável se se deseja evitar o _repainting_. Você não pode ter o melhor dos dois mundos.__
 
+### Repintura em Chamadas `request.security()`
+
+A função [request.security()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.security) se comporta de maneira diferente em barras históricas e em tempo real. Em barras históricas, ela retorna apenas valores _confirmados_ de seu contexto solicitado, enquanto em barras de tempo real pode retornar valores _não confirmados_. Quando o script reinicia sua execução, as barras que estavam em estado de tempo real se tornam barras históricas e conterão apenas os valores confirmados nessas barras. Se os valores retornados por [request.security()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.security) flutuarem em barras de tempo real sem confirmação do contexto, o script os repintará quando reiniciar sua execução. Veja a seção [Comportamento histórico e tempo real](./05_14_outros_timeframes_e_dados.md#comportamento-histórico-e-tempo-real) da página [Outros períodos e dados](./05_14_outros_timeframes_e_dados.md) para uma explicação detalhada.
+
+Pode-se garantir que as solicitações de dados de timeframes de tempo maiores retornem apenas valores confirmados em todas as barras, independentemente do estado da barra, deslocando o argumento `expression` em pelo menos uma barra com o operador de referência histórica [[]](https://br.tradingview.com/pine-script-reference/v5/#op_%5B%5D) e usando [barmerge.lookahead_on](https://br.tradingview.com/pine-script-reference/v5/#var_barmerge.lookahead_on) para o argumento `lookahead` na chamada [request.security()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.security), conforme explicado [aqui](./05_14_outros_timeframes_e_dados.md#dados-higher-timeframe-htf-timeframe-superior).
+
+O script abaixo demonstra a diferença entre solicitações de dados HTF que repintam e que não repintam. Ele contém duas chamadas [request.security()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.security). A primeira chamada da função solicita dados de [fechamento](https://br.tradingview.com/pine-script-reference/v5/#var_close) do `higherTimeframe` sem especificação adicional, e a segunda chamada solicita a mesma série com um deslocamento e [barmerge.lookahead_on](https://br.tradingview.com/pine-script-reference/v5/#var_barmerge.lookahead_on).
+
+Como se vê em todas as barras [realtime](https://br.tradingview.com/pine-script-reference/v5/#var_barstate.isrealtime) (aquelas com fundo laranja), o `repaintingClose` contém valores que flutuam sem confirmação do `higherTimeframe`, o que significa que ele _repintará_ quando o script reiniciar sua execução. O `nonRepaintingClose`, por outro lado, se comporta da mesma forma em barras em tempo real e históricas, ou seja, só muda seu valor quando novos dados confirmados estão disponíveis:
+
+![Repintura em chamadas request.security()](./imgs/Repainting-Repainting-request-security-calls-1.DKoD6okt_2uKSkR.webp)
+
+```c
+//@version=5
+indicator("Repainting vs non-repainting `request.security()` demo", overlay = true)
+
+//@variable The timeframe to request data from.
+string higherTimeframe = input.timeframe("30", "Timeframe")
+
+if timeframe.in_seconds() > timeframe.in_seconds(higherTimeframe)
+    runtime.error("The 'Timeframe' input is smaller than the chart's timeframe. Choose a higher timeframe.")
+
+//@variable The current `close` requested from the `higherTimeframe`. Fluctuates without confirmation on realtime bars.
+float repaintingClose = request.security(syminfo.tickerid, higherTimeframe, close)
+//@variable The last confirmed `close` requested from the `higherTimeframe`. 
+// Behaves the same on historical and realtime bars.
+float nonRepaintingClose = request.security(
+     syminfo.tickerid, higherTimeframe, close[1], lookahead = barmerge.lookahead_on
+ )
+
+// Plot the values.
+plot(repaintingClose, "Repainting close", color.new(color.purple, 50), 8)
+plot(nonRepaintingClose, "Non-repainting close", color.teal, 3)
+// Plot a shape when a new `higherTimeframe` starts.
+plotshape(timeframe.change(higherTimeframe), "Timeframe change marker", shape.square, location.top, size = size.small)
+// Color the background on realtime bars.
+bgcolor(barstate.isrealtime ? color.new(color.orange, 60) : na, title = "Realtime bar highlight")
+```
+
+__Note que:__
+
+- Foi usada a função [plotshape()](https://br.tradingview.com/pine-script-reference/v5/#fun_plotshape) para marcar o gráfico quando há uma [mudança](https://br.tradingview.com/pine-script-reference/v5/#fun_timeframe.change) no `higherTimeframe`.
+- Este script produz um [erro de execução](https://br.tradingview.com/pine-script-reference/v5/#fun_runtime.error) se o `higherTimeframe` for menor que o período de tempo do gráfico.
+- Em barras históricas, o `repaintingClose` tem um novo valor no _final_ de cada período de tempo, e o `nonRepaintingClose` tem um novo valor no _início_ de cada período de tempo.
+
+Para facilitar a reutilização, abaixo está uma função `noRepaintSecurity()` simples que pode ser aplicada em seus scripts para solicitar valores de períodos maiores que não repintam:
+
+```c
+//@function Requests non-repainting `expression` values from the context of the `symbol` and `timeframe`.
+noRepaintSecurity(symbol, timeframe, expression) =>
+    request.security(symbol, timeframe, expression[1], lookahead = barmerge.lookahead_on)
+```
+
+__Note que:__
+
+- O deslocamento `[1]` na série e o uso de `lookahead = barmerge.lookahead_on` são interdependentes. Um __não__ pode ser removido sem comprometer a integridade da função.
+- Ao contrário de uma chamada simples de [request.security()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.security), essa função wrapper não pode aceitar argumentos de expressão de tupla. Para casos de uso com múltiplos elementos, pode-se passar um [tipo definido pelo usuário](./04_09_tipagem_do_sistema.md#tipos-definidos-pelo-usuário) cujos campos contenham os elementos desejados para solicitação.
+
+<!-- ### Usando `request.security()` em Períodos Menores
+
+Alguns scripts usam [request.security()](https://br.tradingview.com/pine-script-reference/v5/#fun_request%7Bdot%7Dsecurity) para solicitar dados de um período __menor__ que o período do gráfico. Isso pode ser útil quando funções especificamente projetadas para lidar com intrabarras em períodos menores são enviadas para baixo no período de tempo. Quando esse tipo de função definida pelo usuário requer a detecção da primeira barra das intrabarras, como a maioria faz, a técnica só funcionará em barras históricas. Isso se deve ao fato de que as intrabarras em tempo real ainda não estão ordenadas. O impacto disso é que esses scripts não podem reproduzir em tempo real seu comportamento em barras históricas. Qualquer lógica que gere alertas, por exemplo, será falha, e uma atualização constante será necessária para recalcular as barras de tempo real passadas como barras históricas.
+
+Quando usados em períodos menores que o gráfico sem funções especializadas capazes de distinguir entre intrabarras, [request.security()](https://br.tradingview.com/pine-script-reference/v5/#fun_request%7Bdot%7Dsecurity) retornará apenas o valor da __última__ intrabar na dilatação da barra do gráfico, o que geralmente não é útil e também não se reproduzirá em tempo real, levando ao repintura.
+
+Por todas essas razões, a menos que entenda as sutilezas de usar [request.security()](https://br.tradingview.com/pine-script-reference/v5/#fun_request%7Bdot%7Dsecurity) em períodos menores que o do gráfico, é melhor evitar usar a função nesses períodos. Scripts de maior qualidade terão lógica para detectar tais anomalias e impedir a exibição de resultados que seriam inválidos quando um período menor é usado.
+
+Para solicitações de dados de períodos menores mais confiáveis, use [request.security_lower_tf()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.security_lower_tf), conforme explicado [nesta](./05_14_outros_timeframes_e_dados.md#dados-lower-timeframe-ltf-timeframe-inferior) seção da página [Outros períodos e dados](./05_14_outros_timeframes_e_dados.md). -->
+
 
 # Plotagem no Passado
 
