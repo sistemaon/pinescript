@@ -124,7 +124,7 @@ Três variáveis incorporadas permitem distinguir o tipo de sessão à qual a ba
 - [session.ispremarket](https://br.tradingview.com/pine-script-reference/v5/#var_session%7Bdot%7Dispremarket) retorna `true` quando a barra pertence à sessão estendida que precede o horário de negociação regular.
 - [session.ispostmarket](https://br.tradingview.com/pine-script-reference/v5/#var_session%7Bdot%7Dispostmarket) retorna `true` quando a barra pertence à sessão estendida que segue o horário de negociação regular.
 
-<!-- ## Usando Sessões com `request.security()`
+## Usando Sessões com `request.security()`
 
 Quando sua conta no TradingView fornece acesso a sessões estendidas, você pode optar por ver suas barras com o campo "Configurações/Símbolo/Sessão" "_Settings/Symbol/Session_". Existem dois tipos de sessões:
 
@@ -187,4 +187,4 @@ indicator("Example 1: Regular Session Data")
 t = ticker.new("NASDAQ", "AAPL", syminfo.session)
 regularSessionData = request.security(t, timeframe.period, close, barmerge.gaps_on)
 plot(regularSessionData, style = plot.style_linebr)
-``` -->
+```
