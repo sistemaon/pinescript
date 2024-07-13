@@ -75,7 +75,7 @@ Uma sessão estranha que dura apenas um minuto nas segundas-feiras (2) e sextas-
 
 Uma sessão que começa às 9:00, faz uma pausa das 16:00 às 17:00 e continua até as 20:00. Aplica-se a todos os dias da semana.
 
-<!-- ### Usando Strings de Sessão
+### Usando Strings de Sessão
 
 Propriedades de sessão definidas com strings de sessão são independentes das sessões definidas pela bolsa que determinam quando um instrumento pode ser negociado. Programadores têm total liberdade para criar quaisquer definições de sessão que se adequem ao seu propósito, que geralmente é detectar quando barras pertencem a períodos específicos. Isso é realizado no Pine Script usando uma das duas assinaturas da função [time()](https://br.tradingview.com/pine-script-reference/v5/#fun_time):
 
@@ -116,7 +116,7 @@ __Note que:__
     - O script não está na primeira barra do gráfico, o que é garantido com `(not barstate.isfirst)`. Esta verificação impede que o código sempre detecte um início de sessão na primeira barra porque `na(t[1]) and not na(t)` é sempre `true` lá.
     - A chamada [time()](https://br.tradingview.com/pine-script-reference/v5/#fun_time) retornou [na](https://br.tradingview.com/pine-script-reference/v5/#var_na) na barra anterior porque não estava no período da sessão e retornou um valor que não é [na](https://br.tradingview.com/pine-script-reference/v5/#var_na) na barra atual, o que significa que a barra está __no__ período da sessão.
 
-## Estados da Sessão
+<!-- ## Estados da Sessão
 
 Três variáveis incorporadas permitem distinguir o tipo de sessão à qual a barra atual pertence. Elas são úteis apenas em timeframes intradiários:
 
