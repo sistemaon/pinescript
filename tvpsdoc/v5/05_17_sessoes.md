@@ -116,7 +116,7 @@ __Note que:__
     - O script não está na primeira barra do gráfico, o que é garantido com `(not barstate.isfirst)`. Esta verificação impede que o código sempre detecte um início de sessão na primeira barra porque `na(t[1]) and not na(t)` é sempre `true` lá.
     - A chamada [time()](https://br.tradingview.com/pine-script-reference/v5/#fun_time) retornou [na](https://br.tradingview.com/pine-script-reference/v5/#var_na) na barra anterior porque não estava no período da sessão e retornou um valor que não é [na](https://br.tradingview.com/pine-script-reference/v5/#var_na) na barra atual, o que significa que a barra está __no__ período da sessão.
 
-<!-- ## Estados da Sessão
+## Estados da Sessão
 
 Três variáveis incorporadas permitem distinguir o tipo de sessão à qual a barra atual pertence. Elas são úteis apenas em timeframes intradiários:
 
@@ -124,7 +124,7 @@ Três variáveis incorporadas permitem distinguir o tipo de sessão à qual a ba
 - [session.ispremarket](https://br.tradingview.com/pine-script-reference/v5/#var_session%7Bdot%7Dispremarket) retorna `true` quando a barra pertence à sessão estendida que precede o horário de negociação regular.
 - [session.ispostmarket](https://br.tradingview.com/pine-script-reference/v5/#var_session%7Bdot%7Dispostmarket) retorna `true` quando a barra pertence à sessão estendida que segue o horário de negociação regular.
 
-## Usando Sessões com `request.security()`
+<!-- ## Usando Sessões com `request.security()`
 
 Quando sua conta no TradingView fornece acesso a sessões estendidas, você pode optar por ver suas barras com o campo "Configurações/Símbolo/Sessão" "_Settings/Symbol/Session_". Existem dois tipos de sessões:
 
