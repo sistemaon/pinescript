@@ -241,8 +241,68 @@ A variável incorporada [timenow](https://br.tradingview.com/pine-script-referen
 
 Estratégias que usam `calc_on_every_tick = true` executam em cada atualização em tempo real, enquanto estratégias são executadas no [fechamento](https://br.tradingview.com/pine-script-reference/v5/#var_close) de barras históricas. Elas provavelmente não gerarão as mesmas execuções de ordens e, portanto, repintam. Note que quando isso acontece, também invalida os resultados de backtesting, pois não representam o comportamento da estratégia em tempo real.
 
+### Plotagem no Passado
 
-# Plotagem no Passado
+Scripts que detectam pivôs após 5 barras terem decorrido frequentemente voltam ao passado para plotar níveis de pivô ou valores no pivô real, 5 barras no passado. Isso muitas vezes faz com que traders desavisados que olham para plotagens em barras históricas inferirem que, quando o pivô acontece em tempo real, as mesmas plotagens aparecerão no pivô quando ocorrer, em vez de quando for detectado.
 
+Veja um script que mostra o preço dos pivôs altos colocando o preço no passado, 5 barras após o pivô ter sido detectado:
 
-# Variações no Conjunto de Dados
+```c
+//@version=5
+indicator("Plotting in the past", "", true)
+pHi = ta.pivothigh(5, 5)
+if not na(pHi)
+    label.new(bar_index[5], na, str.tostring(pHi, format.mintick) + "\n🠇", yloc = yloc.abovebar, style = label.style_none, textcolor = color.black, size = size.normal)
+```
+
+![Plotagem no passado](./imgs/Repainting-PlottingInThePast-01.CdfEKXRh_VvvoS.webp)
+
+__Note que:__
+
+- Esse script repinta porque uma barra de tempo real que não mostra preço pode ter um preço colocado nela se for identificada como um pivô, 5 barras após o pivô real ocorrer.
+- A exibição parece ótima, mas pode ser enganosa.
+
+A melhor solução para esse problema ao desenvolver scripts para outros é plotar __sem__ um deslocamento por padrão, mas dar a opção para os usuários do script ativarem a plotagem no passado através de entradas, para que eles estejam necessariamente cientes do que o script está fazendo, por exemplo:
+
+```c
+//@version=5
+indicator("Plotting in the past", "", true)
+plotInThePast = input(false, "Plot in the past")
+pHi = ta.pivothigh(5, 5)
+if not na(pHi)
+    label.new(bar_index[plotInThePast ? 5 : 0], na, str.tostring(pHi, format.mintick) + "\n🠇", yloc = yloc.abovebar, style = label.style_none, textcolor = color.black, size = size.normal)
+```
+
+## Variações no Conjunto de Dados
+
+### Pontos de Partida
+
+Scripts começam a ser executados na primeira barra histórica do gráfico e, em seguida, são executados em cada barra sequencialmente, conforme explicado na página sobre o [modelo de execução do Pine Script](./04_01_modelo_de_execucao.md). Se a primeira barra mudar, o script muitas vezes não calculará da mesma forma que fez quando o conjunto de dados começou em um ponto diferente no tempo.
+
+Os seguintes fatores têm impacto na quantidade de barras que você vê em seus gráficos e em seu _ponto de partida_:
+
+- O tipo de conta que você possui.
+- Os dados históricos disponíveis pelo fornecedor de dados.
+- Os requisitos de alinhamento do conjunto de dados, que determinam seu _ponto de partida_.
+
+Estes são os limites de barras específicos da conta:
+
+- 20000 barras históricas para o plano Premium.
+- 10000 barras históricas para os planos Pro e Pro+.
+- 5000 barras históricas para outros planos.
+
+Os pontos de partida são determinados usando as seguintes regras, que dependem do timeframe do gráfico:
+
+- __1, 5, 10, 15, 30 segundos__: alinha ao início de um dia.
+- __1 - 14 minutos__: alinha ao início de uma semana.
+- __15 - 29 minutos__: alinha ao início de um mês.
+- __30 - 1439 minutos__: alinha ao início de um ano.
+- __1440 minutos e mais__: alinha ao primeiro ponto de dados históricos disponível.
+
+Com o passar do tempo, esses fatores fazem com que a história do seu gráfico comece em pontos diferentes no tempo. Isso muitas vezes impacta os cálculos de seus scripts, pois mudanças nos resultados dos cálculos nas barras iniciais podem se propagar por todas as outras barras no conjunto de dados. Usar funções como [ta.valuewhen()](https://br.tradingview.com/pine-script-reference/v5/#fun_ta%7Bdot%7Dvaluewhen), [ta.barssince()](https://br.tradingview.com/pine-script-reference/v5/#fun_ta%7Bdot%7Dbarssince) ou [ta.ema()](https://br.tradingview.com/pine-script-reference/v5/#fun_ta%7Bdot%7Dema), por exemplo, produzirá resultados que variam com a história inicial.
+
+### Revisão de Dados Históricos
+
+Barras históricas e em tempo real são construídas usando dois feeds de dados diferentes fornecidos por bolsas/corretoras: dados históricos e dados em tempo real. Quando as barras em tempo real elapsam, as bolsas/corretoras às vezes fazem ajustes pequenos nos preços das barras, que são então escritos em seus dados históricos. Quando o gráfico é atualizado ou o script é reexecutado nessas barras de tempo real elapsadas, elas serão então construídas e calculadas usando os dados históricos, que conterão essas pequenas revisões de preço, se houver.
+
+Os dados históricos também podem ser revisados por outros motivos, por exemplo, para desdobramentos de ações.
