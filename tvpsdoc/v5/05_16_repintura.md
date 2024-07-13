@@ -233,11 +233,11 @@ Scripts usando o modo de declaração [varip](https://br.tradingview.com/pine-sc
 
 Scripts usando [estados da barra](./05_05_estados_da_barra.md) podem ou não repintar. Como visto na seção anterior, usar [barstate.isconfirmed](https://br.tradingview.com/pine-script-reference/v5/#var_barstate%7Bdot%7Disconfirmed) é na verdade uma maneira de __evitar__ repintura que __será__ reproduzida em barras históricas, que são sempre "confirmadas". O uso de outros estados da barra, como [barstate.isnew](https://br.tradingview.com/pine-script-reference/v5/#var_barstate%7Bdot%7Disnew), no entanto, levará à repintura. A razão é que em barras históricas, [barstate.isnew](https://br.tradingview.com/pine-script-reference/v5/#var_barstate%7Bdot%7Disnew) é `true` no [fechamento](https://br.tradingview.com/pine-script-reference/v5/#var_close) da barra, enquanto em tempo real, é `true` na [abertura](https://br.tradingview.com/pine-script-reference/v5/#var_open) da barra. Usar outras variáveis de estado da barra geralmente causará algum tipo de discrepância comportamental entre barras históricas e em tempo real.
 
-<!-- ### `timenow`
+### `timenow`
 
 A variável incorporada [timenow](https://br.tradingview.com/pine-script-reference/v5/#var_timenow) retorna a hora atual. Scripts usando essa variável não podem mostrar comportamento consistente entre histórico e tempo real, então necessariamente repintam.
 
-### Estratégias
+<!-- ### Estratégias
 
 Estratégias que usam `calc_on_every_tick = true` executam em cada atualização em tempo real, enquanto estratégias são executadas no [fechamento](https://br.tradingview.com/pine-script-reference/v5/#var_close) de barras históricas. Elas provavelmente não gerarão as mesmas execuções de ordens e, portanto, repintam. Note que quando isso acontece, também invalida os resultados de backtesting, pois não representam o comportamento da estratégia em tempo real. -->
 
