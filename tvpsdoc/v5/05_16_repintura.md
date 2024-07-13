@@ -229,11 +229,11 @@ Usar lookahead para produzir resultados enganosos não é permitido em publicaç
 
 Scripts usando o modo de declaração [varip](https://br.tradingview.com/pine-script-reference/v5/#kw_varip) para variáveis (veja a seção sobre [varip](./04_06_declaracoes_de_variavel.md#varip-varip) para mais informações) salvam informações através de atualizações em tempo real, que não podem ser reproduzidas em barras históricas onde apenas informações OHLC estão disponíveis. Esses scripts podem ser úteis em tempo real, inclusive para gerar alertas, mas sua lógica não pode ser backtestada, nem suas plotagens em barras históricas refletirão cálculos que serão feitos em tempo real.
 
-<!-- ### Variáveis de Estado da Barra
+### Variáveis de Estado da Barra
 
 Scripts usando [estados da barra](./05_05_estados_da_barra.md) podem ou não repintar. Como visto na seção anterior, usar [barstate.isconfirmed](https://br.tradingview.com/pine-script-reference/v5/#var_barstate%7Bdot%7Disconfirmed) é na verdade uma maneira de __evitar__ repintura que __será__ reproduzida em barras históricas, que são sempre "confirmadas". O uso de outros estados da barra, como [barstate.isnew](https://br.tradingview.com/pine-script-reference/v5/#var_barstate%7Bdot%7Disnew), no entanto, levará à repintura. A razão é que em barras históricas, [barstate.isnew](https://br.tradingview.com/pine-script-reference/v5/#var_barstate%7Bdot%7Disnew) é `true` no [fechamento](https://br.tradingview.com/pine-script-reference/v5/#var_close) da barra, enquanto em tempo real, é `true` na [abertura](https://br.tradingview.com/pine-script-reference/v5/#var_open) da barra. Usar outras variáveis de estado da barra geralmente causará algum tipo de discrepância comportamental entre barras históricas e em tempo real.
 
-### `timenow`
+<!-- ### `timenow`
 
 A variável incorporada [timenow](https://br.tradingview.com/pine-script-reference/v5/#var_timenow) retorna a hora atual. Scripts usando essa variável não podem mostrar comportamento consistente entre histórico e tempo real, então necessariamente repintam.
 
