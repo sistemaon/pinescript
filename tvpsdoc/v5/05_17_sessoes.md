@@ -16,7 +16,7 @@ __Note que:__
 
 ## Strings de Sessão
 
-<!-- ### Especificações de String de Sessão
+### Especificações de String de Sessão
 
 Strings de sessão usadas com [time()](https://br.tradingview.com/pine-script-reference/v5/#fun_time) e [time_close()](https://br.tradingview.com/pine-script-reference/v5/#fun_time_close) devem ter um formato específico. Sua sintaxe é:
 
@@ -75,7 +75,7 @@ Uma sessão estranha que dura apenas um minuto nas segundas-feiras (2) e sextas-
 
 Uma sessão que começa às 9:00, faz uma pausa das 16:00 às 17:00 e continua até as 20:00. Aplica-se a todos os dias da semana.
 
-### Usando Strings de Sessão
+<!-- ### Usando Strings de Sessão
 
 Propriedades de sessão definidas com strings de sessão são independentes das sessões definidas pela bolsa que determinam quando um instrumento pode ser negociado. Programadores têm total liberdade para criar quaisquer definições de sessão que se adequem ao seu propósito, que geralmente é detectar quando barras pertencem a períodos específicos. Isso é realizado no Pine Script usando uma das duas assinaturas da função [time()](https://br.tradingview.com/pine-script-reference/v5/#fun_time):
 
