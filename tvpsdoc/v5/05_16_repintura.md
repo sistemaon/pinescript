@@ -203,6 +203,44 @@ Por todas essas razões, a menos que entenda as sutilezas de usar [request.secur
 
 Para solicitações de dados de períodos menores mais confiáveis, use [request.security_lower_tf()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.security_lower_tf), conforme explicado [nesta](./05_14_outros_timeframes_e_dados.md#dados-lower-timeframe-ltf-timeframe-inferior) seção da página [Outros períodos e dados](./05_14_outros_timeframes_e_dados.md).
 
+### Vazamento Futuro com `request.security()`
+
+Quando [request.security()](https://br.tradingview.com/pine-script-reference/v5/#fun_request%7Bdot%7Dsecurity) é usado com `lookahead = barmerge.lookahead_on` para buscar preços sem deslocar a série por `[1]`, ele retornará dados do futuro em barras históricas, o que é perigosamente enganoso.
+
+Embora as barras históricas exibam magicamente preços futuros antes que eles sejam conhecidos, nenhum lookahead é possível em tempo real porque o futuro lá é desconhecido, como deve ser, então não existem barras futuras.
+
+Este é um exemplo:
+
+![Vazamento futuro com request.security()](./imgs/Repainting-FutureLeakWithRequestSecurity-01.B8DsNHGV_Kgu8T.webp)
+
+```c
+// FUTURE LEAK! DO NOT USE!
+//@version=5
+indicator("Future leak", "", true)
+futureHigh = request.security(syminfo.tickerid, "1D", high, lookahead = barmerge.lookahead_on)
+plot(futureHigh)
+```
+
+Note como a linha de timeframe maior está mostrando o valor da [máxima](https://br.tradingview.com/pine-script-reference/v5/#var_high) do timeframe antes que ocorra. A solução para evitar esse efeito é usar a função conforme demonstrado [nesta seção](./05_16_repintura.md#repintura-em-chamadas-requestsecurity).
+
+Usar lookahead para produzir resultados enganosos não é permitido em publicações de scripts, conforme explicado na seção [lookahead](./05_14_outros_timeframes_e_dados.md#lookahead) da página [Outros timeframes e dados](./05_14_outros_timeframes_e_dados.md). Publicações de scripts que usam essa técnica enganosa __serão moderadas__.
+
+<!-- ### `varip`
+
+Scripts usando o modo de declaração [varip](https://br.tradingview.com/pine-script-reference/v5/#kw_varip) para variáveis (veja nossa seção sobre [varip](./04_06_declaracoes_de_variavel.md#varip-varip) para mais informações) salvam informações através de atualizações em tempo real, que não podem ser reproduzidas em barras históricas onde apenas informações OHLC estão disponíveis. Esses scripts podem ser úteis em tempo real, inclusive para gerar alertas, mas sua lógica não pode ser backtestada, nem suas plotagens em barras históricas refletirão cálculos que serão feitos em tempo real.
+
+### Variáveis de Estado da Barra
+
+Scripts usando [estados da barra](./05_05_estados_da_barra.md) podem ou não repintar. Como visto na seção anterior, usar [barstate.isconfirmed](https://br.tradingview.com/pine-script-reference/v5/#var_barstate%7Bdot%7Disconfirmed) é na verdade uma maneira de __evitar__ repintura que __será__ reproduzida em barras históricas, que são sempre "confirmadas". O uso de outros estados da barra, como [barstate.isnew](https://br.tradingview.com/pine-script-reference/v5/#var_barstate%7Bdot%7Disnew), no entanto, levará à repintura. A razão é que em barras históricas, [barstate.isnew](https://br.tradingview.com/pine-script-reference/v5/#var_barstate%7Bdot%7Disnew) é `true` no [fechamento](https://br.tradingview.com/pine-script-reference/v5/#var_close) da barra, enquanto em tempo real, é `true` na [abertura](https://br.tradingview.com/pine-script-reference/v5/#var_open) da barra. Usar outras variáveis de estado da barra geralmente causará algum tipo de discrepância comportamental entre barras históricas e em tempo real.
+
+### `timenow`
+
+A variável incorporada [timenow](https://br.tradingview.com/pine-script-reference/v5/#var_timenow) retorna a hora atual. Scripts usando essa variável não podem mostrar comportamento consistente entre histórico e tempo real, então necessariamente repintam.
+
+### Estratégias
+
+Estratégias que usam `calc_on_every_tick = true` executam em cada atualização em tempo real, enquanto estratégias são executadas no [fechamento](https://br.tradingview.com/pine-script-reference/v5/#var_close) de barras históricas. Elas provavelmente não gerarão as mesmas execuções de ordens e, portanto, repintam. Note que quando isso acontece, também invalida os resultados de backtesting, pois não representam o comportamento da estratégia em tempo real. -->
+
 
 # Plotagem no Passado
 
