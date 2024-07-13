@@ -237,9 +237,9 @@ Scripts usando [estados da barra](./05_05_estados_da_barra.md) podem ou não rep
 
 A variável incorporada [timenow](https://br.tradingview.com/pine-script-reference/v5/#var_timenow) retorna a hora atual. Scripts usando essa variável não podem mostrar comportamento consistente entre histórico e tempo real, então necessariamente repintam.
 
-<!-- ### Estratégias
+### Estratégias
 
-Estratégias que usam `calc_on_every_tick = true` executam em cada atualização em tempo real, enquanto estratégias são executadas no [fechamento](https://br.tradingview.com/pine-script-reference/v5/#var_close) de barras históricas. Elas provavelmente não gerarão as mesmas execuções de ordens e, portanto, repintam. Note que quando isso acontece, também invalida os resultados de backtesting, pois não representam o comportamento da estratégia em tempo real. -->
+Estratégias que usam `calc_on_every_tick = true` executam em cada atualização em tempo real, enquanto estratégias são executadas no [fechamento](https://br.tradingview.com/pine-script-reference/v5/#var_close) de barras históricas. Elas provavelmente não gerarão as mesmas execuções de ordens e, portanto, repintam. Note que quando isso acontece, também invalida os resultados de backtesting, pois não representam o comportamento da estratégia em tempo real.
 
 
 # Plotagem no Passado
