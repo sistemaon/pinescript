@@ -5,7 +5,7 @@ As estratégias do Pine Script simulam a execução de negociações em dados hi
 
 Quando um script usa a função [strategy()](https://br.tradingview.com/pine-script-reference/v5/#fun_strategy) para sua declaração, ele ganha acesso ao namespace `strategy.*`, onde pode chamar funções e variáveis para simular ordens e acessar informações essenciais da estratégia. Além disso, o script exibirá informações e resultados simulados externamente na aba "Strategy Tester".
 
-<!-- ## Um Exemplo Simples de Estratégia
+## Um Exemplo Simples de Estratégia
 
 O script a seguir é uma estratégia simples que simula a entrada de posições longas ou curtas com base no cruzamento de duas médias móveis:
 
@@ -36,7 +36,7 @@ __Note que:__
 - [strategy.entry()](https://br.tradingview.com/pine-script-reference/v5/#fun_strategy%7Bdot%7Dentry) é o comando que o script usa para simular ordens de "compra" e "venda". Quando o script coloca uma ordem, ele também plota o `id` da ordem no gráfico e uma seta para indicar a direção.
 - Duas funções [plot()](https://br.tradingview.com/pine-script-reference/v5/#fun_plot) plotam as médias móveis com duas cores diferentes para referência visual.
 
-## Aplicando uma Estratégia a um Gráfico
+<!-- ## Aplicando uma Estratégia a um Gráfico
 
 Para testar uma estratégia, aplique-a ao gráfico. Você pode usar uma estratégia integrada a partir da caixa de diálogo "Indicadores e Estratégias" ou escrever a sua própria no Pine Editor. Clique em "Adicionar ao gráfico" "_Add to chart_" na aba "Pine Editor" para aplicar um script ao gráfico:
 
