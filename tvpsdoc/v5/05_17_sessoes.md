@@ -30,7 +30,7 @@ __Onde:__
 
 Os períodos de tempo estão no formato "hhmm-hhmm", e uma vírgula pode separar múltiplos períodos de tempo para especificar combinações de períodos distintos.
 
-Por exemplo, - `<days>` é um conjunto de dígitos de 1 a 7 que especifica em quais dias a sessão é válida.
+- `<days>` é um conjunto de dígitos de 1 a 7 que especifica em quais dias a sessão é válida.
 
 1 é Domingo, 7 é Sábado.
 
