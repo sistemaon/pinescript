@@ -345,7 +345,7 @@ Pode-se usar o operador [+](https://br.tradingview.com/pine-script-reference/v5/
 "This is a " + "concatenated string."
 ```
 
-Os elementos incorporados no espaço de nomes (_namespace_) `str.*()` criam valores de "string" usando operações especializadas. Por exemplo, o script a seguir cria uma _string formatada_ para representar valores de preço "float" e exibe o resultado usando um rótulo:
+Os elementos incorporados no espaço de nomes (_namespace_) `str.*()` criam valores de "string" usando operações especializadas. Por exemplo, o script a seguir cria uma _string formatada_ para representar valores de preço "float" e exibe o resultado usando um _label_:
 
 ```c
 //@version=5

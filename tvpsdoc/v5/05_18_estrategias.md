@@ -180,10 +180,106 @@ if (longCondition)
 strategy.close_all()
 ```
 
-Neste script, é definido uma `longCondition` que é verdadeira sempre que o `bar_index` é divisível por 20, ou seja, a cada 20ª barra. A estratégia usa essa condição dentro de uma estrutura [if](https://br.tradingview.com/pine-script-reference/v5/#kw_if) para simular uma ordem de entrada com [strategy.entry()](https://br.tradingview.com/pine-script-reference/v5/#fun_strategy%7Bdot%7Dentry) e desenha um rótulo no preço de entrada com a função `debugLabel()` definida pelo usuário. O script chama [strategy.close_all()](https://br.tradingview.com/pine-script-reference/v5/#fun_strategy%7Bdot%7Dclose_all) do escopo global para simular uma ordem de mercado que fecha qualquer posição aberta. Veja o que acontece quando é adicionado o script ao gráfico:
+Neste script, é definido uma `longCondition` que é verdadeira sempre que o `bar_index` é divisível por 20, ou seja, a cada 20ª barra. A estratégia usa essa condição dentro de uma estrutura [if](https://br.tradingview.com/pine-script-reference/v5/#kw_if) para simular uma ordem de entrada com [strategy.entry()](https://br.tradingview.com/pine-script-reference/v5/#fun_strategy%7Bdot%7Dentry) e desenha um _label_ no preço de entrada com a função `debugLabel()` definida pelo usuário. O script chama [strategy.close_all()](https://br.tradingview.com/pine-script-reference/v5/#fun_strategy%7Bdot%7Dclose_all) do escopo global para simular uma ordem de mercado que fecha qualquer posição aberta. Veja o que acontece quando é adicionado o script ao gráfico:
 
 ![Ordens e entradas](./imgs/Strategies-Orders-and-entries-1.CX7qCrxg_Z2raUd5.webp)
 
-As setas azuis no gráfico indicam os locais de entrada, e as roxas marcam os pontos onde a estratégia fechou posições. Observe que os rótulos precedem o ponto de entrada real, em vez de ocorrer na mesma barra - isso são as ordens em ação. Por padrão, as estratégias do Pine aguardam o próximo tick de preço disponível antes de preencher ordens, pois preencher uma ordem no mesmo tick não é realista. Além disso, elas recalculam no fechamento de cada barra histórica, significando que o próximo tick disponível para preencher uma ordem é a abertura da próxima barra neste caso. Como resultado, por padrão, todas as ordens são atrasadas por uma barra do gráfico.
+As setas azuis no gráfico indicam os locais de entrada, e as roxas marcam os pontos onde a estratégia fechou posições. Observe que os _labels_ precedem o ponto de entrada real, em vez de ocorrer na mesma barra - isso são as ordens em ação. Por padrão, as estratégias do Pine aguardam o próximo tick de preço disponível antes de preencher ordens, pois preencher uma ordem no mesmo tick não é realista. Além disso, elas recalculam no fechamento de cada barra histórica, significando que o próximo tick disponível para preencher uma ordem é a abertura da próxima barra neste caso. Como resultado, por padrão, todas as ordens são atrasadas por uma barra do gráfico.
 
 É importante notar que, embora o script chame [strategy.close_all()](https://br.tradingview.com/pine-script-reference/v5/#fun_strategy%7Bdot%7Dclose_all) do escopo global, forçando a execução em cada barra, a chamada da função não faz nada se a estratégia não estiver simulando uma posição aberta. Se houver uma posição aberta, o comando emite uma ordem de mercado para fechá-la, que é executada no próximo tick disponível. Por exemplo, quando a `longCondition` é verdadeira na barra 20, a estratégia coloca uma ordem de entrada para preencher no próximo tick, que é na abertura da barra 21. Uma vez que o script recalcula seus valores no fechamento dessa barra, a função coloca uma ordem para fechar a posição, que é preenchida na abertura da barra 22.
+
+### Tipos de Ordens
+
+As estratégias do Pine Script permitem aos usuários simular diferentes tipos de ordens para suas necessidades específicas. Os principais tipos notáveis são _market/mercado_, _limit/limite_, _stop_ e _stop-limit_.
+
+#### Ordens de Market/Mercado 
+
+Ordens de mercado são o tipo mais básico de ordens. Elas comandam uma estratégia para comprar ou vender um ativo o mais rápido possível, independentemente do preço. Consequentemente, elas sempre executam no próximo tick de preço disponível. Por padrão, todas as funções `strategy.*()` que geram ordens produzem especificamente ordens de mercado.
+
+O script a seguir simula uma ordem de mercado longa quando o `bar_index` é divisível por `2 * cycleLength`. Caso contrário, simula uma ordem de mercado curta quando o `bar_index` é divisível por `cycleLength`, resultando em uma estratégia com negociações longas e curtas alternadas a cada `cycleLength` barras:
+
+![Ordens de market/mercado](./imgs/Strategies-Orders-and-entries-Order-types-1.XLQDthDF_Z1YB5yU.webp)
+
+```c
+//@version=5
+strategy("Market order demo", overlay = true, margin_long = 100, margin_short = 100)
+
+//@variable Number of bars between long and short entries.
+cycleLength = input.int(10, "Cycle length")
+
+//@function Displays text passed to `txt` when called.
+debugLabel(txt, lblColor) => label.new(
+     bar_index, high, text = txt, color = lblColor, textcolor = color.white, 
+     style = label.style_label_lower_right, size = size.large
+ )
+
+//@variable Returns `true` every `2 * cycleLength` bars.
+longCondition = bar_index % (2 * cycleLength) == 0
+//@variable Returns `true` every `cycleLength` bars.
+shortCondition = bar_index % cycleLength == 0
+
+// Generate a long market order with a `color.green` label on `longCondition`.
+if longCondition
+    debugLabel("Long market order created", color.green)
+    strategy.entry("My Long Entry Id", strategy.long)
+// Otherwise, generate a short market order with a `color.red` label on `shortCondition`.
+else if shortCondition
+    debugLabel("Short market order created", color.red)
+    strategy.entry("My Short Entry Id", strategy.short)
+```
+
+#### Ordens de Limit/Limite
+
+Ordens de limite comandam uma estratégia para entrar em uma posição a um preço específico ou melhor (inferior ao especificado para ordens longas e superior para ordens curtas). Quando o preço de mercado atual é melhor do que o parâmetro `limit` da ordem, a ordem será preenchida sem esperar que o preço de mercado atinja o nível limite.
+
+Para simular ordens de limite em um script, passe um valor de preço para um comando de colocação de ordem com um parâmetro `limit`. O exemplo a seguir coloca uma ordem de limite 800 ticks abaixo do fechamento da barra 100 barras antes do `last_bar_index`:
+
+![Ordens de limit/limite 01](./imgs/Strategies-Orders-and-entries-Order-types-2.Ma_eheTS_1mD31p.webp)
+
+```c
+//@version=5
+strategy("Limit order demo", overlay = true, margin_long = 100, margin_short = 100)
+
+//@function Displays text passed to `txt` and a horizontal line at `price` when called.
+debugLabel(price, txt) =>
+    label.new(
+         bar_index, price, text = txt, color = color.teal, textcolor = color.white, 
+         style = label.style_label_lower_right, size = size.large
+     )
+    line.new(
+         bar_index, price, bar_index + 1, price, color = color.teal, extend = extend.right, 
+         style = line.style_dashed
+     )
+
+// Generate a long limit order with a label and line 100 bars before the `last_bar_index`.
+if last_bar_index - bar_index == 100
+    limitPrice = close - syminfo.mintick * 800
+    debugLabel(limitPrice, "Long Limit order created")
+    strategy.entry("Long", strategy.long, limit = limitPrice)
+```
+
+Observe como o script colocou o _label_ e começou a linha várias barras antes da negociação. Enquanto o preço permanecesse acima do valor `limitPrice`, a ordem não poderia ser preenchida. Uma vez que o preço de mercado atingiu o limite, a estratégia executou a negociação no meio da barra. Se tivesse definido o `limitPrice` para 800 ticks _acima_ do fechamento da barra em vez de _abaixo_, a ordem seria preenchida imediatamente, pois o preço já estaria em um valor melhor:
+
+![Ordens de limit/limite 02](./imgs/Strategies-Orders-and-entries-Order-types-3.D5qNWPW8_Ad7IE.webp)
+
+```c
+//@version=5
+strategy("Limit order demo", overlay = true, margin_long = 100, margin_short = 100)
+
+//@function Displays text passed to `txt` and a horizontal line at `price` when called.
+debugLabel(price, txt) =>
+    label.new(
+        bar_index, price, text = txt, color = color.teal, textcolor = color.white, 
+        style = label.style_label_lower_right, size = size.large
+    )
+    line.new(
+        bar_index, price, bar_index + 1, price, color = color.teal, extend = extend.right, 
+        style = line.style_dashed
+    )
+
+// Generate a long limit order with a label and line 100 bars before the `last_bar_index`.
+if last_bar_index - bar_index == 100
+    limitPrice = close + syminfo.mintick * 800
+    debugLabel(limitPrice, "Long Limit order created")
+    strategy.entry("Long", strategy.long, limit = limitPrice)
+```

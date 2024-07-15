@@ -192,7 +192,7 @@ plot(localSMA,   "Local SMA",   color = color.red,  style = plot.style_cross)
 
 # Motivo pelo Comportamento?
 
-Esse comportamento é necessário porque, forçar a execução de funções em cada barra levaria a resultados inesperados em funções que produzem efeitos colaterais, ou seja, aquelas que fazem algo além de retornar o valor. Por exemplo, a função [label.new()](https://br.tradingview.com/pine-script-reference/v5/#fun_label{dot}new) cria um rótulo no gráfico, então forçá-la a ser chamada em cada barra mesmo quando estiver dentro de uma estrutura [if](https://br.tradingview.com/pine-script-reference/v5/#op_if) criaria rótulos onde logicamente não deveriam aparecer.
+Esse comportamento é necessário porque, forçar a execução de funções em cada barra levaria a resultados inesperados em funções que produzem efeitos colaterais, ou seja, aquelas que fazem algo além de retornar o valor. Por exemplo, a função [label.new()](https://br.tradingview.com/pine-script-reference/v5/#fun_label{dot}new) cria um label (_rótulo_) no gráfico, então forçá-la a ser chamada em cada barra mesmo quando estiver dentro de uma estrutura [if](https://br.tradingview.com/pine-script-reference/v5/#op_if) criaria _labels_ onde logicamente não deveriam aparecer.
 
 
 # Exceções
