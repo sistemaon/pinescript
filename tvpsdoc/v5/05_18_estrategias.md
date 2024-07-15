@@ -209,9 +209,9 @@ cycleLength = input.int(10, "Cycle length")
 
 //@function Displays text passed to `txt` when called.
 debugLabel(txt, lblColor) => label.new(
-     bar_index, high, text = txt, color = lblColor, textcolor = color.white, 
-     style = label.style_label_lower_right, size = size.large
- )
+    bar_index, high, text = txt, color = lblColor, textcolor = color.white, 
+    style = label.style_label_lower_right, size = size.large
+)
 
 //@variable Returns `true` every `2 * cycleLength` bars.
 longCondition = bar_index % (2 * cycleLength) == 0
@@ -228,7 +228,7 @@ else if shortCondition
     strategy.entry("My Short Entry Id", strategy.short)
 ```
 
-<!-- #### Ordens de Limit/Limite
+#### Ordens de Limit/Limite
 
 Ordens de limite comandam uma estratégia para entrar em uma posição a um preço específico ou melhor (inferior ao especificado para ordens longas e superior para ordens curtas). Quando o preço de mercado atual é melhor do que o parâmetro `limit` da ordem, a ordem será preenchida sem esperar que o preço de mercado atinja o nível limite.
 
@@ -282,4 +282,4 @@ if last_bar_index - bar_index == 100
     limitPrice = close + syminfo.mintick * 800
     debugLabel(limitPrice, "Long Limit order created")
     strategy.entry("Long", strategy.long, limit = limitPrice)
-``` -->
+```
