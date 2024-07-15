@@ -228,7 +228,7 @@ else if shortCondition
     strategy.entry("My Short Entry Id", strategy.short)
 ```
 
-#### Ordens de Limit/Limite
+<!-- #### Ordens de Limit/Limite
 
 Ordens de limite comandam uma estratégia para entrar em uma posição a um preço específico ou melhor (inferior ao especificado para ordens longas e superior para ordens curtas). Quando o preço de mercado atual é melhor do que o parâmetro `limit` da ordem, a ordem será preenchida sem esperar que o preço de mercado atinja o nível limite.
 
@@ -282,4 +282,4 @@ if last_bar_index - bar_index == 100
     limitPrice = close + syminfo.mintick * 800
     debugLabel(limitPrice, "Long Limit order created")
     strategy.entry("Long", strategy.long, limit = limitPrice)
-```
+``` -->
