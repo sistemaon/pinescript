@@ -355,11 +355,11 @@ if high >= stopPrice
     stopPrice := na
 ```
 
-<!-- ### Comandos de Colocação de Ordens
+### Comandos de Colocação de Ordens
 
 As estratégias do Pine Script possuem várias funções para simular a colocação de ordens, conhecidas como _comandos de colocação de ordens_. Cada comando serve a um propósito único e se comporta de maneira diferente dos outros.
 
-#### `strategy.entry()`
+<!-- #### `strategy.entry()`
 
 Este comando simula ordens de entrada. Por padrão, as estratégias colocam ordens de mercado ao chamar esta função, mas também podem criar ordens stop, limite e stop-limit ao utilizar os parâmetros `stop` e `limit`.
 
