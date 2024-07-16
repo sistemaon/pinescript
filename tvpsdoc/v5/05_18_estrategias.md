@@ -438,7 +438,7 @@ Todas as ordens de saída de [strategy.exit()](https://br.tradingview.com/pine-s
 
 A estratégia a seguir coloca uma ordem de entrada de "compra" via [strategy.entry()](https://br.tradingview.com/pine-script-reference/v5/#fun_strategy%7Bdot%7Dentry) e uma ordem de stop-loss e take-profit via o comando [strategy.exit()](https://br.tradingview.com/pine-script-reference/v5/#fun_strategy%7Bdot%7Dexit) a cada 100 barras. Observe que o script chama [strategy.exit()](https://br.tradingview.com/pine-script-reference/v5/#fun_strategy%7Bdot%7Dexit) duas vezes. O comando "exit1" faz referência a uma ordem de entrada "buy1", e "exit2" faz referência à ordem "buy". A estratégia só simulará ordens de saída de "exit2" porque "exit1" faz referência a um ID de ordem que não existe:
 
-![strategy.exit()](./imgs/Strategies-Orders-and-entries-Order-placement-commands-4.C3m9MCQf_ZyDV7k.webp)
+![strategy.exit() 01](./imgs/Strategies-Orders-and-entries-Order-placement-commands-4.C3m9MCQf_ZyDV7k.webp)
 
 ```c
 //@version=5
@@ -473,3 +473,350 @@ plot(takeProfit, "TP", color.green, style = plot.style_circles)
 __Note que:__
 
 - Ordens de limite e stop de cada comando de saída não necessariamente preenchem nos preços especificados. Estratégias podem preencher ordens limite a preços melhores e ordens de stop a preços piores, dependendo da gama de valores disponíveis para o emulador do broker.
+
+Se um usuário não fornecer um argumento `from_entry` na chamada [strategy.exit()](https://br.tradingview.com/pine-script-reference/v5/#fun_strategy%7Bdot%7Dexit), a função criará ordens de saída para cada entrada aberta.
+
+Neste exemplo, a estratégia cria ordens de entrada "buy1" e "buy2" e chama [strategy.exit()](https://br.tradingview.com/pine-script-reference/v5/#fun_strategy%7Bdot%7Dexit) sem um argumento `from_entry` a cada 100 barras. Como pode ser visto pelas marcas de ordem no gráfico, uma vez que o preço de mercado atinge os valores `stopLoss` ou `takeProfit`, a estratégia preenche uma ordem de saída para as entradas "buy1" e "buy2":
+
+![strategy.exit() 02](./imgs/Strategies-Orders-and-entries-Order-placement-commands-4a.B5VHq-B1_Z2pnJVr.webp)
+
+```c
+//@version=5
+strategy("Exit all demo", "test", overlay = true, pyramiding = 2)
+
+//@variable Is `true` on every 100th bar.
+buyCondition = bar_index % 100 == 0
+
+//@variable Stop-loss price for exit commands.
+var float stopLoss   = na
+//@variable Take-profit price for exit commands.
+var float takeProfit = na
+
+// Place orders upon `buyCondition`.
+if buyCondition
+    if strategy.position_size == 0.0
+        stopLoss   := close * 0.99
+        takeProfit := close * 1.01
+    strategy.entry("buy1", strategy.long)
+    strategy.entry("buy2", strategy.long)
+    strategy.exit("exit", stop = stopLoss, limit = takeProfit) // Places orders to exit all open entries.
+
+// Set `stopLoss` and `takeProfit` to `na` when price touches either, i.e., when the strategy simulates an exit.
+if low <= stopLoss or high >= takeProfit
+    stopLoss   := na
+    takeProfit := na
+
+plot(stopLoss, "SL", color.red, style = plot.style_circles)
+plot(takeProfit, "TP", color.green, style = plot.style_circles)
+```
+
+É possível que uma estratégia saia do mesmo ID de entrada mais de uma vez, o que facilita a formação de estratégias de saída em múltiplos níveis. Ao realizar múltiplos comandos de saída, a quantidade de cada ordem deve ser uma porção da quantidade negociada, com a soma não excedendo a posição aberta. Se a `qty` da função for menor que o tamanho da posição de mercado atual, a estratégia simulará uma saída parcial. Se o valor de `qty` exceder a quantidade da posição aberta, ele reduzirá a ordem, pois não pode preencher mais _contratos/ações/lotes/unidades_ (_contracts/shares/lots/units_) do que a posição aberta.
+
+No exemplo abaixo, foi alterado o script anterior "Exit demo" para simular duas ordens de stop-loss e take-profit por entrada. A estratégia coloca uma ordem de "compra" com uma `qty` de duas ações, ordens de stop-loss e take-profit "exit1" com uma `qty` de uma ação, e ordens de stop-loss e take-profit "exit2" com uma `qty` de três ações:
+
+![strategy.exit() 03](./imgs/Strategies-Orders-and-entries-Order-placement-commands-5.WJU0XPdU_11c8yK.webp)
+
+```c
+//@version=5
+strategy("Multiple exit demo", "test", overlay = true)
+
+//@variable Is `true` on every 100th bar.
+buyCondition = bar_index % 100 == 0
+
+//@variable Stop-loss price for "exit1" commands.
+var float stopLoss1 = na
+//@variable Stop-loss price for "exit2" commands.
+var float stopLoss2 = na
+//@variable Take-profit price for "exit1" commands.
+var float takeProfit1 = na
+//@variable Take-profit price for "exit2" commands.
+var float takeProfit2 = na
+
+// Place orders upon `buyCondition`.
+if buyCondition
+    if strategy.position_size == 0.0
+        stopLoss1   := close * 0.99
+        stopLoss2   := close * 0.98
+        takeProfit1 := close * 1.01
+        takeProfit2 := close * 1.02
+    strategy.entry("buy", strategy.long, qty = 2)
+    strategy.exit("exit1", "buy", stop = stopLoss1, limit = takeProfit1, qty = 1)
+    strategy.exit("exit2", "buy", stop = stopLoss2, limit = takeProfit2, qty = 3)
+
+// Set `stopLoss1` and `takeProfit1` to `na` when price touches either.
+if low <= stopLoss1 or high >= takeProfit1
+    stopLoss1   := na
+    takeProfit1 := na
+// Set `stopLoss2` and `takeProfit2` to `na` when price touches either.
+if low <= stopLoss2 or high >= takeProfit2
+    stopLoss2   := na
+    takeProfit2 := na
+
+plot(stopLoss1, "SL1", color.red, style = plot.style_circles)
+plot(stopLoss2, "SL2", color.red, style = plot.style_circles)
+plot(takeProfit1, "TP1", color.green, style = plot.style_circles)
+plot(takeProfit2, "TP2", color.green, style = plot.style_circles)
+```
+
+Como pode se ver pelas marcas de ordem no gráfico, a estratégia preencheu as ordens "exit2" apesar do valor `qty` especificado exceder a quantidade negociada. Em vez de usar essa quantidade, o script reduziu o tamanho das ordens para corresponder à posição restante.
+
+__Note que:__
+
+- Todas as ordens geradas a partir de uma chamada [strategy.exit()](https://br.tradingview.com/pine-script-reference/v5/#fun_strategy%7Bdot%7Dexit) pertencem ao mesmo grupo [strategy.oca.reduce](./05_18_estrategias.md#strategyocareduce), o que significa que, quando qualquer ordem é preenchida, a estratégia reduz todas as outras para corresponder à posição aberta.
+
+É importante notar que as ordens produzidas por este comando reservam uma porção da posição de mercado aberta para saída. [strategy.exit()](https://br.tradingview.com/pine-script-reference/v5/#fun_strategy%7Bdot%7Dexit) não pode colocar uma ordem para sair de uma parte da posição já reservada para saída por outro comando de saída.
+
+O script a seguir simula uma ordem de mercado "compra" para 20 ações há 100 barras com ordens "limit" e "stop" de 19 e 20 ações, respectivamente. No gráfico, a estratégia executou a ordem "stop" primeiro. No entanto, a quantidade negociada foi de apenas uma ação. Como o script colocou a ordem "limit" primeiro, a estratégia reservou sua `qty` (19 ações) para fechar a posição aberta, deixando apenas uma ação para ser fechada pela ordem "stop":
+
+![strategy.exit() 04](./imgs/Strategies-Orders-and-entries-Order-placement-commands-5a.CVJyBloz_1r0nNp.webp)
+
+```c
+//@version=5
+strategy("Reserved exit demo", "test", overlay = true)
+
+//@variable "stop" exit order price.
+var float stop   = na
+//@variable "limit" exit order price
+var float limit  = na
+//@variable Is `true` 100 bars before the `last_bar_index`.
+longCondition = last_bar_index - bar_index == 100 
+
+if longCondition
+    stop  := close * 0.99
+    limit := close * 1.01 
+    strategy.entry("buy", strategy.long, 20)
+    strategy.exit("limit", limit = limit,  qty = 19)
+    strategy.exit("stop", stop = stop, qty = 20)
+
+bool showPlot = strategy.position_size != 0
+plot(showPlot ? stop : na, "Stop", color.red, 2, plot.style_linebr)
+plot(showPlot ? limit : na, "Limit 1", color.green, 2, plot.style_linebr)
+```
+
+Outra característica chave da função [strategy.exit()](https://br.tradingview.com/pine-script-reference/v5/#fun_strategy%7Bdot%7Dexit) é que ela pode criar _trailing stops_, ou seja, ordens de stop-loss que acompanham o preço de mercado por uma quantidade especificada sempre que o preço se move para um valor melhor na direção favorável. Essas ordens têm dois componentes: o nível de ativação e o _trail offset_;
+- O nível de ativação é o valor que o preço de mercado deve cruzar para ativar o cálculo do trailing stop, expresso em ticks via o parâmetro `trail_points` ou como um valor de preço via o parâmetro `trail_price`. Se uma chamada de saída contiver ambos os argumentos, o argumento `trail_price` terá precedência.
+- O _trail offset_ é a distância que o stop seguirá atrás do preço de mercado, expresso em ticks via o parâmetro `trail_offset`.
+
+Para [strategy.exit()](https://br.tradingview.com/pine-script-reference/v5/#fun_strategy%7Bdot%7Dexit) criar e ativar trailing stops, a chamada da função deve conter os argumentos `trail_offset` e `trail_price` ou `trail_points`.
+
+O exemplo abaixo mostra um trailing stop em ação e visualiza seu comportamento. A estratégia simula uma ordem de entrada longa na barra 100 barras antes da última barra no gráfico e, em seguida, um trailing stop na próxima barra. O script tem duas entradas: uma controla o _trail offset_ de nível de ativação (ou seja, a quantidade além do preço de entrada necessária para ativar o stop), e a outra controla o _trail offset_ (ou seja, a distância a seguir atrás do preço de mercado quando ele se move para um valor melhor na direção desejada).
+
+A linha tracejada verde no gráfico mostra o nível que o preço de mercado deve cruzar para acionar a ordem de trailing stop. Após o preço cruzar esse nível, o script plota uma linha azul para significar o trailing stop. Quando o preço sobe para um novo valor máximo, o que é favorável para a estratégia, pois significa que o valor da posição está aumentando, o stop também sobe para manter uma distância de `trailingStopOffset` ticks atrás do preço atual. Quando o preço diminui ou não atinge um novo ponto alto, o valor do stop permanece o mesmo. Eventualmente, o preço cruza abaixo do stop, acionando a saída:
+
+![strategy.exit() 05](./imgs/Strategies-Orders-and-entries-Order-placement-commands-5b.BprhxxcZ_1ujAyE.webp)
+
+```c
+//@version=5
+strategy("Trailing stop order demo", overlay = true, margin_long = 100, margin_short = 100)
+
+//@variable Offset used to determine how far above the entry price (in ticks) the activation level will be located. 
+activationLevelOffset = input(1000, "Activation Level Offset (in ticks)")
+//@variable Offset used to determine how far below the high price (in ticks) the trailing stop will trail the chart.
+trailingStopOffset = input(2000, "Trailing Stop Offset (in ticks)")
+
+//@function Displays text passed to `txt` when called and shows the `price` level on the chart.
+debugLabel(price, txt, lblColor, hasLine = false) =>
+    label.new(
+         bar_index, price, text = txt, color = lblColor, textcolor = color.white,
+         style = label.style_label_lower_right, size = size.large
+     )
+    if hasLine
+        line.new(
+             bar_index, price, bar_index + 1, price, color = lblColor, extend = extend.right,
+             style = line.style_dashed
+         )
+
+//@variable The price at which the trailing stop activation level is located.
+var float trailPriceActivationLevel = na
+//@variable The price at which the trailing stop itself is located.
+var float trailingStop = na
+//@variable Caclulates the value that Trailing Stop would have if it were active at the moment.
+theoreticalStopPrice = high - trailingStopOffset * syminfo.mintick
+
+// Generate a long market order to enter 100 bars before the last bar.
+if last_bar_index - bar_index == 100
+    strategy.entry("Long", strategy.long)
+
+// Generate a trailing stop 99 bars before the last bar.
+if last_bar_index - bar_index == 99
+    trailPriceActivationLevel := open + syminfo.mintick * activationLevelOffset
+    strategy.exit(
+         "Trailing Stop", from_entry = "Long", trail_price = trailPriceActivationLevel, 
+         trail_offset = trailingStopOffset
+     )
+    debugLabel(trailPriceActivationLevel, "Trailing Stop Activation Level", color.green, true)
+
+// Visualize the trailing stop mechanic in action.
+// If there is an open trade, check whether the Activation Level has been achieved.
+// If it has been achieved, track the trailing stop by assigning its value to a variable.
+if strategy.opentrades == 1
+    if na(trailingStop) and high > trailPriceActivationLevel
+        debugLabel(trailPriceActivationLevel, "Activation level crossed", color.green)
+        trailingStop := theoreticalStopPrice
+        debugLabel(trailingStop, "Trailing Stop Activated", color.blue)
+
+    else if theoreticalStopPrice > trailingStop
+        trailingStop := theoreticalStopPrice
+
+// Visualize the movement of the trailing stop.
+plot(trailingStop, "Trailing Stop")
+```
+
+#### `strategy.close()` e `strategy.close_all()`
+
+Esses comandos simulam posições de saída usando ordens de mercado. As funções fecham negociações ao serem chamadas, em vez de em um preço específico.
+
+O exemplo abaixo demonstra uma estratégia simples que coloca uma ordem de "compra" via [strategy.entry()](https://br.tradingview.com/pine-script-reference/v5/#fun_strategy%7Bdot%7Dentry) a cada 50 barras e a fecha com uma ordem de mercado usando [strategy.close()](https://br.tradingview.com/pine-script-reference/v5/#fun_strategy%7Bdot%7Dclose) 25 barras depois:
+
+![strategy.close() e strategy.close_all() 01](./imgs/Strategies-Orders-and-entries-Order-placement-commands-6.C8naMrYK_ZahHab.webp)
+
+```c
+//@version=5
+strategy("Close demo", "test", overlay = true)
+
+//@variable Is `true` on every 50th bar.
+buyCond = bar_index % 50 == 0
+//@variable Is `true` on every 25th bar except for those that are divisible by 50.
+sellCond = bar_index % 25 == 0 and not buyCond
+
+if buyCond
+    strategy.entry("buy", strategy.long)
+if sellCond
+    strategy.close("buy")
+
+bgcolor(buyCond ? color.new(color.blue, 90) : na)
+bgcolor(sellCond ? color.new(color.red, 90) : na)
+```
+
+Ao contrário da maioria dos outros comandos de colocação de ordens, o parâmetro `id` de [strategy.close()](https://br.tradingview.com/pine-script-reference/v5/#fun_strategy%7Bdot%7Dclose) faz referência a um ID de entrada existente para fechar. Se o `id` especificado não existir, o comando não executará uma ordem. Se uma posição foi formada a partir de várias entradas com o mesmo ID, o comando fechará todas as entradas simultaneamente.
+
+Para demonstrar, o script a seguir coloca uma ordem de "compra" a cada 25 barras. O script fecha todas as entradas "buy" a cada 100 barras. Incluímos `pyramiding = 3` na declaração da [strategy()](https://br.tradingview.com/pine-script-reference/v5/#fun_strategy) para permitir que a estratégia simule até três ordens na mesma direção:
+
+![strategy.close() e strategy.close_all() 02](./imgs/Strategies-Orders-and-entries-Order-placement-commands-7.BnXt0DwI_2ljg1Q.webp)
+
+```c
+//@version=5
+strategy("Multiple close demo", "test", overlay = true, pyramiding = 3)
+
+//@variable Is `true` on every 100th bar.
+sellCond = bar_index % 100 == 0
+//@variable Is `true` on every 25th bar except for those that are divisible by 100.
+buyCond = bar_index % 25 == 0 and not sellCond
+
+if buyCond
+    strategy.entry("buy", strategy.long)
+if sellCond
+    strategy.close("buy")
+
+bgcolor(buyCond ? color.new(color.blue, 90) : na)
+bgcolor(sellCond ? color.new(color.red, 90) : na)
+```
+
+Para casos em que um script tem várias entradas com IDs diferentes, o comando [strategy.close_all()](https://br.tradingview.com/pine-script-reference/v5/#fun_strategy%7Bdot%7Dclose_all) pode ser útil, pois fecha todas as entradas, independentemente de seus IDs.
+
+O script abaixo coloca ordens de entrada "A", "B" e "C" sequencialmente com base no número de negociações abertas, depois fecha todas com uma única ordem de mercado:
+
+![strategy.close() e strategy.close_all() 03](./imgs/Strategies-Orders-and-entries-Order-placement-commands-8.CRIv7OvG_1rGwwH.webp)
+
+```c
+//@version=5
+strategy("Close multiple ID demo", "test", overlay = true, pyramiding = 3)
+
+switch strategy.opentrades
+    0 => strategy.entry("A", strategy.long)
+    1 => strategy.entry("B", strategy.long)
+    2 => strategy.entry("C", strategy.long)
+    3 => strategy.close_all()
+```
+
+<!-- #### `strategy.cancel()` e `strategy.cancel_all()`
+
+Esses comandos permitem que uma estratégia cancele ordens pendentes, ou seja, aquelas geradas por [strategy.exit()](https://br.tradingview.com/pine-script-reference/v5/#fun_strategy%7Bdot%7Dexit) ou por [strategy.order()](https://br.tradingview.com/pine-script-reference/v5/#fun_strategy%7Bdot%7Dorder) ou [strategy.entry()](https://br.tradingview.com/pine-script-reference/v5/#fun_strategy%7Bdot%7Dentry) quando usam argumentos `limit` ou `stop`.
+
+A estratégia a seguir simula uma ordem de limite de "compra" 500 ticks abaixo do preço de fechamento de 100 barras atrás, depois cancela a ordem na barra seguinte. O script desenha uma linha horizontal no `limitPrice` e colore o fundo de verde e laranja para indicar quando a ordem de limite é colocada e cancelada, respectivamente. Como podemos ver, nada aconteceu quando o preço de mercado cruzou o `limitPrice` porque a estratégia já havia cancelado a ordem:
+
+![strategy.cancel()](./imgs/Strategies-Orders-and-entries-Order-placement-commands-9.4WRZcmod_TgLp6.webp)
+
+```c
+//@version=5
+strategy("Cancel demo", "test", overlay = true)
+
+//@variable Draws a horizontal line at the `limit` price of the "buy" order.
+var line limitLine = na
+
+//@variable Returns `color.green` when the strategy places the "buy" order, `color.orange` when it cancels the order.
+color bgColor = na
+
+if last_bar_index - bar_index == 100
+    float limitPrice = close - syminfo.mintick * 500
+    strategy.entry("buy", strategy.long, limit = limitPrice)
+    limitLine := line.new(bar_index, limitPrice, bar_index + 1, limitPrice, extend = extend.right)
+    bgColor := color.new(color.green, 50)
+
+if last_bar_index - bar_index == 99
+    strategy.cancel("buy")
+    bgColor := color.new(color.orange, 50)
+
+bgcolor(bgColor)
+```
+
+Assim como [strategy.close()](https://br.tradingview.com/pine-script-reference/v5/#fun_strategy%7Bdot%7Dclose), o parâmetro `id` de [strategy.cancel()](https://br.tradingview.com/pine-script-reference/v5/#fun_strategy%7Bdot%7Dcancel) refere-se ao ID de uma entrada existente. Este comando não fará nada se o parâmetro `id` referenciar um ID que não exista. Quando houver várias ordens pendentes com o mesmo ID, este comando cancelará todas de uma vez.
+
+Neste exemplo, modificamos o script anterior para colocar uma ordem de limite de "compra" em três barras consecutivas a partir de 100 barras atrás. A estratégia cancela todas elas depois que o `bar_index` está a 97 barras da barra mais recente, resultando em nada acontecer quando o preço cruza qualquer uma das linhas:
+
+![strategy.cancel() 02](./imgs/Strategies-Orders-and-entries-Order-placement-commands-10.BdK1xjss_Z1VR5ov.webp)
+
+```c
+//@version=5
+strategy("Multiple cancel demo", "test", overlay = true, pyramiding = 3)
+
+//@variable Draws a horizontal line at the `limit` price of the "buy" order.
+var line limitLine = na
+
+//@variable Returns `color.green` when the strategy places the "buy" order, `color.orange` when it cancels the order.
+color bgColor = na
+
+if last_bar_index - bar_index <= 100 and last_bar_index - bar_index >= 98
+    float limitPrice = close - syminfo.mintick * 500
+    strategy.entry("buy", strategy.long, limit = limitPrice)
+    limitLine := line.new(bar_index, limitPrice, bar_index + 1, limitPrice, extend = extend.right)
+    bgColor := color.new(color.green, 50)
+
+if last_bar_index - bar_index == 97
+    strategy.cancel("buy")
+    bgColor := color.new(color.orange, 50)
+
+bgcolor(bgColor)
+```
+
+__Note que:__
+
+- Adicionamos `pyramiding = 3` à declaração do script para permitir que três ordens [strategy.entry()](https://br.tradingview.com/pine-script-reference/v5/#fun_strategy%7Bdot%7Dentry) sejam preenchidas. Alternativamente, o script obteria o mesmo resultado usando [strategy.order()](https://br.tradingview.com/pine-script-reference/v5/#fun_strategy%7Bdot%7Dorder) já que não é sensível à configuração `pyramiding`.
+
+É importante notar que nem [strategy.cancel()](https://br.tradingview.com/pine-script-reference/v5/#fun_strategy%7Bdot%7Dcancel) nem [strategy.cancel_all()](https://br.tradingview.com/pine-script-reference/v5/#fun_strategy%7Bdot%7Dcancel_all) podem cancelar ordens de _mercado_, pois a estratégia as executa imediatamente no próximo tick. Estratégias não podem cancelar ordens depois de preenchidas. Para fechar uma posição aberta, use [strategy.close()](https
+
+://br.tradingview.com/pine-script-reference/v5/#fun_strategy%7Bdot%7Dclose) ou [strategy.close_all()](https://br.tradingview.com/pine-script-reference/v5/#fun_strategy%7Bdot%7Dclose_all).
+
+Este exemplo simula uma ordem de mercado "compra" 100 barras atrás, depois tenta cancelar todas as ordens pendentes na barra seguinte. Como a estratégia já preencheu a ordem de "compra", o comando [strategy.cancel_all()](https://br.tradingview.com/pine-script-reference/v5/#fun_strategy%7Bdot%7Dcancel_all) não faz nada neste caso, pois não há ordens pendentes para cancelar:
+
+![strategy.cancel_all()](./imgs/Strategies-Orders-and-entries-Order-placement-commands-11.C3U1GI3M_DIxpi.webp)
+
+```c
+//@version=5
+strategy("Cancel market demo", "test", overlay = true)
+
+//@variable Returns `color.green` when the strategy places the "buy" order, `color.orange` when it tries to cancel.
+color bgColor = na
+
+if last_bar_index - bar_index == 100
+    strategy.entry("buy", strategy.long)
+    bgColor := color.new(color.green, 50)
+
+if last_bar_index - bar_index == 99
+    strategy.cancel_all()
+    bgColor := color.new(color.orange, 50)
+
+bgcolor(bgColor)
+``` -->
+
+#### `strategy.oca.reduce`
