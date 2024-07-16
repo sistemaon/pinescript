@@ -7,7 +7,7 @@ Quando um script usa a função [strategy()](https://br.tradingview.com/pine-scr
 
 ## Um Exemplo Simples de Estratégia
 
-O script a seguir é uma estratégia simples que simula a entrada de posições longas ou curtas com base no cruzamento de duas médias móveis:
+O script a seguir é uma estratégia simples que simula a entrada de posições _longs_ ou _short_ com base no cruzamento de duas médias móveis:
 
 ```c
 //@version=5
@@ -46,7 +46,8 @@ Depois que um script de estratégia é compilado e aplicado a um gráfico, ele p
 
 ![Aplicando uma estratégia a um gráfico 02](./imgs/Strategies-Applying-a-strategy-to-a-chart-2.DSJCJN56_Z2kfkPT.webp)
 
-__Note que:__ Os resultados de uma estratégia aplicada a gráficos não padronizados ([Heikin Ashi](https://br.tradingview.com/support/solutions/43000619436), [Renko](https://br.tradingview.com/support/solutions/43000502284), [Line Break](https://br.tradingview.com/support/solutions/43000502273), [Kagi](https://br.tradingview.com/support/solutions/43000502272), [Point & Figure](https://br.tradingview.com/support/solutions/43000502276) e [Range](https://br.tradingview.com/support/solutions/43000474007)) não refletem as condições reais do mercado por padrão. Scripts de estratégia usarão os valores de preços sintéticos desses gráficos durante a simulação, que muitas vezes não se alinham com os preços reais do mercado e, portanto, produzirão resultados de backtest irreais. Recomenda-se fortemente o uso de tipos de gráficos padrão para backtesting de estratégias. Alternativamente, em gráficos Heikin Ashi, os usuários podem simular ordens usando preços reais habilitando a opção "Preencher ordens usando OHLC padrão" "_Fill orders using standard OHLC_" nas [Propriedades das estratégias](https://br.tradingview.com/support/solutions/43000628599).
+> __Observação!__\
+> Os resultados de uma estratégia aplicada a gráficos não padronizados ([Heikin Ashi](https://br.tradingview.com/support/solutions/43000619436), [Renko](https://br.tradingview.com/support/solutions/43000502284), [Line Break](https://br.tradingview.com/support/solutions/43000502273), [Kagi](https://br.tradingview.com/support/solutions/43000502272), [Point & Figure](https://br.tradingview.com/support/solutions/43000502276) e [Range](https://br.tradingview.com/support/solutions/43000474007)) não refletem as condições reais do mercado por padrão. Scripts de estratégia usarão os valores de preços sintéticos desses gráficos durante a simulação, que muitas vezes não se alinham com os preços reais do mercado e, portanto, produzirão resultados de backtest irreais. Recomenda-se fortemente o uso de tipos de gráficos padrão para backtesting de estratégias. Alternativamente, em gráficos Heikin Ashi, os usuários podem simular ordens usando preços reais habilitando a opção "Preencher ordens usando OHLC padrão" "_Fill orders using standard OHLC_" nas [Propriedades das estratégias](https://br.tradingview.com/support/solutions/43000628599).
 
 ## Testador de Estratégia
 
@@ -65,7 +66,7 @@ __Note que:__
 
 ### Resumo de Desempenho
 
-A aba [Performance Summary](https://br.tradingview.com/support/solutions/43000681683) do módulo apresenta uma visão abrangente das métricas de desempenho de uma estratégia. Ela exibe três colunas: uma para todas as negociações, uma para todas as longas e outra para todas as curtas, proporcionando aos traders insights mais detalhados sobre o desempenho simulado de negociações longas, curtas e gerais de uma estratégia.
+A aba [Performance Summary](https://br.tradingview.com/support/solutions/43000681683) do módulo apresenta uma visão abrangente das métricas de desempenho de uma estratégia. Ela exibe três colunas: uma para todas as negociações, uma para todas as _longs_ e outra para todas as _short_, proporcionando aos traders insights mais detalhados sobre o desempenho simulado de negociações _longs_, _short_ e gerais de uma estratégia.
 
 ![Resumo de desempenho](./imgs/Strategies-Strategy-tester-Performance-summary-1.DcoSYJi9_Zew5cK.webp)
 
@@ -153,7 +154,7 @@ Como visto no gráfico acima, o emulador do broker assumiu que os preços intrab
 
 ![Ampliador da barra 02](./imgs/Strategies-Broker-emulator-Bar-magnifier-2.BNRDP6RA_1rU9cu.webp)
 
-> __Observação:__\
+> __Observação!__\
 > O número máximo de intrabarras que um script pode solicitar é 200.000. Alguns símbolos com histórico mais longo podem não ter cobertura completa de intrabarras para suas barras iniciais do gráfico com essa limitação, significando que negociações simuladas nessas barras não serão afetadas pelo amplificador de barras.
 
 ## Ordens e Entradas
@@ -196,7 +197,7 @@ As estratégias do Pine Script permitem aos usuários simular diferentes tipos d
 
 Ordens de mercado são o tipo mais básico de ordens. Elas comandam uma estratégia para comprar ou vender um ativo o mais rápido possível, independentemente do preço. Consequentemente, elas sempre executam no próximo tick de preço disponível. Por padrão, todas as funções `strategy.*()` que geram ordens produzem especificamente ordens de mercado.
 
-O script a seguir simula uma ordem de mercado longa quando o `bar_index` é divisível por `2 * cycleLength`. Caso contrário, simula uma ordem de mercado curta quando o `bar_index` é divisível por `cycleLength`, resultando em uma estratégia com negociações longas e curtas alternadas a cada `cycleLength` barras:
+O script a seguir simula uma ordem de mercado _long_ quando o `bar_index` é divisível por `2 * cycleLength`. Caso contrário, simula uma ordem de mercado _short_ quando o `bar_index` é divisível por `cycleLength`, resultando em uma estratégia com negociações _longs_ e _short_ alternadas a cada `cycleLength` barras:
 
 ![Ordens de market/mercado](./imgs/Strategies-Orders-and-entries-Order-types-1.XLQDthDF_Z1YB5yU.webp)
 
@@ -230,7 +231,7 @@ else if shortCondition
 
 #### Ordens de Limit/Limite
 
-Ordens de limite comandam uma estratégia para entrar em uma posição a um preço específico ou melhor (inferior ao especificado para ordens longas e superior para ordens curtas). Quando o preço de mercado atual é melhor do que o parâmetro `limit` da ordem, a ordem será preenchida sem esperar que o preço de mercado atinja o nível limite.
+Ordens de limite comandam uma estratégia para entrar em uma posição a um preço específico ou melhor (inferior ao especificado para ordens _longs_ e superior para ordens _short_). Quando o preço de mercado atual é melhor do que o parâmetro `limit` da ordem, a ordem será preenchida sem esperar que o preço de mercado atinja o nível limite.
 
 Para simular ordens de limite em um script, passe um valor de preço para um comando de colocação de ordem com um parâmetro `limit`. O exemplo a seguir coloca uma ordem de limite 800 ticks abaixo do fechamento da barra 100 barras antes do `last_bar_index`:
 
@@ -283,3 +284,192 @@ if last_bar_index - bar_index == 100
     debugLabel(limitPrice, "Long Limit order created")
     strategy.entry("Long", strategy.long, limit = limitPrice)
 ```
+
+#### Ordens Stop e Stop-Limit
+
+Ordens stop comandam uma estratégia para simular outra ordem após o preço atingir o preço `stop` especificado ou um valor pior (maior que o especificado para ordens _longs_ e menor para _short_). Elas são essencialmente o oposto das ordens limite. Quando o preço de mercado atual é pior do que o parâmetro `stop`, a estratégia acionará a ordem subsequente sem esperar que o preço atual atinja o nível stop. Se o comando de colocação de ordem incluir um argumento `limit`, a ordem subsequente será uma ordem limite no valor especificado. Caso contrário, será uma ordem de mercado.
+
+O script abaixo coloca uma ordem stop 800 ticks acima do `close` de 100 barras atrás. Neste exemplo, a estratégia entrou em uma posição _long_ quando o preço de mercado cruzou o preço `stop` algumas barras depois de colocada a ordem. Observe que o preço inicial no momento da ordem era melhor do que o passado para `stop`. Uma ordem limite equivalente teria sido preenchida na barra do gráfico seguinte:
+
+![Ordens de stop e stop-limit 01](./imgs/Strategies-Orders-and-entries-Order-types-4.BpjXSFRL_ZCMq1X.webp)
+
+```c
+//@version=5
+strategy("Stop order demo", overlay = true, margin_long = 100, margin_short = 100)
+
+//@function Displays text passed to `txt` when called and shows the `price` level on the chart.
+debugLabel(price, txt) =>
+    label.new(
+         bar_index, high, text = txt, color = color.teal, textcolor = color.white, 
+         style = label.style_label_lower_right, size = size.large
+     )
+    line.new(bar_index, high, bar_index, price, style = line.style_dotted, color = color.teal)
+    line.new(
+         bar_index, price, bar_index + 1, price, color = color.teal, extend = extend.right, 
+         style = line.style_dashed
+     )
+
+// Generate a long stop order with a label and lines 100 bars before the last bar.
+if last_bar_index - bar_index == 100
+    stopPrice = close + syminfo.mintick * 800
+    debugLabel(stopPrice, "Long Stop order created")
+    strategy.entry("Long", strategy.long, stop = stopPrice)
+```
+
+Comandos de colocação de ordens que usam ambos os argumentos `limit` e `stop` produzem ordens stop-limit. Esse tipo de ordem espera que o preço cruze o nível stop e, em seguida, coloca uma ordem limite no preço `limit` especificado.
+
+Modificando o script anterior para simular e visualizar uma ordem stop-limit. Neste exemplo, utiliza-se o valor `low` de 100 barras atrás como o preço `limit` no comando de entrada. Este script também exibe um _label_ e nível de preço para indicar quando a estratégia cruza o `stopPrice`, ou seja, quando a estratégia ativa a ordem limite. Observe como o preço de mercado inicialmente atinge o nível limite, mas a estratégia não simula uma negociação porque o preço deve cruzar o `stopPrice` para colocar a ordem limite pendente no `limitPrice`:
+
+![Ordens de stop e stop-limit 02](./imgs/Strategies-Orders-and-entries-Order-types-5.CduO1Nxw_2mnPeh.webp)
+
+```c
+//@version=5
+strategy("Stop-Limit order demo", overlay = true, margin_long = 100, margin_short = 100)
+
+//@function Displays text passed to `txt` when called and shows the `price` level on the chart.
+debugLabel(price, txt, lblColor, lineWidth = 1) =>
+    label.new(
+         bar_index, high, text = txt, color = lblColor, textcolor = color.white, 
+         style = label.style_label_lower_right, size = size.large
+     )
+    line.new(bar_index, close, bar_index, price, style = line.style_dotted, color = lblColor, width = lineWidth)
+    line.new(
+         bar_index, price, bar_index + 1, price, color = lblColor, extend = extend.right, 
+         style = line.style_dashed, width = lineWidth
+     )
+
+var float stopPrice  = na
+var float limitPrice = na
+
+// Generate a long stop-limit order with a label and lines 100 bars before the last bar.
+if last_bar_index - bar_index == 100
+    stopPrice  := close + syminfo.mintick * 800
+    limitPrice := low
+    debugLabel(limitPrice, "", color.gray)
+    debugLabel(stopPrice, "Long Stop-Limit order created", color.teal)
+    strategy.entry("Long", strategy.long, stop = stopPrice, limit = limitPrice)
+
+// Draw a line and label once the strategy activates the limit order.
+if high >= stopPrice
+    debugLabel(limitPrice, "Limit order activated", color.green, 2)
+    stopPrice := na
+```
+
+<!-- ### Comandos de Colocação de Ordens
+
+As estratégias do Pine Script possuem várias funções para simular a colocação de ordens, conhecidas como _comandos de colocação de ordens_. Cada comando serve a um propósito único e se comporta de maneira diferente dos outros.
+
+#### `strategy.entry()`
+
+Este comando simula ordens de entrada. Por padrão, as estratégias colocam ordens de mercado ao chamar esta função, mas também podem criar ordens stop, limite e stop-limit ao utilizar os parâmetros `stop` e `limit`.
+
+Para simplificar a abertura de posições, [strategy.entry()](https://br.tradingview.com/pine-script-reference/v5/#fun_strategy%7Bdot%7Dentry) apresenta vários comportamentos únicos. Um desses comportamentos é que este comando pode reverter uma posição de mercado aberta sem chamadas de função adicionais. Quando uma ordem colocada usando [strategy.entry()](https://br.tradingview.com/pine-script-reference/v5/#fun_strategy%7Bdot%7Dentry) é preenchida, a função calculará automaticamente a quantidade que a estratégia precisa para fechar a posição de mercado aberta e negociar contratos/ações/lotes/unidades na direção oposta por padrão. Por exemplo, se uma estratégia tem uma posição aberta de 15 ações na direção [strategy.long](https://br.tradingview.com/pine-script-reference/v5/#var_strategy%7Bdot%7Dlong) e chama [strategy.entry()](https://br.tradingview.com/pine-script-reference/v5/#fun_strategy%7Bdot%7Dentry) para colocar uma ordem de mercado na direção [strategy.short](https://br.tradingview.com/pine-script-reference/v5/#var_strategy%7Bdot%7Dshort), a quantidade que a estratégia negociará para colocar a ordem é de 15 ações mais a `qty` da nova ordem _short_.
+
+O exemplo abaixo demonstra uma estratégia que usa apenas chamadas [strategy.entry()](https://br.tradingview.com/pine-script-reference/v5/#fun_strategy%7Bdot%7Dentry) para colocar ordens de entrada. Ele cria uma ordem de mercado _long_ com um valor `qty` de 15 ações a cada 100 barras e uma ordem de mercado _short_ com um `qty` de 5 a cada 25 barras. O script destaca o fundo em azul e vermelho para ocorrências das respectivas `buyCondition` e `sellCondition`:
+
+![strategy.entry() 01](./imgs/Strategies-Orders-and-entries-Order-placement-commands-1.DcjzabKe_Z1NSxPj.webp)
+
+```c
+//@version=5
+strategy("Entry demo", "test", overlay = true)
+
+//@variable Is `true` on every 100th bar.
+buyCondition = bar_index % 100 == 0
+//@variable Is `true` on every 25th bar except for those that are divisible by 100.
+sellCondition = bar_index % 25 == 0 and not buyCondition
+
+if buyCondition
+    strategy.entry("buy", strategy.long, qty = 15)
+if sellCondition
+    strategy.entry("sell", strategy.short, qty = 5)
+
+bgcolor(buyCondition  ? color.new(color.blue, 90) : na)
+bgcolor(sellCondition ? color.new(color.red, 90) : na)
+```
+
+Como se vê no gráfico acima, as marcas de ordem mostram que a estratégia negociou 20 ações em cada preenchimento de ordem em vez de 15 e 5. Como [strategy.entry()](https://br.tradingview.com/pine-script-reference/v5/#fun_strategy%7Bdot%7Dentry) reverte automaticamente as posições, a menos que especificado de outra forma através da função [strategy.risk.allow_entry_in()](https://br.tradingview.com/pine-script-reference/v5/#fun_strategy%7Bdot%7Drisk%7Bdot%7Dallow_entry_in), ela adiciona o tamanho da posição aberta (15 para entradas _longs_) ao tamanho da nova ordem (5 para entradas _short_) ao mudar a direção, resultando em uma quantidade negociada de 20 ações.
+
+Observe que no exemplo acima, embora a `sellCondition` ocorra três vezes antes de outra `buyCondition`, a estratégia coloca uma ordem de "venda" apenas na primeira ocorrência. Outro comportamento único do comando [strategy.entry()](https://br.tradingview.com/pine-script-reference/v5/#fun_strategy%7Bdot%7Dentry) é que ele é afetado pela configuração de _pyramiding_ do script. Pyramiding especifica o número de ordens consecutivas que a estratégia pode preencher na mesma direção. Seu valor é 1 por padrão, o que significa que a estratégia permite apenas uma ordem consecutiva para preencher em qualquer direção. Os usuários podem definir os valores de pyramiding da estratégia através do parâmetro `pyramiding` da chamada da função [strategy()](https://br.tradingview.com/pine-script-reference/v5/#fun_strategy) ou da entrada "Pyramiding" na aba "Propriedades" "_Properties_" das configurações do script.
+
+Se for adicionado `pyramiding = 3` à declaração do script anterior, a estratégia permitirá até três negociações consecutivas na mesma direção, significando que pode simular novas ordens de mercado em cada ocorrência de `sellCondition`:
+
+![strategy.entry() 02](./imgs/Strategies-Orders-and-entries-Order-placement-commands-2.zCHoGtrD_Z1roH1b.webp)
+
+#### `strategy.order()`
+
+Este comando simula uma ordem básica. Ao contrário da maioria dos comandos de colocação de ordens, que contêm lógica interna para simplificar a interface com as estratégias, [strategy.order()](https://br.tradingview.com/pine-script-reference/v5/#fun_strategy%7Bdot%7Dorder) usa os parâmetros especificados sem levar em conta a maioria das configurações adicionais da estratégia. As ordens colocadas por [strategy.order()](https://br.tradingview.com/pine-script-reference/v5/#fun_strategy%7Bdot%7Dorder) podem abrir novas posições e modificar ou fechar as existentes.
+
+O script a seguir usa apenas chamadas [strategy.order()](https://br.tradingview.com/pine-script-reference/v5/#fun_strategy%7Bdot%7Dorder) para criar e modificar entradas. A estratégia simula uma ordem de mercado _long_ para 15 unidades a cada 100 barras, e depois três ordens curtas para cinco unidades a cada 25 barras. O script destaca o fundo em azul e vermelho para indicar quando a estratégia simula ordens de "compra" e "venda":
+
+![strategy.order()](./imgs/Strategies-Orders-and-entries-Order-placement-commands-3.DSecmQ5U_Zz9mM4.webp)
+
+```c
+//@version=5
+strategy("Order demo", "test", overlay = true)
+
+//@variable Is `true` on every 100th bar.
+buyCond = bar_index % 100 == 0
+//@variable Is `true` on every 25th bar except for those that are divisible by 100.
+sellCond = bar_index % 25 == 0 and not buyCond
+
+if buyCond
+    strategy.order("buy", strategy.long, qty = 15) // Enter a long position of 15 units.
+if sellCond
+    strategy.order("sell", strategy.short, qty = 5) // Exit 5 units from the long position.
+
+bgcolor(buyCond ? color.new(color.blue, 90) : na)
+bgcolor(sellCond ? color.new(color.red, 90) : na)
+```
+
+Essa estratégia em particular nunca simulará uma posição _short_, pois, ao contrário de [strategy.entry()](https://br.tradingview.com/pine-script-reference/v5/#fun_strategy%7Bdot%7Dentry), [strategy.order()](https://br.tradingview.com/pine-script-reference/v5/#fun_strategy%7Bdot%7Dorder) não reverte automaticamente as posições. Ao usar este comando, a posição de mercado resultante é a soma líquida da posição de mercado atual e da quantidade de ordens preenchidas. Após a estratégia preencher a ordem de "compra" para 15 unidades, ela executa três ordens de "venda" que reduzem a posição aberta em cinco unidades cada, e 15 - 5 * 3 = 0. O mesmo script se comportaria de maneira diferente usando [strategy.entry()](https://br.tradingview.com/pine-script-reference/v5/#fun_strategy%7Bdot%7Dentry), conforme o exemplo mostrado na [seção acima](./05_18_estrategias.md#strategyentry).
+
+#### `strategy.exit()`
+
+Este comando simula ordens de saída. É único no sentido de que permite que uma estratégia saia de uma posição de mercado ou forme múltiplas saídas na forma de ordens de stop-loss, take-profit e trailing stop via os parâmetros `loss`, `stop`, `profit`, `limit` e `trail_*`.
+
+O uso mais básico do comando [strategy.exit()](https://br.tradingview.com/pine-script-reference/v5/#fun_strategy%7Bdot%7Dexit) é a criação de níveis onde a estratégia sairá de uma posição devido a uma perda excessiva de dinheiro (stop-loss), ganho suficiente de dinheiro (take-profit) ou ambos (bracket).
+
+As funcionalidades de stop-loss e take-profit deste comando estão associadas a dois parâmetros. Os parâmetros `loss` e `profit` da função especificam valores de stop-loss e take-profit como um número definido de ticks longe do preço da ordem de entrada, enquanto seus parâmetros `stop` e `limit` fornecem valores específicos de preço de stop-loss e take-profit. Os parâmetros absolutos na chamada da função substituem os relativos. Se uma chamada [strategy.exit()](https://br.tradingview.com/pine-script-reference/v5/#fun_strategy%7Bdot%7Dexit) contiver argumentos `profit` e `limit`, o comando priorizará o valor `limit` e ignorará o valor `profit`. Da mesma forma, só considerará o valor `stop` quando a chamada da função contiver argumentos `stop` e `loss`.
+
+> __Observação!__\
+> Embora compartilhem os mesmos nomes com parâmetros dos comandos [strategy.entry()](https://br.tradingview.com/pine-script-reference/v5/#fun_strategy%7Bdot%7Dentry) e [strategy.order()](https://br.tradingview.com/pine-script-reference/v5/#fun_strategy%7Bdot%7Dorder), os parâmetros `limit` e `stop` funcionam de maneira diferente em [strategy.exit()](https://br.tradingview.com/pine-script-reference/v5/#fun_strategy%7Bdot%7Dexit). No primeiro caso, usar `limit` e `stop` no comando criará uma única ordem stop-limit que abre uma ordem limite após cruzar o preço de stop. No segundo caso, o comando criará uma ordem limite e uma ordem de stop separadas para sair de uma posição aberta.
+
+Todas as ordens de saída de [strategy.exit()](https://br.tradingview.com/pine-script-reference/v5/#fun_strategy%7Bdot%7Dexit) com um argumento `from_entry` estão vinculadas ao `id` de uma ordem de entrada correspondente; estratégias não podem simular ordens de saída quando não há posição de mercado aberta ou ordem de entrada ativa associada a um ID `from_entry`.
+
+A estratégia a seguir coloca uma ordem de entrada de "compra" via [strategy.entry()](https://br.tradingview.com/pine-script-reference/v5/#fun_strategy%7Bdot%7Dentry) e uma ordem de stop-loss e take-profit via o comando [strategy.exit()](https://br.tradingview.com/pine-script-reference/v5/#fun_strategy%7Bdot%7Dexit) a cada 100 barras. Observe que o script chama [strategy.exit()](https://br.tradingview.com/pine-script-reference/v5/#fun_strategy%7Bdot%7Dexit) duas vezes. O comando "exit1" faz referência a uma ordem de entrada "buy1", e "exit2" faz referência à ordem "buy". A estratégia só simulará ordens de saída de "exit2" porque "exit1" faz referência a um ID de ordem que não existe:
+
+![strategy.exit()](./imgs/Strategies-Orders-and-entries-Order-placement-commands-4.C3m9MCQf_ZyDV7k.webp)
+
+```c
+//@version=5
+strategy("Exit demo", "test", overlay = true)
+
+//@variable Is `true` on every 100th bar.
+buyCondition = bar_index % 100 == 0
+
+//@variable Stop-loss price for exit commands.
+var float stopLoss   = na
+//@variable Take-profit price for exit commands.
+var float takeProfit = na
+
+// Place orders upon `buyCondition`.
+if buyCondition
+    if strategy.position_size == 0.0
+        stopLoss   := close * 0.99
+        takeProfit := close * 1.01
+    strategy.entry("buy", strategy.long)
+    strategy.exit("exit1", "buy1", stop = stopLoss, limit = takeProfit) // Does nothing. "buy1" order doesn't exist.
+    strategy.exit("exit2", "buy", stop = stopLoss, limit = takeProfit)
+
+// Set `stopLoss` and `takeProfit` to `na` when price touches either, i.e., when the strategy simulates an exit.
+if low <= stopLoss or high >= takeProfit
+    stopLoss   := na
+    takeProfit := na
+
+plot(stopLoss, "SL", color.red, style = plot.style_circles)
+plot(takeProfit, "TP", color.green, style = plot.style_circles)
+```
+
+__Note que:__
+
+- Ordens de limite e stop de cada comando de saída não necessariamente preenchem nos preços especificados. Estratégias podem preencher ordens limite a preços melhores e ordens de stop a preços piores, dependendo da gama de valores disponíveis para o emulador do broker. -->

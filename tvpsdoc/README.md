@@ -75,4 +75,9 @@ IN Plots > Introduction > Calls to plot() can, however, be designed to plot cond
 Deveria referenciar com (https://www.tradingview.com/pine-script-docs/concepts/plots/#plotting-conditionally)
 e não com (https://www.tradingview.com/pine-script-docs/concepts/plots/#plots).
 
+IN Strategies > strategy.order() > The same script would behave differently using strategy.entry(), as per the example shown in the [section above]().
+[section above]() is referencing (https://www.tradingview.com/pine-script-docs/concepts/strategies/#strategy-entry)
+in which is not redirecting to the reference but to the initial introduction.
+It should be (https://www.tradingview.com/pine-script-docs/concepts/strategies/#strategyentry)
+
 **No link sobre a constante CURRENCY.KRW https://br.tradingview.com/pine-script-reference/v5/#var_currency.KRW (é para referir a moeda sul coreana won, e não venceu)**

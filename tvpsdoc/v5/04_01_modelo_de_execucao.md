@@ -16,7 +16,7 @@ Quando o script é executado pela primeira vez num gráfico, todas as barras num
 
 # Cálculo Baseado em Barras Históricas
 
-Vamos usar este simples script e acompanhar sua execução em barras históricas:
+Utilizando este simples script e acompanhando sua execução em barras históricas:
 
 ```c
 //@version=5
@@ -56,7 +56,7 @@ A diferença mais importante entre a execução de scripts em barras históricas
 > __Observação!__\
 > Na barra em tempo real, a variável `close` sempre representa o __preço atual__. Da mesma forma, as variáveis embutidas `high` e `low` representam a _máxima mais alta_ e a _mínima mais baixa_ alcançadas desde o início da barra em tempo real. As variáveis integradas do Pine Script só representarão os valores finais da barra em tempo real na última barra atualizada.
 
-Vamos acompanhar nosso exemplo de script na barra em tempo real.
+Acompanhando o exemplo de script na barra em tempo real.
 
 Quando o script alcança a barra em tempo real, ele é executado pela primeira vez. Utiliza os valores atuais das variáveis embutidas para produzir um conjunto de resultados e os plota, se necessário. Antes do script executar novamente quando a próxima atualização ocorre, as variáveis definidas pelo usuário são redefinidas para um estado conhecido correspondente ao último _registro de mudanças_ (_commit_) no fechamento da barra anterior. Se nenhuma confirmação foi feita nas variáveis porque elas são inicializadas a cada barra, então elas são reinicializadas, ou seja, se as variáveis não foram confirmadas por serem inicializadas a cada barra, então são reinicializadas a cada barra. Em ambos os casos, o último estado calculado é perdido. O estado das _etiquetas_ e _linhas_ (_labels_ e _lines_) plotadas também é redefinido. Essa redefinição das variáveis definidas pelo usuário do script e dos desenhos anteriores de cada nova iteração do script na barra em tempo real é chamada de _rollback_. Seu efeito é resetar o script para o mesmo estado conhecido em que estava quando a barra em tempo real foi aberta, então os cálculos na barra em tempo real são sempre realizados a partir de um estado limpo.
 
