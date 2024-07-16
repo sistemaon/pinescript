@@ -690,7 +690,7 @@ bgcolor(sellCond ? color.new(color.red, 90) : na)
 
 Ao contrário da maioria dos outros comandos de colocação de ordens, o parâmetro `id` de [strategy.close()](https://br.tradingview.com/pine-script-reference/v5/#fun_strategy%7Bdot%7Dclose) faz referência a um ID de entrada existente para fechar. Se o `id` especificado não existir, o comando não executará uma ordem. Se uma posição foi formada a partir de várias entradas com o mesmo ID, o comando fechará todas as entradas simultaneamente.
 
-Para demonstrar, o script a seguir coloca uma ordem de "compra" a cada 25 barras. O script fecha todas as entradas "buy" a cada 100 barras. Incluímos `pyramiding = 3` na declaração da [strategy()](https://br.tradingview.com/pine-script-reference/v5/#fun_strategy) para permitir que a estratégia simule até três ordens na mesma direção:
+Para demonstrar, o script a seguir coloca uma ordem de "compra" a cada 25 barras. O script fecha todas as entradas "buy" a cada 100 barras. Incluído `pyramiding = 3` na declaração da [strategy()](https://br.tradingview.com/pine-script-reference/v5/#fun_strategy) para permitir que a estratégia simule até três ordens na mesma direção:
 
 ![strategy.close() e strategy.close_all() 02](./imgs/Strategies-Orders-and-entries-Order-placement-commands-7.BnXt0DwI_2ljg1Q.webp)
 
@@ -729,13 +729,13 @@ switch strategy.opentrades
     3 => strategy.close_all()
 ```
 
-<!-- #### `strategy.cancel()` e `strategy.cancel_all()`
+#### `strategy.cancel()` e `strategy.cancel_all()`
 
 Esses comandos permitem que uma estratégia cancele ordens pendentes, ou seja, aquelas geradas por [strategy.exit()](https://br.tradingview.com/pine-script-reference/v5/#fun_strategy%7Bdot%7Dexit) ou por [strategy.order()](https://br.tradingview.com/pine-script-reference/v5/#fun_strategy%7Bdot%7Dorder) ou [strategy.entry()](https://br.tradingview.com/pine-script-reference/v5/#fun_strategy%7Bdot%7Dentry) quando usam argumentos `limit` ou `stop`.
 
-A estratégia a seguir simula uma ordem de limite de "compra" 500 ticks abaixo do preço de fechamento de 100 barras atrás, depois cancela a ordem na barra seguinte. O script desenha uma linha horizontal no `limitPrice` e colore o fundo de verde e laranja para indicar quando a ordem de limite é colocada e cancelada, respectivamente. Como podemos ver, nada aconteceu quando o preço de mercado cruzou o `limitPrice` porque a estratégia já havia cancelado a ordem:
+A estratégia a seguir simula uma ordem de limite de "compra" 500 ticks abaixo do preço de fechamento de 100 barras atrás, depois cancela a ordem na barra seguinte. O script desenha uma linha horizontal no `limitPrice` e colore o fundo de verde e laranja para indicar quando a ordem de limite é colocada e cancelada, respectivamente. Nada aconteceu quando o preço de mercado cruzou o `limitPrice` porque a estratégia já havia cancelado a ordem:
 
-![strategy.cancel()](./imgs/Strategies-Orders-and-entries-Order-placement-commands-9.4WRZcmod_TgLp6.webp)
+![strategy.cancel() e strategy.cancel_all() 01](./imgs/Strategies-Orders-and-entries-Order-placement-commands-9.4WRZcmod_TgLp6.webp)
 
 ```c
 //@version=5
@@ -762,9 +762,9 @@ bgcolor(bgColor)
 
 Assim como [strategy.close()](https://br.tradingview.com/pine-script-reference/v5/#fun_strategy%7Bdot%7Dclose), o parâmetro `id` de [strategy.cancel()](https://br.tradingview.com/pine-script-reference/v5/#fun_strategy%7Bdot%7Dcancel) refere-se ao ID de uma entrada existente. Este comando não fará nada se o parâmetro `id` referenciar um ID que não exista. Quando houver várias ordens pendentes com o mesmo ID, este comando cancelará todas de uma vez.
 
-Neste exemplo, modificamos o script anterior para colocar uma ordem de limite de "compra" em três barras consecutivas a partir de 100 barras atrás. A estratégia cancela todas elas depois que o `bar_index` está a 97 barras da barra mais recente, resultando em nada acontecer quando o preço cruza qualquer uma das linhas:
+Neste exemplo, foi modificado o script anterior para colocar uma ordem de limite de "compra" em três barras consecutivas a partir de 100 barras atrás. A estratégia cancela todas elas depois que o `bar_index` está a 97 barras da barra mais recente, resultando em nada acontecer quando o preço cruza qualquer uma das linhas:
 
-![strategy.cancel() 02](./imgs/Strategies-Orders-and-entries-Order-placement-commands-10.BdK1xjss_Z1VR5ov.webp)
+![strategy.cancel() e strategy.cancel_all() 02](./imgs/Strategies-Orders-and-entries-Order-placement-commands-10.BdK1xjss_Z1VR5ov.webp)
 
 ```c
 //@version=5
@@ -791,15 +791,13 @@ bgcolor(bgColor)
 
 __Note que:__
 
-- Adicionamos `pyramiding = 3` à declaração do script para permitir que três ordens [strategy.entry()](https://br.tradingview.com/pine-script-reference/v5/#fun_strategy%7Bdot%7Dentry) sejam preenchidas. Alternativamente, o script obteria o mesmo resultado usando [strategy.order()](https://br.tradingview.com/pine-script-reference/v5/#fun_strategy%7Bdot%7Dorder) já que não é sensível à configuração `pyramiding`.
+- Foi adicionado `pyramiding = 3` à declaração do script para permitir que três ordens [strategy.entry()](https://br.tradingview.com/pine-script-reference/v5/#fun_strategy%7Bdot%7Dentry) sejam preenchidas. Alternativamente, o script obteria o mesmo resultado usando [strategy.order()](https://br.tradingview.com/pine-script-reference/v5/#fun_strategy%7Bdot%7Dorder) já que não é sensível à configuração `pyramiding`.
 
-É importante notar que nem [strategy.cancel()](https://br.tradingview.com/pine-script-reference/v5/#fun_strategy%7Bdot%7Dcancel) nem [strategy.cancel_all()](https://br.tradingview.com/pine-script-reference/v5/#fun_strategy%7Bdot%7Dcancel_all) podem cancelar ordens de _mercado_, pois a estratégia as executa imediatamente no próximo tick. Estratégias não podem cancelar ordens depois de preenchidas. Para fechar uma posição aberta, use [strategy.close()](https
-
-://br.tradingview.com/pine-script-reference/v5/#fun_strategy%7Bdot%7Dclose) ou [strategy.close_all()](https://br.tradingview.com/pine-script-reference/v5/#fun_strategy%7Bdot%7Dclose_all).
+É importante notar que nem [strategy.cancel()](https://br.tradingview.com/pine-script-reference/v5/#fun_strategy%7Bdot%7Dcancel) nem [strategy.cancel_all()](https://br.tradingview.com/pine-script-reference/v5/#fun_strategy%7Bdot%7Dcancel_all) podem cancelar ordens de _mercado_, pois a estratégia as executa imediatamente no próximo tick. Estratégias não podem cancelar ordens depois de preenchidas. Para fechar uma posição aberta, use [strategy.close()](https://br.tradingview.com/pine-script-reference/v5/#fun_strategy%7Bdot%7Dclose) ou [strategy.close_all()](https://br.tradingview.com/pine-script-reference/v5/#fun_strategy%7Bdot%7Dclose_all).
 
 Este exemplo simula uma ordem de mercado "compra" 100 barras atrás, depois tenta cancelar todas as ordens pendentes na barra seguinte. Como a estratégia já preencheu a ordem de "compra", o comando [strategy.cancel_all()](https://br.tradingview.com/pine-script-reference/v5/#fun_strategy%7Bdot%7Dcancel_all) não faz nada neste caso, pois não há ordens pendentes para cancelar:
 
-![strategy.cancel_all()](./imgs/Strategies-Orders-and-entries-Order-placement-commands-11.C3U1GI3M_DIxpi.webp)
+![strategy.cancel() e strategy.cancel_all() 03](./imgs/Strategies-Orders-and-entries-Order-placement-commands-11.C3U1GI3M_DIxpi.webp)
 
 ```c
 //@version=5
@@ -817,6 +815,6 @@ if last_bar_index - bar_index == 99
     bgColor := color.new(color.orange, 50)
 
 bgcolor(bgColor)
-``` -->
+```
 
 #### `strategy.oca.reduce`
