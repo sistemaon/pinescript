@@ -1033,9 +1033,9 @@ __Note que:__
 
 - Foi alterado o `qty` da ordem "Limit 2" para 6 em vez de 3 porque a estratégia reduzirá seu valor em 3 quando preencher a ordem "Limit 1". Manter o valor `qty` de 3 faria com que ele caísse para 0 e nunca fosse preenchido após preencher a primeira ordem limite.
 
-### `strategy.oca.none`
+<!-- ### `strategy.oca.none`
 
 O tipo OCA [strategy.oca.none](https://br.tradingview.com/pine-script-reference/v5/#const_strategy%7Bdot%7Doca%7Bdot%7Dnone) especifica que uma ordem é executada independentemente de qualquer grupo OCA. Esse valor é o `oca_type` padrão para os comandos de colocação de ordens [strategy.order()](https://br.tradingview.com/pine-script-reference/v5/#fun_strategy%7Bdot%7Dorder) e [strategy.entry()](https://br.tradingview.com/pine-script-reference/v5/#fun_strategy%7Bdot%7Dentry).
 
 > __Observação:__\
-> Se dois comandos de colocação de ordens tiverem o mesmo `oca_name` mas valores de `oca_type` diferentes, a estratégia os considerará como sendo de dois grupos distintos. Ou seja, os grupos OCA não podem combinar os tipos [strategy.oca.cancel](https://br.tradingview.com/pine-script-reference/v5/#const_strategy%7Bdot%7Doca%7Bdot%7Dcancel), [strategy.oca.reduce](https://br.tradingview.com/pine-script-reference/v5/#const_strategy%7Bdot%7Doca%7Bdot%7Dreduce) e [strategy.oca.none](https://br.tradingview.com/pine-script-reference/v5/#const_strategy%7Bdot%7Doca%7Bdot%7Dnone).
+> Se dois comandos de colocação de ordens tiverem o mesmo `oca_name` mas valores de `oca_type` diferentes, a estratégia os considerará como sendo de dois grupos distintos. Ou seja, os grupos OCA não podem combinar os tipos [strategy.oca.cancel](https://br.tradingview.com/pine-script-reference/v5/#const_strategy%7Bdot%7Doca%7Bdot%7Dcancel), [strategy.oca.reduce](https://br.tradingview.com/pine-script-reference/v5/#const_strategy%7Bdot%7Doca%7Bdot%7Dreduce) e [strategy.oca.none](https://br.tradingview.com/pine-script-reference/v5/#const_strategy%7Bdot%7Doca%7Bdot%7Dnone). -->
