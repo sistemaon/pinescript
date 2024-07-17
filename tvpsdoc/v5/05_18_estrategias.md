@@ -399,7 +399,7 @@ Se for adicionado `pyramiding = 3` à declaração do script anterior, a estrat�
 
 Este comando simula uma ordem básica. Ao contrário da maioria dos comandos de colocação de ordens, que contêm lógica interna para simplificar a interface com as estratégias, [strategy.order()](https://br.tradingview.com/pine-script-reference/v5/#fun_strategy%7Bdot%7Dorder) usa os parâmetros especificados sem levar em conta a maioria das configurações adicionais da estratégia. As ordens colocadas por [strategy.order()](https://br.tradingview.com/pine-script-reference/v5/#fun_strategy%7Bdot%7Dorder) podem abrir novas posições e modificar ou fechar as existentes.
 
-O script a seguir usa apenas chamadas [strategy.order()](https://br.tradingview.com/pine-script-reference/v5/#fun_strategy%7Bdot%7Dorder) para criar e modificar entradas. A estratégia simula uma ordem de mercado _long_ para 15 unidades a cada 100 barras, e depois três ordens curtas para cinco unidades a cada 25 barras. O script destaca o fundo em azul e vermelho para indicar quando a estratégia simula ordens de "compra" e "venda":
+O script a seguir usa apenas chamadas [strategy.order()](https://br.tradingview.com/pine-script-reference/v5/#fun_strategy%7Bdot%7Dorder) para criar e modificar entradas. A estratégia simula uma ordem de mercado _long_ para 15 unidades a cada 100 barras, e depois três ordens _shorts_ para cinco unidades a cada 25 barras. O script destaca o fundo em azul e vermelho para indicar quando a estratégia simula ordens de "compra" e "venda":
 
 ![strategy.order()](./imgs/Strategies-Orders-and-entries-Order-placement-commands-3.DSecmQ5U_Zz9mM4.webp)
 
@@ -917,4 +917,125 @@ Na aba "Lista de Negociações" do _Testador de Estratégia_, em vez de fechar a
 
 Grupos One-Cancels-All (OCA) permitem que uma estratégia cancele total ou parcialmente outras ordens após a execução de comandos de colocação de ordens, incluindo [strategy.entry()](https://br.tradingview.com/pine-script-reference/v5/#fun_strategy%7Bdot%7Dentry) e [strategy.order()](https://br.tradingview.com/pine-script-reference/v5/#fun_strategy%7Bdot%7Dorder), com o mesmo `oca_name`, dependendo do `oca_type` que o usuário fornecer na chamada da função.
 
-#### `strategy.oca.reduce`
+### `strategy.oca.cancel`
+
+O tipo OCA [strategy.oca.cancel](https://br.tradingview.com/pine-script-reference/v5/#const_strategy%7Bdot%7Doca%7Bdot%7Dcancel) cancela todas as ordens com o mesmo `oca_name` após o preenchimento ou preenchimento parcial de uma ordem do grupo.
+
+Por exemplo, a estratégia a seguir executa ordens quando `ma1` cruza `ma2`. Quando o [strategy.position_size](https://br.tradingview.com/pine-script-reference/v5/#var_strategy%7Bdot%7Dposition_size) é 0, ela coloca ordens stop _longs_ e _shorts_ no `high` e `low` da barra. Caso contrário, chama [strategy.close_all()](https://br.tradingview.com/pine-script-reference/v5/#fun_strategy%7Bdot%7Dclose_all) para fechar todas as posições abertas com uma ordem de mercado. Dependendo da ação do preço, a estratégia pode preencher ambas as ordens antes de emitir uma ordem de fechamento. Além disso, se a suposição intrabar do emulador do broker permitir, ambas as ordens podem ser preenchidas na mesma barra. O comando [strategy.close_all()](https://br.tradingview.com/pine-script-reference/v5/#fun_strategy%7Bdot%7Dclose_all) não faz nada nesses casos, pois o script não pode invocar a ação até já ter executado ambas as ordens:
+
+![strategy.oca.cancel 01](./imgs/Strategies-OCA-groups-Strategy-oca-cancel-1.B4pkrsRw_1KFx5x.webp)
+
+```c
+//@version=5
+strategy("OCA Cancel Demo", overlay=true)
+
+float ma1 = ta.sma(close, 5)
+float ma2 = ta.sma(close, 9)
+
+if ta.cross(ma1, ma2)
+    if strategy.position_size == 0
+        strategy.order("Long",  strategy.long, stop = high)
+        strategy.order("Short", strategy.short, stop = low)
+    else
+        strategy.close_all()
+
+plot(ma1, "Fast MA", color.aqua)
+plot(ma2, "Slow MA", color.orange)
+```
+
+Para eliminar cenários onde a estratégia preenche ordens _longs_ e _shorts_ antes de uma ordem de fechamento, possível ser instruída para cancelar uma ordem após executar a outra. Neste exemplo, é definido o `oca_name` para ambos os comandos [strategy.order()](https://br.tradingview.com/pine-script-reference/v5/#fun_strategy%7Bdot%7Dorder) como "Entry" e o `oca_type` como `strategy.oca.cancel`:
+
+![strategy.oca.cancel 02](./imgs/Strategies-OCA-groups-Strategy-oca-cancel-2.Pw0HBDfm_ZLEEMG.webp)
+
+```c
+//@version=5
+strategy("OCA Cancel Demo", overlay=true)
+
+float ma1 = ta.sma(close, 5)
+float ma2 = ta.sma(close, 9)
+
+if ta.cross(ma1, ma2)
+    if strategy.position_size == 0
+        strategy.order("Long", strategy.long, stop = high, oca_name = "Entry", oca_type = strategy.oca.cancel)
+        strategy.order("Short", strategy.short, stop = low, oca_name = "Entry", oca_type = strategy.oca.cancel)
+    else
+        strategy.close_all()
+
+plot(ma1, "Fast MA", color.aqua)
+plot(ma2, "Slow MA", color.orange)
+```
+
+### `strategy.oca.reduce`
+
+O tipo OCA [strategy.oca.reduce](https://br.tradingview.com/pine-script-reference/v5/#const_strategy%7Bdot%7Doca%7Bdot%7Dreduce) não cancela ordens. Em vez disso, ele reduz o tamanho das ordens com o mesmo `oca_name` após cada novo preenchimento pelo número de "_contratos/ações/lotes/unidades_" "_contracts/shares/lots/units_" fechados, o que é particularmente útil para estratégias de saída.
+
+O exemplo a seguir demonstra uma tentativa de uma estratégia de saída _long_, apenas, que gera uma ordem de stop-loss e duas ordens de take-profit para cada nova entrada. Após o cruzamento de duas médias móveis, ele simula uma ordem de entrada "Long" usando [strategy.entry()](https://br.tradingview.com/pine-script-reference/v5/#fun_strategy%7Bdot%7Dentry) com `qty` de 6 unidades, depois simula ordens stop/limite para 6, 3 e 3 unidades usando [strategy.order()](https://br.tradingview.com/pine-script-reference/v5/#fun_strategy%7Bdot%7Dorder) nos preços `stop`, `limit1` e `limit2` respectivamente.
+
+Após adicionar a estratégia ao gráfico, é pode ser visto que ela não funciona como pretendido. O problema com este script é que [strategy.order()](https://br.tradingview.com/pine-script-reference/v5/#fun_strategy%7Bdot%7Dorder) não pertence a um grupo OCA por padrão, ao contrário de [strategy.exit()](https://br.tradingview.com/pine-script-reference/v5/#fun_strategy%7Bdot%7Dexit). Como não foi atribuído explicitamente as ordens a um grupo OCA, a estratégia não as cancela ou reduz quando preenche uma, o que significa que é possível negociar uma quantidade maior do que a posição aberta e reverter a direção:
+
+![strategy.oca.reduce 01](./imgs/Strategies-OCA-groups-Strategy-oca-reduce-1.B8XPX6-M_ZmN4JH.webp)
+
+```c
+//@version=5
+strategy("Multiple TP Demo", overlay = true)
+
+var float stop   = na
+var float limit1 = na
+var float limit2 = na
+
+bool longCondition = ta.crossover(ta.sma(close, 5), ta.sma(close, 9))
+if longCondition and strategy.position_size == 0
+    stop   := close * 0.99
+    limit1 := close * 1.01
+    limit2 := close * 1.02
+    strategy.entry("Long",  strategy.long, 6)
+    strategy.order("Stop",  strategy.short, stop = stop, qty = 6)
+    strategy.order("Limit 1", strategy.short, limit = limit1, qty = 3)
+    strategy.order("Limit 2", strategy.short, limit = limit2, qty = 3)
+
+bool showPlot = strategy.position_size != 0
+plot(showPlot ? stop   : na, "Stop",    color.red,   style = plot.style_linebr)
+plot(showPlot ? limit1 : na, "Limit 1", color.green, style = plot.style_linebr)
+plot(showPlot ? limit2 : na, "Limit 2", color.green, style = plot.style_linebr)
+```
+
+Para que a estratégia funcione como pretendido, deve instruí-la para reduzir o número de unidades para as outras ordens de stop-loss/take-profit para que não excedam o tamanho do restante da posição aberta.
+
+No exemplo abaixo, é definido o `oca_name` para cada ordem na estratégia de saída como "Bracket" e o `oca_type` como [strategy.oca.reduce](https://br.tradingview.com/pine-script-reference/v5/#const_strategy%7Bdot%7Doca%7Bdot%7Dreduce). Essas configurações dizem à estratégia para reduzir os valores de `qty` das ordens no grupo "Bracket" pelo `qty` preenchido quando executa uma delas, evitando que negocie um número excessivo de unidades e cause uma reversão:
+
+![strategy.oca.reduce 02](./imgs/Strategies-OCA-groups-Strategy-oca-reduce-2.C2FZumhg_1kQ60w.webp)
+
+```c
+//@version=5
+strategy("Multiple TP Demo", overlay = true)
+
+var float stop   = na
+var float limit1 = na
+var float limit2 = na
+
+bool longCondition = ta.crossover(ta.sma(close, 5), ta.sma(close, 9))
+if longCondition and strategy.position_size == 0
+    stop   := close * 0.99
+    limit1 := close * 1.01
+    limit2 := close * 1.02
+    strategy.entry("Long",  strategy.long, 6)
+    strategy.order("Stop",  strategy.short, stop = stop, qty = 6, oca_name = "Bracket", oca_type = strategy.oca.reduce)
+    strategy.order("Limit 1", strategy.short, limit = limit1, qty = 3, oca_name = "Bracket", oca_type = strategy.oca.reduce)
+    strategy.order("Limit 2", strategy.short, limit = limit2, qty = 6, oca_name = "Bracket", oca_type = strategy.oca.reduce)
+
+bool showPlot = strategy.position_size != 0
+plot(showPlot ? stop   : na, "Stop",    color.red,   style = plot.style_linebr)
+plot(showPlot ? limit1 : na, "Limit 1", color.green, style = plot.style_linebr)
+plot(showPlot ? limit2 : na, "Limit 2", color.green, style = plot.style_linebr)
+```
+
+__Note que:__
+
+- Foi alterado o `qty` da ordem "Limit 2" para 6 em vez de 3 porque a estratégia reduzirá seu valor em 3 quando preencher a ordem "Limit 1". Manter o valor `qty` de 3 faria com que ele caísse para 0 e nunca fosse preenchido após preencher a primeira ordem limite.
+
+### `strategy.oca.none`
+
+O tipo OCA [strategy.oca.none](https://br.tradingview.com/pine-script-reference/v5/#const_strategy%7Bdot%7Doca%7Bdot%7Dnone) especifica que uma ordem é executada independentemente de qualquer grupo OCA. Esse valor é o `oca_type` padrão para os comandos de colocação de ordens [strategy.order()](https://br.tradingview.com/pine-script-reference/v5/#fun_strategy%7Bdot%7Dorder) e [strategy.entry()](https://br.tradingview.com/pine-script-reference/v5/#fun_strategy%7Bdot%7Dentry).
+
+> __Observação:__\
+> Se dois comandos de colocação de ordens tiverem o mesmo `oca_name` mas valores de `oca_type` diferentes, a estratégia os considerará como sendo de dois grupos distintos. Ou seja, os grupos OCA não podem combinar os tipos [strategy.oca.cancel](https://br.tradingview.com/pine-script-reference/v5/#const_strategy%7Bdot%7Doca%7Bdot%7Dcancel), [strategy.oca.reduce](https://br.tradingview.com/pine-script-reference/v5/#const_strategy%7Bdot%7Doca%7Bdot%7Dreduce) e [strategy.oca.none](https://br.tradingview.com/pine-script-reference/v5/#const_strategy%7Bdot%7Doca%7Bdot%7Dnone).
