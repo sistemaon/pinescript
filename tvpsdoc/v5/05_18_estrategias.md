@@ -913,8 +913,8 @@ plot(positionSize == 0 ? na : positionSize, "Position Size", color.lime, 4, plot
 
 Na aba "Lista de Negociações" do _Testador de Estratégia_, em vez de fechar a posição "Buy2" com [strategy.close()](https://br.tradingview.com/pine-script-reference/v5/#fun_strategy%7Bdot%7Dclose), ela fecha a quantidade de "Buy1" primeiro, que é metade da quantidade da ordem de fechamento, depois fecha metade da posição "Buy2", pois o emulador do broker segue as regras FIFO por padrão. Os usuários podem alterar esse comportamento especificando `close_entries_rule = "ANY"` na função [strategy()](https://br.tradingview.com/pine-script-reference/v5/#fun_strategy).
 
-<!-- ## Grupos OCA
+## Grupos OCA
 
-Grupos One-Cancels-All (OCA) permitem que uma estratégia cancele total ou parcialmente outras ordens após a execução de comandos de colocação de ordens, incluindo [strategy.entry()](https://br.tradingview.com/pine-script-reference/v5/#fun_strategy%7Bdot%7Dentry) e [strategy.order()](https://br.tradingview.com/pine-script-reference/v5/#fun_strategy%7Bdot%7Dorder), com o mesmo `oca_name`, dependendo do `oca_type` que o usuário fornecer na chamada da função. -->
+Grupos One-Cancels-All (OCA) permitem que uma estratégia cancele total ou parcialmente outras ordens após a execução de comandos de colocação de ordens, incluindo [strategy.entry()](https://br.tradingview.com/pine-script-reference/v5/#fun_strategy%7Bdot%7Dentry) e [strategy.order()](https://br.tradingview.com/pine-script-reference/v5/#fun_strategy%7Bdot%7Dorder), com o mesmo `oca_name`, dependendo do `oca_type` que o usuário fornecer na chamada da função.
 
 #### `strategy.oca.reduce`
