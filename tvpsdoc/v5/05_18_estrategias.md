@@ -817,4 +817,104 @@ if last_bar_index - bar_index == 99
 bgcolor(bgColor)
 ```
 
+### Dimensionamento de Posições
+
+As estratégias do Pine Script apresentam duas maneiras de controlar o tamanho das negociações simuladas:
+
+- Definir um tipo e valor de quantidade fixa padrão para todas as ordens usando os argumentos `default_qty_type` e `default_qty_value` na função [strategy()](https://br.tradingview.com/pine-script-reference/v5/#fun_strategy), que também define os valores padrão na aba "_Propriedades_" "_Properties_" das configurações do script.
+- Especificar o argumento `qty` ao chamar [strategy.entry()](https://br.tradingview.com/pine-script-reference/v5/#fun_strategy%7Bdot%7Dentry). Quando um usuário fornece esse argumento para a função, o script ignora o valor e tipo de quantidade padrão da estratégia.
+
+O exemplo a seguir simula ordens de "Compra" de tamanho `longAmount` sempre que o preço `low` for igual ao valor `lowest`, e ordens de "Venda" de tamanho `shortAmount` quando o preço `high` for igual ao valor `highest`:
+
+![Dimensionamento de posições 01](./imgs/Strategies-Position-sizing-1.CpMYvl8Y_ZCp8n6.webp)
+
+```c
+//@version=5
+strategy("Buy low, sell high", overlay = true, default_qty_type = strategy.cash, default_qty_value = 5000)
+
+int   length      = input.int(20, "Length")
+float longAmount  = input.float(4.0, "Long Amount")
+float shortAmount = input.float(2.0, "Short Amount")
+
+float highest = ta.highest(length)
+float lowest  = ta.lowest(length)
+
+switch
+    low == lowest   => strategy.entry("Buy", strategy.long, longAmount)
+    high == highest => strategy.entry("Sell", strategy.short, shortAmount)
+```
+
+No exemplo acima, embora tenha sido especificado os argumentos `default_qty_type` e `default_qty_value` na declaração, o script não usa esses valores padrão para as ordens simuladas. Em vez disso, ele dimensiona as ordens como `longAmount` e `shortAmount` de unidades. Caso quieira que o script use o tipo e valor padrão, deve remover a especificação `qty` das chamadas [strategy.entry()](https://br.tradingview.com/pine-script-reference/v5/#fun_strategy%7Bdot%7Dentry):
+
+![Dimensionamento de posições 02](./imgs/Strategies-Position-sizing-2.BNMrWxCG_Z1eMhKJ.webp)
+
+```c
+//@version=5
+strategy("Buy low, sell high", overlay = true, default_qty_type = strategy.cash, default_qty_value = 5000)
+
+int length = input.int(20, "Length")
+
+float highest = ta.highest(length)
+float lowest  = ta.lowest(length)
+
+switch
+    low == lowest   => strategy.entry("Buy", strategy.long)
+    high == highest => strategy.entry("Sell", strategy.short)
+```
+
+<!-- ## Fechando uma Posição de Mercado
+
+Embora seja possível simular uma saída de uma ordem de entrada específica mostrada na aba [Lista de Negociações](./05_18_estrategias.md#lista-de-negociações) do módulo [Testador de Estratégia](./05_18_estrategias.md#testador-de-estratégia), todas as ordens são vinculadas de acordo com as regras FIFO (primeiro a entrar, primeiro a sair). Se o usuário não especificar o parâmetro `from_entry` em uma chamada [strategy.exit()](https://br.tradingview.com/pine-script-reference/v5/#fun_strategy%7Bdot%7Dexit), a estratégia sairá da posição de mercado aberta começando pela primeira ordem de entrada que a abriu.
+
+O exemplo a seguir simula duas ordens sequencialmente: "Buy1" ao preço de mercado para as últimas 100 barras e "Buy2" uma vez que o tamanho da posição corresponda ao tamanho de "Buy1". A estratégia só coloca uma ordem de saída quando o `positionSize` é de 15 unidades. O script não fornece um argumento `from_entry` para o comando [strategy.exit()](https://br.tradingview.com/pine-script-reference/v5/#fun_strategy%7Bdot%7Dexit), então a estratégia coloca ordens de saída para todas as posições abertas cada vez que chama a função, começando pela primeira. Ele plota o `positionSize` em um painel separado para referência visual:
+
+![Fechando uma posição de mercado 01](./imgs/Strategies-Closing-a-market-position-1.CG44yAVx_1GNd4G.webp)
+
+```c
+//@version=5
+strategy("Exit Demo", pyramiding = 2)
+
+float positionSize = strategy.position_size
+
+if positionSize == 0 and last_bar_index - bar_index <= 100
+    strategy.entry("Buy1", strategy.long, 5)
+else if positionSize == 5
+    strategy.entry("Buy2", strategy.long, 10)
+else if positionSize == 15
+    strategy.exit("bracket", loss = 10, profit = 10)
+
+plot(positionSize == 0 ? na : positionSize, "Position Size", color.lime, 4, plot.style_histogram)
+```
+
+__Note que:__
+
+- É incluído `pyramiding = 2` na declaração do script para permitir que ele simule duas ordens consecutivas na mesma direção.
+
+Suponha que precisasse sair de "Buy2" antes de "Buy1". Veja o que acontece se instruir a estratégia para fechar "Buy2" antes de "Buy1" quando ambas as ordens forem preenchidas:
+
+![Fechando uma posição de mercado 02](./imgs/Strategies-Closing-a-market-position-2.tTsJ7OdZ_Z2rHJes.webp)
+
+```c
+//@version=5
+strategy("Exit Demo", pyramiding = 2)
+
+float positionSize = strategy.position_size
+
+if positionSize == 0 and last_bar_index - bar_index <= 100
+    strategy.entry("Buy1", strategy.long, 5)
+else if positionSize == 5
+    strategy.entry("Buy2", strategy.long, 10)
+else if positionSize == 15
+    strategy.close("Buy2")
+    strategy.exit("bracket", "Buy1", loss = 10, profit = 10)
+
+plot(positionSize == 0 ? na : positionSize, "Position Size", color.lime, 4, plot.style_histogram)
+```
+
+Na aba "Lista de Negociações" do _Testador de Estratégia_, em vez de fechar a posição "Buy2" com [strategy.close()](https://br.tradingview.com/pine-script-reference/v5/#fun_strategy%7Bdot%7Dclose), ela fecha a quantidade de "Buy1" primeiro, que é metade da quantidade da ordem de fechamento, depois fecha metade da posição "Buy2", pois o emulador do broker segue as regras FIFO por padrão. Os usuários podem alterar esse comportamento especificando `close_entries_rule = "ANY"` na função [strategy()](https://br.tradingview.com/pine-script-reference/v5/#fun_strategy).
+
+## Grupos OCA
+
+Grupos One-Cancels-All (OCA) permitem que uma estratégia cancele total ou parcialmente outras ordens após a execução de comandos de colocação de ordens, incluindo [strategy.entry()](https://br.tradingview.com/pine-script-reference/v5/#fun_strategy%7Bdot%7Dentry) e [strategy.order()](https://br.tradingview.com/pine-script-reference/v5/#fun_strategy%7Bdot%7Dorder), com o mesmo `oca_name`, dependendo do `oca_type` que o usuário fornecer na chamada da função. -->
+
 #### `strategy.oca.reduce`
