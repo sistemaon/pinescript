@@ -1063,11 +1063,11 @@ __Note que:__
 
 - Quando negocia em períodos de tempo superiores ao diário, a estratégia usará o preço de fechamento de um dia de negociação antes do fechamento da barra para cálculo de taxa de câmbio em barras históricas. Por exemplo, em um período semanal, a taxa de câmbio será baseada no valor de fechamento da quinta-feira anterior, embora a estratégia ainda use a taxa de fechamento diária para barras em tempo real.
 
-<!-- ## Alterando o comportamento de cálculo
+## Alterando o Comportamento de Cálculo
 
-As estratégias executam em todas as barras históricas disponíveis de um gráfico e, em seguida, continuam automaticamente seus cálculos em tempo real à medida que novos dados ficam disponíveis. Por padrão, os scripts de estratégia calculam apenas uma vez por barra confirmada. Esse comportamento pode ser alterado mudando os parâmetros da função [strategy()](https://br.tradingview.com/pine-script-reference/v5/#fun_strategy) ou clicando nas caixas de seleção na seção "Recalcular" da aba "Propriedades" do script.
+As estratégias executam em todas as barras históricas disponíveis de um gráfico e, em seguida, continuam automaticamente seus cálculos em tempo real à medida que novos dados ficam disponíveis. Por padrão, os scripts de estratégia calculam apenas uma vez por barra confirmada. Esse comportamento pode ser alterado mudando os parâmetros da função [strategy()](https://br.tradingview.com/pine-script-reference/v5/#fun_strategy) ou clicando nas caixas de seleção na seção "Recalcular" da aba "Propriedades" "_Properties_" do script.
 
-### `calc_on_every_tick`
+<!-- ### `calc_on_every_tick`
 
 `calc_on_every_tick` é uma configuração opcional que controla o comportamento de cálculo em dados em tempo real. Quando esse parâmetro está habilitado, o script recalculará seus valores em cada novo tick de preço. Por padrão, seu valor é falso, o que significa que o script só executa cálculos após uma barra ser confirmada.
 
@@ -1082,7 +1082,7 @@ strategy("Donchian Channel Break", overlay = true, calc_on_every_tick = true, py
 int length = input.int(15, "Length")
 
 float highest = ta.highest(close, length)
-float lowest = ta.lowest(close, length)
+float lowest  = ta.lowest(close, length)
 
 if close == highest
     strategy.entry("Buy", strategy.long)
@@ -1099,9 +1099,10 @@ plot(highest, "Highest", color = color.lime)
 plot(lowest, "Lowest", color = color.red)
 ```
 
-> __Note que:__\
-> O script usa um valor de `pyramiding` de 20 em sua declaração, o que permite que a estratégia simule um máximo de 20 negociações na mesma direção.\
-> Para demarcar visualmente quais barras são processadas como barras em tempo real pela estratégia, o script colore o fundo de todas as barras desde o [timenow](https://br.tradingview.com/pine-script-reference/v5/#var_timenow) quando foi compilado pela última vez.
+__Note que:__
+
+- O script usa um valor de `pyramiding` de 20 em sua declaração, o que permite que a estratégia simule um máximo de 20 negociações na mesma direção.
+- Para demarcar visualmente quais barras são processadas como barras em tempo real pela estratégia, o script colore o fundo de todas as barras desde o [timenow](https://br.tradingview.com/pine-script-reference/v5/#var_timenow) quando foi compilado pela última vez.
 
 Após aplicar o script ao gráfico e deixá-lo calcular em algumas barras em tempo real, pode-se ver uma saída como a seguinte:
 
@@ -1125,24 +1126,23 @@ O exemplo abaixo mostra uma estratégia simples declarada com `calc_on_order_fil
 //@version=5
 strategy("Intrabar exit", overlay = true, calc_on_order_fills = true)
 
-float stopSize = input.float(5.0, "SL %", minval = 0.0) / 100.0
+float stopSize   = input.float(5.0, "SL %", minval = 0.0) / 100.0
 float profitSize = input.float(5.0, "TP %", minval = 0.0) / 100.0
 
 if strategy.position_size == 0.0
     strategy.entry("Buy", strategy.long)
 
-float stopLoss = strategy.position_avg_price * (1.0 - stopSize)
+float stopLoss   = strategy.position_avg_price * (1.0 - stopSize)
 float takeProfit = strategy.position_avg_price * (1.0 + profitSize)
 
 strategy.exit("Exit", stop = stopLoss, limit = takeProfit)
 ```
 
-> __Note que:__\
-> Com `calc_on_order_fills` desativado, a mesma estratégia só entrará uma barra após acionar uma ordem de saída. Primeiro, a saída no meio da barra acontecerá, mas sem ordem de entrada. Em seguida, a estratégia simulará uma ordem de entrada uma vez que a barra feche, que será preenchida no próximo tick após isso, ou seja, na abertura da próxima barra.
+__Note que:__
 
-É importante notar que habilitar `calc_on_order_fills` pode produzir resultados de estratégia irreal
+- Com `calc_on_order_fills` desativado, a mesma estratégia só entrará uma barra após acionar uma ordem de saída. Primeiro, a saída no meio da barra acontecerá, mas sem ordem de entrada. Em seguida, a estratégia simulará uma ordem de entrada uma vez que a barra feche, que será preenchida no próximo tick após isso, ou seja, na abertura da próxima barra.
 
-istas, pois o emulador de corretor pode assumir preços de ordens que não são possíveis ao negociar em tempo real. Os usuários devem ter cautela com essa configuração e considerar cuidadosamente a lógica em seus scripts.
+É importante notar que habilitar `calc_on_order_fills` pode produzir resultados de estratégia irrealistas, pois o emulador de corretor pode assumir preços de ordens que não são possíveis ao negociar em tempo real. Os usuários devem ter cautela com essa configuração e considerar cuidadosamente a lógica em seus scripts.
 
 O exemplo a seguir simula uma ordem de "Compra" após cada novo preenchimento de ordem e confirmação de barra em uma janela de 25 barras a partir do [last_bar_index](https://br.tradingview.com/pine-script-reference/v5/#var_last_bar_index) quando o script foi carregado no gráfico. Com a configuração habilitada, a estratégia simula quatro entradas por barra, pois o emulador considera que cada barra tem quatro ticks (abertura, máxima, mínima, fechamento), o que é um comportamento irrealista, pois normalmente não é possível que uma ordem seja preenchida exatamente na máxima ou mínima de uma barra:
 
@@ -1154,4 +1154,6 @@ strategy("buy on every fill", overlay = true, calc_on_order_fills = true, pyrami
 
 if last_bar_index - bar_index <= 25
     strategy.entry("Buy", strategy.long)
-``` -->
+```
+ -->
+
