@@ -1170,7 +1170,7 @@ __Note que:__
 
 Para que um relatório de desempenho de estratégia contenha dados relevantes e significativos, os traders devem se esforçar para considerar os custos potenciais do mundo real em seus resultados de estratégia. Negligenciar isso pode dar aos traders uma visão irrealista do desempenho da estratégia e comprometer a credibilidade dos resultados do teste. Sem modelar os custos potenciais associados às suas negociações, os traders podem superestimar a lucratividade histórica de uma estratégia, levando potencialmente a decisões subótimas em negociações ao vivo. As estratégias do Pine Script incluem entradas e parâmetros para simular custos de negociação nos resultados de desempenho.
 
-<!-- ### Comissão
+### Comissão
 
 A comissão refere-se à taxa que um "corretor/bolsa" "_broker/exchange_" cobra ao executar negociações. Dependendo do corretor/bolsa, alguns podem cobrar uma taxa fixa por negociação ou contrato/ação/lote/unidade, e outros podem cobrar uma porcentagem do valor total da transação. Os usuários podem definir as propriedades de comissão de suas estratégias incluindo os argumentos `commission_type` e `commission_value` na função [strategy()](https://br.tradingview.com/pine-script-reference/v5/#fun_strategy) ou configurando as entradas de "Comissão" na aba "Propriedades" das configurações da estratégia.
 
@@ -1333,7 +1333,3 @@ Por padrão, o script assume que todas as ordens limitadas são garantidas para 
 
 > __Observação!__\
 > Embora a verificação de limite tenha alterado os _tempos_ de alguns preenchimentos de ordens, a estratégia os simulou nos mesmos _preços_. Esse efeito de "distorção temporal" é um compromisso que preserva os preços das ordens limitadas verificadas, mas pode fazer com que a estratégia simule seus preenchimentos em momentos que não seriam necessariamente possíveis no mundo real. Os usuários devem ter cautela com essa configuração e entender suas limitações ao analisar os resultados da estratégia.
-
-
- -->
-
