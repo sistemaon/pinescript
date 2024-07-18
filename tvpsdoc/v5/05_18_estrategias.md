@@ -1112,7 +1112,7 @@ O script colocou ordens de "Compra" em cada novo tick de preço em tempo real em
 
 ![calc_on_every_tick 02](./imgs/Strategies-Altering-calculation-behavior-Calc-on-every-tick-2.CEEZdx06_1CeGHx.webp)
 
-<!-- ### `calc_on_order_fills`
+### `calc_on_order_fills`
 
 A configuração opcional `calc_on_order_fills` permite a recalculação de uma estratégia imediatamente após simular um preenchimento de ordem, o que permite que o script use preços mais granulares e coloque ordens adicionais sem esperar que uma barra seja confirmada.
 
@@ -1155,5 +1155,3 @@ strategy("buy on every fill", overlay = true, calc_on_order_fills = true, pyrami
 if last_bar_index - bar_index <= 25
     strategy.entry("Buy", strategy.long)
 ```
- -->
-
