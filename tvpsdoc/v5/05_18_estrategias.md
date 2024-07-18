@@ -1067,7 +1067,7 @@ __Note que:__
 
 As estratégias executam em todas as barras históricas disponíveis de um gráfico e, em seguida, continuam automaticamente seus cálculos em tempo real à medida que novos dados ficam disponíveis. Por padrão, os scripts de estratégia calculam apenas uma vez por barra confirmada. Esse comportamento pode ser alterado mudando os parâmetros da função [strategy()](https://br.tradingview.com/pine-script-reference/v5/#fun_strategy) ou clicando nas caixas de seleção na seção "Recalcular" da aba "Propriedades" "_Properties_" do script.
 
-<!-- ### `calc_on_every_tick`
+### `calc_on_every_tick`
 
 `calc_on_every_tick` é uma configuração opcional que controla o comportamento de cálculo em dados em tempo real. Quando esse parâmetro está habilitado, o script recalculará seus valores em cada novo tick de preço. Por padrão, seu valor é falso, o que significa que o script só executa cálculos após uma barra ser confirmada.
 
@@ -1112,7 +1112,7 @@ O script colocou ordens de "Compra" em cada novo tick de preço em tempo real em
 
 ![calc_on_every_tick 02](./imgs/Strategies-Altering-calculation-behavior-Calc-on-every-tick-2.CEEZdx06_1CeGHx.webp)
 
-### `calc_on_order_fills`
+<!-- ### `calc_on_order_fills`
 
 A configuração opcional `calc_on_order_fills` permite a recalculação de uma estratégia imediatamente após simular um preenchimento de ordem, o que permite que o script use preços mais granulares e coloque ordens adicionais sem esperar que uma barra seja confirmada.
 
