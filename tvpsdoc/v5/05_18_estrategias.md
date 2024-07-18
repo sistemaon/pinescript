@@ -599,7 +599,7 @@ Outra característica chave da função [strategy.exit()](https://br.tradingview
 
 Para [strategy.exit()](https://br.tradingview.com/pine-script-reference/v5/#fun_strategy%7Bdot%7Dexit) criar e ativar trailing stops, a chamada da função deve conter os argumentos `trail_offset` e `trail_price` ou `trail_points`.
 
-O exemplo abaixo mostra um trailing stop em ação e visualiza seu comportamento. A estratégia simula uma ordem de entrada longa na barra 100 barras antes da última barra no gráfico e, em seguida, um trailing stop na próxima barra. O script tem duas entradas: uma controla o _trail offset_ de nível de ativação (ou seja, a quantidade além do preço de entrada necessária para ativar o stop), e a outra controla o _trail offset_ (ou seja, a distância a seguir atrás do preço de mercado quando ele se move para um valor melhor na direção desejada).
+O exemplo abaixo mostra um trailing stop em ação e visualiza seu comportamento. A estratégia simula uma ordem de entrada _long_ na barra 100 barras antes da última barra no gráfico e, em seguida, um trailing stop na próxima barra. O script tem duas entradas: uma controla o _trail offset_ de nível de ativação (ou seja, a quantidade além do preço de entrada necessária para ativar o stop), e a outra controla o _trail offset_ (ou seja, a distância a seguir atrás do preço de mercado quando ele se move para um valor melhor na direção desejada).
 
 A linha tracejada verde no gráfico mostra o nível que o preço de mercado deve cruzar para acionar a ordem de trailing stop. Após o preço cruzar esse nível, o script plota uma linha azul para significar o trailing stop. Quando o preço sobe para um novo valor máximo, o que é favorável para a estratégia, pois significa que o valor da posição está aumentando, o stop também sobe para manter uma distância de `trailingStopOffset` ticks atrás do preço atual. Quando o preço diminui ou não atinge um novo ponto alto, o valor do stop permanece o mesmo. Eventualmente, o preço cruza abaixo do stop, acionando a saída:
 
@@ -1333,3 +1333,78 @@ Por padrão, o script assume que todas as ordens limitadas são garantidas para 
 
 > __Observação!__\
 > Embora a verificação de limite tenha alterado os _tempos_ de alguns preenchimentos de ordens, a estratégia os simulou nos mesmos _preços_. Esse efeito de "distorção temporal" é um compromisso que preserva os preços das ordens limitadas verificadas, mas pode fazer com que a estratégia simule seus preenchimentos em momentos que não seriam necessariamente possíveis no mundo real. Os usuários devem ter cautela com essa configuração e entender suas limitações ao analisar os resultados da estratégia.
+
+## Gerenciamento de Risco
+
+Construir uma estratégia que tenha um bom desempenho, especialmente em uma ampla gama de mercados, é uma tarefa desafiadora. A maioria das estratégias é projetada para padrões/condições de mercado específicos e pode gerar perdas incontroláveis quando aplicadas a outros dados. Portanto, as qualidades de gerenciamento de risco de uma estratégia podem ser críticas para seu desempenho. Os usuários podem definir critérios de gerenciamento de risco em seus scripts de estratégia usando comandos especiais com o prefixo `strategy.risk`.
+
+As estratégias podem incorporar qualquer número de critérios de gerenciamento de risco em qualquer combinação. Todos os comandos de gerenciamento de risco são executados a cada tick e evento de execução de ordem, independentemente de quaisquer mudanças no comportamento de cálculo da estratégia. Não há como desativar nenhum desses comandos durante a execução de um script. Independentemente da localização da regra de risco, ela sempre se aplicará à estratégia, a menos que o usuário remova a chamada do código.
+
+##### [`strategy.risk.allow_entry_in()`](https://br.tradingview.com/pine-script-reference/v5/#fun_strategy%7Bdot%7Drisk%7Bdot%7Dallow_entry_in)
+
+Este comando substitui a direção do mercado permitida para os comandos [strategy.entry()](https://br.tradingview.com/pine-script-reference/v5/#fun_strategy%7Bdot%7Dentry). Quando um usuário especifica a direção do trade com esta função (por exemplo, [strategy.direction.long](https://br.tradingview.com/pine-script-reference/v5/#const_strategy%7Bdot%7Ddirection%7Bdot%7Dlong)), a estratégia só entrará em trades nessa direção. No entanto, é importante notar que, se um script chamar um comando de entrada na direção oposta enquanto houver uma posição de mercado aberta, a estratégia simulará uma ordem de mercado para sair da posição.
+
+##### [`strategy.risk.max_cons_loss_days()`](https://br.tradingview.com/pine-script-reference/v5/#fun_strategy%7Bdot%7Drisk%7Bdot%7Dmax_cons_loss_days)
+
+Este comando cancela todas as ordens pendentes, fecha a posição de mercado aberta e interrompe todas as ações comerciais adicionais após a estratégia simular um número definido de dias de negociação com perdas consecutivas.
+
+##### [`strategy.risk.max_drawdown()`](https://br.tradingview.com/pine-script-reference/v5/#fun_strategy%7Bdot%7Drisk%7Bdot%7Dmax_drawdown)
+
+Este comando cancela todas as ordens pendentes, fecha a posição de mercado aberta e interrompe todas as ações comerciais adicionais após a redução da estratégia atingir o valor especificado na chamada da função.
+
+##### [`strategy.risk.max_intraday_filled_orders()`](https://br.tradingview.com/pine-script-reference/v5/#fun_strategy%7Bdot%7Drisk%7Bdot%7Dmax_intraday_filled_orders)
+
+Este comando especifica o número máximo de ordens preenchidas por dia de negociação (ou por barra de gráfico se o período for superior ao diário). Uma vez que a estratégia executa o número máximo de ordens por dia, cancela todas as ordens pendentes, fecha a posição de mercado aberta e interrompe a atividade de negociação até o final da sessão atual.
+
+##### [`strategy.risk.max_intraday_loss()`](https://br.tradingview.com/pine-script-reference/v5/#fun_strategy%7Bdot%7Drisk%7Bdot%7Dmax_intraday_loss)
+
+Este comando controla a perda máxima que a estratégia tolerará por dia de negociação (ou por barra de gráfico se o período for superior ao diário). Quando as perdas da estratégia atingem esse limite, cancela todas as ordens pendentes, fecha a posição de mercado aberta e interrompe todas as atividades de negociação até o final da sessão atual.
+
+##### [`strategy.risk.max_position_size()`](https://br.tradingview.com/pine-script-reference/v5/#fun_strategy%7Bdot%7Drisk%7Bdot%7Dmax_position_size)
+
+Este comando especifica o tamanho máximo possível da posição ao usar os comandos [strategy.entry()](https://br.tradingview.com/pine-script-reference/v5/#fun_strategy%7Bdot%7Dentry). Se a quantidade de um comando de entrada resultar em uma posição de mercado que exceda esse limite, a estratégia reduzirá a quantidade da ordem para que a posição resultante não ultrapasse a limitação.
+
+<!-- ## Margem
+
+A margem é a porcentagem mínima de uma posição de mercado que um trader deve manter em sua conta como garantia para receber e sustentar um empréstimo de seu corretor para atingir a alavancagem desejada. Os parâmetros `margin_long` e `margin_short` da declaração [strategy()](https://br.tradingview.com/pine-script-reference/v5/#fun_strategy) e as entradas "Margem para posições long/short" na aba "Propriedades" "_Properties_" do script permitem que as estratégias especifiquem percentuais de margem para posições _longs_ e _shorts_. Por exemplo, se um trader definir a margem para posições _longs_ em 25%, ele deve ter fundos suficientes para cobrir 25% de uma posição _long_ aberta. Esse percentual de margem também significa que o trader pode potencialmente gastar até 400% de seu patrimônio em suas negociações.
+
+Se os fundos simulados de uma estratégia não puderem cobrir as perdas de uma negociação com margem, o emulador de corretora aciona uma chamada de margem, que liquida forçadamente toda ou parte da posição. O número exato de contratos/ações/lotes/unidades que o emulador liquida é quatro vezes o necessário para cobrir uma perda, a fim de evitar chamadas de margem constantes em barras subsequentes. O emulador calcula o valor usando o seguinte algoritmo:
+
+1. Calcular o valor de capital gasto na posição: `Dinheiro Gasto = Quantidade * Preço de Entrada`
+2. Calcular o Valor de Mercado do Ativo (MVS): `MVS = Tamanho da Posição * Preço Atual`
+3. Calcular o Lucro Aberto como a diferença entre `MVS` e `Dinheiro Gasto`. Se a posição for _short_, multiplicamos isso por -1.
+4. Calcular o valor do patrimônio da estratégia: `Patrimônio = Capital Inicial + Lucro Líquido + Lucro Aberto`
+5. Calcular a razão de margem: `Razão de Margem = Percentual de Margem / 100`
+6. Calcular o valor da margem, que é o dinheiro necessário para cobrir a parte do trader na posição: `Margem = MVS * Razão de Margem`
+7. Calcular os fundos disponíveis: `Fundos Disponíveis = Patrimônio - Margem`
+8. Calcular o valor total de dinheiro que o trader perdeu: `Perda = Fundos Disponíveis / Razão de Margem`
+9. Calcular quantos contratos/ações/lotes/unidades o trader precisaria liquidar para cobrir a perda. Truncamos esse valor para a mesma precisão decimal do tamanho mínimo da posição para o símbolo atual: `Quantidade de Cobertura = TRUNCATE(Perda / Preço Atual).`
+10. Calcular quantas unidades o corretor liquidará para cobrir a perda: `Chamada de Margem = Quantidade de Cobertura * 4`
+
+Para examinar esse cálculo em detalhes, é adicionado a "_Supertrend Strategy_" integrada ao gráfico NASDAQ:TSLA no período de 1D e definir o "Tamanho da Ordem" para 300% do patrimônio e a "Margem para posições _longs_" para 25% na aba "Propriedades" "_Properties_" da configuração da estratégia:
+
+![Margem](./imgs/Strategies-Margin-1.D7HQz6iZ_Z2vIF4D.webp)
+
+A primeira entrada ocorreu no preço de abertura da barra em 16 de setembro de 2010. A estratégia comprou 682.438 ações (Tamanho da Posição) a 4,43 USD (Preço de Entrada). Então, em 23 de setembro de 2010, quando o preço caiu para 3,9 (Preço Atual), o emulador liquidou forçadamente 111.052 ações por meio de uma chamada de margem.
+
+```c
+Dinheiro Gasto: 682438 * 4.43 = 3023200.34
+
+MVS: 682438 * 3.9 = 2661508.2
+
+Lucro Aberto: −361692.14
+
+Patrimônio: 1000000 + 0 − 361692.14 = 638307.86
+
+Razão de Margem: 25 / 100 = 0.25
+
+Margem: 2661508.2 * 0.25 = 665377.05
+
+Fundos Disponíveis: 638307.86 - 665377.05 = -27069.19
+
+Perda: -27069.19 / 0.25 = -108276.76
+
+Quantidade de Cobertura: TRUNCATE(-108276.76 / 3.9) = TRUNCATE(-27763.27) = -27763
+
+Tamanho da Chamada de Margem: -27763 * 4 = -111052
+``` -->
