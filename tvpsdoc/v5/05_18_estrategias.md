@@ -1044,7 +1044,7 @@ O tipo OCA [strategy.oca.none](https://br.tradingview.com/pine-script-reference/
 
 As estratégias do Pine Script podem usar diferentes moedas base além dos instrumentos nos quais são calculadas. Os usuários podem especificar a moeda base da conta simulada incluindo uma variável `currency.*` como argumento `currency` na função [strategy()](https://br.tradingview.com/pine-script-reference/v5/#fun_strategy), o que alterará o valor de [strategy.account_currency](https://br.tradingview.com/pine-script-reference/v5/#var_strategy%7Bdot%7Daccount_currency) do script. O valor padrão `currency` para estratégias é `currency.NONE`, o que significa que o script usa a moeda base do instrumento no gráfico.
 
-Quando um script de estratégia usa uma moeda base especificada, ele multiplica os lucros simulados pela taxa de conversão FX_IDC do dia de negociação anterior. Por exemplo, a estratégia abaixo coloca uma ordem de entrada para um lote padrão (100.000 unidades) com uma meta de lucro e stop-loss de 1 ponto em cada uma das últimas 500 barras do gráfico, depois plota o lucro líquido ao lado do fechamento diário invertido do símbolo em um painel separado. Definimos a moeda base como `currency.EUR`. Quando esse script é adicionado ao FX_IDC:EURUSD, os dois gráficos se alinham, confirmando que a estratégia usa a taxa do dia anterior desse símbolo para seus cálculos:
+Quando um script de estratégia usa uma moeda base especificada, ele multiplica os lucros simulados pela taxa de conversão FX_IDC do dia de negociação anterior. Por exemplo, a estratégia abaixo coloca uma ordem de entrada para um lote padrão (100.000 unidades) com uma meta de lucro e stop-loss de 1 ponto em cada uma das últimas 500 barras do gráfico, depois plota o lucro líquido ao lado do fechamento diário invertido do símbolo em um painel separado. Foi definido a moeda base como `currency.EUR`. Quando esse script é adicionado ao FX_IDC:EURUSD, os dois gráficos se alinham, confirmando que a estratégia usa a taxa do dia anterior desse símbolo para seus cálculos:
 
 ![Moeda](./imgs/Strategies-Currency-1.BIrX-27H_1pt4ls.webp)
 
@@ -1155,3 +1155,185 @@ strategy("buy on every fill", overlay = true, calc_on_order_fills = true, pyrami
 if last_bar_index - bar_index <= 25
     strategy.entry("Buy", strategy.long)
 ```
+
+### `process_orders_on_close`
+
+O comportamento padrão da estratégia simula ordens no fechamento de cada barra, o que significa que a primeira oportunidade para preencher as ordens e executar cálculos e alertas da estratégia é na abertura da barra seguinte. Os traders podem alterar esse comportamento para processar uma estratégia usando o valor de fechamento de cada barra, habilitando a configuração `process_orders_on_close`.
+
+Esse comportamento é mais útil ao fazer backtesting de estratégias manuais nas quais os traders encerram posições antes do fechamento de uma barra ou em cenários onde traders algorítmicos em mercados que não operam 24x7 configuram a capacidade de negociação após o horário comercial para que os alertas enviados após o fechamento ainda tenham chance de serem preenchidos antes do dia seguinte.
+
+__Note que:__
+
+- É crucial estar ciente de que usar estratégias com `process_orders_on_close` em um ambiente de negociação ao vivo pode levar a uma estratégia de repainting, pois os alertas no fechamento de uma barra ainda ocorrem quando o mercado fecha, e as ordens podem não ser preenchidas até a próxima abertura do mercado.
+
+<!-- ## Simulando Custos de Negociação
+
+Para que um relatório de desempenho de estratégia contenha dados relevantes e significativos, os traders devem se esforçar para considerar os custos potenciais do mundo real em seus resultados de estratégia. Negligenciar isso pode dar aos traders uma visão irrealista do desempenho da estratégia e comprometer a credibilidade dos resultados do teste. Sem modelar os custos potenciais associados às suas negociações, os traders podem superestimar a lucratividade histórica de uma estratégia, levando potencialmente a decisões subótimas em negociações ao vivo. As estratégias do Pine Script incluem entradas e parâmetros para simular custos de negociação nos resultados de desempenho.
+
+### Comissão
+
+A comissão refere-se à taxa que um "corretor/bolsa" "_broker/exchange_" cobra ao executar negociações. Dependendo do corretor/bolsa, alguns podem cobrar uma taxa fixa por negociação ou contrato/ação/lote/unidade, e outros podem cobrar uma porcentagem do valor total da transação. Os usuários podem definir as propriedades de comissão de suas estratégias incluindo os argumentos `commission_type` e `commission_value` na função [strategy()](https://br.tradingview.com/pine-script-reference/v5/#fun_strategy) ou configurando as entradas de "Comissão" na aba "Propriedades" das configurações da estratégia.
+
+O script a seguir é uma estratégia simples que simula uma posição "Long" de 2% do patrimônio quando o `close` é igual ao valor `highest` durante o `length`, e fecha a negociação quando é igual ao valor `lowest`:
+
+![Comissão 01](./imgs/Strategies-Simulating-trading-costs-Commission-1.XUDZaoNR_2iKnnJ.webp)
+
+```c
+//@version=5
+strategy("Commission Demo", overlay=true, default_qty_value = 2, default_qty_type = strategy.percent_of_equity)
+
+length = input.int(10, "Length")
+
+float highest = ta.highest(close, length)
+float lowest  = ta.lowest(close, length)
+
+switch close
+    highest => strategy.entry("Long", strategy.long)
+    lowest  => strategy.close("Long")
+
+plot(highest, color = color.new(color.lime, 50))
+plot(lowest, color = color.new(color.red, 50))
+```
+
+Ao inspecionar os resultados no Strategy Tester, a estratégia teve um crescimento positivo de patrimônio de 17,61% durante o período de teste. No entanto, os resultados do backtest não consideram as taxas que o corretor/bolsa pode cobrar. Veja o que acontece com esses resultados quando uma pequena comissão é incluído em cada negociação na simulação da estratégia. Neste exemplo, foi adicionado `commission_type = strategy.commission.percent` e `commission_value = 1` na declaração [strategy()](https://br.tradingview.com/pine-script-reference/v5/#fun_strategy), o que significa que ele simulará uma comissão de 1% em todas as ordens executadas:
+
+![Comissão 02](./imgs/Strategies-Simulating-trading-costs-Commission-2.DAdgHUnC_4hzO7.webp)
+
+```c
+//@version=5
+strategy(
+     "Commission Demo", overlay=true, default_qty_value = 2, default_qty_type = strategy.percent_of_equity,
+     commission_type = strategy.commission.percent, commission_value = 1
+ )
+
+length = input.int(10, "Length")
+
+float highest = ta.highest(close, length)
+float lowest  = ta.lowest(close, length)
+
+switch close
+    highest => strategy.entry("Long", strategy.long)
+    lowest  => strategy.close("Long")
+
+plot(highest, color = color.new(color.lime, 50))
+plot(lowest, color = color.new(color.red, 50))
+```
+
+Após aplicar uma comissão de 1% ao backtest, a estratégia simulou um lucro líquido significativamente reduzido de apenas 1,42% e uma curva de patrimônio mais volátil com um rebaixamento máximo elevado, destacando o impacto que a simulação de comissão pode ter nos resultados do teste de uma estratégia.
+
+### Slippage (_Deslizamento_) e Limites não Preenchidos
+
+Na negociação real, um "corretor/bolsa" "_broker/exchange_" pode preencher ordens a preços ligeiramente diferentes do que um trader pretendia devido à volatilidade, liquidez, tamanho da ordem e outros fatores de mercado, o que pode impactar profundamente o desempenho de uma estratégia. A disparidade entre os preços esperados e os preços reais em que o corretor/bolsa executa negociações é chamado de deslizamento. O deslizamento é dinâmico e imprevisível, tornando impossível simular com precisão. No entanto, considerar uma pequena quantidade de deslizamento em cada negociação durante um backtest ou teste de avanço pode ajudar os resultados a se alinhar melhor com a realidade. Os usuários podem modelar o deslizamento nos resultados da estratégia, dimensionado como um número fixo de ticks, incluindo um argumento `slippage` na declaração [strategy()](https://br.tradingview.com/pine-script-reference/v5/#fun_strategy) ou configurando a entrada "Slippage" na aba "Propriedades" "_Properties_" das configurações da estratégia.
+
+O exemplo a seguir demonstra como a simulação de deslizamento afeta os preços de preenchimento das ordens de mercado em um teste de estratégia. O script abaixo coloca uma ordem de "Compra" de mercado de 2% do patrimônio quando o preço de mercado está acima de uma EMA enquanto a EMA está subindo e fecha a posição quando o preço cai abaixo da EMA enquanto ela está caindo. É adicionado `slippage = 20` na função [strategy()](https://br.tradingview.com/pine-script-reference/v5/#fun_strategy), o que declara que o preço de cada ordem simulada deslizará 20 ticks na direção da negociação. O script usa [strategy.opentrades.entry_bar_index()](https://br.tradingview.com/pine-script-reference/v5/#fun_strategy%7Bdot%7Dopentrades%7Bdot%7Dentry_bar_index) e [strategy.closedtrades.exit_bar_index()](https://br.tradingview.com/pine-script-reference/v5/#fun_strategy%7Bdot%7Dclosedtrades%7Bdot%7Dexit_bar_index) para obter o `entryIndex` e o `exitIndex`, que utiliza para obter o `fillPrice` da ordem. Quando o índice da barra está no `entryIndex`, o `fillPrice` é o primeiro valor de [strategy.opentrades.entry_price()](https://br.tradingview.com/pine-script-reference/v5/#fun_strategy%7Bdot%7Dopentrades%7Bdot%7Dentry_price). No `exitIndex`, o `fillPrice` é o valor de [strategy.closedtrades.exit_price()](https://br.tradingview.com/pine-script-reference/v5/#fun_strategy%7Bdot%7Dclosedtrades%7Bdot%7Dexit_price) do último comércio fechado. O script plota o preço de preenchimento esperado juntamente com o preço de preenchimento simulado após o deslizamento para comparar visualmente a diferença:
+
+![Slippage e limites não preenchidos 01](./imgs/Strategies-Simulating-trading-costs-Slippage-and-unfilled-limits-1.viLUaTPh_Z17uYCF.webp)
+
+```c
+//@version=5
+strategy(
+     "Slippage Demo", overlay = true, slippage = 20,
+     default_qty_value = 2, default_qty_type = strategy.percent_of_equity
+ )
+
+int length = input.int(5, "Length")
+
+//@variable Exponential moving average with an input `length`.
+float ma = ta.ema(close, length)
+
+//@variable Returns `true` when `ma` has increased and `close` is greater than it, `false` otherwise.
+bool longCondition = close > ma and ma > ma[1]
+//@variable Returns `true` when `ma` has decreased and `close` is less than it, `false` otherwise.
+bool shortCondition = close < ma and ma < ma[1]
+
+// Enter a long market position on `longCondition`, close the position on `shortCondition`. 
+if longCondition    
+    strategy.entry("Buy", strategy.long)
+if shortCondition
+    strategy.close("Buy")
+
+//@variable The `bar_index` of the position's entry order fill.
+int entryIndex = strategy.opentrades.entry_bar_index(0)
+//@variable The `bar_index` of the position's close order fill.
+int exitIndex  = strategy.closedtrades.exit_bar_index(strategy.closedtrades - 1)
+
+//@variable The fill price simulated by the strategy.
+float fillPrice = switch bar_index
+    entryIndex => strategy.opentrades.entry_price(0)
+    exitIndex  => strategy.closedtrades.exit_price(strategy.closedtrades - 1)
+
+//@variable The expected fill price of the open market position.
+float expectedPrice = fillPrice ? open : na
+
+color expectedColor = na
+color filledColor   = na
+
+if bar_index == entryIndex
+    expectedColor := color.green
+    filledColor   := color.blue
+else if bar_index == exitIndex
+    expectedColor := color.red
+    filledColor   := color.fuchsia
+
+plot(ma, color = color.new(color.orange, 50))
+
+plotchar(fillPrice ? open : na, "Expected fill price", "—", location.absolute, expectedColor)
+plotchar(fillPrice, "Fill price after slippage", "—", location.absolute, filledColor)
+```
+
+__Note que:__
+
+- Como a estratégia aplica deslizamento constante a todos os preenchimentos de ordens, algumas ordens podem ser preenchidas fora do intervalo da vela na simulação. Portanto, os usuários devem ter cautela com essa configuração, pois um deslizamento simulado excessivo pode produzir resultados de teste irrealisticamente piores.
+
+Alguns traders podem assumir que podem evitar os efeitos adversos do deslizamento usando ordens limitadas, pois, ao contrário das ordens de mercado, elas não podem ser executadas a um preço pior do que o valor especificado. No entanto, dependendo do estado do mercado real, mesmo que o preço de mercado atinja o preço da ordem, há uma chance de que uma ordem limitada não seja preenchida, pois as ordens limitadas só podem ser preenchidas se um título tiver liquidez e ação de preço suficientes em torno do valor. Para considerar a possibilidade de ordens não preenchidas em um backtest, os usuários podem especificar o valor `backtest_fill_limits_assumption` na declaração ou usar a entrada "Verify price for limit orders" na aba "Propriedades" para instruir a estratégia a preencher ordens limitadas apenas após os preços se moverem um número definido de ticks além dos preços das ordens.
+
+O exemplo a seguir coloca uma ordem limitada de 2% do patrimônio no `hlcc4` de uma barra quando o `high` é o valor `highest` durante as últimas barras `length` e não há entradas pendentes. A estratégia fecha a posição de mercado e cancela todas as ordens quando o `low` é o valor `lowest`. Cada vez que a estratégia aciona uma ordem, ela desenha uma linha horizontal no `limitPrice`, que é atualizada em cada barra até fechar a posição ou cancelar a ordem:
+
+![Slippage e limites não preenchidos 02](./imgs/Strategies-Simulating-trading-costs-Slippage-and-unfilled-limits-2.izbF-BkC_2p4GEQ.webp)
+
+```c
+//@version=5
+strategy(
+     "Verify price for limits example", overlay = true,
+     default_qty_type = strategy.percent_of_equity, default_qty_value = 2
+ )
+
+int length = input.int(25, title = "Length")
+
+//@variable Draws a line at the limit price of the most recent entry order.
+var line limitLine = na
+
+// Highest high and lowest low
+highest = ta.highest(length)
+lowest  = ta.lowest(length)
+
+// Place an entry order and draw a new line when the the `high` equals the `highest` value and `limitLine` is `na`.
+if high == highest and na(limitLine)
+    float limitPrice = hlcc4
+    strategy.entry("Long", strategy.long, limit = limitPrice)
+    limitLine := line.new(bar_index, limitPrice, bar_index + 1, limitPrice)
+
+// Close the open market position, cancel orders, and set `limitLine` to `na` when the `low` equals the `lowest` value.
+if low == lowest
+    strategy.cancel_all()
+    limitLine := na
+    strategy.close_all()
+
+// Update the `x2` value of `limitLine` if it isn't `na`.
+if not na(limitLine)
+    limitLine.set_x2(bar_index + 1) 
+
+plot(highest, "Highest High", color = color.new(color.green, 50))
+plot(lowest, "Lowest Low", color = color.new(color.red, 50))
+```
+
+Por padrão, o script assume que todas as ordens limitadas são garantidas para preencher. No entanto, isso muitas vezes não é o caso na negociação real. É adicionado uma verificação de preço às nossas ordens limitadas para considerar ordens potencialmente não preenchidas. Neste exemplo, foi adicionado `backtest_fill_limits_assumption = 3` na chamada da função [strategy()](https://br.tradingview.com/pine-script-reference/v5/#fun_strategy). Usar a verificação de limite omite alguns preenchimentos de ordens simuladas e altera os tempos de outras, já que as ordens de entrada agora só podem ser preenchidas após o preço penetrar o preço limite por três ticks:
+
+![Slippage e limites não preenchidos 03](./imgs/Strategies-Simulating-trading-costs-Slippage-and-unfilled-limits-3.DDaLk5Eu_fLnmo.webp)
+
+> __Observação!__\
+> Embora a verificação de limite tenha alterado os _tempos_ de alguns preenchimentos de ordens, a estratégia os simulou nos mesmos _preços_. Esse efeito de "distorção temporal" é um compromisso que preserva os preços das ordens limitadas verificadas, mas pode fazer com que a estratégia simule seus preenchimentos em momentos que não seriam necessariamente possíveis no mundo real. Os usuários devem ter cautela com essa configuração e entender suas limitações ao analisar os resultados da estratégia.
+
+
+ -->
+
