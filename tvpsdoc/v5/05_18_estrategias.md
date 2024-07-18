@@ -1166,11 +1166,11 @@ __Note que:__
 
 - É crucial estar ciente de que usar estratégias com `process_orders_on_close` em um ambiente de negociação ao vivo pode levar a uma estratégia de repainting, pois os alertas no fechamento de uma barra ainda ocorrem quando o mercado fecha, e as ordens podem não ser preenchidas até a próxima abertura do mercado.
 
-<!-- ## Simulando Custos de Negociação
+## Simulando Custos de Negociação
 
 Para que um relatório de desempenho de estratégia contenha dados relevantes e significativos, os traders devem se esforçar para considerar os custos potenciais do mundo real em seus resultados de estratégia. Negligenciar isso pode dar aos traders uma visão irrealista do desempenho da estratégia e comprometer a credibilidade dos resultados do teste. Sem modelar os custos potenciais associados às suas negociações, os traders podem superestimar a lucratividade histórica de uma estratégia, levando potencialmente a decisões subótimas em negociações ao vivo. As estratégias do Pine Script incluem entradas e parâmetros para simular custos de negociação nos resultados de desempenho.
 
-### Comissão
+<!-- ### Comissão
 
 A comissão refere-se à taxa que um "corretor/bolsa" "_broker/exchange_" cobra ao executar negociações. Dependendo do corretor/bolsa, alguns podem cobrar uma taxa fixa por negociação ou contrato/ação/lote/unidade, e outros podem cobrar uma porcentagem do valor total da transação. Os usuários podem definir as propriedades de comissão de suas estratégias incluindo os argumentos `commission_type` e `commission_value` na função [strategy()](https://br.tradingview.com/pine-script-reference/v5/#fun_strategy) ou configurando as entradas de "Comissão" na aba "Propriedades" das configurações da estratégia.
 
