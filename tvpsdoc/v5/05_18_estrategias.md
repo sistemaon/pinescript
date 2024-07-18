@@ -1364,7 +1364,7 @@ Este comando controla a perda máxima que a estratégia tolerará por dia de neg
 
 Este comando especifica o tamanho máximo possível da posição ao usar os comandos [strategy.entry()](https://br.tradingview.com/pine-script-reference/v5/#fun_strategy%7Bdot%7Dentry). Se a quantidade de um comando de entrada resultar em uma posição de mercado que exceda esse limite, a estratégia reduzirá a quantidade da ordem para que a posição resultante não ultrapasse a limitação.
 
-<!-- ## Margem
+## Margem
 
 A margem é a porcentagem mínima de uma posição de mercado que um trader deve manter em sua conta como garantia para receber e sustentar um empréstimo de seu corretor para atingir a alavancagem desejada. Os parâmetros `margin_long` e `margin_short` da declaração [strategy()](https://br.tradingview.com/pine-script-reference/v5/#fun_strategy) e as entradas "Margem para posições long/short" na aba "Propriedades" "_Properties_" do script permitem que as estratégias especifiquem percentuais de margem para posições _longs_ e _shorts_. Por exemplo, se um trader definir a margem para posições _longs_ em 25%, ele deve ter fundos suficientes para cobrir 25% de uma posição _long_ aberta. Esse percentual de margem também significa que o trader pode potencialmente gastar até 400% de seu patrimônio em suas negociações.
 
@@ -1407,4 +1407,4 @@ Perda: -27069.19 / 0.25 = -108276.76
 Quantidade de Cobertura: TRUNCATE(-108276.76 / 3.9) = TRUNCATE(-27763.27) = -27763
 
 Tamanho da Chamada de Margem: -27763 * 4 = -111052
-``` -->
+```
