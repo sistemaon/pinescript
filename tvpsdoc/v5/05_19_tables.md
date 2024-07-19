@@ -160,7 +160,7 @@ __Note que:__
 - Mesmo que as células da tabela sejam populadas apenas na última barra, é necessário executar as chamadas para [ta.sma()](https://br.tradingview.com/pine-script-reference/v5/#fun_ta%7Bdot%7Dsma) em cada barra para produzir os resultados corretos. O aviso do compilador que aparece ao compilar o código pode ser ignorado com segurança.
 - Os inputs são separados em duas seções usando `group` e os relevantes são juntados na mesma linha usando `inline`. Ferramentas de dicas são fornecidas para documentar os limites de certos campos usando `tooltip`.
 
-<!-- ## Exibindo um Heatmap
+## Exibindo um Heatmap
 
 O próximo projeto é um heatmap, que indicará a relação bull/bear do preço atual em relação aos seus valores passados. Para isso, será usada uma tabela posicionada na parte inferior do gráfico. Apenas cores serão exibidas, portanto, nossa tabela não conterá texto; simplesmente será colorido o fundo de suas células para produzir o heatmap. O heatmap usa um período de lookback selecionável pelo usuário. Ele percorre esse período para determinar se o preço está acima/abaixo de cada barra no passado, exibindo uma intensidade progressivamente mais clara da cor bull/bear à medida que avançamos no passado:
 
@@ -209,7 +209,7 @@ __Note que:__
 - Ao contrário de outros objetos exibidos em scripts Pine, as células deste heatmap não estão vinculadas a barras de gráfico. O período de lookback configurado determina quantas células da tabela o heatmap contém, e o heatmap não mudará à medida que o gráfico for panoramado horizontalmente ou dimensionado.
 - O número máximo de células que podem ser exibidas no espaço visual do script dependerá da resolução do dispositivo de visualização e da porção da tela usada pelo gráfico. Telas de maior resolução e janelas mais largas permitirão exibir mais células da tabela.
 
-## Dicas
+<!-- ## Dicas
 
 - Ao criar tabelas em scripts de estratégia, lembre-se de que, a menos que a estratégia use `calc_on_every_tick = true`, o código da tabela incluído em blocos [if](https://br.tradingview.com/pine-script-reference/v5/#kw_if) [barstate.islast](https://br.tradingview.com/pine-script-reference/v5/#var_barstate%7Bdot%7Dislast) não será executado em cada atualização em tempo real, portanto, a tabela não será exibida como esperado.
 - Lembre-se de que chamadas sucessivas a [table.cell()](https://br.tradingview.com/pine-script-reference/v5/#fun_table%7Bdot%7Dcell) sobrescrevem as propriedades da célula especificadas por chamadas anteriores a [table.cell()](https://br.tradingview.com/pine-script-reference/v5/#fun_table%7Bdot%7Dcell). Use as funções setter para modificar as propriedades de uma célula.
