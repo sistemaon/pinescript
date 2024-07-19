@@ -209,8 +209,8 @@ __Note que:__
 - Ao contrário de outros objetos exibidos em scripts Pine, as células deste heatmap não estão vinculadas a barras de gráfico. O período de lookback configurado determina quantas células da tabela o heatmap contém, e o heatmap não mudará à medida que o gráfico for panoramado horizontalmente ou dimensionado.
 - O número máximo de células que podem ser exibidas no espaço visual do script dependerá da resolução do dispositivo de visualização e da porção da tela usada pelo gráfico. Telas de maior resolução e janelas mais largas permitirão exibir mais células da tabela.
 
-<!-- ## Dicas
+## Dicas
 
 - Ao criar tabelas em scripts de estratégia, lembre-se de que, a menos que a estratégia use `calc_on_every_tick = true`, o código da tabela incluído em blocos [if](https://br.tradingview.com/pine-script-reference/v5/#kw_if) [barstate.islast](https://br.tradingview.com/pine-script-reference/v5/#var_barstate%7Bdot%7Dislast) não será executado em cada atualização em tempo real, portanto, a tabela não será exibida como esperado.
 - Lembre-se de que chamadas sucessivas a [table.cell()](https://br.tradingview.com/pine-script-reference/v5/#fun_table%7Bdot%7Dcell) sobrescrevem as propriedades da célula especificadas por chamadas anteriores a [table.cell()](https://br.tradingview.com/pine-script-reference/v5/#fun_table%7Bdot%7Dcell). Use as funções setter para modificar as propriedades de uma célula.
-- Controle a execução do seu código da tabela de forma sábia, restringindo-o apenas às barras necessárias. Isso economiza recursos do servidor e seus gráficos serão exibidos mais rapidamente, beneficiando todos. -->
+- Controle a execução do seu código da tabela de forma sábia, restringindo-o apenas às barras necessárias. Isso economiza recursos do servidor e seus gráficos serão exibidos mais rapidamente, beneficiando todos.
