@@ -35,7 +35,7 @@ Ao popularem células usando [table.cell()](https://br.tradingview.com/pine-scri
 
 Lembre-se de que cada chamada sucessiva a [table.cell()](https://br.tradingview.com/pine-script-reference/v5/#fun_table%7Bdot%7Dcell) redefine __todas__ as propriedades da célula, excluindo quaisquer propriedades definidas por chamadas anteriores a [table.cell()](https://br.tradingview.com/pine-script-reference/v5/#fun_table%7Bdot%7Dcell) na mesma célula.
 
-<!-- ### Colocando um Valor Único em uma Posição Fixa
+### Colocando um Valor Único em uma Posição Fixa
 
 O exemplo abaixo, colocará o valor do ATR no canto superior direito do gráfico. Primeiro, cria-se uma tabela de uma célula, depois popula-se essa célula:
 
@@ -80,4 +80,4 @@ __Note que:__
 - Usou-se [table.new()](https://br.tradingview.com/pine-script-reference/v5/#fun_table%7Bdot%7Dnew) para definir uma cor de fundo, uma cor de moldura e sua largura.
 - Ao popular a célula com [table.cell()](https://br.tradingview.com/pine-script-reference/v5/#fun_table%7Bdot%7Dcell), definiu-se o texto para ser exibido em branco.
 - Passou-se [format.mintick](https://br.tradingview.com/pine-script-reference/v5/#const_format%7Bdot%7Dmintick) como um segundo argumento para a função [str.tostring()](https://br.tradingview.com/pine-script-reference/v5/#fun_str%7Bdot%7Dtostring) para restringir a precisão do ATR à precisão do tick do gráfico.
-- Agora usa-se uma entrada para permitir que o usuário do script especifique o período do ATR. A entrada também inclui uma dica de ferramenta, que o usuário pode ver ao passar o mouse sobre o ícone "i" na aba "Configurações/Entradas" "_Settings/Inputs_" do script. -->
+- Agora usa-se uma entrada para permitir que o usuário do script especifique o período do ATR. A entrada também inclui uma dica de ferramenta, que o usuário pode ver ao passar o mouse sobre o ícone "i" na aba "Configurações/Entradas" "_Settings/Inputs_" do script.
