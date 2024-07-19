@@ -1448,14 +1448,14 @@ Ao acionar o alerta, a estratégia preencherá os placeholders na mensagem do al
 
 ![Alertas de estratégia 02](./imgs/Strategies-Strategy-alerts-2.RsPPvOvM_1vSwtv.webp)
 
-<!-- ## Notas sobre Teste de Estratégias
+## Notas sobre Teste de Estratégias
 
 É comum que traders testem e ajustem suas estratégias em condições de mercado históricas e em tempo real, pois muitos acreditam que analisar os resultados pode fornecer insights valiosos sobre as características de uma estratégia, suas possíveis fraquezas e seu potencial futuro. No entanto, deve-se sempre estar ciente dos vieses e limitações dos resultados das estratégias simuladas, especialmente ao usar os resultados para suportar decisões de negociação ao vivo. Esta seção descreve alguns pontos de atenção associados à validação e ajuste de estratégias e possíveis soluções para mitigar seus efeitos.
 
 > __Observação!__\
 > Embora testar estratégias em dados existentes possa fornecer informações úteis sobre as qualidades de uma estratégia, é importante notar que nem o passado nem o presente garantem o futuro. Os mercados financeiros podem mudar rápida e imprevisivelmente, o que pode fazer com que uma estratégia sofra perdas incontroláveis. Além disso, os resultados simulados podem não levar totalmente em conta outros fatores do mundo real que podem impactar o desempenho da negociação. Portanto, recomenda-se que traders compreendam profundamente as limitações e riscos ao avaliar testes de backtest e forward test e considerem-nos "partes do todo" em seus processos de validação, em vez de basear decisões apenas nos resultados.
 
-### Backtesting e Forward Testing
+<!-- ### Backtesting e Forward Testing
 
 Backtesting é uma técnica usada para avaliar o desempenho histórico de uma estratégia ou modelo de negociação simulando e analisando seus resultados passados em dados de mercado históricos; esta técnica assume que a análise dos resultados de uma estratégia em dados passados pode fornecer insights sobre seus pontos fortes e fracos. Ao realizar o backtesting, muitos ajustam os parâmetros de uma estratégia na tentativa de otimizar seus resultados. A análise e otimização de resultados históricos pode ajudar a obter uma compreensão mais profunda de uma estratégia. No entanto, é essencial entender os riscos e limitações ao basear decisões em resultados de backtest otimizados.
 
