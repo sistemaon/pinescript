@@ -1327,7 +1327,7 @@ plot(highest, "Highest High", color = color.new(color.green, 50))
 plot(lowest, "Lowest Low", color = color.new(color.red, 50))
 ```
 
-Por padrão, o script assume que todas as ordens limitadas são garantidas para preencher. No entanto, isso muitas vezes não é o caso na negociação real. É adicionado uma verificação de preço às nossas ordens limitadas para considerar ordens potencialmente não preenchidas. Neste exemplo, foi adicionado `backtest_fill_limits_assumption = 3` na chamada da função [strategy()](https://br.tradingview.com/pine-script-reference/v5/#fun_strategy). Usar a verificação de limite omite alguns preenchimentos de ordens simuladas e altera os tempos de outras, já que as ordens de entrada agora só podem ser preenchidas após o preço penetrar o preço limite por três ticks:
+Por padrão, o script assume que todas as ordens limitadas são garantidas para preencher. No entanto, isso muitas vezes não é o caso na negociação real. É adicionado uma verificação de preço às ordens limitadas para considerar ordens potencialmente não preenchidas. Neste exemplo, foi adicionado `backtest_fill_limits_assumption = 3` na chamada da função [strategy()](https://br.tradingview.com/pine-script-reference/v5/#fun_strategy). Usar a verificação de limite omite alguns preenchimentos de ordens simuladas e altera os tempos de outras, já que as ordens de entrada agora só podem ser preenchidas após o preço penetrar o preço limite por três ticks:
 
 ![Slippage e limites não preenchidos 03](./imgs/Strategies-Simulating-trading-costs-Slippage-and-unfilled-limits-3.DDaLk5Eu_fLnmo.webp)
 
@@ -1372,13 +1372,13 @@ Se os fundos simulados de uma estratégia não puderem cobrir as perdas de uma n
 
 1. Calcular o valor de capital gasto na posição: `Dinheiro Gasto = Quantidade * Preço de Entrada`
 2. Calcular o Valor de Mercado do Ativo (MVS): `MVS = Tamanho da Posição * Preço Atual`
-3. Calcular o Lucro Aberto como a diferença entre `MVS` e `Dinheiro Gasto`. Se a posição for _short_, multiplicamos isso por -1.
+3. Calcular o Lucro Aberto como a diferença entre `MVS` e `Dinheiro Gasto`. Se a posição for _short_, multiplica isso por -1.
 4. Calcular o valor do patrimônio da estratégia: `Patrimônio = Capital Inicial + Lucro Líquido + Lucro Aberto`
 5. Calcular a razão de margem: `Razão de Margem = Percentual de Margem / 100`
 6. Calcular o valor da margem, que é o dinheiro necessário para cobrir a parte do trader na posição: `Margem = MVS * Razão de Margem`
 7. Calcular os fundos disponíveis: `Fundos Disponíveis = Patrimônio - Margem`
 8. Calcular o valor total de dinheiro que o trader perdeu: `Perda = Fundos Disponíveis / Razão de Margem`
-9. Calcular quantos contratos/ações/lotes/unidades o trader precisaria liquidar para cobrir a perda. Truncamos esse valor para a mesma precisão decimal do tamanho mínimo da posição para o símbolo atual: `Quantidade de Cobertura = TRUNCATE(Perda / Preço Atual).`
+9. Calcular quantos contratos/ações/lotes/unidades o trader precisaria liquidar para cobrir a perda. Trunca-se esse valor para a mesma precisão decimal do tamanho mínimo da posição para o símbolo atual: `Quantidade de Cobertura = TRUNCATE(Perda / Preço Atual).`
 10. Calcular quantas unidades o corretor liquidará para cobrir a perda: `Chamada de Margem = Quantidade de Cobertura * 4`
 
 Para examinar esse cálculo em detalhes, é adicionado a "_Supertrend Strategy_" integrada ao gráfico NASDAQ:TSLA no período de 1D e definir o "Tamanho da Ordem" para 300% do patrimônio e a "Margem para posições _longs_" para 25% na aba "Propriedades" "_Properties_" da configuração da estratégia:
@@ -1408,3 +1408,57 @@ Quantidade de Cobertura: TRUNCATE(-108276.76 / 3.9) = TRUNCATE(-27763.27) = -277
 
 Tamanho da Chamada de Margem: -27763 * 4 = -111052
 ```
+
+## Alertas de Estratégia
+
+Os indicadores regulares do Pine Script têm dois mecanismos diferentes para configurar condições de alerta personalizadas: a função [alertcondition()](https://br.tradingview.com/pine-script-reference/v5/#fun_alertcondition), que rastreia uma condição específica por chamada de função, e a função [alert()](https://br.tradingview.com/pine-script-reference/v5/#fun_alert), que rastreia todas as suas chamadas simultaneamente, mas oferece maior flexibilidade no número de chamadas, mensagens de alerta, etc.
+
+As estratégias do Pine Script não funcionam com chamadas [alertcondition()](https://br.tradingview.com/pine-script-reference/v5/#fun_alertcondition), mas suportam a geração de alertas personalizados via função [alert()](https://br.tradingview.com/pine-script-reference/v5/#fun_alert). Além disso, cada função que cria ordens também possui sua própria funcionalidade de alerta integrada, que não requer código adicional para implementação. Assim, qualquer estratégia que utilize um comando de colocação de ordens pode emitir alertas após a execução da ordem. A mecânica precisa desses alertas de estratégia integrados é descrita na seção [Eventos de Execução de Ordem](./05_01_alertas.md#order-fill-events-eventos-de-preenchimento-de-ordens) da página [Alertas](./05_01_alertas.md) no Manual do Usuário.
+
+Quando uma estratégia usa funções que criam ordens e a função `alert()` juntas, a caixa de diálogo de criação de alertas oferece uma escolha entre as condições que dispararão o alerta: pode ser disparado em eventos `alert()`, eventos de execução de ordens ou ambos.
+
+Para muitas estratégias de negociação, a latência entre uma condição acionada e uma negociação ao vivo pode ser um fator de desempenho crítico. Por padrão, os scripts de estratégia só podem executar chamadas da função [alert()](https://br.tradingview.com/pine-script-reference/v5/#fun_alert) no fechamento de barras em tempo real, considerando-as para usar [alert.freq_once_per_bar_close](https://br.tradingview.com/pine-script-reference/v5/#const_alert%7Bdot%7Dfreq_once_per_bar_close), independentemente do argumento `freq` na chamada. Os usuários podem alterar a frequência do alerta incluindo também `calc_on_every_tick = true` na chamada [strategy()](https://br.tradingview.com/pine-script-reference/v5/#fun_strategy) ou selecionando a opção "Recalcular em cada tick" "_Recalculate on every tick_" na aba "Propriedades" das configurações da estratégia antes de criar o alerta. No entanto, dependendo do script, isso também pode impactar negativamente o comportamento de uma estratégia, portanto, tenha cautela e esteja ciente das limitações ao usar essa abordagem.
+
+Ao enviar alertas para terceiros para automação de estratégias, recomenda-se usar alertas de execução de ordens em vez da função [alert()](https://br.tradingview.com/pine-script-reference/v5/#fun_alert), pois eles não sofrem das mesmas limitações; alertas de eventos de execução de ordens são executados imediatamente, não sendo afetados pela configuração `calc_on_every_tick` de um script. Os usuários podem definir a mensagem padrão para alertas de execução de ordens via a anotação do compilador `@strategy_alert_message`. O texto fornecido com esta anotação preencherá o campo "Mensagem" para execuções de ordens na caixa de diálogo de criação de alertas.
+
+O script a seguir mostra um exemplo simples de uma mensagem de alerta de execução de ordens padrão. Acima da declaração [strategy()](https://br.tradingview.com/pine-script-reference/v5/#fun_strategy), ele usa `@strategy_alert_message` com _placeholders_ para a ação de trade, tamanho da posição, ticker e valores de preço de execução na mensagem de texto:
+
+```c
+//@version=5
+//@strategy_alert_message {{strategy.order.action}} {{strategy.position_size}} {{ticker}} @ {{strategy.order.price}}
+strategy("Alert Message Demo", overlay = true)
+float fastMa = ta.sma(close, 5)
+float slowMa = ta.sma(close, 10)
+
+if ta.crossover(fastMa, slowMa)
+    strategy.entry("buy", strategy.long)
+
+if ta.crossunder(fastMa, slowMa)
+    strategy.entry("sell", strategy.short)
+
+plot(fastMa, "Fast MA", color.aqua)
+plot(slowMa, "Slow MA", color.orange)
+```
+
+Este script preencherá a caixa de diálogo de criação de alertas com sua mensagem padrão quando o usuário selecionar seu nome na aba do _dropdown_ "Condição" "_Condition_":
+
+![Alertas de estratégia 01](./imgs/Strategies-Strategy-alerts-1.BxOEoyCe_ZM3QoM.webp)
+
+Ao acionar o alerta, a estratégia preencherá os placeholders na mensagem do alerta com seus valores correspondentes. Por exemplo:
+
+![Alertas de estratégia 02](./imgs/Strategies-Strategy-alerts-2.RsPPvOvM_1vSwtv.webp)
+
+<!-- ## Notas sobre Teste de Estratégias
+
+É comum que traders testem e ajustem suas estratégias em condições de mercado históricas e em tempo real, pois muitos acreditam que analisar os resultados pode fornecer insights valiosos sobre as características de uma estratégia, suas possíveis fraquezas e seu potencial futuro. No entanto, deve-se sempre estar ciente dos vieses e limitações dos resultados das estratégias simuladas, especialmente ao usar os resultados para suportar decisões de negociação ao vivo. Esta seção descreve alguns pontos de atenção associados à validação e ajuste de estratégias e possíveis soluções para mitigar seus efeitos.
+
+> __Observação!__\
+> Embora testar estratégias em dados existentes possa fornecer informações úteis sobre as qualidades de uma estratégia, é importante notar que nem o passado nem o presente garantem o futuro. Os mercados financeiros podem mudar rápida e imprevisivelmente, o que pode fazer com que uma estratégia sofra perdas incontroláveis. Além disso, os resultados simulados podem não levar totalmente em conta outros fatores do mundo real que podem impactar o desempenho da negociação. Portanto, recomenda-se que traders compreendam profundamente as limitações e riscos ao avaliar testes de backtest e forward test e considerem-nos "partes do todo" em seus processos de validação, em vez de basear decisões apenas nos resultados.
+
+### Backtesting e Forward Testing
+
+Backtesting é uma técnica usada para avaliar o desempenho histórico de uma estratégia ou modelo de negociação simulando e analisando seus resultados passados em dados de mercado históricos; esta técnica assume que a análise dos resultados de uma estratégia em dados passados pode fornecer insights sobre seus pontos fortes e fracos. Ao realizar o backtesting, muitos ajustam os parâmetros de uma estratégia na tentativa de otimizar seus resultados. A análise e otimização de resultados históricos pode ajudar a obter uma compreensão mais profunda de uma estratégia. No entanto, é essencial entender os riscos e limitações ao basear decisões em resultados de backtest otimizados.
+
+Paralelamente ao backtesting, o desenvolvimento prudente de sistemas de negociação muitas vezes também envolve a incorporação de análise em tempo real como uma ferramenta para avaliar um sistema de negociação em uma base prospectiva. O forward testing visa medir o desempenho de uma estratégia em condições de mercado reais e em tempo real, onde fatores como custos de negociação, slippage e liquidez podem afetar significativamente seu desempenho. O forward testing tem a vantagem distinta de não ser afetado por certos tipos de vieses (por exemplo, viés de retrospectiva ou "vazamento de dados futuros"), mas tem a desvantagem de ser limitado na quantidade de dados para testar. Portanto, geralmente não é uma solução autônoma para validação de estratégia, mas pode fornecer insights úteis sobre o desempenho de uma estratégia nas condições de mercado atuais.
+
+Backtesting e forward testing são duas faces da mesma moeda, pois ambos os métodos visam validar a eficácia de uma estratégia e identificar seus pontos fortes e fracos. Combinando backtesting e forward testing, é possível compensar algumas limitações e obter uma perspectiva mais clara sobre o desempenho de uma estratégia. No entanto, cabe aos traders sanitizar suas estratégias e processos de avaliação para garantir que os insights estejam alinhados com a realidade o mais próximo possível. -->
