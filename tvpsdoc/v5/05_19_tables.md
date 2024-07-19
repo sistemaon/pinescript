@@ -81,3 +81,136 @@ __Note que:__
 - Ao popular a célula com [table.cell()](https://br.tradingview.com/pine-script-reference/v5/#fun_table%7Bdot%7Dcell), definiu-se o texto para ser exibido em branco.
 - Passou-se [format.mintick](https://br.tradingview.com/pine-script-reference/v5/#const_format%7Bdot%7Dmintick) como um segundo argumento para a função [str.tostring()](https://br.tradingview.com/pine-script-reference/v5/#fun_str%7Bdot%7Dtostring) para restringir a precisão do ATR à precisão do tick do gráfico.
 - Agora usa-se uma entrada para permitir que o usuário do script especifique o período do ATR. A entrada também inclui uma dica de ferramenta, que o usuário pode ver ao passar o mouse sobre o ícone "i" na aba "Configurações/Entradas" "_Settings/Inputs_" do script.
+
+## Colorindo o Fundo do Gráfico
+
+Este exemplo usa uma tabela de uma célula para colorir o fundo do gráfico com base no estado bull/bear do RSI:
+
+```c
+//@version=5
+indicator("Chart background", "", true)
+bullColorInput = input.color(color.new(color.green, 95), "Bull", inline = "1")
+bearColorInput = input.color(color.new(color.red, 95), "Bear", inline = "1")
+// ————— Function colors chart bg on RSI bull/bear state.
+colorChartBg(bullColor, bearColor) =>
+    var table bgTable = table.new(position.middle_center, 1, 1)
+    float r = ta.rsi(close, 20)
+    color bgColor = r > 50 ? bullColor : r < 50 ? bearColor : na
+    if barstate.islast
+        table.cell(bgTable, 0, 0, width = 100, height = 100, bgcolor = bgColor)
+
+colorChartBg(bullColorInput, bearColorInput)
+```
+
+__Note que:__
+
+- São fornecidos aos usuários inputs que permitem especificar as cores bull/bear a serem usadas para o fundo, enviando essas cores de input como argumentos para a função `colorChartBg()`.
+- Uma nova tabela é criada apenas uma vez, usando a palavra-chave [var](https://br.tradingview.com/pine-script-reference/v5/#kw_var) para declarar a tabela.
+- [table.cell()](https://br.tradingview.com/pine-script-reference/v5/#fun_table%7Bdot%7Dcell) é usada apenas na última barra para especificar as propriedades da célula. A célula é feita com a largura e altura do espaço do indicador, para cobrir todo o gráfico.
+
+<!-- ## Criando um Painel de Exibição
+
+Tabelas são ideais para criar painéis de exibição sofisticados. Elas permitem que os painéis de exibição estejam sempre visíveis em uma posição constante e proporcionam formatação mais flexível, pois as propriedades de cada célula são controladas separadamente: cor de fundo, cor do texto, tamanho e alinhamento, etc.
+
+Aqui, cria-se um painel básico de exibição mostrando uma quantidade selecionada pelo usuário de valores de MAs. Exibe-se o período na primeira coluna e o valor com um fundo verde/vermelho/cinza que varia conforme a posição do preço em relação a cada MA. Quando o preço está acima/abaixo da MA, o fundo da célula é colorido com a cor bull/bear. Quando a MA está entre a [abertura](https://br.tradingview.com/pine-script-reference/v5/#var_open) e o [fechamento](https://br.tradingview.com/pine-script-reference/v5/#var_close) da barra atual, o fundo da célula é da cor neutra:
+
+![Criando um painel de exibição](./imgs/Tables-DisplayPanel-1.BUQMSYyF_1oOTmO.webp)
+
+```c
+//@version=5
+indicator("Price vs MA", "", true)
+
+var string GP1 = "Moving averages"
+int     masQtyInput    = input.int(20, "Quantity", minval = 1, maxval = 40, group = GP1, tooltip = "1-40")
+int     masStartInput  = input.int(20, "Periods begin at", minval = 2, maxval = 200, group = GP1, tooltip = "2-200")
+int     masStepInput   = input.int(20, "Periods increase by", minval = 1, maxval = 100, group = GP1, tooltip = "1-100")
+
+var string GP2 = "Display"
+string  tableYposInput = input.string("top", "Panel position", inline = "11", options = ["top", "middle", "bottom"], group = GP2)
+string  tableXposInput = input.string("right", "", inline = "11", options = ["left", "center", "right"], group = GP2)
+color   bullColorInput = input.color(color.new(color.green, 30), "Bull", inline = "12", group = GP2)
+color   bearColorInput = input.color(color.new(color.red, 30), "Bear", inline = "12", group = GP2)
+color   neutColorInput = input.color(color.new(color.gray, 30), "Neutral", inline = "12", group = GP2)
+
+var table panel = table.new(tableYposInput + "_" + tableXposInput, 2, masQtyInput + 1)
+if barstate.islast
+    // Table header.
+    table.cell(panel, 0, 0, "MA", bgcolor = neutColorInput)
+    table.cell(panel, 1, 0, "Value", bgcolor = neutColorInput)
+
+int period = masStartInput
+for i = 1 to masQtyInput
+    // ————— Call MAs on each bar.
+    float ma = ta.sma(close, period)
+    // ————— Only execute table code on last bar.
+    if barstate.islast
+        // Period in left column.
+        table.cell(panel, 0, i, str.tostring(period), bgcolor = neutColorInput)
+        // If MA is between the open and close, use neutral color. If close is lower/higher than MA, use bull/bear color.
+        bgColor = close > ma ? open < ma ? neutColorInput : bullColorInput : open > ma ? neutColorInput : bearColorInput
+        // MA value in right column.
+        table.cell(panel, 1, i, str.tostring(ma, format.mintick), text_color = color.black, bgcolor = bgColor)
+    period += masStepInput
+```
+
+__Note que:__
+
+- Os usuários podem selecionar a posição da tabela a partir dos inputs, bem como as cores bull/bear/neutra a serem usadas para o fundo das células da coluna direita.
+- A quantidade de linhas da tabela é determinada pelo número de MAs que o usuário escolhe exibir. Adiciona-se uma linha para os cabeçalhos das colunas.
+- Mesmo que as células da tabela sejam populadas apenas na última barra, é necessário executar as chamadas para [ta.sma()](https://br.tradingview.com/pine-script-reference/v5/#fun_ta%7Bdot%7Dsma) em cada barra para produzir os resultados corretos. O aviso do compilador que aparece ao compilar o código pode ser ignorado com segurança.
+- Os inputs são separados em duas seções usando `group` e os relevantes são juntados na mesma linha usando `inline`. Ferramentas de dicas são fornecidas para documentar os limites de certos campos usando `tooltip`.
+
+## Exibindo um Heatmap
+
+O próximo projeto é um heatmap, que indicará a relação bull/bear do preço atual em relação aos seus valores passados. Para isso, será usada uma tabela posicionada na parte inferior do gráfico. Apenas cores serão exibidas, portanto, nossa tabela não conterá texto; simplesmente será colorido o fundo de suas células para produzir o heatmap. O heatmap usa um período de lookback selecionável pelo usuário. Ele percorre esse período para determinar se o preço está acima/abaixo de cada barra no passado, exibindo uma intensidade progressivamente mais clara da cor bull/bear à medida que avançamos no passado:
+
+![Exibindo um heatmap](./imgs/Tables-Heatmap-1.BRQU14P0_ZbbqpM.webp)
+
+```c
+//@version=5
+indicator("Price vs Past", "", true)
+
+var int MAX_LOOKBACK = 300
+
+int     lookBackInput  = input.int(150, minval = 1, maxval = MAX_LOOKBACK, step = 10)
+color   bullColorInput = input.color(#00FF00ff, "Bull", inline = "11")
+color   bearColorInput = input.color(#FF0080ff, "Bear", inline = "11")
+
+// ————— Function draws a heatmap showing the position of the current `_src` relative to its past `_lookBack` values.
+drawHeatmap(src, lookBack) =>
+    // float src     : evaluated price series.
+    // int   lookBack: number of past bars evaluated.
+    // Dependency: MAX_LOOKBACK
+
+    // Force historical buffer to a sufficient size.
+    max_bars_back(src, MAX_LOOKBACK)
+    // Only run table code on last bar.
+    if barstate.islast
+        var heatmap = table.new(position.bottom_center, lookBack, 1)
+        for i = 1 to lookBackInput
+            float transp = 100. * i / lookBack
+            if src > src[i]
+                table.cell(heatmap, lookBack - i, 0, bgcolor = color.new(bullColorInput, transp))
+            else
+                table.cell(heatmap, lookBack - i, 0, bgcolor = color.new(bearColorInput, transp))
+
+drawHeatmap(high, lookBackInput)
+```
+
+__Note que:__
+
+- Um período máximo de lookback é definido como uma constante `MAX_LOOKBACK`. Este é um valor importante e é usado para dois propósitos: especificar o número de colunas que serão criadas em nossa tabela de uma linha, e especificar o período de lookback necessário para o argumento `_src` em nossa função, forçando o Pine Script™ a criar um tamanho de buffer histórico que permita referir-se à quantidade necessária de valores passados de `_src` no loop [for](https://br.tradingview.com/pine-script-reference/v5/#kw_for).
+- É oferecida aos usuários a possibilidade de configurar as cores bull/bear nos inputs e usa-se `inline` para colocar as seleções de cores na mesma linha.
+- Dentro da função, o código de criação da tabela é incluído em um constructo [if](https://br.tradingview.com/pine-script-reference/v5/#kw_if) [barstate.islast](https://br.tradingview.com/pine-script-reference/v5/#var_barstate%7Bdot%7Dislast) para que ele seja executado apenas na última barra do gráfico.
+- A inicialização da tabela é feita dentro da declaração [if](https://br.tradingview.com/pine-script-reference/v5/#kw_if). Por causa disso, e do fato de que usa-se a palavra-chave [var](https://br.tradingview.com/pine-script-reference/v5/#kw_var), a inicialização ocorre apenas na primeira vez que o script é executado na última barra. Note que esse comportamento é diferente das declarações usuais [var](https://br.tradingview.com/pine-script-reference/v5/#kw_var) no escopo global do script, onde a inicialização ocorre na primeira barra do conjunto de dados, em [bar_index](https://br.tradingview.com/pine-script-reference/v5/#var_bar_index) zero.
+- Não se especifica um argumento para o parâmetro `text` nas chamadas [table.cell()](https://br.tradingview.com/pine-script-reference/v5/#fun_table%7Bdot%7Dcell), então uma string vazia é usada.
+- A transparência é calculada de modo que a intensidade das cores diminua à medida que se avança no histórico.
+- Gera-se cores dinamicamente para criar diferentes transparências das cores base conforme necessário.
+- Ao contrário de outros objetos exibidos em scripts Pine, as células deste heatmap não estão vinculadas a barras de gráfico. O período de lookback configurado determina quantas células da tabela o heatmap contém, e o heatmap não mudará à medida que o gráfico for panoramado horizontalmente ou dimensionado.
+- O número máximo de células que podem ser exibidas no espaço visual do script dependerá da resolução do dispositivo de visualização e da porção da tela usada pelo gráfico. Telas de maior resolução e janelas mais largas permitirão exibir mais células da tabela.
+
+## Dicas
+
+- Ao criar tabelas em scripts de estratégia, lembre-se de que, a menos que a estratégia use `calc_on_every_tick = true`, o código da tabela incluído em blocos [if](https://br.tradingview.com/pine-script-reference/v5/#kw_if) [barstate.islast](https://br.tradingview.com/pine-script-reference/v5/#var_barstate%7Bdot%7Dislast) não será executado em cada atualização em tempo real, portanto, a tabela não será exibida como esperado.
+- Lembre-se de que chamadas sucessivas a [table.cell()](https://br.tradingview.com/pine-script-reference/v5/#fun_table%7Bdot%7Dcell) sobrescrevem as propriedades da célula especificadas por chamadas anteriores a [table.cell()](https://br.tradingview.com/pine-script-reference/v5/#fun_table%7Bdot%7Dcell). Use as funções setter para modificar as propriedades de uma célula.
+- Controle a execução do seu código da tabela de forma sábia, restringindo-o apenas às barras necessárias. Isso economiza recursos do servidor e seus gráficos serão exibidos mais rapidamente, beneficiando todos. -->
