@@ -25,7 +25,7 @@ Os conteúdos exibidos na tabela sempre representam o último estado da tabela, 
 > __Observação!__\
 > Múltiplas tabelas podem ser usadas em um script, desde que cada uma seja ancorada a uma posição diferente. Cada objeto de tabela é identificado por seu próprio ID. Os limites na quantidade de células em todas as tabelas são determinados pelo número total de células usadas em um script.
 
-<!-- ## Criando Tabelas
+## Criando Tabelas
 
 Ao criar uma tabela usando [table.new()](https://br.tradingview.com/pine-script-reference/v5/#fun_table%7Bdot%7Dnew), três parâmetros são obrigatórios: a posição da tabela e seu número de colunas e linhas. Cinco outros parâmetros são opcionais: a cor de fundo da tabela, a cor e largura da moldura externa da tabela, e a cor e largura das bordas ao redor de todas as células, excluindo a moldura externa. Todos os atributos da tabela, exceto seu número de colunas e linhas, podem ser modificados usando funções setter: [table.set_position()](https://br.tradingview.com/pine-script-reference/v5/#fun_table%7Bdot%7Dset_position), [table.set_bgcolor()](https://br.tradingview.com/pine-script-reference/v5/#fun_table%7Bdot%7Dset_bgcolor), [table.set_frame_color()](https://br.tradingview.com/pine-script-reference/v5/#fun_table%7Bdot%7Dset_frame_color), [table.set_frame_width()](https://br.tradingview.com/pine-script-reference/v5/#fun_table%7Bdot%7Dset_frame_width), [table.set_border_color()](https://br.tradingview.com/pine-script-reference/v5/#fun_table%7Bdot%7Dset_border_color) e [table.set_border_width()](https://br.tradingview.com/pine-script-reference/v5/#fun_table%7Bdot%7Dset_border_width).
 
@@ -35,7 +35,7 @@ Ao popularem células usando [table.cell()](https://br.tradingview.com/pine-scri
 
 Lembre-se de que cada chamada sucessiva a [table.cell()](https://br.tradingview.com/pine-script-reference/v5/#fun_table%7Bdot%7Dcell) redefine __todas__ as propriedades da célula, excluindo quaisquer propriedades definidas por chamadas anteriores a [table.cell()](https://br.tradingview.com/pine-script-reference/v5/#fun_table%7Bdot%7Dcell) na mesma célula.
 
-### Colocando um Valor Único em uma Posição Fixa
+<!-- ### Colocando um Valor Único em uma Posição Fixa
 
 O exemplo abaixo, colocará o valor do ATR no canto superior direito do gráfico. Primeiro, cria-se uma tabela de uma célula, depois popula-se essa célula:
 
