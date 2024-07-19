@@ -108,7 +108,7 @@ __Note que:__
 - Uma nova tabela é criada apenas uma vez, usando a palavra-chave [var](https://br.tradingview.com/pine-script-reference/v5/#kw_var) para declarar a tabela.
 - [table.cell()](https://br.tradingview.com/pine-script-reference/v5/#fun_table%7Bdot%7Dcell) é usada apenas na última barra para especificar as propriedades da célula. A célula é feita com a largura e altura do espaço do indicador, para cobrir todo o gráfico.
 
-<!-- ## Criando um Painel de Exibição
+## Criando um Painel de Exibição
 
 Tabelas são ideais para criar painéis de exibição sofisticados. Elas permitem que os painéis de exibição estejam sempre visíveis em uma posição constante e proporcionam formatação mais flexível, pois as propriedades de cada célula são controladas separadamente: cor de fundo, cor do texto, tamanho e alinhamento, etc.
 
@@ -160,7 +160,7 @@ __Note que:__
 - Mesmo que as células da tabela sejam populadas apenas na última barra, é necessário executar as chamadas para [ta.sma()](https://br.tradingview.com/pine-script-reference/v5/#fun_ta%7Bdot%7Dsma) em cada barra para produzir os resultados corretos. O aviso do compilador que aparece ao compilar o código pode ser ignorado com segurança.
 - Os inputs são separados em duas seções usando `group` e os relevantes são juntados na mesma linha usando `inline`. Ferramentas de dicas são fornecidas para documentar os limites de certos campos usando `tooltip`.
 
-## Exibindo um Heatmap
+<!-- ## Exibindo um Heatmap
 
 O próximo projeto é um heatmap, que indicará a relação bull/bear do preço atual em relação aos seus valores passados. Para isso, será usada uma tabela posicionada na parte inferior do gráfico. Apenas cores serão exibidas, portanto, nossa tabela não conterá texto; simplesmente será colorido o fundo de suas células para produzir o heatmap. O heatmap usa um período de lookback selecionável pelo usuário. Ele percorre esse período para determinar se o preço está acima/abaixo de cada barra no passado, exibindo uma intensidade progressivamente mais clara da cor bull/bear à medida que avançamos no passado:
 
