@@ -114,7 +114,7 @@ Este método tem o inconveniente de que, como não há mecanismo de posicionamen
 ![plotchar() 03](./imgs/TextAndShapes-Plotchar-03.lnUtjJIt_5GDoG.webp)
 
 
-<!-- ## `plotshape()`
+## `plotshape()`
 
 Esta função é útil para exibir formas predefinidas e/ou texto nas barras. A sintaxe é a seguinte:
 
@@ -153,6 +153,6 @@ plotshape(true, "", shape.arrowdown, location.belowbar, color.maroon, text = "�
 As formas disponíveis que podem ser usadas com o parâmetro `style` são:
 
 ![plotshape() 03](./imgs/plotshape-available-shape-style.png)
- -->
+
 
 # Labels
