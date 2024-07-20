@@ -56,7 +56,7 @@ __Note que:__
 - Algumas strings de texto contêm a seta Unicode 🠇 (U+1F807).
 - Algumas strings de texto contêm a sequência `\n` que representa uma nova linha.
 
-<!-- ## `plotchar()`
+## `plotchar()`
 
 Esta função é útil para exibir um único caractere nas barras. Tem a seguinte sintaxe:
 
@@ -114,7 +114,7 @@ Este método tem o inconveniente de que, como não há mecanismo de posicionamen
 ![plotchar() 03](./imgs/TextAndShapes-Plotchar-03.lnUtjJIt_5GDoG.webp)
 
 
-## `plotshape()`
+<!-- ## `plotshape()`
 
 Esta função é útil para exibir formas predefinidas e/ou texto nas barras. A sintaxe é a seguinte:
 
