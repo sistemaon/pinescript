@@ -200,7 +200,7 @@ plotarrow(osc)
 
 Repare que o "Oscilador de Chaikin" "_Chaikin Oscillator_" é exibido em um painel abaixo do gráfico, para que seja possível ver quais valores são usados para determinar a posição e o tamanho das setas.
 
-<!-- ## Labels
+## Labels
 
 Os _labels_ estão disponíveis a partir da v4. Funcionam de maneira muito diferente de [plotchar()](https://br.tradingview.com/pine-script-reference/v5/#fun_plotchar) e [plotshape()](https://br.tradingview.com/pine-script-reference/v5/#fun_plotshape).
 
@@ -227,7 +227,7 @@ A caixa de ferramentas de built-ins para gerenciar _labels_ está no namespace `
 - [label.delete()](https://br.tradingview.com/pine-script-reference/v5/#fun_label%7Bdot%7Ddelete) para excluir _labels_.
 - O array [label.all](https://br.tradingview.com/pine-script-reference/v5/#var_label%7Bdot%7Dall), que sempre contém os IDs de todos os _labels_ visíveis no gráfico. O tamanho do array dependerá do número máximo de _labels_ para o script e quantos deles foram desenhados. `array.size(label.all)` retornará o tamanho do array.
 
-### Criando e Modificando _Labels_
+<!-- ### Criando e Modificando _Labels_
 
 A função [label.new()](https://br.tradingview.com/pine-script-reference/v5/#fun_label%7Bdot%7Dnew) cria um novo _label_. Tem a seguinte assinatura:
 
