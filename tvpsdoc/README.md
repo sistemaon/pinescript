@@ -80,4 +80,9 @@ IN Strategies > strategy.order() > The same script would behave differently usin
 in which is not redirecting to the reference but to the initial introduction.
 It should be (https://www.tradingview.com/pine-script-docs/concepts/strategies/#strategyentry)
 
+IN Text and shapes > plotchar() > "As explained in the [When the script’s scale must be preserved] section of our page on Debugging,"
+[When the script’s scale must be preserved] is referencing (https://www.tradingview.com/pine-script-docs/writing/debugging/#when-the-scripts-scale-must-be-preserved)
+shouldnt be referencing (https://www.tradingview.com/pine-script-docs/writing/debugging/#without-affecting-the-scale)
+
+
 **No link sobre a constante CURRENCY.KRW https://br.tradingview.com/pine-script-reference/v5/#var_currency.KRW (é para referir a moeda sul coreana won, e não venceu)**
