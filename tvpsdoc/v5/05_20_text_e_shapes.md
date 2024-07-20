@@ -209,7 +209,7 @@ _Labels_ são objetos, como [linhas e caixas](./05_12_lines_e_boxes.md), ou [tab
 > __Observação!__\
 > Nos gráficos do TradingView, um conjunto completo de "_Ferramentas de Desenho_" "_Drawing Tools_" permite que os usuários criem e modifiquem desenhos usando ações do mouse. Embora às vezes possam parecer semelhantes a objetos de desenho criados com código Pine Script, são entidades não relacionadas. Objetos de desenho criados usando código Pine não podem ser modificados com ações do mouse, e desenhos feitos manualmente na interface do usuário do gráfico não são visíveis em scripts Pine.
 
-Labels são vantajosos porque:
+_Labels_ são vantajosos porque:
 
 - Permitem que valores "series" sejam convertidos em texto e colocados nos gráficos. Isso significa que são ideais para exibir valores que não podem ser conhecidos antecipadamente, como valores de preços, níveis de suporte e resistência, ou quaisquer outros valores que o script calcular.
 - Suas opções de posicionamento são mais flexíveis do que as funções `plot*()`.
@@ -227,7 +227,7 @@ A caixa de ferramentas de built-ins para gerenciar _labels_ está no namespace `
 - [label.delete()](https://br.tradingview.com/pine-script-reference/v5/#fun_label%7Bdot%7Ddelete) para excluir _labels_.
 - O array [label.all](https://br.tradingview.com/pine-script-reference/v5/#var_label%7Bdot%7Dall), que sempre contém os IDs de todos os _labels_ visíveis no gráfico. O tamanho do array dependerá do número máximo de _labels_ para o script e quantos deles foram desenhados. `array.size(label.all)` retornará o tamanho do array.
 
-<!-- ### Criando e Modificando _Labels_
+### Criando e Modificando _Labels_
 
 A função [label.new()](https://br.tradingview.com/pine-script-reference/v5/#fun_label%7Bdot%7Dnew) cria um novo _label_. Tem a seguinte assinatura:
 
