@@ -48,7 +48,7 @@ printTable("•TABLE•\n" + str.tostring(bar_index + 1) + " bars\nin the datase
 __Note que:__
 
 - O método usado para exibir cada string de texto é mostrado com o texto, exceto para as setas para cima em verde-lima exibidas usando [plotchar()](https://br.tradingview.com/pine-script-reference/v5/#fun_plotchar), pois só pode exibir um caractere.
-- As chamadas de rótulo e tabela podem ser inseridas em estruturas condicionais para controlar quando são executadas, enquanto [plotchar()](https://br.tradingview.com/pine-script-reference/v5/#fun_plotchar) e [plotshape()](https://br.tradingview.com/pine-script-reference/v5/#fun_plotshape) não podem. Sua plotagem condicional deve ser controlada usando seu primeiro argumento, que é um "bool series" cujo valor `true` ou `false` determina quando o texto é exibido.
+- As chamadas de _label_ e tabela podem ser inseridas em estruturas condicionais para controlar quando são executadas, enquanto [plotchar()](https://br.tradingview.com/pine-script-reference/v5/#fun_plotchar) e [plotshape()](https://br.tradingview.com/pine-script-reference/v5/#fun_plotshape) não podem. Sua plotagem condicional deve ser controlada usando seu primeiro argumento, que é um "bool series" cujo valor `true` ou `false` determina quando o texto é exibido.
 - Os valores numéricos exibidos na tabela e nos _labels_ são convertidos em string usando [str.tostring()](https://br.tradingview.com/pine-script-reference/v5/#fun_str%7Bdot%7Dtostring).
 - Utiliza-se o operador `+` para concatenar componentes de string.
 - [plotshape()](https://br.tradingview.com/pine-script-reference/v5/#fun_plotshape) é projetado para exibir uma forma com texto acompanhante. Seu parâmetro `size` controla o tamanho da forma, não do texto. É usado [na](https://br.tradingview.com/pine-script-reference/v5/#var_na) para seu argumento `color` para que a forma não seja visível.
@@ -154,5 +154,179 @@ As formas disponíveis que podem ser usadas com o parâmetro `style` são:
 
 ![plotshape() 03](./imgs/plotshape-available-shape-style.png)
 
+## `plotarrow()`
 
-# Labels
+A função [plotarrow](https://br.tradingview.com/pine-script-reference/v5/#fun_plotarrow) exibe setas para cima ou para baixo de comprimento variável, com base no valor relativo da série usada no primeiro argumento da função. A sintaxe é a seguinte:
+
+```c
+plotarrow(series, title, colorup, colordown, offset, minheight, maxheight, editable, show_last, display, force_overlay) → void
+```
+
+Veja a [entrada do Manual de Referência para plotarrow()](https://br.tradingview.com/pine-script-reference/v5/#fun_plotarrow) para detalhes sobre seus parâmetros.
+
+O parâmetro `series` em [plotarrow()](https://br.tradingview.com/pine-script-reference/v5/#fun_plotarrow) não é um "series bool" como em [plotchar()](https://br.tradingview.com/pine-script-reference/v5/#fun_plotchar) e [plotshape()](https://br.tradingview.com/pine-script-reference/v5/#fun_plotshape); é um "series int/float" e há mais do que um simples valor `true` ou `false` determinando quando as setas são plotadas. Esta é a lógica que governa como o argumento fornecido para `series` afeta o comportamento de [plotarrow()](https://br.tradingview.com/pine-script-reference/v5/#fun_plotarrow):
+
+- `series > 0`: Uma seta para cima é exibida, cujo comprimento será proporcional ao valor relativo da série naquela barra em relação a outros valores da série.
+- `series < 0`: Uma seta para baixo é exibida, com tamanho proporcional usando as mesmas regras.
+- `series == 0 ou na(series)`: Nenhuma seta é exibida.
+
+Os tamanhos máximos e mínimos possíveis para as setas (em pixels) podem ser controlados usando os parâmetros `minheight` e `maxheight`.
+
+Aqui está um script simples ilustrando como [plotarrow()](https://br.tradingview.com/pine-script-reference/v5/#fun_plotarrow) funciona:
+
+```c
+//@version=5
+indicator("", "", true)
+body = close - open
+plotarrow(body, colorup = color.teal, colordown = color.orange)
+```
+
+![plotarrow() 01](./imgs/TextAndShapes-Plotarrow-01.KkXXJXUI_Z1LV4X8.webp)
+
+Repare como a altura das setas é proporcional ao tamanho relativo dos corpos das barras.
+
+Qualquer série pode ser usada para plotar as setas. Aqui é usado o valor do "Oscilador de Chaikin" "_Chaikin Oscillator_" para controlar a localização e o tamanho das setas:
+
+```c
+//@version=5
+indicator("Chaikin Oscillator Arrows", overlay = true)
+fastLengthInput = input.int(3,  minval = 1)
+slowLengthInput = input.int(10, minval = 1)
+osc = ta.ema(ta.accdist, fastLengthInput) - ta.ema(ta.accdist, slowLengthInput)
+plotarrow(osc)
+```
+
+![plotarrow() 02](./imgs/TextAndShapes-Plotarrow-02.ChRmPIiy_Zb0OYl.webp)
+
+Repare que o "Oscilador de Chaikin" "_Chaikin Oscillator_" é exibido em um painel abaixo do gráfico, para que seja possível ver quais valores são usados para determinar a posição e o tamanho das setas.
+
+<!-- ## Labels
+
+Os _labels_ estão disponíveis a partir da v4. Funcionam de maneira muito diferente de [plotchar()](https://br.tradingview.com/pine-script-reference/v5/#fun_plotchar) e [plotshape()](https://br.tradingview.com/pine-script-reference/v5/#fun_plotshape).
+
+_Labels_ são objetos, como [linhas e caixas](./05_12_lines_e_boxes.md), ou [tabelas](./05_19_tables.md). Como eles, são referenciados usando um ID, que atua como um ponteiro. IDs de _labels_ são do tipo "label". Assim como outros objetos, os IDs de _labels_ são "time series" e todas as funções usadas para gerenciá-los aceitam argumentos "series", o que os torna muito flexíveis.
+
+> __Observação!__\
+> Nos gráficos do TradingView, um conjunto completo de "_Ferramentas de Desenho_" "_Drawing Tools_" permite que os usuários criem e modifiquem desenhos usando ações do mouse. Embora às vezes possam parecer semelhantes a objetos de desenho criados com código Pine Script, são entidades não relacionadas. Objetos de desenho criados usando código Pine não podem ser modificados com ações do mouse, e desenhos feitos manualmente na interface do usuário do gráfico não são visíveis em scripts Pine.
+
+Labels são vantajosos porque:
+
+- Permitem que valores "series" sejam convertidos em texto e colocados nos gráficos. Isso significa que são ideais para exibir valores que não podem ser conhecidos antecipadamente, como valores de preços, níveis de suporte e resistência, ou quaisquer outros valores que o script calcular.
+- Suas opções de posicionamento são mais flexíveis do que as funções `plot*()`.
+- Oferecem mais modos de exibição.
+- Ao contrário das funções `plot*()`, as funções de manipulação de _labels_ podem ser inseridas em estruturas condicionais ou de loop, facilitando o controle de seu comportamento.
+- É possível adicionar tooltips aos _labels_.
+
+Uma desvantagem de usar _labels_ em comparação com [plotchar()](https://br.tradingview.com/pine-script-reference/v5/#fun_plotchar) e [plotshape()](https://br.tradingview.com/pine-script-reference/v5/#fun_plotshape) é que é possível desenhar apenas uma quantidade limitada deles no gráfico. O padrão é cerca de 50, mas pode-se usar o parâmetro `max_labels_count` na declaração [indicator()](https://br.tradingview.com/pine-script-reference/v5/#fun_indicator) ou [strategy()](https://br.tradingview.com/pine-script-reference/v5/#fun_strategy) para especificar até 500. _Labels_, como [linhas e caixas](./05_12_lines_e_boxes.md), são gerenciados usando um mecanismo de "_coleta de lixo_" "_garbage collection_" que exclui os mais antigos no gráfico, de modo que apenas os _labels_ mais recentemente desenhados sejam visíveis.
+
+A caixa de ferramentas de built-ins para gerenciar _labels_ está no namespace `label`. Inclui:
+
+- [label.new()](https://br.tradingview.com/pine-script-reference/v5/#fun_label%7Bdot%7Dnew) para criar _labels_.
+- Funções `label.set_*()` para modificar as propriedades de um _label_ existente.
+- Funções `label.get_*()` para ler as propriedades de um _label_ existente.
+- [label.delete()](https://br.tradingview.com/pine-script-reference/v5/#fun_label%7Bdot%7Ddelete) para excluir _labels_.
+- O array [label.all](https://br.tradingview.com/pine-script-reference/v5/#var_label%7Bdot%7Dall), que sempre contém os IDs de todos os _labels_ visíveis no gráfico. O tamanho do array dependerá do número máximo de _labels_ para o script e quantos deles foram desenhados. `array.size(label.all)` retornará o tamanho do array.
+
+### Criando e Modificando _Labels_
+
+A função [label.new()](https://br.tradingview.com/pine-script-reference/v5/#fun_label%7Bdot%7Dnew) cria um novo _label_. Tem a seguinte assinatura:
+
+```c
+label.new(x, y, text, xloc, yloc, color, style, textcolor, size, textalign, tooltip, force_overylay) → series label
+```
+
+As funções _setter_ que permitem alterar as propriedades de um _label_ são:
+
+- [label.set_x()](https://br.tradingview.com/pine-script-reference/v5/#fun_label%7Bdot%7Dset_x)
+- [label.set_y()](https://br.tradingview.com/pine-script-reference/v5/#fun_label%7Bdot%7Dset_y)
+- [label.set_xy()](https://br.tradingview.com/pine-script-reference/v5/#fun_label%7Bdot%7Dset_xy)
+- [label.set_text()](https://br.tradingview.com/pine-script-reference/v5/#fun_label%7Bdot%7Dset_text)
+- [label.set_xloc()](https://br.tradingview.com/pine-script-reference/v5/#fun_label%7Bdot%7Dset_xloc)
+- [label.set_yloc()](https://br.tradingview.com/pine-script-reference/v5/#fun_label%7Bdot%7Dset_yloc)
+- [label.set_color()](https://br.tradingview.com/pine-script-reference/v5/#fun_label%7Bdot%7Dset_color)
+- [label.set_style()](https://br.tradingview.com/pine-script-reference/v5/#fun_label%7Bdot%7Dset_style)
+- [label.set_textcolor()](https://br.tradingview.com/pine-script-reference/v5/#fun_label%7Bdot%7Dset_textcolor)
+- [label.set_size()](https://br.tradingview.com/pine-script-reference/v5/#fun_label%7Bdot%7Dset_size)
+- [label.set_textalign()](https://br.tradingview.com/pine-script-reference/v5/#fun_label%7Bdot%7Dset_textalign)
+- [label.set_tooltip()](https://br.tradingview.com/pine-script-reference/v5/#fun_label%7Bdot%7Dset_tooltip)
+
+Todas têm uma assinatura semelhante. A de [label.set_color()](https://br.tradingview.com/pine-script-reference/v5/#fun_label%7Bdot%7Dset_color) é:
+
+```c
+label.set_color(id, color) → void
+```
+
+Onde:
+
+- `id` é o ID do _label_ cuja propriedade deve ser modificada.
+- O próximo parâmetro é a propriedade do _label_ a ser modificada. Depende da função setter usada. [label.set_xy()](https://br.tradingview.com/pine-script-reference/v5/#fun_label%7Bdot%7Dset_xy) altera duas propriedades, portanto, possui dois desses parâmetros.
+
+É assim que se pode criar _labels_ em sua forma mais simples:
+
+```c
+//@version=5
+indicator("", "", true)
+label.new(bar_index, high)
+```
+
+![Criando e modificando labels 01](./imgs/TextAndShapes-CreatingLabels-01.BHaO-o78_Y8WYV.webp)
+
+__Note que:__
+
+- O _label_ é criado com os parâmetros `x = bar_index` (o índice da barra atual, [bar_index](https://br.tradingview.com/pine-script-reference/v5/#var_bar_index)) e `y = high` (o valor [high](https://br.tradingview.com/pine-script-reference/v5/#var_high) da barra).
+- Não é fornecido um argumento para o parâmetro `text` da função. Seu valor padrão sendo uma string vazia, nenhum texto é exibido.
+- Nenhuma lógica controla a chamada [label.new()](https://br.tradingview.com/pine-script-reference/v5/#fun_label%7Bdot%7Dnew), então _labels_ são criados em cada barra.
+- Apenas os últimos 54 _labels_ são exibidos porque a chamada [indicator()](https://br.tradingview.com/pine-script-reference/v5/#fun_indicator) não usa o parâmetro `max_labels_count` para especificar um valor diferente do padrão (~50).
+- _Labels_ persistem nas barras até que o script os exclua usando [label.delete()](https://br.tradingview.com/pine-script-reference/v5/#fun_label%7Bdot%7Ddelete) ou a coleta de lixo os remova.
+
+No próximo exemplo, um _label_ é exibido na barra com o valor mais alto de [high](https://br.tradingview.com/pine-script-reference/v5/#var_high) nos últimos 50 barras:
+
+```c
+//@version=5
+indicator("", "", true)
+
+// Find the highest `high` in last 50 bars and its offset. Change its sign so it is positive.
+LOOKBACK = 50
+hi = ta.highest(LOOKBACK)
+highestBarOffset = -ta.highestbars(LOOKBACK)
+
+// Create label on bar zero only.
+var lbl = label.new(na, na, "", color = color.orange, style = label.style_label_lower_left)
+// When a new high is found, move the label there and update its text and tooltip.
+if ta.change(hi)
+    // Build label and tooltip strings.
+    labelText = "High: " + str.tostring(hi, format.mintick)
+    tooltipText = "Offset in bars: " + str.tostring(highestBarOffset) + "\nLow: " + str.tostring(low[highestBarOffset], format.mintick)
+    // Update the label's position, text and tooltip.
+    label.set_xy(lbl, bar_index[highestBarOffset], hi)
+    label.set_text(lbl, labelText)
+    label.set_tooltip(lbl, tooltipText)
+```
+
+![Criando e modificando labels 02](./imgs/TextAndShapes-CreatingLabels-02.CaxmDfMG_1vmoqQ.webp)
+
+__Note que:__
+
+- O _label_ é criado apenas na primeira barra, utilizando a palavra-chave [var](https://br.tradingview.com/pine-script-reference/v5/#kw_var) para declarar a variável `lbl` que contém o ID do _label_. Os argumentos `x`, `y` e `text` nessa chamada de [label.new()](https://br.tradingview.com/pine-script-reference/v5/#fun_label%7Bdot%7Dnew) são irrelevantes, pois o _label_ será atualizado nas barras seguintes. No entanto, cuida-se de usar a `color` e `style` desejadas para os _labels_, para que não precisem ser atualizadas posteriormente.
+- Em cada barra, detecta-se se um novo valor máximo foi encontrado testando alterações no valor de `hi`.
+- Quando ocorre uma mudança no valor máximo, o _label_ é atualizado com novas informações. Para isso, três chamadas `label.set*()` são usadas para alterar as informações relevantes do _label_. Refere-se ao _label_ usando a variável `lbl`, que contém o ID do _label_. O script mantém o mesmo _label_ em todas as barras, movendo-o e atualizando suas informações quando um novo valor máximo é detectado.
+
+Aqui, um _label_ é criado em cada barra, mas suas propriedades são definidas condicionalmente, dependendo da polaridade da barra:
+
+```c
+//@version=5
+indicator("", "", true)
+lbl = label.new(bar_index, na)
+if close >= open
+    label.set_text(lbl, "green")
+    label.set_color(lbl, color.green)
+    label.set_yloc(lbl, yloc.belowbar)
+    label.set_style(lbl, label.style_label_up)
+else
+    label.set_text(lbl, "red")
+    label.set_color(lbl, color.red)
+    label.set_yloc(lbl, yloc.abovebar)
+    label.set_style(lbl, label.style_label_down)
+```
+
+![Criando e modificando labels 03](./imgs/TextAndShapes-CreatingLabels-03.ClglPmUL_Z1Jm6jL.webp) -->
