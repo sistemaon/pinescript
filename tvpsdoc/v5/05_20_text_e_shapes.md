@@ -385,7 +385,7 @@ label.new(bar_index - 10, high[10])
 label.new(bar_index[10], high[10])
 ```
 
-<!-- ### Leitura de Propriedades de _Labels_
+### Leitura de Propriedades de _Labels_
 
 As seguintes funções _getter_ estão disponíveis para _labels_:
 
@@ -401,7 +401,7 @@ label.get_text(id) → series string
 
 Onde `id` é o _label_ cujo texto deve ser recuperado.
 
-### Clonando _Labels_
+<!-- ### Clonando _Labels_
 
 A função [label.copy()](https://br.tradingview.com/pine-script-reference/v5/#fun_label%7Bdot%7Dcopy) é usada para clonar _labels_. Sua sintaxe é:    
     
