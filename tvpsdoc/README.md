@@ -85,4 +85,6 @@ IN Text and shapes > plotchar() > "As explained in the [When the script’s scal
 shouldnt be referencing (https://www.tradingview.com/pine-script-docs/writing/debugging/#without-affecting-the-scale)
 
 
+IN Text and shapes > Realtime behavior >= See the page on Pine Script™‘s [Execution model](https://www.tradingview.com/pine-script-docs/#execution-model). Deveria ser esse link [Execution model](https://www.tradingview.com/pine-script-docs/language/execution-model/#execution-model)
+
 **No link sobre a constante CURRENCY.KRW https://br.tradingview.com/pine-script-reference/v5/#var_currency.KRW (é para referir a moeda sul coreana won, e não venceu)**

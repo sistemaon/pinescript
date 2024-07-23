@@ -273,7 +273,7 @@ label.new(bar_index, high)
 
 __Note que:__
 
-- O _label_ é criado com os parâmetros `x = bar_index` (o índice da barra atual, [bar_index](https://br.tradingview.com/pine-script-reference/v5/#var_bar_index)) e `y = high` (o valor [high](https://br.tradingview.com/pine-script-reference/v5/#var_high) da barra).
+- O _label_ é criado com os parâmetros `x = bar_index` (o _index_ da barra atual, [bar_index](https://br.tradingview.com/pine-script-reference/v5/#var_bar_index)) e `y = high` (o valor [high](https://br.tradingview.com/pine-script-reference/v5/#var_high) da barra).
 - Não é fornecido um argumento para o parâmetro `text` da função. Seu valor padrão sendo uma string vazia, nenhum texto é exibido.
 - Nenhuma lógica controla a chamada [label.new()](https://br.tradingview.com/pine-script-reference/v5/#fun_label%7Bdot%7Dnew), então _labels_ são criados em cada barra.
 - Apenas os últimos 54 _labels_ são exibidos porque a chamada [indicator()](https://br.tradingview.com/pine-script-reference/v5/#fun_indicator) não usa o parâmetro `max_labels_count` para especificar um valor diferente do padrão (~50).
@@ -329,4 +329,150 @@ else
     label.set_style(lbl, label.style_label_down)
 ```
 
-![Criando e modificando labels 03](./imgs/TextAndShapes-CreatingLabels-03.ClglPmUL_Z1Jm6jL.webp) -->
+![Criando e modificando labels 03](./imgs/TextAndShapes-CreatingLabels-03.ClglPmUL_Z1Jm6jL.webp)
+
+### Posicionamento de _Labels_
+
+Os _labels_ são posicionados no gráfico de acordo com as coordenadas _x_ (barras) e _y_ (preço). Cinco parâmetros afetam esse comportamento: `x`, `y`, `xloc`, `yloc` e `style`.
+
+<!-- ##### `x`
+
+Pode ser um _index_ da barra ou um valor de tempo. Quando um _index_ da barra é usado, o valor pode ser deslocado para o passado ou para o futuro (máximo de 500 barras no futuro). Deslocamentos passados ou futuros também podem ser calculados ao usar valores de tempo. O valor `x` de um _label_ existente pode ser modificado usando [label.set_x()](https://br.tradingview.com/pine-script-reference/v5/#fun_label%7Bdot%7Dset_x) ou [label.set_xy()](https://br.tradingview.com/pine-script-reference/v5/#fun_label%7Bdot%7Dset_xy).
+
+##### `xloc`
+
+Pode ser [xloc.bar_index](https://br.tradingview.com/pine-script-reference/v5/#const_xloc%7Bdot%7Dbar_index) (o padrão) ou [xloc.bar_time](https://br.tradingview.com/pine-script-reference/v5/#const_xloc%7Bdot%7Dbar_time). Isso determina qual tipo de argumento deve ser usado com `x`. Com [xloc.bar_index](https://br.tradingview.com/pine-script-reference/v5/#const_xloc%7Bdot%7Dbar_index), `x` deve ser um _index_ de barra absoluto. Com [xloc.bar_time](https://br.tradingview.com/pine-script-reference/v5/#const_xloc%7Bdot%7Dbar_time), `x` deve ser um tempo UNIX em milissegundos correspondente ao valor [time](https://br.tradingview.com/pine-script-reference/v5/#var_time) da abertura de uma barra ([open](https://br.tradingview.com/pine-script-reference/v5/#var_open)). O valor `xloc` de um _label_ existente pode ser modificado usando [label.set_xloc()](https://br.tradingview.com/pine-script-reference/v5/#fun_label%7Bdot%7Dset_xloc).
+
+##### `y`
+
+É o nível de preço onde o _label_ é posicionado. Só é levado em conta com o valor padrão `yloc` de `yloc.price`. Se `yloc` for [yloc.abovebar](https://br.tradingview.com/pine-script-reference/v5/#const_yloc%7Bdot%7Dabovebar) ou [yloc.belowbar](https://br.tradingview.com/pine-script-reference/v5/#const_yloc%7Bdot%7Dbelowbar), o argumento `y` é ignorado. O valor `y` de um _label_ existente pode ser modificado usando [label.set_y()](https://br.tradingview.com/pine-script-reference/v5/#fun_label%7Bdot%7Dset_y) ou [label.set_xy()](https://br.tradingview.com/pine-script-reference/v5/#fun_label%7Bdot%7Dset_xy).
+
+##### `yloc`
+
+Pode ser [yloc.price](https://br.tradingview.com/pine-script-reference/v5/#const_yloc%7Bdot%7Dprice) (o padrão), [yloc.abovebar](https://br.tradingview.com/pine-script-reference/v5/#const_yloc%7Bdot%7Dabovebar) ou [yloc.belowbar](https://br.tradingview.com/pine-script-reference/v5/#const_yloc%7Bdot%7Dbelowbar). O argumento usado para `y` só é levado em conta com [yloc.price](https://br.tradingview.com/pine-script-reference/v5/#const_yloc%7Bdot%7Dprice). O valor `yloc` de um _label_ existente pode ser modificado usando [label.set_yloc()](https://br.tradingview.com/pine-script-reference/v5/#fun_label%7Bdot%7Dset_yloc).
+
+##### `style`
+
+O argumento utilizado tem um impacto na aparência visual do _label_ e na sua posição relativa ao ponto de referência determinado pelo valor de `y` ou pelo topo/fundo da barra quando [yloc.abovebar](https://br.tradingview.com/pine-script-reference/v5/#const_yloc%7Bdot%7Dabovebar) ou [yloc.belowbar](https://br.tradingview.com/pine-script-reference/v5/#const_yloc%7Bdot%7Dbelowbar) são usados. O `style` de um _label_ existente pode ser modificado usando [label.set_style()](https://br.tradingview.com/pine-script-reference/v5/#fun_label%7Bdot%7Dset_style).
+
+Estes são os argumentos `style` disponíveis:
+
+![Posicionamento de labels style](./imgs/positioning_labels_available_style.png)
+
+Ao usar [xloc.bar_time](https://br.tradingview.com/pine-script-reference/v5/#const_xloc%7Bdot%7Dbar_time), o valor `x` deve ser um carimbo de data/hora UNIX em milissegundos. Veja a página sobre [Tempo](./05_21_time.md) para mais informações. O horário de início da barra atual pode ser obtido a partir da variável embutida [time](https://br.tradingview.com/pine-script-reference/v5/#var_time). O tempo da barra anterior é `time[1]`, `time[2]` e assim por diante. O tempo também pode ser definido para um valor absoluto com a função [timestamp](https://br.tradingview.com/pine-script-reference/v5/#fun_timestamp). Períodos de tempo podem ser adicionados ou subtraídos para obter um deslocamento de tempo relativo.
+
+Posicionamento de um _label_ um dia atrás a partir da data da última barra:
+
+```c
+//@version=5
+indicator("")
+daysAgoInput = input.int(1, tooltip = "Use negative values to offset in the future")
+if barstate.islast
+    MS_IN_ONE_DAY = 24 * 60 * 60 * 1000
+    oneDayAgo = time - (daysAgoInput * MS_IN_ONE_DAY)
+    label.new(oneDayAgo, high, xloc = xloc.bar_time, style = label.style_label_right)
+```
+
+__Note que:__
+
+- Devido a variações de _timeframes_ e barras ausentes quando os mercados estão fechados, o posicionamento do _label_ pode nem sempre ser exato. Deslocamentos de tempo desse tipo tendem a ser mais confiáveis em mercados 24x7.
+
+Também é possível usar um _index_ de barra para o valor `x`, por exemplo:
+
+```c
+label.new(bar_index + 10, high)
+label.new(bar_index - 10, high[10])
+label.new(bar_index[10], high[10])
+```
+
+### Leitura de Propriedades de _Labels_
+
+As seguintes funções _getter_ estão disponíveis para _labels_:
+
+- [label.get_x()](https://br.tradingview.com/pine-script-reference/v5/#fun_label%7Bdot%7Dget_x)
+- [label.get_y()](https://br.tradingview.com/pine-script-reference/v5/#fun_label%7Bdot%7Dget_y)
+- [label.get_text()](https://br.tradingview.com/pine-script-reference/v5/#fun_label%7Bdot%7Dget_text)
+
+Todas têm uma assinatura semelhante. A de [label.get_text()](https://br.tradingview.com/pine-script-reference/v5/#fun_label%7Bdot%7Dget_text) é:
+
+```c
+label.get_text(id) → series string
+```
+
+Onde `id` é o _label_ cujo texto deve ser recuperado.
+
+### Clonando _Labels_
+
+A função [label.copy()](https://br.tradingview.com/pine-script-reference/v5/#fun_label%7Bdot%7Dcopy) é usada para clonar _labels_. Sua sintaxe é:    
+    
+```c
+label.copy(id) → void
+```
+
+### Excluindo _Labels_
+
+A função [label.delete()](https://br.tradingview.com/pine-script-reference/v5/#fun_label%7Bdot%7Ddelete) é usada para excluir _labels_. Sua sintaxe é:
+    
+```c
+label.delete(id) → void
+```
+
+Para manter apenas uma quantidade definida pelo usuário de _labels_ no gráfico, pode-se usar um código como este:
+
+```c
+//@version=5
+MAX_LABELS = 500
+indicator("", max_labels_count = MAX_LABELS)
+qtyLabelsInput = input.int(5, "Labels to keep", minval = 0, maxval = MAX_LABELS)
+myRSI = ta.rsi(close, 20)
+if myRSI > ta.highest(myRSI, 20)[1]
+    label.new(bar_index, myRSI, str.tostring(myRSI, "#.00"), style = label.style_none)
+    if array.size(label.all) > qtyLabelsInput
+        label.delete(array.get(label.all, 0))
+plot(myRSI)
+```
+
+![Excluindo labels](./imgs/TextAndShapes-DeletingLabels-01.CQiqGcEC_ZRD1mW.webp)
+
+__Note que:__
+
+- Define-se uma constante `MAX_LABELS` para manter a quantidade máxima de _labels_ que um script pode acomodar. Esse valor é usado para definir o parâmetro `max_labels_count` na chamada [indicator()](https://br.tradingview.com/pine-script-reference/v5/#fun_indicator) e também como o valor `maxval` na chamada [input.int()](https://br.tradingview.com/pine-script-reference/v5/#fun_input%7Bdot%7Dint) para limitar o valor do usuário.
+- Cria-se um novo _label_ quando o RSI ultrapassa seu valor mais alto dos últimos 20 barras. Note o deslocamento de `[1]` em `if myRSI > ta.highest(myRSI, 20)[1]`. Isso é necessário. Sem ele, o valor retornado por [ta.highest()](https://br.tradingview.com/pine-script-reference/v5/#fun_ta%7Bdot%7Dhighest) sempre incluiria o valor atual de `myRSI`, então `myRSI` nunca seria maior que o valor retornado pela função.
+- Após isso, exclui-se o _label_ mais antigo no array [label.all](https://br.tradingview.com/pine-script-reference/v5/#var_label%7Bdot%7Dall) que é automaticamente mantido pelo runtime do Pine Script e contém o ID de todos os _labels_ visíveis desenhados pelo script. A função [array.get()](https://br.tradingview.com/pine-script-reference/v5/#fun_array%7Bdot%7Dget) é usada para recuperar o elemento do array no índice zero (o ID do _label_ visível mais antigo). Em seguida, usa-se [label.delete()](https://br.tradingview.com/pine-script-reference/v5/#fun_label%7Bdot%7Ddelete) para excluir o _label_ vinculado a esse ID.
+
+Note que se desejar posicionar um _label_ apenas na última barra, é desnecessário e ineficiente criar e excluir o _label_ enquanto o script executa em todas as barras, de forma que apenas o último _label_ permaneça:
+
+```c
+// INEFFICENT!
+//@version=5
+indicator("", "", true)
+lbl = label.new(bar_index, high, str.tostring(high, format.mintick))
+label.delete(lbl[1])
+```
+
+Esta é a maneira eficiente de realizar a mesma tarefa:
+
+```c
+//@version=5
+indicator("", "", true)
+if barstate.islast
+    // Create the label once, the first time the block executes on the last bar.
+    var lbl = label.new(na, na)
+    // On all iterations of the script on the last bar, update the label's information.
+    label.set_xy(lbl, bar_index, high)
+    label.set_text(lbl, str.tostring(high, format.mintick))
+```
+
+### Comportamento em Tempo Real
+
+Os _labels_ estão sujeitos a ações de _commit_ e _rollback_, que afetam o comportamento de um script quando é executado na barra em tempo real. Veja a página sobre o [Modelo de Execução](./04_01_modelo_de_execucao.md) do Pine Script para mais informações.
+
+Este script demonstra o efeito do _rollback_ ao executar na barra em tempo real:
+
+```c
+//@version=5
+indicator("", "", true)
+label.new(bar_index, high)
+```
+
+Em barras em tempo real, [label.new()](https://br.tradingview.com/pine-script-reference/v5/#fun_label%7Bdot%7Dnew) cria um novo _label_ a cada atualização do script, mas devido ao processo de _rollback_, o _label_ criado na atualização anterior na mesma barra é excluído. Apenas o último _label_ criado antes do fechamento da barra em tempo real será confirmado e, portanto, persistirá. -->
