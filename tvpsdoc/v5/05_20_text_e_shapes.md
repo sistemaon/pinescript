@@ -335,7 +335,7 @@ else
 
 Os _labels_ são posicionados no gráfico de acordo com as coordenadas _x_ (barras) e _y_ (preço). Cinco parâmetros afetam esse comportamento: `x`, `y`, `xloc`, `yloc` e `style`.
 
-<!-- ##### `x`
+##### `x`
 
 Pode ser um _index_ da barra ou um valor de tempo. Quando um _index_ da barra é usado, o valor pode ser deslocado para o passado ou para o futuro (máximo de 500 barras no futuro). Deslocamentos passados ou futuros também podem ser calculados ao usar valores de tempo. O valor `x` de um _label_ existente pode ser modificado usando [label.set_x()](https://br.tradingview.com/pine-script-reference/v5/#fun_label%7Bdot%7Dset_x) ou [label.set_xy()](https://br.tradingview.com/pine-script-reference/v5/#fun_label%7Bdot%7Dset_xy).
 
@@ -385,7 +385,7 @@ label.new(bar_index - 10, high[10])
 label.new(bar_index[10], high[10])
 ```
 
-### Leitura de Propriedades de _Labels_
+<!-- ### Leitura de Propriedades de _Labels_
 
 As seguintes funções _getter_ estão disponíveis para _labels_:
 
