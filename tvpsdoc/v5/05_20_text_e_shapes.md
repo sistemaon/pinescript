@@ -463,7 +463,7 @@ if barstate.islast
     label.set_text(lbl, str.tostring(high, format.mintick))
 ```
 
-<!-- ### Comportamento em Tempo Real
+### Comportamento em Tempo Real
 
 Os _labels_ estão sujeitos a ações de _commit_ e _rollback_, que afetam o comportamento de um script quando é executado na barra em tempo real. Veja a página sobre o [Modelo de Execução](./04_01_modelo_de_execucao.md) do Pine Script para mais informações.
 
@@ -476,4 +476,3 @@ label.new(bar_index, high)
 ```
 
 Em barras em tempo real, [label.new()](https://br.tradingview.com/pine-script-reference/v5/#fun_label%7Bdot%7Dnew) cria um novo _label_ a cada atualização do script, mas devido ao processo de _rollback_, o _label_ criado na atualização anterior na mesma barra é excluído. Apenas o último _label_ criado antes do fechamento da barra em tempo real será confirmado e, portanto, persistirá.
--->
