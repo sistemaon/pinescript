@@ -409,7 +409,7 @@ A função [label.copy()](https://br.tradingview.com/pine-script-reference/v5/#f
 label.copy(id) → void
 ```
 
-<!-- ### Excluindo _Labels_
+### Excluindo _Labels_
 
 A função [label.delete()](https://br.tradingview.com/pine-script-reference/v5/#fun_label%7Bdot%7Ddelete) é usada para excluir _labels_. Sua sintaxe é:
 
@@ -463,7 +463,7 @@ if barstate.islast
     label.set_text(lbl, str.tostring(high, format.mintick))
 ```
 
-### Comportamento em Tempo Real
+<!-- ### Comportamento em Tempo Real
 
 Os _labels_ estão sujeitos a ações de _commit_ e _rollback_, que afetam o comportamento de um script quando é executado na barra em tempo real. Veja a página sobre o [Modelo de Execução](./04_01_modelo_de_execucao.md) do Pine Script para mais informações.
 
