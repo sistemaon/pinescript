@@ -401,18 +401,18 @@ label.get_text(id) → series string
 
 Onde `id` é o _label_ cujo texto deve ser recuperado.
 
-<!-- ### Clonando _Labels_
+### Clonando _Labels_
 
-A função [label.copy()](https://br.tradingview.com/pine-script-reference/v5/#fun_label%7Bdot%7Dcopy) é usada para clonar _labels_. Sua sintaxe é:    
-    
+A função [label.copy()](https://br.tradingview.com/pine-script-reference/v5/#fun_label%7Bdot%7Dcopy) é usada para clonar _labels_. Sua sintaxe é:
+
 ```c
 label.copy(id) → void
 ```
 
-### Excluindo _Labels_
+<!-- ### Excluindo _Labels_
 
 A função [label.delete()](https://br.tradingview.com/pine-script-reference/v5/#fun_label%7Bdot%7Ddelete) é usada para excluir _labels_. Sua sintaxe é:
-    
+
 ```c
 label.delete(id) → void
 ```
@@ -475,4 +475,5 @@ indicator("", "", true)
 label.new(bar_index, high)
 ```
 
-Em barras em tempo real, [label.new()](https://br.tradingview.com/pine-script-reference/v5/#fun_label%7Bdot%7Dnew) cria um novo _label_ a cada atualização do script, mas devido ao processo de _rollback_, o _label_ criado na atualização anterior na mesma barra é excluído. Apenas o último _label_ criado antes do fechamento da barra em tempo real será confirmado e, portanto, persistirá. -->
+Em barras em tempo real, [label.new()](https://br.tradingview.com/pine-script-reference/v5/#fun_label%7Bdot%7Dnew) cria um novo _label_ a cada atualização do script, mas devido ao processo de _rollback_, o _label_ criado na atualização anterior na mesma barra é excluído. Apenas o último _label_ criado antes do fechamento da barra em tempo real será confirmado e, portanto, persistirá.
+-->
