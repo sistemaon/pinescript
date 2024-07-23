@@ -3,7 +3,7 @@
 
 Os _Inputs_ ("_Entradas_") permitem que scripts recebam valores que os usuários podem alterar. Usá-las para valores-chave torna os scripts mais adaptáveis às preferências do usuário.
 
-O script a seguir plota uma [média móvel simples (SMA)](https://br.tradingview.com/support/solutions/43000502589) de 20 períodos usando `ta.sma(close, 20)`. Embora seja simples de escrever, não é muito flexível, pois essa MA específica é tudo o que ele sempre plotará:
+O script a seguir plota uma [média móvel simples (SMA)](https://br.tradingview.com/support/solutions/43000502589) de 20 períodos usando [ta.sma(close, 20)](https://br.tradingview.com/pine-script-reference/v5/#fun_ta.sma). Embora seja simples de escrever, não é muito _flexível_, pois o uso da chamada da função define especificamente argumentos de `source` e `length` que os usuários não podem alterar sem modificarem o código:
 
 ```c
 //@version=5
@@ -11,7 +11,7 @@ indicator("MA", "", true)
 plot(ta.sma(close, 20))
 ```
 
-Se, em vez disso, o script for escrito desta maneira, ele se torna muito mais flexível, pois os usuários poderão selecionar a "_source_" ("_fonte_") e a "_length_" ("_comprimento_") que desejam usar para o cálculo da MA:
+Se, em vez disso, o script for escrito desta maneira, ele se torna muito mais _flexível_, pois os usuários poderão selecionar a `source` "_fonte_" e a `length` "_comprimento_" que desejam usar para o cálculo da MA:
 
 ```c
 //@version=5
