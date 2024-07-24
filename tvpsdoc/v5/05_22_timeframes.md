@@ -14,7 +14,7 @@ __Strings de Timeframe__ são utilizadas em diferentes contextos:
 - A declaração [indicator()](https://br.tradingview.com/pine-script-reference/v5/#fun_indicator) possui um parâmetro opcional `timeframe` que pode ser usado para fornecer capacidades de múltiplos _timeframes_ a scripts simples sem usar [request.security()](https://br.tradingview.com/pine-script-reference/v5/#fun_request%7Bdot%7Dsecurity).
 - Muitas variáveis incorporadas fornecem informações sobre o _timeframe_ usado pelo gráfico em que o script está sendo executado. Veja a seção [Timeframe do Gráfico](./05_06_informacoes_do_grafico.md#timeframe-do-gráfico) para mais informações sobre elas, incluindo [timeframe.period](https://br.tradingview.com/pine-script-reference/v5/#var_timeframe%7Bdot%7Dperiod), que retorna uma string no formato de especificação de _timeframe_ do Pine Script.
 
-<!-- ## Especificações de String do Timeframe
+## Especificações de String do Timeframe
 
 Strings de _timeframe_ seguem estas regras:
 
@@ -29,7 +29,7 @@ Strings de _timeframe_ seguem estas regras:
     - Para semanas, de 1 a 52.
     - Para meses, de 1 a 12.
 
-## Comparando Timeframes
+<!-- ## Comparando Timeframes
 
 Pode ser útil comparar diferentes strings de _timeframe_ para determinar, por exemplo, se o _timeframe_ usado no gráfico é menor do que os _timeframes_ superiores usados no script.
 
