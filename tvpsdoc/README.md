@@ -92,6 +92,16 @@ IN Time > Calendar dates and times > This will plot the day of the opening of th
 Deveria ser: [time](https://www.tradingview.com/pine-script-reference/v5/#var_time)
 Atual: [time](https://www.tradingview.com/pine-script-reference/v5/#var_time_close)
 
+IN Timeframes > Introduction > The [input.timeframe()]() function provides a way to allow script users to define a timeframe
+Deveria ser: [input.timeframe()](https://www.tradingview.com/pine-script-reference/v5/#fun_input.timeframe)
+Atual: [input.timeframe()](https://www.tradingview.com/pine-script-reference/v5/#fun_input%7Bdot%7Dsession)
 
+IN Timeframes > Comparing timeframes > the [input.timeframe()]() function into seconds, then divide by 60 to convert into minutes.
+Deveria ser: [input.timeframe()](https://www.tradingview.com/pine-script-reference/v5/#fun_input.timeframe)
+Atual: [input.timeframe()](https://www.tradingview.com/pine-script-reference/v5/#fun_input%7Bdot%7Dsession)
+
+IN Timeframes > Comparing timeframes > we supply the timeframe selected by the script’s user through the call to [input.timeframe()]().
+Deveria ser: [input.timeframe()](https://www.tradingview.com/pine-script-reference/v5/#fun_input.timeframe)
+Atual: [input.timeframe()](https://www.tradingview.com/pine-script-reference/v5/#fun_input%7Bdot%7Dsession)
 
 **No link sobre a constante CURRENCY.KRW https://br.tradingview.com/pine-script-reference/v5/#var_currency.KRW (é para referir a moeda sul coreana won, e não venceu)**
