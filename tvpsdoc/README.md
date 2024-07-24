@@ -87,4 +87,11 @@ shouldnt be referencing (https://www.tradingview.com/pine-script-docs/writing/de
 
 IN Text and shapes > Realtime behavior >= See the page on Pine Script™‘s [Execution model](https://www.tradingview.com/pine-script-docs/#execution-model). Deveria ser esse link [Execution model](https://www.tradingview.com/pine-script-docs/language/execution-model/#execution-model)
 
+
+IN Time > Calendar dates and times > This will plot the day of the opening of the bar where the January 1st, 2021 at 00:00 time falls between its [time]() and time_close values:
+Deveria ser: [time](https://www.tradingview.com/pine-script-reference/v5/#var_time)
+Atual: [time](https://www.tradingview.com/pine-script-reference/v5/#var_time_close)
+
+
+
 **No link sobre a constante CURRENCY.KRW https://br.tradingview.com/pine-script-reference/v5/#var_currency.KRW (é para referir a moeda sul coreana won, e não venceu)**
