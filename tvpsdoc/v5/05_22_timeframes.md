@@ -29,7 +29,7 @@ Strings de _timeframe_ seguem estas regras:
     - Para semanas, de 1 a 52.
     - Para meses, de 1 a 12.
 
-<!-- ## Comparando Timeframes
+## Comparando Timeframes
 
 Pode ser útil comparar diferentes strings de _timeframe_ para determinar, por exemplo, se o _timeframe_ usado no gráfico é menor do que os _timeframes_ superiores usados no script.
 
@@ -60,4 +60,4 @@ __Note que:__
 - Usa-se a função incorporada [timeframe.in_seconds()](https://br.tradingview.com/pine-script-reference/v5/#fun_timeframe%7Bdot%7Din_seconds) para converter o _timeframe_ do gráfico e a função [input.timeframe()](https://br.tradingview.com/pine-script-reference/v5/#fun_input.timeframe) em segundos, depois divide-se por 60 para converter em minutos.
 - São feitas duas chamadas para a função [timeframe.in_seconds()](https://br.tradingview.com/pine-script-reference/v5/#fun_timeframe%7Bdot%7Din_seconds) na inicialização das variáveis `chartTFInMinutes` e `inputTFInMinutes`. Na primeira instância, não se fornece um argumento para seu parâmetro `timeframe`, então a função retorna o _timeframe_ do gráfico em segundos. Na segunda chamada, fornece-se o _timeframe_ selecionado pelo usuário do script através da chamada para [input.timeframe()](https://br.tradingview.com/pine-script-reference/v5/#fun_input.timeframe).
 - Em seguida, valida-se os _timeframes_ para garantir que o _timeframe_ de entrada seja igual ou superior ao _timeframe_ do gráfico. Caso contrário, gera-se um erro de execução.
-- Finalmente, imprimem-se os dois valores de _timeframe_ convertidos em minutos. -->
+- Finalmente, imprimem-se os dois valores de _timeframe_ convertidos em minutos.
