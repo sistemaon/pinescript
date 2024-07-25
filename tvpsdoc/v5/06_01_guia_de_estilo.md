@@ -13,7 +13,7 @@ Recomenda-se o uso de:
 - `SNAKE_CASE` em letras maiúsculas para constantes: `BULL_COLOR`, `BEAR_COLOR`, `MAX_LOOKBACK`.
 - O uso de sufixos qualificadores quando fornecem pistas valiosas sobre o tipo ou a procedência de uma variável: `maShowInput`, `bearColor`, `bearColorInput`, `volumesArray`, `maPlotID`, `resultsTable`, `levelsColorArray`.
 
-<!-- ## Organização do Script
+## Organização do Script
 
 O compilador Pine Script é bastante tolerante quanto à posição de declarações específicas ou à [anotação do compilador](./04_03_estrutura_do_script.md#anotações-do-compilador) no script. Embora outras disposições sejam sintaticamente corretas, recomenda-se organizar os scripts da seguinte maneira:
 
@@ -31,7 +31,7 @@ O compilador Pine Script é bastante tolerante quanto à posição de declaraç�
 <alerts>
 ```
 
-### `<license>`
+<!-- ### `<license>`
 
 Se publicar seus scripts de código aberto publicamente no TradingView (scripts também podem ser publicados de forma privada), seu código de código aberto é, por padrão, protegido pela licença Mozilla. Pode-se escolher qualquer outra licença preferida.
 
