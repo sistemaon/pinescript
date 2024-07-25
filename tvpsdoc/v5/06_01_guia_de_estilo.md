@@ -31,7 +31,7 @@ O compilador Pine Script é bastante tolerante quanto à posição de declaraç�
 <alerts>
 ```
 
-<!-- ### `<license>`
+### `<license>`
 
 Se publicar seus scripts de código aberto publicamente no TradingView (scripts também podem ser publicados de forma privada), seu código de código aberto é, por padrão, protegido pela licença Mozilla. Pode-se escolher qualquer outra licença preferida.
 
@@ -184,7 +184,7 @@ Esta seção deve incluir idealmente todas as instruções que produzem os visua
 
 O código de alertas geralmente exigirá que os cálculos do script tenham sido executados antes dele, então faz sentido colocá-lo no final do script.
 
-## Espaçamento
+<!-- ## Espaçamento
 
 Um espaço deve ser usado em ambos os lados de todos os operadores, exceto operadores unários (`-1`). Também é recomendado um espaço após todas as vírgulas e ao usar argumentos nomeados de funções, como em `plot(series = close)`:
 
