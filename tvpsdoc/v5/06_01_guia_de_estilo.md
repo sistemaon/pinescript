@@ -198,7 +198,7 @@ int index = bar_index % 2 == 0 ? 1 : 2
 plot(close, color = color.red)
 ```
 
-<!-- ## Quebra de Linha
+## Quebra de Linha
 
 A quebra de linha pode tornar linhas longas mais fáceis de ler. Quebras de linha são definidas usando um nível de indentação que não é múltiplo de quatro, pois quatro espaços ou uma tabulação são usados para definir blocos locais. Aqui, usamos dois espaços:
 
@@ -211,7 +211,7 @@ plot(
  )
 ```
 
-## Alinhamento Vertical
+<!-- ## Alinhamento Vertical
 
 O alinhamento vertical usando tabulações ou espaços pode ser útil em seções de código contendo muitas linhas semelhantes, como declarações de constantes ou entradas. Elas podem facilitar edições em massa usando o recurso de múltiplos cursos do Pine Editor (`ctrl` \+ `alt` \+ `🠅`):
 
