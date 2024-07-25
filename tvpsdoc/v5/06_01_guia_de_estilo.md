@@ -1,7 +1,7 @@
 
 # Style Guide (_Guia de Estilo_)
 
-Este guia de estilo fornece recomendações sobre como nomear variáveis e organizar seus scripts Pine de uma maneira padrão que funcione bem. Scripts que seguem nossas melhores práticas serão mais fáceis de ler, entender e manter.
+Este guia de estilo fornece recomendações sobre como nomear variáveis e organizar seus scripts Pine de uma maneira padrão que funcione bem. Scripts que seguem as melhores práticas serão mais fáceis de ler, entender e manter.
 
 Scripts que utilizam essas diretrizes podem ser encontrados nas contas [TradingView](https://br.tradingview.com/u/TradingView/#published-scripts) e [PineCoders](https://br.tradingview.com/u/PineCoders/#published-scripts) na plataforma.
 
@@ -35,7 +35,7 @@ O compilador Pine Script é bastante tolerante quanto à posição de declaraç�
 
 Se publicar seus scripts de código aberto publicamente no TradingView (scripts também podem ser publicados de forma privada), seu código de código aberto é, por padrão, protegido pela licença Mozilla. Pode-se escolher qualquer outra licença preferida.
 
-A reutilização de código desses scripts é regida por nossas [Regras da Casa sobre Publicação de Scripts](https://br.tradingview.com/support/solutions/43000590599), que têm precedência sobre a licença do autor.
+A reutilização de código desses scripts é regida pelas [Regras da Casa sobre Publicação de Scripts](https://br.tradingview.com/support/solutions/43000590599), que têm precedência sobre a licença do autor.
 
 Os comentários padrão de licença que aparecem no início dos scripts são:
 
@@ -200,7 +200,7 @@ plot(close, color = color.red)
 
 ## Quebra de Linha
 
-A quebra de linha pode tornar linhas longas mais fáceis de ler. Quebras de linha são definidas usando um nível de indentação que não é múltiplo de quatro, pois quatro espaços ou uma tabulação são usados para definir blocos locais. Aqui, usamos dois espaços:
+A quebra de linha pode tornar linhas longas mais fáceis de ler. Quebras de linha são definidas usando um nível de indentação que não é múltiplo de quatro, pois quatro espaços ou uma tabulação são usados para definir blocos locais. Aqui, usando dois espaços:
 
 ```c
 plot(
@@ -224,6 +224,6 @@ color COLOR_CORAL = #FF8080ff
 color COLOR_GOLD  = #CCCC00ff
 ```
 
-<!-- ## Tipagem Explícita
+## Tipagem Explícita
 
-Incluir o tipo de variáveis ao declará-las não é obrigatório. No entanto, isso ajuda a tornar os scripts mais fáceis de ler, navegar e entender. Pode ajudar a esclarecer os tipos esperados em cada ponto da execução do script e distinguir a declaração de uma variável (usando `=`) de suas reatribuições (usando `:=`). Usar tipagem explícita também pode tornar os scripts mais fáceis de [depurar](./06_02_debugging.md). -->
+Incluir o tipo de variáveis ao declará-las não é obrigatório. No entanto, isso ajuda a tornar os scripts mais fáceis de ler, navegar e entender. Pode ajudar a esclarecer os tipos esperados em cada ponto da execução do script e distinguir a declaração de uma variável (usando `=`) de suas reatribuições (usando `:=`). Usar tipagem explícita também pode tornar os scripts mais fáceis de [depurar](./06_02_debugging.md).
