@@ -5,7 +5,7 @@ Este guia de estilo fornece recomendações sobre como nomear variáveis e organ
 
 Scripts que utilizam essas diretrizes podem ser encontrados nas contas [TradingView](https://br.tradingview.com/u/TradingView/#published-scripts) e [PineCoders](https://br.tradingview.com/u/PineCoders/#published-scripts) na plataforma.
 
-<!-- ## Convenções de Nomeação
+## Convenções de Nomeação
 
 Recomenda-se o uso de:
 
@@ -13,7 +13,7 @@ Recomenda-se o uso de:
 - `SNAKE_CASE` em letras maiúsculas para constantes: `BULL_COLOR`, `BEAR_COLOR`, `MAX_LOOKBACK`.
 - O uso de sufixos qualificadores quando fornecem pistas valiosas sobre o tipo ou a procedência de uma variável: `maShowInput`, `bearColor`, `bearColorInput`, `volumesArray`, `maPlotID`, `resultsTable`, `levelsColorArray`.
 
-## Organização do Script
+<!-- ## Organização do Script
 
 O compilador Pine Script é bastante tolerante quanto à posição de declarações específicas ou à [anotação do compilador](./04_03_estrutura_do_script.md#anotações-do-compilador) no script. Embora outras disposições sejam sintaticamente corretas, recomenda-se organizar os scripts da seguinte maneira:
 
