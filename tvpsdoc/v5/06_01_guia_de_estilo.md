@@ -211,7 +211,7 @@ plot(
  )
 ```
 
-<!-- ## Alinhamento Vertical
+## Alinhamento Vertical
 
 O alinhamento vertical usando tabulações ou espaços pode ser útil em seções de código contendo muitas linhas semelhantes, como declarações de constantes ou entradas. Elas podem facilitar edições em massa usando o recurso de múltiplos cursos do Pine Editor (`ctrl` \+ `alt` \+ `🠅`):
 
@@ -224,6 +224,6 @@ color COLOR_CORAL = #FF8080ff
 color COLOR_GOLD  = #CCCC00ff
 ```
 
-## Tipagem Explícita
+<!-- ## Tipagem Explícita
 
 Incluir o tipo de variáveis ao declará-las não é obrigatório. No entanto, isso ajuda a tornar os scripts mais fáceis de ler, navegar e entender. Pode ajudar a esclarecer os tipos esperados em cada ponto da execução do script e distinguir a declaração de uma variável (usando `=`) de suas reatribuições (usando `:=`). Usar tipagem explícita também pode tornar os scripts mais fáceis de [depurar](./06_02_debugging.md). -->
