@@ -564,9 +564,223 @@ __Note que:__
 
 Veja as páginas [Cores](./05_07_cores.md), [Preenchimentos](./05_08_fills.md), [Backgrounds](./05_02_background.md) e [Coloração de Barras](./05_03_coloracao_de_barras.md) para mais informações sobre como trabalhar com cores, preencher plots, destacar fundos e colorir barras.
 
-## Pine Logs
+### Usando Desenhos
+
+Os [tipos de desenho](./04_09_tipagem_do_sistema.md#tipos-de-desenho) do Pine Script fornecem maneiras flexíveis de visualizar condições no gráfico, especialmente quando as condições estão dentro de escopos locais.
+
+Considere o seguinte script, que calcula um `filtro` personalizado com um parâmetro de suavização (`alpha`) que altera seu valor dentro de uma estrutura [if](https://br.tradingview.com/pine-script-reference/v5/#kw_if) com base nas condições recentes de [volume](https://br.tradingview.com/pine-script-reference/v5/#var_volume):
+
+![Usando desenhos 01](./imgs/Debugging-Conditions-Using-drawings-1.bqLda39j_Z13aGwI.webp)
+
+```c
+//@version=5
+indicator("Conditional drawings demo", "Volume-based filter", true)
+
+//@variable The number of bars in the volume average.
+int lengthInput = input.int(20, "Volume average length", 1)
+
+//@variable The average `volume` over `lengthInput` bars.
+float avgVolume = ta.sma(volume, lengthInput)
+
+//@variable A custom price filter based on volume activity.
+float filter = close
+//@variable The smoothing parameter of the filter calculation. Its value depends on multiple volume conditions.
+float alpha = na
+
+// Set the `alpha` to 1 if `volume` exceeds its `lengthInput`-bar moving average.
+if volume > avgVolume
+    alpha := 1.0
+// Set the `alpha` to 0.5 if `volume` exceeds its previous value.
+else if volume > volume[1]
+    alpha := 0.5
+// Set the `alpha` to 0.01 otherwise.
+else
+    alpha := 0.01
+
+// Calculate the new `filter` value.
+filter := (1.0 - alpha) * nz(filter[1], filter) + alpha * close
+
+// Plot the `filter`.
+plot(filter, "Filter", linewidth = 3)
+```
+
+Para inspecionar as condições que controlam o valor de `alpha`, é possível usar vários métodos visuais no gráfico. No entanto, algumas abordagens exigem mais código e um tratamento cuidadoso.
+
+Por exemplo, para visualizar as condições da estrutura [if](https://br.tradingview.com/pine-script-reference/v5/#kw_if) usando [formas plotadas](./06_02_debugging.md#plotando-formas-condicionais) ou [cores de fundo](./06_02_debugging.md#cores-condicionais), seria necessário criar variáveis ou expressões adicionais no escopo global para as funções `plot*()` ou [bgcolor()](https://br.tradingview.com/pine-script-reference/v5/#fun_bgcolor).
+
+Alternativamente, é possível usar [tipos de desenho](./04_09_tipagem_do_sistema.md#tipos-de-desenho) para visualizar as condições de forma concisa sem esses passos extras.
+
+A seguir, uma modificação do script anterior que chama [label.new()](https://br.tradingview.com/pine-script-reference/v5/#fun_label.new) dentro de ramificações específicas da [estrutura condicional](./04_07_estruturas_condicionais.md) para desenhar [labels](./05_20_text_e_shapes.md#labels) no gráfico sempre que essas ramificações são executadas. Essas alterações simples permitem identificar essas condições no gráfico com pouco código adicional:
+
+![Usando desenhos 02](./imgs/Debugging-Conditions-Using-drawings-2.6tfkMr81_1G1BSn.webp)
+
+```c
+//@version=5
+indicator("Conditional drawings demo", "Volume-based filter", true, max_labels_count = 500)
+
+//@variable The number of bars in the volume average.
+int lengthInput = input.int(20, "Volume average length", 1)
+
+//@variable The average `volume` over `lengthInput` bars.
+float avgVolume = ta.sma(volume, lengthInput)
+
+//@variable A custom price filter based on volume activity.
+float filter = close
+//@variable The smoothing parameter of the filter calculation. Its value depends on multiple volume conditions.
+float alpha = na
+
+// Set the `alpha` to 1 if `volume` exceeds its `lengthInput`-bar moving average.
+if volume > avgVolume
+    // Add debug label.
+    label.new(chart.point.now(high), "alpha = 1", color = color.teal, textcolor = color.white)
+    alpha := 1.0
+// Set the `alpha` to 0.5 if `volume` exceeds its previous value.
+else if volume > volume[1]
+    // Add debug label.
+    label.new(chart.point.now(high), "alpha = 0.5", color = color.green, textcolor = color.white)
+    alpha := 0.5
+// Set the `alpha` to 0.01 otherwise.
+else
+    alpha := 0.01
+
+// Calculate the new `filter` value.
+filter := (1.0 - alpha) * nz(filter[1], filter) + alpha * close
+
+// Plot the `filter`.
+plot(filter, "Filter", linewidth = 3)
+```
+
+__Note que:__
+
+- As chamadas de [label.new()](https://br.tradingview.com/pine-script-reference/v5/#fun_label.new) foram adicionadas _acima_ das expressões de reatribuição de `alpha`, pois os tipos retornados de cada ramificação na estrutura [if](https://br.tradingview.com/pine-script-reference/v5/#kw_if) devem coincidir.
+- A função [indicator()](https://br.tradingview.com/pine-script-reference/v5/#fun_indicator) inclui `max_labels_count = 500` para especificar que o script pode mostrar até 500 [labels](./05_20_text_e_shapes.md#labels) no gráfico.
+
+<!-- ### Condições Compostas e Aninhadas
+
+Ao precisar identificar situações em que mais de uma condição pode ocorrer, é possível construir _condições compostas_ agregando condições individuais com operadores lógicos ([and](https://br.tradingview.com/pine-script-reference/v5/#kw_and), [or](https://br.tradingview.com/pine-script-reference/v5/#kw_or)).
+
+Por exemplo, esta linha de código mostra uma variável `compoundCondition` que só retorna `true` se `condition1` e `condition2` ou `condition3` ocorrerem:
+
+```c
+bool compoundCondition = condition1 and (condition2 or condition3)
+```
+
+Alternativamente, é possível criar _condições aninhadas_ usando [estruturas condicionais](./04_07_estruturas_condicionais.md) ou [expressões ternárias](https://br.tradingview.com/pine-script-reference/v5/#op_?:). Por exemplo, esta estrutura [if](https://br.tradingview.com/pine-script-reference/v5/#kw_if) atribui `true` à variável `nestedCondition` se `condition1` e `condition2` ou `condition3` ocorrerem. No entanto, diferentemente da expressão lógica acima, as ramificações dessa estrutura também permitem que o script execute código adicional antes de atribuir o valor "bool":
+
+```c
+bool nestedCondition = false
+
+if condition1
+    // [additional_code]
+    if condition2
+        // [additional_code]
+        nestedCondition := true
+    else if condition3
+        // [additional_code]
+        nestedCondition := true
+```
+
+Em ambos os casos, seja trabalhando com condições compostas ou aninhadas no código, é importante validar os comportamentos das _condições individuais_ que as compõem para garantir que funcionem conforme o esperado.
+
+Por exemplo, este script calcula um `rsi` e a `mediana` do `rsi` ao longo de `lengthInput` barras. Em seguida, cria cinco variáveis para representar diferentes condições singulares. O script usa essas variáveis em uma expressão lógica para atribuir um valor "bool" à variável `compoundCondition` e exibe os resultados de `compoundCondition` usando uma [cor de fundo condicional](./06_02_debugging.md#cores-condicionais):
+
+![Condições compostas e aninhadas 01](./imgs/Debugging-Conditions-Compound-conditions-1.BIlbHbn5_Z1hVb8A.webp)
+
+```c
+//@version=5
+indicator("Compound conditions demo")
+
+//@variable The length of the RSI and median RSI calculations.
+int lengthInput = input.int(14, "Length", 2)
+
+//@variable The `lengthInput`-bar RSI.
+float rsi = ta.rsi(close, lengthInput)
+//@variable The `lengthInput`-bar median of the `rsi`.
+float median = ta.median(rsi, lengthInput)
+
+//@variable Condition #1: Is `true` when the 1-bar `rsi` change switches from 1 to -1.
+bool changeNegative = ta.change(math.sign(ta.change(rsi))) == -2
+//@variable Condition #2: Is `true` when the previous bar's `rsi` is greater than 70.
+bool prevAbove70 = rsi[1] > 70.0
+//@variable Condition #3: Is `true` when the current `close` is lower than the previous bar's `open`.
+bool closeBelow = close < open[1]
+//@variable Condition #4: Is `true` when the `rsi` is between 60 and 70.
+bool betweenLevels = bool(math.max(70.0 - rsi, 0.0) * math.max(rsi - 60.0, 0.0))
+//@variable Condition #5: Is `true` when the `rsi` is above the `median`.
+bool aboveMedian = rsi > median
+
+//@variable Is `true` when the first condition occurs alongside conditions 2 and 3 or 4 and 5.
+bool compundCondition = changeNegative and ((prevAbove70 and closeBelow) or (betweenLevels and aboveMedian))
+
+//Plot the `rsi` and the `median`.
+plot(rsi, "RSI", color.rgb(201, 109, 34), 3)
+plot(median, "RSI Median", color.rgb(180, 160, 102), 2)
+
+// Highlight the background red when the `compundCondition` occurs.
+bgcolor(compundCondition ? color.new(color.red, 60) : na, title = "compundCondition")
+```
+
+Visualizando apenas o resultado final de `compoundCondition` não é fácil entender seu comportamento, pois cinco condições singulares subjacentes determinam o valor final. Para depurar `compoundCondition` de forma eficaz, também é necessário inspecionar as condições que a compõem.
+
+No exemplo abaixo, foram adicionadas cinco chamadas de [plotchar()](https://br.tradingview.com/pine-script-reference/v5/#fun_plotchar) para exibir [caracteres](./06_02_debugging.md#plotando-formas-condicionais) no gráfico e valores numéricos na linha de status e na Janela de Dados quando cada condição singular ocorre. Inspecionar cada um desses resultados fornece informações mais completas sobre o comportamento de `compoundCondition`:
+
+![Condições compostas e aninhadas 02](./imgs/Debugging-Conditions-Compound-conditions-2.CqS0Ugyz_Z181FHW.webp)
+
+```c
+//@version=5
+indicator("Compound conditions demo")
+
+//@variable The length of the RSI and median RSI calculations.
+int lengthInput = input.int(14, "Length", 2)
+
+//@variable The `lengthInput`-bar RSI.
+float rsi = ta.rsi(close, lengthInput)
+//@variable The `lengthInput`-bar median of the `rsi`.
+float median = ta.median(rsi, lengthInput)
+
+//@variable Condition #1: Is `true` when the 1-bar `rsi` change switches from 1 to -1.
+bool changeNegative = ta.change(math.sign(ta.change(rsi))) == -2
+//@variable Condition #2: Is `true` when the previous bar's `rsi` is greater than 70.
+bool prevAbove70 = rsi[1] > 70.0
+//@variable Condition #3: Is `true` when the current `close` is lower than the previous bar's `open`.
+bool closeBelow = close < open[1]
+//@variable Condition #4: Is `true` when the `rsi` is between 60 and 70.
+bool betweenLevels = bool(math.max(70.0 - rsi, 0.0) * math.max(rsi - 60.0, 0.0))
+//@variable Condition #5: Is `true` when the `rsi` is above the `median`.
+bool aboveMedian = rsi > median
+
+//@variable Is `true` when the first condition occurs alongside conditions 2 and 3 or 4 and 5.
+bool compundCondition = changeNegative and ((prevAbove70 and closeBelow) or (betweenLevels and aboveMedian))
+
+//Plot the `rsi` and the `median`.
+plot(rsi, "RSI", color.rgb(201, 109, 34), 3)
+plot(median, "RSI Median", color.rgb(180, 160, 102), 2)
+
+// Highlight the background red when the `compundCondition` occurs.
+bgcolor(compundCondition ? color.new(color.red, 60) : na, title = "compundCondition")
+
+// Plot characters on the chart when conditions 1-5 occur.
+plotchar(changeNegative ? rsi : na, "changeNegative (1)", "1", location.absolute, chart.fg_color)
+plotchar(prevAbove70 ? 70.0 : na, "prevAbove70 (2)", "2", location.absolute, chart.fg_color)
+plotchar(closeBelow ? close : na, "closeBelow (3)", "3", location.bottom, chart.fg_color)
+plotchar(betweenLevels ? 60 : na, "betweenLevels (4)", "4", location.absolute, chart.fg_color)
+plotchar(aboveMedian ? median : na, "aboveMedian (5)", "5", location.absolute, chart.fg_color)
+```
+
+__Note que:__
+
+- Cada chamada de [plotchar()](https://br.tradingview.com/pine-script-reference/v5/#fun_plotchar) usa um [número condicional](./06_02_debugging.md#como-números) como argumento `series`. As funções exibem os valores numéricos na linha de status e na Janela de Dados.
+- Todas as chamadas de [plotchar()](https://br.tradingview.com/pine-script-reference/v5/#fun_plotchar), exceto a da condição `closeBelow`, usam [location.absolute](https://br.tradingview.com/pine-script-reference/v5/#const_location.absolute) como argumento `location` para exibir caracteres em locais precisos sempre que sua `series` não for [na](https://br.tradingview.com/pine-script-reference/v5/#var_na) (ou seja, a condição ocorre). A chamada para `closeBelow` usa [location.bottom](https://br.tradingview.com/pine-script-reference/v5/#const_location.bottom) para exibir seus caracteres próximo à parte inferior do painel.
+- Nos exemplos desta seção, foram atribuídas condições individuais a variáveis separadas com nomes e anotações diretas. Embora esse formato não seja obrigatório para criar uma condição composta, pois é possível combinar condições diretamente dentro de uma expressão lógica, ele torna o código mais legível e fácil de depurar, conforme explicado na seção [Dicas](./06_02_debugging.md#dicas).
 
 ## Strings
+
+[Strings](./04_09_tipagem_do_sistema.md#string) são sequências de caracteres alfanuméricos, de controle e outros (por exemplo, Unicode). São úteis na depuração de scripts, pois permitem representar os tipos de dados do script como texto legível e inspecioná-los com [tipos de desenho](./04_09_tipagem_do_sistema.md#tipos-de-desenho) que possuem propriedades relacionadas a texto, ou usando [Pine Logs](./06_02_debugging.md#pine-logs).
+
+> __Observação!__\
+> Esta seção discute conversões de "string" e inspeção de strings via [labels](./05_20_text_e_shapes.md#labels) e [tabelas](./05_21_tabelas.md). [Caixas](./05_12_lines_e_boxes.md#boxes-caixas) também podem exibir texto. No entanto, sua utilidade para depurar strings é mais limitada do que as técnicas abordadas nesta seção e na seção [Pine Logs](./06_02_debugging.md#pine-logs). -->
+
+## Pine Logs
 
 ## Depuração de Funções
 
