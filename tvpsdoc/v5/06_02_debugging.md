@@ -317,7 +317,7 @@ __Note que:__
 - O script usa [plot.style_areabr](https://br.tradingview.com/pine-script-reference/v5/#const_plot.style_areabr) no plot de depuração, que não se conecta sobre valores [na](https://br.tradingview.com/pine-script-reference/v5/#var_na) como o estilo padrão faz.
 - Quando o valor plotado da barra visível mais à direita é [na](https://br.tradingview.com/pine-script-reference/v5/#var_na), o número na escala de preços representa o último valor _não-na_ antes dessa barra, se existir.
 
-<!-- ## Com Desenhos
+## Com Desenhos
 
 Uma abordagem alternativa para inspecionar graficamente o histórico de valores numéricos de um script é usar os [tipos de desenho](./04_09_tipagem_do_sistema.md#tipos-de-desenho) do Pine, incluindo [linhas](./05_12_lines_e_boxes.md#lines-linhas), [caixas](./05_12_lines_e_boxes.md#boxes-caixas), [polilinhas](./05_12_lines_e_boxes.md#polylines-polilinhas) e [labels](./05_20_text_e_shapes.md#labels).
 
@@ -370,7 +370,7 @@ __Note que:__
 
 Para mais informações sobre o uso de [caixas](./05_12_lines_e_boxes.md#boxes-caixas) e outros [tipos de desenho](./04_09_tipagem_do_sistema.md#tipos-de-desenho) relacionados, veja a página [Linhas e Caixas](./05_12_lines_e_boxes.md) do Manual do Usuário.
 
-## Condições
+<!-- ## Condições
 
 Muitos scripts criados no Pine envolvem declarar e avaliar _condições_ para ditar ações específicas do script, como acionar diferentes padrões de cálculo, visuais, sinais, alertas, ordens de estratégia, etc. Portanto, é essencial entender como inspecionar as condições que um script usa para garantir a execução adequada.
 
