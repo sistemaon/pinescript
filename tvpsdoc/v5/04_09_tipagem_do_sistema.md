@@ -8,7 +8,7 @@ O Pine Script utiliza [tipos](./04_09_tipagem_do_sistema.md#tipos) para classifi
 A tipagem do Sistema está intimamente entrelaçado com o [modelo de execução](./04_01_modelo_de_execucao.md) do Pine e os conceitos de [séries temporais](./04_02_series_temporais.md). Compreender os três é essencial para aproveitar ao máximo o poder do Pine Script.
 
 > __Observação!__\
-> Para simplificar, muitas vezes usamos "tipo" para nos referirmos a um "tipo qualificado".
+> Para simplificar, muitas vezes é utilizado "tipo" para referir a um "tipo qualificado".
 
 
 # Qualificadores
