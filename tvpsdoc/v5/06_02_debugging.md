@@ -377,7 +377,7 @@ Muitos scripts criados no Pine envolvem declarar e avaliar _condições_ para di
 > __Observação!__\
 > Esta seção discute técnicas de depuração baseadas em visuais de gráficos. Para saber mais sobre _registro_ de condições, veja a seção [Pine Logs](./06_02_debugging.md#pine-logs).
 
-<!-- ### Como Números
+### Como Números
 
 Uma maneira possível de depurar as condições de um script é definir _valores numéricos_ baseados nelas, o que permite inspecioná-las usando abordagens numéricas, como as descritas na [seção anterior](./06_02_debugging.md#valores-numéricos).
 
@@ -408,11 +408,7 @@ plot(debugValue, "Conditional number", color.teal, 3)
 
 __Note que:__
 
-- Representar valores "bool" usando números também permite que scripts exibam formas ou caracteres condicionais em locais específicos do eixo-y com [plotshape()](https://br.tradingview.com/pine-script-reference/v5/#fun_plotshape) e [plotchar()](https://br.tradingview.com/pine-script-reference/v5/#fun_plotchar), além de facilitar a depuração condicional com [plotarrow()](https://br.tradingview.com/pine-script-reference/v5/#fun_plotarrow). Veja a [próxima seção](./06_02_debugging.md#plotando-formas-condicionais) para saber mais. -->
-
-
-
-
+- Representar valores "bool" usando números também permite que scripts exibam formas ou caracteres condicionais em locais específicos do eixo-y com [plotshape()](https://br.tradingview.com/pine-script-reference/v5/#fun_plotshape) e [plotchar()](https://br.tradingview.com/pine-script-reference/v5/#fun_plotchar), além de facilitar a depuração condicional com [plotarrow()](https://br.tradingview.com/pine-script-reference/v5/#fun_plotarrow). Veja a [próxima seção](./06_02_debugging.md#plotando-formas-condicionais) para saber mais.
 
 
 
