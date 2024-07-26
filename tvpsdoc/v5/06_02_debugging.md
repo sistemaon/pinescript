@@ -515,7 +515,7 @@ __Note que:__
 
 Para saber mais sobre [plotshape()](https://br.tradingview.com/pine-script-reference/v5/#fun_plotshape), [plotchar()](https://br.tradingview.com/pine-script-reference/v5/#fun_plotchar) e [plotarrow()](https://br.tradingview.com/pine-script-reference/v5/#fun_plotarrow), veja a página [Textos e Formas](./05_20_text_e_shapes.md) deste manual.
 
-<!-- ### Cores Condicionais
+### Cores Condicionais
 
 Uma maneira elegante de representar visualmente condições no Pine é criar expressões que retornem valores de [cor](./04_09_tipagem_do_sistema.md#color) com base nos estados `true` ou `false`, pois os scripts podem usá-los para controlar a aparência de [objetos de desenho](./04_09_tipagem_do_sistema.md#tipos-de-desenho) ou os resultados de chamadas `plot*()`, [fill()](https://br.tradingview.com/pine-script-reference/v5/#fun_fill), [bgcolor()](https://br.tradingview.com/pine-script-reference/v5/#fun_bgcolor) ou [barcolor()](https://br.tradingview.com/pine-script-reference/v5/#fun_barcolor).
 
@@ -562,7 +562,7 @@ __Note que:__
 
 - A função [barcolor()](https://br.tradingview.com/pine-script-reference/v5/#fun_barcolor) sempre colore as barras do gráfico principal, independentemente de o script ocupar outro painel do gráfico, e o gráfico só exibirá os resultados se as barras estiverem visíveis.
 
-Veja as páginas [Cores](./05_07_cores.md), [Preenchimentos](./05_08_fills.md), [Backgrounds](./05_02_background.md) e [Coloração de Barras](./05_03_coloracao_de_barras.md) para mais informações sobre como trabalhar com cores, preencher plots, destacar fundos e colorir barras. -->
+Veja as páginas [Cores](./05_07_cores.md), [Preenchimentos](./05_08_fills.md), [Backgrounds](./05_02_background.md) e [Coloração de Barras](./05_03_coloracao_de_barras.md) para mais informações sobre como trabalhar com cores, preencher plots, destacar fundos e colorir barras.
 
 ## Pine Logs
 
