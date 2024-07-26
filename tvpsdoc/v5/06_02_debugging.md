@@ -410,11 +410,9 @@ __Note que:__
 
 - Representar valores "bool" usando números também permite que scripts exibam formas ou caracteres condicionais em locais específicos do eixo-y com [plotshape()](https://br.tradingview.com/pine-script-reference/v5/#fun_plotshape) e [plotchar()](https://br.tradingview.com/pine-script-reference/v5/#fun_plotchar), além de facilitar a depuração condicional com [plotarrow()](https://br.tradingview.com/pine-script-reference/v5/#fun_plotarrow). Veja a [próxima seção](./06_02_debugging.md#plotando-formas-condicionais) para saber mais.
 
+### Plotando Formas Condicionais
 
-
-<!-- ### Plotando Formas Condicionais
-
-As funções [plotshape()](https://br.tradingview.com/pine-script-reference/v5/#fun_plotshape) e [plotchar()](https://br.tradingview.com/pine-script-reference/v5/#fun_plotchar) são úteis para depurar condições, pois podem plotar formas ou caracteres em locais absolutos ou relativos do gráfico sempre que contiverem um argumento `series` `true` ou `não-na`.
+As funções [plotshape()](https://br.tradingview.com/pine-script-reference/v5/#fun_plotshape) e [plotchar()](https://br.tradingview.com/pine-script-reference/v5/#fun_plotchar) são úteis para depurar condições, pois podem plotar formas ou caracteres em locais absolutos ou relativos do gráfico sempre que contiverem um argumento `true` ou _não-na_/_non-na_ `series`.
 
 Essas funções também podem exibir representações _numéricas_ da `series` na linha de status do script e na Janela de Dados, sendo também úteis para depurar [números](./06_02_debugging.md#valores-numéricos). Um modo simples e prático de depurar números com essas funções está demonstrado na seção [Dicas](./06_02_debugging.md#dicas).
 
@@ -423,7 +421,7 @@ Os locais dos plots no gráfico dependem do parâmetro `location`, que por padr�
 > __Observação!__\
 > Ao usar [location.abovebar](https://br.tradingview.com/pine-script-reference/v5/#const_location.abovebar) ou [location.belowbar](https://br.tradingview.com/pine-script-reference/v5/#const_location.belowbar), a função posiciona as formas/caracteres em relação aos preços do _gráfico principal_. Se o script plota seus valores em um painel de gráfico separado, recomenda-se depurar com outras opções de `location` para evitar interferir na escala do painel.
 
-Vamos inspecionar uma condição usando essas funções. O script a seguir calcula um [RSI](https://br.tradingview.com/pine-script-reference/v5/#fun_ta.rsi) com um comprimento `lengthInput` e uma variável `crossBelow`, cujo valor é o resultado de uma condição que retorna `true` quando o RSI cruza abaixo de 30. Ele chama [plotshape()](https://br.tradingview.com/pine-script-reference/v5/#fun_plotshape) para exibir um círculo próximo ao topo do painel sempre que a condição ocorre:
+Inspecionando uma condição usando essas funções, o script a seguir calcula um [RSI](https://br.tradingview.com/pine-script-reference/v5/#fun_ta.rsi) com um comprimento `lengthInput` e uma variável `crossBelow`, cujo valor é o resultado de uma condição que retorna `true` quando o RSI cruza abaixo de 30. Ele chama [plotshape()](https://br.tradingview.com/pine-script-reference/v5/#fun_plotshape) para exibir um círculo próximo ao topo do painel sempre que a condição ocorre:
 
 ![Plotando formas condicionais 01](./imgs/Debugging-Conditions-Plotting-conditional-shapes-1.B_YUlhVQ_Z1ARRXr.webp)
 
@@ -481,7 +479,7 @@ __Note que:__
 
 - Como foi passada uma série _numérica_ para a função, o plot condicional agora mostra os valores do `debugNumber` na linha de status e na Janela de Dados em vez de 1 ou 0.
 
-Outro modo prático de depurar condições é usar [plotarrow()](https://br.tradingview.com/pine-script-reference/v5/#fun_plotarrow). Essa função plota uma seta com localização relativa aos preços do _gráfico principal_ sempre que o argumento `series` não é zero e não é [na](https://br.tradingview.com/pine-script-reference/v5/#var_na). O comprimento de cada seta varia com o valor da `series` fornecida. Assim como [plotshape()](https://br.tradingview.com/pine-script-reference/v5/#fun_plotshape) e [plotchar()](https://br.tradingview.com/pine-script-reference/v5/#fun_plotchar), [plotarrow()](https://br.tradingview.com/pine-script-reference/v5/#fun_plotarrow) também pode exibir resultados numéricos na linha de status e na Janela de Dados.
+Outro modo prático de depurar condições é usar [plotarrow()](https://br.tradingview.com/pine-script-reference/v5/#fun_plotarrow). Essa função plota uma seta com localização relativa aos preços do _gráfico principal_ sempre que o argumento `series` não é zero e não é [na](https://br.tradingview.com/pine-script-reference/v5/#var_na). O comprimento de cada seta varia com o valor da `series` fornecida. Assim como [plotshape()](https://br.tradingview.com/pine-script-reference/v5/#fun_plotshape) e [plotchar()](https://br.tradingview.com/pine-script-reference/v5/#fun_plotchar), [plotarrow()](https://br.tradingview.com/pine-script-reference/v5/#fun_plotarrow) também pode exibir resultados numéricos na linha de status e na "Janela de Dados" "_Data Window_".
 
 > __Observação!__\
 > Como essa função sempre posiciona setas em relação aos preços do gráfico principal, recomenda-se usá-la apenas se o script ocupar o painel do gráfico principal para evitar interferir na escala.
@@ -507,8 +505,8 @@ float debugNumber = crossBelow ? rsi - 30.0 : na
 
 // Plot the `rsi`.
 plot(rsi, "RSI", color.rgb(136, 76, 146), display = display.data_window)
-// Plot arrows at the `debugNumber`.
-plotarrow(debugNumber, "RSI cross below 30 distance")
+// Plot circles at the `debugNumber`.
+plotarrow(debugNumber, "RSI cross below 30 distnce")
 ```
 
 __Note que:__
@@ -517,18 +515,16 @@ __Note que:__
 
 Para saber mais sobre [plotshape()](https://br.tradingview.com/pine-script-reference/v5/#fun_plotshape), [plotchar()](https://br.tradingview.com/pine-script-reference/v5/#fun_plotchar) e [plotarrow()](https://br.tradingview.com/pine-script-reference/v5/#fun_plotarrow), veja a página [Textos e Formas](./05_20_text_e_shapes.md) deste manual.
 
-### Cores Condicionais
+<!-- ### Cores Condicionais
 
-Uma maneira elegante de representar visualmente
-
- condições no Pine é criar expressões que retornem valores de [cor](./04_09_tipagem_do_sistema.md#color) com base nos estados `true` ou `false`, pois os scripts podem usá-los para controlar a aparência de [objetos de desenho](./04_09_tipagem_do_sistema.md#tipos-de-desenho) ou os resultados de chamadas `plot*()`, [fill()](https://br.tradingview.com/pine-script-reference/v5/#fun_fill), [bgcolor()](https://br.tradingview.com/pine-script-reference/v5/#fun_bgcolor) ou [barcolor()](https://br.tradingview.com/pine-script-reference/v5/#fun_barcolor).
+Uma maneira elegante de representar visualmente condições no Pine é criar expressões que retornem valores de [cor](./04_09_tipagem_do_sistema.md#color) com base nos estados `true` ou `false`, pois os scripts podem usá-los para controlar a aparência de [objetos de desenho](./04_09_tipagem_do_sistema.md#tipos-de-desenho) ou os resultados de chamadas `plot*()`, [fill()](https://br.tradingview.com/pine-script-reference/v5/#fun_fill), [bgcolor()](https://br.tradingview.com/pine-script-reference/v5/#fun_bgcolor) ou [barcolor()](https://br.tradingview.com/pine-script-reference/v5/#fun_barcolor).
 
 > __Observação!__\
 > Assim como as funções `plot*()`, scripts só podem chamar [fill()](https://br.tradingview.com/pine-script-reference/v5/#fun_fill), [bgcolor()](https://br.tradingview.com/pine-script-reference/v5/#fun_bgcolor) e [barcolor()](https://br.tradingview.com/pine-script-reference/v5/#fun_barcolor) a partir do _escopo global_, e as funções não podem aceitar variáveis locais.
 
-Por exemplo, este script calcula a variação nos preços de [close](https://br.tradingview.com/pine-script-reference/v5/#var_close) ao longo de `lengthInput` barras e declara duas variáveis “bool” para identificar quando a variação de preço é positiva ou negativa.
+Por exemplo, este script calcula a variação nos preços de [close](https://br.tradingview.com/pine-script-reference/v5/#var_close) ao longo de `lengthInput` barras e declara duas variáveis "bool" para identificar quando a variação de preço é positiva ou negativa.
 
-O script usa esses valores “bool” como condições em expressões [ternárias](https://br.tradingview.com/pine-script-reference/v5/#op_?:) para atribuir os valores de três variáveis “color”, e depois usa essas variáveis como argumentos `color` em [plot()](https://br.tradingview.com/pine-script-reference/v5/#fun_plot), [bgcolor()](https://br.tradingview.com/pine-script-reference/v5/#fun_bgcolor) e [barcolor()](https://br.tradingview.com/pine-script-reference/v5/#fun_barcolor) para depurar os resultados:
+O script usa esses valores "bool" como condições em expressões [ternárias](https://br.tradingview.com/pine-script-reference/v5/#op_?:) para atribuir os valores de três variáveis "color", e depois usa essas variáveis como argumentos `color` em [plot()](https://br.tradingview.com/pine-script-reference/v5/#fun_plot), [bgcolor()](https://br.tradingview.com/pine-script-reference/v5/#fun_bgcolor) e [barcolor()](https://br.tradingview.com/pine-script-reference/v5/#fun_barcolor) para depurar os resultados:
 
 ![Cores condicionais 01](./imgs/Debugging-Conditions-Conditional-colors-1.B5Y6dhKf_Z1jtyTu.webp)
 
@@ -566,7 +562,7 @@ __Note que:__
 
 - A função [barcolor()](https://br.tradingview.com/pine-script-reference/v5/#fun_barcolor) sempre colore as barras do gráfico principal, independentemente de o script ocupar outro painel do gráfico, e o gráfico só exibirá os resultados se as barras estiverem visíveis.
 
-Veja as páginas [Cores](./05_07_cores.md), [Preenchimentos](./05_16_fills.md), [Fundos](./05_08_fundos.md) e [Coloração de Barras](./05_15_coloração_de_barras.md) para mais informações sobre como trabalhar com cores, preencher plots, destacar fundos e colorir barras. -->
+Veja as páginas [Cores](./05_07_cores.md), [Preenchimentos](./05_08_fills.md), [Backgrounds](./05_02_background.md) e [Coloração de Barras](./05_03_coloracao_de_barras.md) para mais informações sobre como trabalhar com cores, preencher plots, destacar fundos e colorir barras. -->
 
 ## Pine Logs
 
@@ -575,3 +571,5 @@ Veja as páginas [Cores](./05_07_cores.md), [Preenchimentos](./05_16_fills.md), 
 ## Depuração de Funções
 
 ## Representando Outros Tipos
+
+## Dicas
