@@ -773,12 +773,12 @@ __Note que:__
 - Todas as chamadas de [plotchar()](https://br.tradingview.com/pine-script-reference/v5/#fun_plotchar), exceto a da condição `closeBelow`, usam [location.absolute](https://br.tradingview.com/pine-script-reference/v5/#const_location.absolute) como argumento `location` para exibir caracteres em locais precisos sempre que sua `series` não for [na](https://br.tradingview.com/pine-script-reference/v5/#var_na) (ou seja, a condição ocorre). A chamada para `closeBelow` usa [location.bottom](https://br.tradingview.com/pine-script-reference/v5/#const_location.bottom) para exibir seus caracteres próximo à parte inferior do painel.
 - Nos exemplos desta seção, foram atribuídas condições individuais a variáveis separadas com nomes e anotações diretas. Embora esse formato não seja obrigatório para criar uma condição composta, pois é possível combinar condições diretamente dentro de uma expressão lógica, ele torna o código mais legível e fácil de depurar, conforme explicado na seção [Dicas](./06_02_debugging.md#dicas).
 
-<!-- ## Strings
+## Strings
 
 [Strings](./04_09_tipagem_do_sistema.md#string) são sequências de caracteres alfanuméricos, de controle e outros (por exemplo, Unicode). São úteis na depuração de scripts, pois permitem representar os tipos de dados do script como texto legível e inspecioná-los com [tipos de desenho](./04_09_tipagem_do_sistema.md#tipos-de-desenho) que possuem propriedades relacionadas a texto, ou usando [Pine Logs](./06_02_debugging.md#pine-logs).
 
 > __Observação!__\
-> Esta seção discute conversões de "string" e inspeção de strings via [labels](./05_20_text_e_shapes.md#labels) e [tabelas](./05_21_tabelas.md). [Caixas](./05_12_lines_e_boxes.md#boxes-caixas) também podem exibir texto. No entanto, sua utilidade para depurar strings é mais limitada do que as técnicas abordadas nesta seção e na seção [Pine Logs](./06_02_debugging.md#pine-logs). -->
+> Esta seção discute conversões de "string" e inspeção de strings via [labels](./05_20_text_e_shapes.md#labels) e [tabelas](./05_21_tabelas.md). [Caixas](./05_12_lines_e_boxes.md#boxes-caixas) também podem exibir texto. No entanto, sua utilidade para depurar strings é mais limitada do que as técnicas abordadas nesta seção e na seção [Pine Logs](./06_02_debugging.md#pine-logs).
 
 ## Pine Logs
 
