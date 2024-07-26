@@ -131,7 +131,7 @@ __Note que:__
 - Os números exibidos na linha de status do script e na Janela de Dados refletem os valores plotados na localização do cursor do gráfico. Essas áreas mostrarão o valor da barra mais recente quando o ponteiro do mouse não estiver no gráfico.
 - O número na escala de preços reflete o valor mais recente disponível no gráfico visível.
 
-<!-- ### Sem Afetar a Escala
+### Sem Afetar a Escala
 
 Ao depurar vários valores numéricos em um script, pode ser necessário inspecioná-los sem interferir nas escalas de preços ou sobrecarregar as saídas visuais no painel do gráfico, pois escalas distorcidas e plots sobrepostos podem dificultar a avaliação dos resultados.
 
@@ -227,7 +227,7 @@ debugLocations = display.all - display.pane
 plot(weight, "weight", color.purple, display = debugLocations)
 plot(numerator, "numerator", color.teal, display = debugLocations)
 plot(denominator, "denominator", color.maroon, display = debugLocations)
-``` -->
+```
 
 ## Pine Logs
 
