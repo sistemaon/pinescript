@@ -1355,4 +1355,188 @@ float maValue = customMA(close, lengthInput)
 plot(maValue, "Custom MA", color.blue, 3)
 ```
 
+### Extraindo Variáveis Locais
+
+Quando um programador deseja inspecionar as variáveis locais de uma [função definida pelo usuário](./04_11_funcoes_definidas_pelo_usuario.md) [plotando](./06_02_debugging.md#plotando-números) seus valores, [colorindo](./06_02_debugging.md#cores-condicionais) o fundo ou as barras do gráfico, etc., ele deve _extrair_ os valores para o _escopo global_, pois as funções integradas que produzem esses outputs só podem aceitar variáveis globais e literais.
+
+Como os valores retornados por uma função estão disponíveis no escopo onde a chamada ocorre, uma abordagem simples de extração é fazer a função retornar uma [tupla](./04_09_tipagem_do_sistema.md#tuples-tuplas) contendo todos os valores que precisam ser inspecionados.
+
+Aqui, a função `customMA()` foi modificada para retornar uma [tupla](./04_09_tipagem_do_sistema.md#tuples-tuplas) contendo todas as variáveis calculadas pela função. Agora, a função pode ser chamada com uma _declaração de tupla_ para tornar os valores disponíveis no escopo global e inspecioná-los com [plots](./06_02_debugging.md#plotando-números):
+
+![Extraindo variáveis locais](./imgs/Debugging-Debugging-functions-Extracting-local-variables-1.Crv6Jvx8_Z2qevgh.webp)
+
+```c
+//@version=5
+indicator("Extracting local variables with tuples demo", "Custom MA", true)
+
+//@variable The number of bars in the `customMA()` calculation.
+int lengthInput = input.int(50, "Length", 2)
+
+//@function      Calculates a moving average that only responds to values outside the first and third quartiles.
+//@param source  The series of values to process.
+//@param length  The number of bars in the calculation.
+//@returns       The moving average value.
+customMA(float source, int length) =>
+    //@variable The custom moving average.
+    var float result = na
+    // Calculate the 25th and 75th `source` percentiles.
+    float q1 = ta.percentile_linear_interpolation(source, length, 25)
+    float q3 = ta.percentile_linear_interpolation(source, length, 75)
+    // Calculate the range values.
+    float outerRange = math.max(source - q3, q1 - source, 0.0)
+    float totalRange = ta.range(source, length)
+    //@variable Half the ratio of the `outerRange` to the `totalRange`.
+    float alpha = 0.5 * outerRange / totalRange
+    // Mix the `source` with the `result` based on the `alpha` value.
+    result := (1.0 - alpha) * nz(result, source) + alpha * source
+    // Return a tuple containing the `result` and other local variables.
+    [result, q1, q3, outerRange, totalRange, alpha]
+
+// Declare a tuple containing all values returned by `customMA()`.
+[maValue, q1Debug, q3Debug, outerRangeDebug, totalRangeDebug, alphaDebug] = customMA(close, lengthInput)
+
+// Plot the `maValue`.
+plot(maValue, "Custom MA", color.blue, 3)
+
+//@variable Display location for plots with different scale.
+notOnPane = display.all - display.pane
+
+// Display the extracted `q1` and `q3` values in all plot locations.
+plot(q1Debug, "q1", color.new(color.maroon, 50))
+plot(q3Debug, "q3", color.new(color.teal, 50))
+// Display the other extracted values in the status line and Data Window to avoid impacting the scale.
+plot(outerRangeDebug, "outerRange", chart.fg_color, display = notOnPane)
+plot(totalRangeDebug, "totalRange", chart.fg_color, display = notOnPane)
+plot(alphaDebug, "alpha", chart.fg_color, display = notOnPane)
+// Highlight the chart when `alphaDebug` is 0, i.e., when the `maValue` does not change.
+bgcolor(alphaDebug == 0.0 ? color.new(color.orange, 90) : na, title = "`alpha == 0.0` highlight")
+```
+
+__Note que:__
+
+- Foi utilizado `display.all - display.pane` para os plots das variáveis `outerRangeDebug`, `totalRangeDebug` e `alphaDebug` para [evitar impactar a escala do gráfico](./06_02_debugging.md#sem-afetar-a-escala).
+- O script também usa uma [cor condicional](./06_02_debugging.md#cores-condicionais) para destacar o [fundo](https://br.tradingview.com/pine-script-reference/v5/#fun_bgcolor) do painel do gráfico quando `debugAlpha` é 0, indicando que `maValue` não muda.
+
+Outra maneira mais _avançada_ de extrair os valores das variáveis locais de uma função é passá-los para uma variável de _tipo de referência_ declarada no escopo global.
+
+Os escopos de funções podem acessar variáveis globais para seus cálculos. Embora um script não possa reatribuir diretamente os valores de variáveis globais de dentro do escopo de uma função, ele pode atualizar os _elementos ou propriedades_ desses valores se eles forem tipos de referência, como [arrays](./04_14_arrays.md), [matrix](./04_15_matrices.md), [mapas](./04_16_mapas.md) e [tipos definidos pelo usuário](./04_09_tipagem_do_sistema.md#tipos-definidos-pelo-usuário).
+
+Esta versão declara uma variável `debugData` no escopo global que referencia um [mapa](https://br.tradingview.com/pine-script-reference/v5/#type_map) com chaves "string" e valores "float". Dentro do escopo local da função `customMA()`, o script coloca _pares de chave-valor_ contendo o nome e o valor de cada variável local no mapa. Após chamar a função, o script plota os valores armazenados em `debugData`:
+
+```c
+//@version=5
+indicator("Extracting local variables with reference types demo", "Custom MA", true)
+
+//@variable The number of bars in the `customMA()` calculation.
+int lengthInput = input.int(50, "Length", 2)
+
+//@variable A map with "string" keys and "float" values for debugging the `customMA()`.
+map<string, float> debugData = map.new<string, float>()
+
+//@function      Calculates a moving average that only responds to values outside the first and third quartiles.
+//@param source  The series of values to process.
+//@param length  The number of bars in the calculation.
+//@returns       The moving average value.
+customMA(float source, int length) =>
+    //@variable The custom moving average.
+    var float result = na
+    // Calculate the 25th and 75th `source` percentiles.
+    float q1 = ta.percentile_linear_interpolation(source, length, 25),    map.put(debugData, "q1", q1)
+    float q3 = ta.percentile_linear_interpolation(source, length, 75),    map.put(debugData, "q3", q3)
+    // Calculate the range values.
+    float outerRange = math.max(source - q3, q1 - source, 0.0),           map.put(debugData, "outerRange", outerRange)
+    float totalRange = ta.range(source, length),                          map.put(debugData, "totalRange", totalRange)
+    //@variable Half the ratio of the `outerRange` to the `totalRange`.
+    float alpha = 0.5 * outerRange / totalRange,                          map.put(debugData, "alpha", alpha)
+    // Mix the `source` with the `result` based on the `alpha` value.
+    result := (1.0 - alpha) * nz(result, source) + alpha * source
+    // Return the `result`.
+    result
+
+//@variable The `customMA()` result over `lengthInput` bars.
+float maValue = customMA(close, lengthInput)
+
+// Plot the `maValue`.
+plot(maValue, "Custom MA", color.blue, 3)
+
+//@variable Display location for plots with different scale.
+notOnPane = display.all - display.pane
+
+// Display the extracted `q1` and `q3` values in all plot locations.
+plot(map.get(debugData, "q1"), "q1", color.new(color.maroon, 50))
+plot(map.get(debugData, "q3"), "q3", color.new(color.teal, 50))
+// Display the other extracted values in the status line and Data Window to avoid impacting the scale.
+plot(map.get(debugData, "outerRange"), "outerRange", chart.fg_color, display = notOnPane)
+plot(map.get(debugData, "totalRange"), "totalRange", chart.fg_color, display = notOnPane)
+plot(map.get(debugData, "alpha"), "alpha", chart.fg_color, display = notOnPane)
+// Highlight the chart when the extracted `alpha` is 0, i.e., when the `maValue` does not change.
+bgcolor(map.get(debugData, "alpha") == 0.0 ? color.new(color.orange, 90) : na, title = "`alpha == 0.0` highlight")
+```
+
+__Note que:__
+
+- Cada chamada de [map.put()](https://br.tradingview.com/pine-script-reference/v5/#fun_map.put) foi colocada na mesma linha da declaração de cada variável, separada por uma vírgula, para manter o código conciso e evitar adicionar linhas extras ao código `customMA()`.
+- Utilizou-se [map.get()](https://br.tradingview.com/pine-script-reference/v5/#fun_map.get) para recuperar cada valor para as chamadas de [plot()](https://br.tradingview.com/pine-script-reference/v5/#fun_plot) e [bgcolor()](https://br.tradingview.com/pine-script-reference/v5/#fun_bgcolor) de depuração.
+
+<!-- ### Desenhos e Logs Locais
+
+Diferente das funções `plot.*()` e outras que requerem valores acessíveis ao escopo global, os scripts podem gerar [objetos de desenho](./04_09_tipagem_do_sistema.md#tipos-de-desenho) e [Pine Logs](./06_02_debugging.md#pine-logs) diretamente dentro de uma função, permitindo que os programadores depurem as variáveis locais _sem_ extrair os valores para o escopo externo.
+
+Neste exemplo, são usados [labels](./05_20_text_e_shapes.md#labels) e [Pine Logs](./06_02_debugging.md#pine-logs) para exibir [representações em string](./06_02_debugging.md#representando-outros-tipos) dos valores dentro do escopo `customMA()`. Dentro da função, o script chama [str.format()](https://br.tradingview.com/pine-script-reference/v5/#fun_str.format) para criar uma string formatada representando os dados do escopo local e, em seguida, chama [label.new()](https://br.tradingview.com/pine-script-reference/v5/#fun_label.new) e [log.info()](https://br.tradingview.com/pine-script-reference/v5/#fun_log.info) para, respectivamente, exibir o texto no gráfico em um tooltip e registrar uma mensagem "info" contendo o texto no painel de [Pine Logs](./06_02_debugging.md#pine-logs):
+
+![Desenhos e logs locais](./imgs/Debugging-Debugging-functions-Local-drawings-and-logs-1.iGi0vyrx_2s4zkG.webp)
+
+```c
+//@version=5
+indicator("Local drawings and logs demo", "Custom MA", true, max_labels_count = 500)
+
+//@variable The number of bars in the `customMA()` calculation.
+int lengthInput = input.int(50, "Length", 2)
+
+//@function      Calculates a moving average that only responds to values outside the first and third quartiles.
+//@param source  The series of values to process.
+//@param length  The number of bars in the calculation.
+//@returns       The moving average value.
+customMA(float source, int length) =>
+    //@variable The custom moving average.
+    var float result = na
+    // Calculate the 25th and 75th `source` percentiles.
+    float q1 = ta.percentile_linear_interpolation(source, length, 25)
+    float q3 = ta.percentile_linear_interpolation(source, length, 75)
+    // Calculate the range values.
+    float outerRange = math.max(source - q3, q1 - source, 0.0)
+    float totalRange = ta.range(source, length)
+    //@variable Half the ratio of the `outerRange` to the `totalRange`.
+    float alpha = 0.5 * outerRange / totalRange
+    // Mix the `source` with the `result` based on the `alpha` value.
+    result := (1.0 - alpha) * nz(result, source) + alpha * source
+
+    //@variable A formatted string containing representations of all local variables.
+    string debugText = str.format(
+         "\n`customMA()` data\n----------\nsource: {0, number, #.########}\nlength: {1}\nq1: {2, number, #.########}
+         \nq3: {3, number, #.########}\nouterRange: {4, number, #.########}\ntotalRange: {5, number, #.########}
+         \nalpha{6, number, #.########}\nresult: {7, number, #.########}",
+         source, length, q1, q3, outerRange, totalRange, alpha, result
+     )
+    // Draw a label with a tooltip displaying the `debugText`.
+    label.new(bar_index, high, color = color.new(chart.fg_color, 80), tooltip = debugText)
+    // Print an "info" message in the Pine Logs pane when the bar is confirmed.
+    if barstate.isconfirmed
+        log.info(debugText)
+
+    // Return the `result`.
+    result
+
+//@variable The `customMA()` result over `lengthInput` bars.
+float maValue = customMA(close, lengthInput)
+
+// Plot the `maValue`.
+plot(maValue, "Custom MA", color.blue, 3)
+```
+
+__Note que:__
+
+- Incluiu-se `max_labels_count = 500` na função [indicator()](https://br.tradingview.com/pine-script-reference/v5/#fun_indicator) para exibir [labels](./05_20_text_e_shapes.md#labels) para as 500 chamadas mais recentes de `customMA()`.
+- A função usa [barstate.isconfirmed](https://br.tradingview.com/pine-script-reference/v5/#var_barstate.isconfirmed) em uma instrução [if](https://br.tradingview.com/pine-script-reference/v5/#kw_if) para chamar [log.info()](https://br.tradingview.com/pine-script-reference/v5/#fun_log.info) apenas em barras _confirmadas_, não registrando uma nova mensagem em cada tick em tempo real. -->
+
 ## Dicas
