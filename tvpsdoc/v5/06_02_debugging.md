@@ -977,7 +977,7 @@ __Note que:__
 
 - Se o gráfico visível contiver mais barras do que os desenhos permitidos, o script só mostrará resultados nas barras mais recentes do intervalo visível. Para melhores resultados com esta técnica, dê zoom no gráfico para manter o intervalo visível limitado ao número permitido de desenhos.
 
-<!-- ### No Final do Gráfico
+### No Final do Gráfico
 
 Uma abordagem frequente para depurar as strings de um script com [labels](./05_20_text_e_shapes.md#labels) é exibi-las no _final_ do gráfico, especialmente quando as strings não mudam ou quando apenas os valores de uma barra específica precisam ser analisados.
 
@@ -1032,7 +1032,7 @@ __Note que:__
 - Quando chamada do _escopo global_, a função cria uma [label](https://br.tradingview.com/pine-script-reference/v5/#type_label) com propriedades `text` e `y` que atualizam em cada barra.
 - Foram feitas três chamadas à função e adicionados caracteres de quebra de linha (`\n`) para demonstrar que é possível sobrepor os resultados de múltiplas [labels](./05_20_text_e_shapes.md#labels) no final do gráfico, se as strings tiverem espaçamento de linha adequado.
 
-### Usando Tabelas
+<!-- ### Usando Tabelas
 
 [Tabelas](./05_19_tables.md) exibem strings dentro de células organizadas em colunas e linhas em locais fixos relativos ao espaço visual do painel do gráfico. Podem servir como ferramentas versáteis de depuração baseadas no gráfico, pois, ao contrário das [labels](./05_20_text_e_shapes.md#labels), permitem que os programadores inspecionem uma ou _mais_ "series strings" em uma estrutura visual organizada, independente da escala do gráfico ou do índice da barra.
 
