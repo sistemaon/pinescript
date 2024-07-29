@@ -1108,7 +1108,7 @@ Para acessar o Painel de Pine Logs, selecione "Pine Logs..." no menu "Mais" "_Mo
 > __Observação!__\
 > Somente __scripts pessoais__ podem gerar Pine Logs. Um script publicado _não pode_ criar logs, mesmo que tenha chamadas de função `log.*()` em seu código. É necessário considerar abordagens alternativas, como as descritas nas seções acima, ao [publicar scripts](./06_04_publicando_scripts.md) com funcionalidade de depuração.
 
-<!-- ### Criando Logs
+### Criando Logs
 
 Scripts podem criar logs chamando as funções no namespace `log.*()`.
 
@@ -1248,7 +1248,7 @@ Após especificar o ponto de início, uma tag contendo o tempo de início aparec
 
 Os usuários podem filtrar os resultados por _nível de depuração_ usando as caixas de seleção disponíveis ao selecionar o ícone mais à direita nas opções de filtragem. Aqui, foram desativados os níveis "info" e "warning" para que os resultados contenham apenas mensagens de "error":
 
-![Filtrando logs 06](./imgs/Debugging-Pine-logs-Filtering-logs-6.CJM074om_Z1UkF5.webp) -->
+![Filtrando logs 06](./imgs/Debugging-Pine-logs-Filtering-logs-6.CJM074om_Z1UkF5.webp)
 
 ## Depuração de Funções
 
