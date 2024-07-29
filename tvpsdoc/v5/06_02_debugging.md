@@ -1311,7 +1311,7 @@ __Note que:__
 - As chamadas [input.time()](https://br.tradingview.com/pine-script-reference/v5/#fun_input.time) incluem `confirm = true` para que seja possível definir interativamente os tempos de início e término diretamente no gráfico. Para redefinir os inputs, selecione “Reset points…” nas opções do menu "More" do script.
 - A condição que aciona cada chamada [log.info()](https://br.tradingview.com/pine-script-reference/v5/#fun_log.info) inclui [barstate.isconfirmed](https://br.tradingview.com/pine-script-reference/v5/#var_barstate.isconfirmed) para limitar a geração de logs às barras _confirmadas_.
 
-<!-- ## Depurando Funções
+## Depurando Funções
 
 [Funções definidas pelo usuário](./04_11_funcoes_definidas_pelo_usuario.md) e [métodos](./04_11_funcoes_definidas_pelo_usuario.md#funções-definidas-pelo-usuário) são funções personalizadas escritas pelos usuários. Elas encapsulam sequências de operações que um script pode invocar posteriormente em sua execução.
 
@@ -1353,6 +1353,6 @@ float maValue = customMA(close, lengthInput)
 
 // Plot the `maValue`.
 plot(maValue, "Custom MA", color.blue, 3)
-``` -->
+```
 
 ## Dicas
