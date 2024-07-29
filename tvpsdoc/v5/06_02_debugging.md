@@ -1478,7 +1478,7 @@ __Note que:__
 - Cada chamada de [map.put()](https://br.tradingview.com/pine-script-reference/v5/#fun_map.put) foi colocada na mesma linha da declaração de cada variável, separada por uma vírgula, para manter o código conciso e evitar adicionar linhas extras ao código `customMA()`.
 - Utilizou-se [map.get()](https://br.tradingview.com/pine-script-reference/v5/#fun_map.get) para recuperar cada valor para as chamadas de [plot()](https://br.tradingview.com/pine-script-reference/v5/#fun_plot) e [bgcolor()](https://br.tradingview.com/pine-script-reference/v5/#fun_bgcolor) de depuração.
 
-<!-- ### Desenhos e Logs Locais
+### Desenhos e Logs Locais
 
 Diferente das funções `plot.*()` e outras que requerem valores acessíveis ao escopo global, os scripts podem gerar [objetos de desenho](./04_09_tipagem_do_sistema.md#tipos-de-desenho) e [Pine Logs](./06_02_debugging.md#pine-logs) diretamente dentro de uma função, permitindo que os programadores depurem as variáveis locais _sem_ extrair os valores para o escopo externo.
 
@@ -1537,6 +1537,6 @@ plot(maValue, "Custom MA", color.blue, 3)
 __Note que:__
 
 - Incluiu-se `max_labels_count = 500` na função [indicator()](https://br.tradingview.com/pine-script-reference/v5/#fun_indicator) para exibir [labels](./05_20_text_e_shapes.md#labels) para as 500 chamadas mais recentes de `customMA()`.
-- A função usa [barstate.isconfirmed](https://br.tradingview.com/pine-script-reference/v5/#var_barstate.isconfirmed) em uma instrução [if](https://br.tradingview.com/pine-script-reference/v5/#kw_if) para chamar [log.info()](https://br.tradingview.com/pine-script-reference/v5/#fun_log.info) apenas em barras _confirmadas_, não registrando uma nova mensagem em cada tick em tempo real. -->
+- A função usa [barstate.isconfirmed](https://br.tradingview.com/pine-script-reference/v5/#var_barstate.isconfirmed) em uma instrução [if](https://br.tradingview.com/pine-script-reference/v5/#kw_if) para chamar [log.info()](https://br.tradingview.com/pine-script-reference/v5/#fun_log.info) apenas em barras _confirmadas_, não registrando uma nova mensagem em cada tick em tempo real.
 
 ## Dicas
