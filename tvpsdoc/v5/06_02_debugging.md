@@ -1095,7 +1095,7 @@ __Note que:__
 
 É importante notar que, embora as tabelas possam fornecer utilidade para depuração, especialmente ao trabalhar com múltiplas séries ou criar logs no gráfico, elas têm um custo computacional mais alto do que outras técnicas discutidas nesta página e podem exigir _mais código_. Além disso, ao contrário das [labels](./06_02_debugging.md#usando-labels), só é possível visualizar o estado de uma tabela a partir da última execução do script. Portanto, recomenda-se usá-las _sabiamente_ e _com moderação_ durante a depuração, optando por abordagens _simplificadas_ quando possível. Para mais informações sobre o uso de objetos [tabela](https://br.tradingview.com/pine-script-reference/v5/#type_table), veja a página [Tabelas](./05_19_tables.md).
 
-<!-- ## Pine Logs
+## Pine Logs
 
 Pine Logs são _mensagens interativas_ que scripts podem gerar em pontos específicos de sua execução. Eles fornecem uma maneira poderosa para programadores inspecionarem os dados, condições e o fluxo de execução de um script com um código mínimo.
 
@@ -1108,7 +1108,7 @@ Para acessar o Painel de Pine Logs, selecione "Pine Logs..." no menu "Mais" "_Mo
 > __Observação!__\
 > Somente __scripts pessoais__ podem gerar Pine Logs. Um script publicado _não pode_ criar logs, mesmo que tenha chamadas de função `log.*()` em seu código. É necessário considerar abordagens alternativas, como as descritas nas seções acima, ao [publicar scripts](./06_04_publicando_scripts.md) com funcionalidade de depuração.
 
-### Criando Logs
+<!-- ### Criando Logs
 
 Scripts podem criar logs chamando as funções no namespace `log.*()`.
 
