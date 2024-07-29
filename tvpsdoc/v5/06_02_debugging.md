@@ -236,7 +236,7 @@ Os _escopos locais_ de um script são seções de código indentado dentro de [e
 Para exibir os valores de uma variável local usando plots, é possível atribuir seus resultados a uma variável global e passar essa variável para a chamada `plot*()`.
 
 > __Observação!__\
-> A abordagem descrita abaixo funciona para variáveis locais declaradas dentro de [estruturas condicionais](./04_07_estruturas_condicionais.md). Empregar um processo semelhante para [funções](./04_11_funcoes_definidas_pelo_usuario.md) e [métodos](./04_13_metodos.md#métodos-definidos-pelo-usuário) requer [coleções](./04_09_tipagem_do_sistema.md#coleções), [tipos definidos pelo usuário](./04_09_tipagem_do_sistema.md#tipos-definidos-pelo-usuário) ou outros tipos de referência incorporados. Veja a seção [Depuração de funções](./06_02_debugging.md#depuração-de-funções) para mais informações.
+> A abordagem descrita abaixo funciona para variáveis locais declaradas dentro de [estruturas condicionais](./04_07_estruturas_condicionais.md). Empregar um processo semelhante para [funções](./04_11_funcoes_definidas_pelo_usuario.md) e [métodos](./04_13_metodos.md#métodos-definidos-pelo-usuário) requer [coleções](./04_09_tipagem_do_sistema.md#coleções), [tipos definidos pelo usuário](./04_09_tipagem_do_sistema.md#tipos-definidos-pelo-usuário) ou outros tipos de referência incorporados. Veja a seção [Depuração de funções](./06_02_debugging.md#depurando-funções) para mais informações.
 
 Por exemplo, este script calcula a variação máxima e mínima de todos os tempos no preço de [close](https://br.tradingview.com/pine-script-reference/v5/#var_close) em um período `lengthInput`. Ele usa uma estrutura [if](https://br.tradingview.com/pine-script-reference/v5/#kw_if) para declarar uma variável local `change` e atualizar as variáveis globais `maxChange` e `minChange` uma vez a cada `lengthInput` barras:
 
@@ -321,7 +321,7 @@ __Note que:__
 
 Uma abordagem alternativa para inspecionar graficamente o histórico de valores numéricos de um script é usar os [tipos de desenho](./04_09_tipagem_do_sistema.md#tipos-de-desenho) do Pine, incluindo [linhas](./05_12_lines_e_boxes.md#lines-linhas), [caixas](./05_12_lines_e_boxes.md#boxes-caixas), [polilinhas](./05_12_lines_e_boxes.md#polylines-polilinhas) e [labels](./05_20_text_e_shapes.md#labels).
 
-Embora os desenhos do Pine não exibam resultados em nenhum outro lugar além do painel do gráfico, scripts podem criá-los a partir de _escopos locais_, incluindo os escopos de [funções](./04_11_funcoes_definidas_pelo_usuario.md) e [métodos](./04_13_metodos.md#métodos-definidos-pelo-usuário) (veja a seção [Depuração de funções](./06_02_debugging.md#depuração-de-funções) para saber mais). Além disso, scripts podem posicionar desenhos em _qualquer_ localização disponível no gráfico, independentemente do [bar_index](https://br.tradingview.com/pine-script-reference/v5/#var_bar_index) atual.
+Embora os desenhos do Pine não exibam resultados em nenhum outro lugar além do painel do gráfico, scripts podem criá-los a partir de _escopos locais_, incluindo os escopos de [funções](./04_11_funcoes_definidas_pelo_usuario.md) e [métodos](./04_13_metodos.md#métodos-definidos-pelo-usuário) (veja a seção [Depuração de funções](./06_02_debugging.md#depurando-funções) para saber mais). Além disso, scripts podem posicionar desenhos em _qualquer_ localização disponível no gráfico, independentemente do [bar_index](https://br.tradingview.com/pine-script-reference/v5/#var_bar_index) atual.
 
 Por exemplo, ao revisitar o script "Periodic changes" da [seção anterior](./06_02_debugging.md#a-partir-de-escopos-locais), é possível inspecionar o histórico da variável local `change` _sem_ usar um plot. Neste caso, evita-se declarar uma variável global separada e, em vez disso, cria-se objetos de desenho diretamente do escopo local da estrutura [if](https://br.tradingview.com/pine-script-reference/v5/#kw_if).
 
@@ -782,7 +782,7 @@ __Note que:__
 
 ### Representando Outros Tipos
 
-Os usuários podem criar representações em "string" de praticamente qualquer tipo de dado, facilitando a depuração eficaz quando outras abordagens podem não ser suficientes. Antes de explorar técnicas de inspeção com "string", vamos revisar brevemente maneiras de _representar_ os dados de um script usando strings.
+Os usuários podem criar representações em "string" de praticamente qualquer tipo de dado, facilitando a depuração eficaz quando outras abordagens podem não ser suficientes. Antes de explorar técnicas de inspeção com "string", será revisado brevemente maneiras de _representar_ os dados de um script usando strings.
 
 O Pine Script inclui lógica predefinida para construir representações em "string" de vários outros tipos incorporados, como [int](./04_09_tipagem_do_sistema.md#int), [float](./04_09_tipagem_do_sistema.md#float), [bool](./04_09_tipagem_do_sistema.md#bool), [array](./04_14_arrays.md) e [matrix](./04_15_matrices.md). Scripts podem representar convenientemente esses tipos como strings por meio das funções [str.tostring()](https://br.tradingview.com/pine-script-reference/v5/#fun_str.tostring) e [str.format()](https://br.tradingview.com/pine-script-reference/v5/#fun_str.format).
 
@@ -1250,8 +1250,109 @@ Os usuários podem filtrar os resultados por _nível de depuração_ usando as c
 
 ![Filtrando logs 06](./imgs/Debugging-Pine-logs-Filtering-logs-6.CJM074om_Z1UkF5.webp)
 
-## Depuração de Funções
+### Usando Inputs
+
+Outra maneira mais envolvente de filtrar interativamente os resultados registrados de um script é criar [inputs](./05_09_inputs.md) vinculados a uma lógica condicional que ativa chamadas específicas de `log.*()` no código.
+
+Este exemplo calcula uma [RMA](https://br.tradingview.com/pine-script-reference/v5/#fun_ta.rma) dos preços de [fechamento](https://br.tradingview.com/pine-script-reference/v5/#var_close) e declara algumas condições únicas para formar uma [condição composta](./06_02_debugging.md#condições-compostas-e-aninhadas). O script usa [log.info()](https://br.tradingview.com/pine-script-reference/v5/#fun_log.info) para exibir informações de depuração importantes no painel de Pine Logs, incluindo os valores da variável `compoundCondition` e as variáveis "bool" que determinam seu resultado.
+
+As variáveis `filterLogsInput`, `logStartInput` e `logEndInput` são atribuídas respectivamente a uma chamada de [input.bool()](https://br.tradingview.com/pine-script-reference/v5/#fun_input.bool) e duas chamadas de [input.time()](https://br.tradingview.com/pine-script-reference/v5/#fun_input.time) para filtragem personalizada de logs. Quando `filterLogsInput` é `true`, o script gerará um novo log apenas se o [time](https://br.tradingview.com/pine-script-reference/v5/#var_time) da barra estiver entre os valores de `logStartInput` e `logEndInput`, permitindo isolar interativamente as entradas que ocorreram dentro de um intervalo de tempo específico:
+
+![Usando inputs](./imgs/Debugging-Pine-logs-Filtering-logs-Using-inputs-1.BCr7IdYS_ZmAWLn.webp)
+
+```c
+//@version=5
+indicator("Filtering logs using inputs demo", "Compound condition in input range", true)
+
+//@variable The length for moving average calculations.
+int lengthInput = input.int(20, "Length", 2)
+
+//@variable If `true`, only allows logs within the input time range.
+bool filterLogsInput = input.bool(true, "Only log in time range", group = "Log filter")
+//@variable The starting time for logs if `filterLogsInput` is `true`.
+int logStartInput = input.time(0, "Start time", group = "Log filter", confirm = true)
+//@variable The ending time for logs if `filterLogsInput` is `true`.
+int logEndInput = input.time(0, "End time", group = "Log filter", confirm = true)
+
+//@variable The RMA of `close` prices.
+float rma = ta.rma(close, lengthInput)
+
+//@variable Is `true` when `close` exceeds the `rma`.
+bool priceBelow = close <= rma
+//@variable Is `true` when the current `close` is greater than the max of the previous `hl2` and `close`.
+bool priceRising = close > math.max(hl2[1], close[1])
+//@variable Is `true` when the `rma` is positively accelerating.
+bool rmaAccelerating = rma - 2.0 * rma[1] + rma[2] > 0.0
+//@variable Is `true` when the difference between `rma` and `close` exceeds 2 times the current ATR.
+bool closeAtThreshold = rma - close > ta.atr(lengthInput) * 2.0
+//@variable Is `true` when all the above conditions occur.
+bool compoundCondition = priceBelow and priceRising and rmaAccelerating and closeAtThreshold
+
+// Plot the `rma`.
+plot(rma, "RMA", color.teal, 3)
+// Highlight the chart background when the `compoundCondition` occurs.
+bgcolor(compoundCondition ? color.new(color.aqua, 80) : na, title = "Compound condition highlight")
+
+//@variable If `filterLogsInput` is `true`, is only `true` in the input time range. Otherwise, always `true`.
+bool showLog = filterLogsInput ? time >= logStartInput and time <= logEndInput : true
+
+// Log results for a confirmed bar when `showLog` is `true`.
+if barstate.isconfirmed and showLog
+    log.info(
+         "\nclose: {0, number, #.#####}\nrma: {1, number, #.#####}\npriceBelow: {2}\npriceRising: {3}
+         \nrmaAccelerating: {4}\ncloseAtThreshold: {5}\n\ncompoundCondition: {6}",
+         close, rma, priceBelow, priceRising, rmaAccelerating, closeAtThreshold, compoundCondition
+     )
+```
+
+__Note que:__
+
+- As funções `input.*()` atribuídas às variáveis `filterLogsInput`, `logStartInput` e `logEndInput` incluem um argumento `group` para organizá-las e distingui-las nas configurações do script.
+- As chamadas [input.time()](https://br.tradingview.com/pine-script-reference/v5/#fun_input.time) incluem `confirm = true` para que seja possível definir interativamente os tempos de início e término diretamente no gráfico. Para redefinir os inputs, selecione “Reset points…” nas opções do menu "More" do script.
+- A condição que aciona cada chamada [log.info()](https://br.tradingview.com/pine-script-reference/v5/#fun_log.info) inclui [barstate.isconfirmed](https://br.tradingview.com/pine-script-reference/v5/#var_barstate.isconfirmed) para limitar a geração de logs às barras _confirmadas_.
+
+<!-- ## Depurando Funções
+
+[Funções definidas pelo usuário](./04_11_funcoes_definidas_pelo_usuario.md) e [métodos](./04_11_funcoes_definidas_pelo_usuario.md#funções-definidas-pelo-usuário) são funções personalizadas escritas pelos usuários. Elas encapsulam sequências de operações que um script pode invocar posteriormente em sua execução.
+
+Toda [função definida pelo usuário](./04_11_funcoes_definidas_pelo_usuario.md) ou [método](./04_11_funcoes_definidas_pelo_usuario.md#funções-definidas-pelo-usuário) tem um _escopo local_ que se incorpora ao escopo global do script. Os parâmetros na assinatura de uma função e as variáveis declaradas dentro do corpo da função pertencem a esse escopo local e _não_ são diretamente acessíveis ao escopo externo do script ou aos escopos de outras funções.
+
+Os segmentos abaixo explicam algumas maneiras de os programadores depurarem os valores do escopo local de uma função. Este script serve como ponto de partida para os exemplos subsequentes. Ele contém uma função `customMA()` que retorna uma média móvel exponencial cujo parâmetro de suavização varia com base na distância do `source` fora dos 25º e 75º [percentis](https://br.tradingview.com/pine-script-reference/v5/#fun_ta.percentile_linear_interpolation) ao longo das barras `length`:
+
+![Depurando funções](./imgs/Debugging-Debugging-functions-1.C82H9E7R_Z1zqdTD.webp)
+
+```c
+//@version=5
+indicator("Debugging functions demo", "Custom MA", true)
+
+//@variable The number of bars in the `customMA()` calculation.
+int lengthInput = input.int(50, "Length", 2)
+
+//@function      Calculates a moving average that only responds to values outside the first and third quartiles.
+//@param source  The series of values to process.
+//@param length  The number of bars in the calculation.
+//@returns       The moving average value.
+customMA(float source, int length) =>
+    //@variable The custom moving average.
+    var float result = na
+    // Calculate the 25th and 75th `source` percentiles.
+    float q1 = ta.percentile_linear_interpolation(source, length, 25)
+    float q3 = ta.percentile_linear_interpolation(source, length, 75)
+    // Calculate the range values.
+    float outerRange = math.max(source - q3, q1 - source, 0.0)
+    float totalRange = ta.range(source, length)
+    //@variable Half the ratio of the `outerRange` to the `totalRange`.
+    float alpha = 0.5 * outerRange / totalRange
+    // Mix the `source` with the `result` based on the `alpha` value.
+    result := (1.0 - alpha) * nz(result, source) + alpha * source
+    // Return the `result`.
+    result
+
+//@variable The `customMA()` result over `lengthInput` bars.
+float maValue = customMA(close, lengthInput)
+
+// Plot the `maValue`.
+plot(maValue, "Custom MA", color.blue, 3)
+``` -->
 
 ## Dicas
-
-## Usando Inputs
