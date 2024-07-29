@@ -858,7 +858,7 @@ string customRepr = str.format("color (r = {0}, g = {1}, b = {2}, t = {3})", r, 
 
 Existem inúmeras maneiras de representar dados usando strings. Ao escolher formatos de string para depuração, assegure-se de que os resultados sejam __legíveis__ e forneçam informações suficientes para uma inspeção adequada. Os segmentos a seguir explicam maneiras de validar strings exibindo-as no gráfico usando [labels](./05_20_text_e_shapes.md#labels), e a seção posterior explica como exibir strings como mensagens no painel [Pine Logs](./06_02_debugging.md#pine-logs).
 
-<!-- ### Usando _Labels_
+### Usando _Labels_
 
 [Labels](./05_20_text_e_shapes.md#labels) permitem que scripts exibam texto dinâmico ("series strings") em qualquer localização disponível no gráfico. Onde exibir esse texto no gráfico depende das informações que o programador deseja inspecionar e de suas preferências de depuração.
 
@@ -977,7 +977,7 @@ __Note que:__
 
 - Se o gráfico visível contiver mais barras do que os desenhos permitidos, o script só mostrará resultados nas barras mais recentes do intervalo visível. Para melhores resultados com esta técnica, dê zoom no gráfico para manter o intervalo visível limitado ao número permitido de desenhos.
 
-### No Final do Gráfico
+<!-- ### No Final do Gráfico
 
 Uma abordagem frequente para depurar as strings de um script com [labels](./05_20_text_e_shapes.md#labels) é exibi-las no _final_ do gráfico, especialmente quando as strings não mudam ou quando apenas os valores de uma barra específica precisam ser analisados.
 
