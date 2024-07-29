@@ -62,12 +62,12 @@ Se o script utilizar uma ou mais [bibliotecas Pine Script](./05_11_libraries.md)
 
 ### `<constant_declarations>`
 
-Scripts podem declarar variáveis qualificadas como “const”, ou seja, que referenciam um valor constante.
+Scripts podem declarar variáveis qualificadas como "const", ou seja, que referenciam um valor constante.
 
-Referem-se a variáveis como “constantes” quando atendem a estes critérios:
+Referem-se a variáveis como "constantes" quando atendem a estes critérios:
 
 - Sua declaração usa a palavra-chave opcional `const` (veja a seção sobre [qualificadores de tipo](./04_09_tipagem_do_sistema.md#qualificadores) no Manual do Usuário para mais informações).
-- São inicializadas usando um literal (por exemplo, `100` ou `"AAPL"`) ou um valor incorporado qualificado como “const” (por exemplo, `color.green`).
+- São inicializadas usando um literal (por exemplo, `100` ou `"AAPL"`) ou um valor incorporado qualificado como "const" (por exemplo, `color.green`).
 - Seu valor não muda durante a execução do script.
 
 Utiliza-se `SNAKE_CASE` para nomear essas variáveis e agrupar suas declarações próximo ao início do script. Por exemplo:

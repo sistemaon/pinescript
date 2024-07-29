@@ -526,7 +526,7 @@ Por exemplo, este script calcula a variação nos preços de [close](https://br.
 
 O script usa esses valores "bool" como condições em expressões [ternárias](https://br.tradingview.com/pine-script-reference/v5/#op_?:) para atribuir os valores de três variáveis "color", e depois usa essas variáveis como argumentos `color` em [plot()](https://br.tradingview.com/pine-script-reference/v5/#fun_plot), [bgcolor()](https://br.tradingview.com/pine-script-reference/v5/#fun_bgcolor) e [barcolor()](https://br.tradingview.com/pine-script-reference/v5/#fun_barcolor) para depurar os resultados:
 
-![Cores condicionais 01](./imgs/Debugging-Conditions-Conditional-colors-1.B5Y6dhKf_Z1jtyTu.webp)
+![Cores condicionais](./imgs/Debugging-Conditions-Conditional-colors-1.B5Y6dhKf_Z1jtyTu.webp)
 
 ```c
 //@version=5
@@ -568,7 +568,7 @@ Veja as páginas [Cores](./05_07_cores.md), [Preenchimentos](./05_08_fills.md), 
 
 Os [tipos de desenho](./04_09_tipagem_do_sistema.md#tipos-de-desenho) do Pine Script fornecem maneiras flexíveis de visualizar condições no gráfico, especialmente quando as condições estão dentro de escopos locais.
 
-Considere o seguinte script, que calcula um `filtro` personalizado com um parâmetro de suavização (`alpha`) que altera seu valor dentro de uma estrutura [if](https://br.tradingview.com/pine-script-reference/v5/#kw_if) com base nas condições recentes de [volume](https://br.tradingview.com/pine-script-reference/v5/#var_volume):
+Considere o seguinte script, que calcula um `filter` personalizado com um parâmetro de suavização (`alpha`) que altera seu valor dentro de uma estrutura [if](https://br.tradingview.com/pine-script-reference/v5/#kw_if) com base nas condições recentes de [volume](https://br.tradingview.com/pine-script-reference/v5/#var_volume):
 
 ![Usando desenhos 01](./imgs/Debugging-Conditions-Using-drawings-1.bqLda39j_Z13aGwI.webp)
 
@@ -778,12 +778,480 @@ __Note que:__
 [Strings](./04_09_tipagem_do_sistema.md#string) são sequências de caracteres alfanuméricos, de controle e outros (por exemplo, Unicode). São úteis na depuração de scripts, pois permitem representar os tipos de dados do script como texto legível e inspecioná-los com [tipos de desenho](./04_09_tipagem_do_sistema.md#tipos-de-desenho) que possuem propriedades relacionadas a texto, ou usando [Pine Logs](./06_02_debugging.md#pine-logs).
 
 > __Observação!__\
-> Esta seção discute conversões de "string" e inspeção de strings via [labels](./05_20_text_e_shapes.md#labels) e [tabelas](./05_21_tabelas.md). [Caixas](./05_12_lines_e_boxes.md#boxes-caixas) também podem exibir texto. No entanto, sua utilidade para depurar strings é mais limitada do que as técnicas abordadas nesta seção e na seção [Pine Logs](./06_02_debugging.md#pine-logs).
+> Esta seção discute conversões de "string" e inspeção de strings via [labels](./05_20_text_e_shapes.md#labels) e [tabelas](./05_19_tables.md). [Caixas](./05_12_lines_e_boxes.md#boxes-caixas) também podem exibir texto. No entanto, sua utilidade para depurar strings é mais limitada do que as técnicas abordadas nesta seção e na seção [Pine Logs](./06_02_debugging.md#pine-logs).
+
+### Representando Outros Tipos
+
+Os usuários podem criar representações em "string" de praticamente qualquer tipo de dado, facilitando a depuração eficaz quando outras abordagens podem não ser suficientes. Antes de explorar técnicas de inspeção com "string", vamos revisar brevemente maneiras de _representar_ os dados de um script usando strings.
+
+O Pine Script inclui lógica predefinida para construir representações em "string" de vários outros tipos incorporados, como [int](./04_09_tipagem_do_sistema.md#int), [float](./04_09_tipagem_do_sistema.md#float), [bool](./04_09_tipagem_do_sistema.md#bool), [array](./04_14_arrays.md) e [matrix](./04_15_matrices.md). Scripts podem representar convenientemente esses tipos como strings por meio das funções [str.tostring()](https://br.tradingview.com/pine-script-reference/v5/#fun_str.tostring) e [str.format()](https://br.tradingview.com/pine-script-reference/v5/#fun_str.format).
+
+Por exemplo, este trecho de código cria strings para representar múltiplos valores usando essas funções:
+
+```c
+//@variable Returns: "1.25"
+string floatRepr = str.tostring(1.25)
+//@variable Returns: "1"
+string rounded0 = str.tostring(1.25, "#")
+//@variable Returns: "1.3"
+string rounded1 = str.tostring(1.25, "#.#")
+//@variable Returns: "1.2500"
+string trailingZeros = str.tostring(1.25, "#.0000")
+//@variable Returns: "true"
+string trueRepr = str.tostring(true)
+//@variable Returns: "false"
+string falseRepr = str.tostring(5 == 3)
+//@variable Returns: "[1, 2, -3.14]"
+string floatArrayRepr = str.tostring(array.from(1, 2.0, -3.14))
+//@variable Returns: "[2, 20, 0]"
+string roundedArrayRepr = str.tostring(array.from(2.22, 19.6, -0.43), "#")
+//@variable Returns: "[Hello, World, !]"
+string stringArrayRepr = str.tostring(array.from("Hello", "World", "!"))
+//@variable Returns: "Test: 2.718 ^ 2 > 5: true"
+string mixedTypeRepr = str.format("{0}{1, number, #.###} ^ 2 > {2}: {3}", "Test: ", math.e, 5, math.e * math.e > 5)
+
+//@variable Combines all the above strings into a multi-line string.
+string combined = str.format(
+     "{0}\n{1}\n{2}\n{3}\n{4}\n{5}\n{6}\n{7}\n{8}\n{9}",
+     floatRepr, rounded0, rounded1, trailingZeros, trueRepr,
+     falseRepr, floatArrayRepr, roundedArrayRepr, stringArrayRepr,
+     mixedTypeRepr
+ )
+```
+
+Ao trabalhar com valores "int" que simbolizam timestamps UNIX, como os retornados por funções e variáveis relacionadas ao tempo, também é possível usar [str.format()](https://br.tradingview.com/pine-script-reference/v5/#fun_str.format) ou [str.format_time()](https://br.tradingview.com/pine-script-reference/v5/#fun_str.format_time) para convertê-los em strings de data legíveis. Este bloco de código demonstra várias maneiras de converter um timestamp usando essas funções:
+
+```c
+//@variable A UNIX timestamp, in milliseconds.
+int unixTime = 1279411200000
+
+//@variable Returns: "2010-07-18T00:00:00+0000"
+string default = str.format_time(unixTime)
+//@variable Returns: "2010-07-18"
+string ymdRepr = str.format_time(unixTime, "yyyy-MM-dd")
+//@variable Returns: "07-18-2010"
+string mdyRepr = str.format_time(unixTime, "MM-dd-yyyy")
+//@variable Returns: "20:00:00, 2010-07-17"
+string hmsymdRepr = str.format_time(unixTime, "HH:mm:ss, yyyy-MM-dd", "America/New_York")
+//@variable Returns: "Year: 2010, Month: 07, Day: 18, Time: 12:00:00"
+string customFormat = str.format(
+     "Year: {0, time, yyyy}, Month: {1, time, MM}, Day: {2, time, dd}, Time: {3, time, hh:mm:ss}",
+     unixTime, unixTime, unixTime, unixTime
+ )
+```
+
+Ao trabalhar com tipos que _não_ possuem representações em "string" incorporadas, como [color](./04_09_tipagem_do_sistema.md#color), [map](./04_16_mapas.md), [tipos definidos pelo usuário](./04_09_tipagem_do_sistema.md#tipos-definidos-pelo-usuário), etc., os programadores podem usar lógica personalizada ou formatação para construir representações. Por exemplo, este código chama [str.format()](https://br.tradingview.com/pine-script-reference/v5/#fun_str.format) para representar um valor "color" usando seus componentes [r](https://br.tradingview.com/pine-script-reference/v5/#fun_color.r), [g](https://br.tradingview.com/pine-script-reference/v5/#fun_color.g), [b](https://br.tradingview.com/pine-script-reference/v5/#fun_color.b) e [t](https://br.tradingview.com/pine-script-reference/v5/#fun_color.t):
+
+```c
+//@variable The built-in `color.maroon` value with 17% transparency.
+color myColor = color.new(color.maroon, 17)
+
+// Get the red, green, blue, and transparency components from `myColor`.
+float r = color.r(myColor)
+float g = color.g(myColor)
+float b = color.b(myColor)
+float t = color.t(myColor)
+
+//@variable Returns: "color (r = 136, g = 14, b = 79, t = 17)"
+string customRepr = str.format("color (r = {0}, g = {1}, b = {2}, t = {3})", r, g, b, t)
+```
+
+Existem inúmeras maneiras de representar dados usando strings. Ao escolher formatos de string para depuração, assegure-se de que os resultados sejam __legíveis__ e forneçam informações suficientes para uma inspeção adequada. Os segmentos a seguir explicam maneiras de validar strings exibindo-as no gráfico usando [labels](./05_20_text_e_shapes.md#labels), e a seção posterior explica como exibir strings como mensagens no painel [Pine Logs](./06_02_debugging.md#pine-logs).
+
+<!-- ### Usando _Labels_
+
+[Labels](./05_20_text_e_shapes.md#labels) permitem que scripts exibam texto dinâmico ("series strings") em qualquer localização disponível no gráfico. Onde exibir esse texto no gráfico depende das informações que o programador deseja inspecionar e de suas preferências de depuração.
+
+#### Em Barras Sucessivas
+
+Ao inspecionar o histórico de valores que afetam a escala do gráfico ou ao trabalhar com múltiplas séries que possuem tipos diferentes, uma abordagem simples e útil para depuração é desenhar [labels](./05_20_text_e_shapes.md#labels) que exibem [representações em string](./06_02_debugging.md#representando-outros-tipos) em barras sucessivas.
+
+Por exemplo, este script calcula quatro séries: `highestClose`, `percentRank`, `barsSinceHigh` e `isLow`. Ele usa [str.format()](https://br.tradingview.com/pine-script-reference/v5/#fun_str.format) para criar uma "string" formatada representando os valores das séries e um timestamp, e então chama [label.new()](https://br.tradingview.com/pine-script-reference/v5/#fun_label.new) para desenhar uma [label](https://br.tradingview.com/pine-script-reference/v5/#type_label) que exibe os resultados no [high](https://br.tradingview.com/pine-script-reference/v5/#var_high) de cada barra:
+
+![Em barras sucessivas 01](./imgs/Debugging-Strings-Using-labels-On-successive-bars-1.QDEDvANn_xLWsm.webp)
+
+```c
+//@version=5
+indicator("Labels on successive bars demo", "Inspecting multiple series", true, max_labels_count = 500)
+
+//@variable The number of bars in the calculation window.
+int lengthInput = input.int(50, "Length", 1)
+
+//@variable The highest `close` over `lengthInput` bars.
+float highestClose = ta.highest(close, lengthInput)
+//@variable The percent rank of the current `close` compared to previous values over `lengthInput` bars.
+float percentRank = ta.percentrank(close, lengthInput)
+//@variable The number of bars since the `close` was equal to the `highestClose`.
+int barsSinceHigh = ta.barssince(close == highestClose)
+//@variable Is `true` when the `percentRank` is 0, i.e., when the `close` is the lowest.
+bool isLow = percentRank == 0.0
+
+//@variable A multi-line string representing the `time`, `highestClose`, `percentRank`, `barsSinceHigh`, and `isLow`.
+string debugString = str.format(
+     "time (GMT): {0, time, yyyy-MM-dd'T'HH:mm:ss}\nhighestClose: {1, number, #.####}
+     \npercentRank: {2, number, #.##}%\nbarsSinceHigh: {3, number, integer}\nisLow: {4}",
+     time, highestClose, percentRank, barsSinceHigh, isLow
+ )
+
+//@variable Draws a label showing the `debugString` at each bar's `high`.
+label debugLabel = label.new(chart.point.now(high), debugString, textcolor = color.white)
+```
+
+Embora o exemplo acima permita inspecionar os resultados das séries do script em qualquer barra com um desenho de [label](https://br.tradingview.com/pine-script-reference/v5/#type_label), desenhos consecutivos como esses podem desorganizar o gráfico, especialmente ao visualizar strings mais longas.
+
+Uma maneira alternativa, mais compacta visualmente, de inspecionar os valores de barras sucessivas com [labels](./05_20_text_e_shapes.md#labels) é utilizar a propriedade `tooltip` em vez da propriedade `text`, já que uma [label](https://br.tradingview.com/pine-script-reference/v5/#type_label) só mostrará seu tooltip quando o cursor _pairar_ sobre ela.
+
+A seguir, o script anterior foi modificado usando `debugString` como argumento `tooltip` em vez de `text` na chamada de [label.new()](https://br.tradingview.com/pine-script-reference/v5/#fun_label.new). Agora, é possível visualizar os resultados em barras específicas sem o ruído extra:
+
+![Em barras sucessivas 02](./imgs/Debugging-Strings-Using-labels-On-successive-bars-2.GO5WpodJ_Z1KqWXN.webp)
+
+```c
+//@version=5
+indicator("Tooltips on successive bars demo", "Inspecting multiple series", true, max_labels_count = 500)
+
+//@variable The number of bars in the calculation window.
+int lengthInput = input.int(50, "Length", 1)
+
+//@variable The highest `close` over `lengthInput` bars.
+float highestClose = ta.highest(close, lengthInput)
+//@variable The percent rank of the current `close` compared to previous values over `lengthInput` bars.
+float percentRank = ta.percentrank(close, lengthInput)
+//@variable The number of bars since the `close` was equal to the `highestClose`.
+int barsSinceHigh = ta.barssince(close == highestClose)
+//@variable Is `true` when the `percentRank` is 0, i.e., when the `close` is the lowest.
+bool isLow = percentRank == 0.0
+
+//@variable A multi-line string representing the `time`, `highestClose`, `percentRank`, `barsSinceHigh`, and `isLow`.
+string debugString = str.format(
+     "time (GMT): {0, time, yyyy-MM-dd'T'HH:mm:ss}\nhighestClose: {1, number, #.####}
+     \npercentRank: {2, number, #.##}%\nbarsSinceHigh: {3, number, integer}\nisLow: {4}",
+     time, highestClose, percentRank, barsSinceHigh, isLow
+ )
+
+//@variable Draws a label showing the `debugString` in a tooltip at each bar's `high`.
+label debugLabel = label.new(chart.point.now(high), tooltip = debugString)
+```
+
+É importante notar que um script pode exibir até 500 desenhos de [label](https://br.tradingview.com/pine-script-reference/v5/#type_label), o que significa que os exemplos acima permitirão inspecionar as strings das 500 barras mais recentes do gráfico.
+
+Se um programador deseja ver os resultados de barras _anteriores_ do gráfico, uma abordagem é criar uma lógica condicional que permita desenhos apenas dentro de um _timeframe_ específico, por exemplo:
+
+```c
+if time >= startTime and time <= endTime
+    <create_drawing_id>
+```
+
+Se essa estrutura for utilizada no exemplo anterior com [chart.left_visible_bar_time](https://br.tradingview.com/pine-script-reference/v5/#var_chart.left_visible_bar_time) e [chart.right_visible_bar_time](https://br.tradingview.com/pine-script-reference/v5/#var_chart.right_visible_bar_time) como valores `startTime` e `endTime`, o script só criará [labels](./05_20_text_e_shapes.md#labels) nas __barras visíveis do gráfico__ e evitará desenhar em outras. Com essa lógica, é possível rolar para visualizar labels em _qualquer_ barra do gráfico, desde que haja até `max_labels_count` barras no intervalo visível:
+
+![Em barras sucessivas 03](./imgs/Debugging-Strings-Using-labels-On-successive-bars-3.Dr46dKLS_Z1WAyIK.webp)
+
+```c
+//@version=5
+indicator("Tooltips on visible bars demo", "Inspecting multiple series", true, max_labels_count = 500)
+
+//@variable The number of bars in the calculation window.
+int lengthInput = input.int(50, "Length", 1)
+
+//@variable The highest `close` over `lengthInput` bars.
+float highestClose = ta.highest(close, lengthInput)
+//@variable The percent rank of the current `close` compared to previous values over `lengthInput` bars.
+float percentRank = ta.percentrank(close, lengthInput)
+//@variable The number of bars since the `close` was equal to the `highestClose`.
+int barsSinceHigh = ta.barssince(close == highestClose)
+//@variable Is `true` when the `percentRank` is 0, i.e., when the `close` is the lowest.
+bool isLow = percentRank == 0.0
+
+//@variable A multi-line string representing the `time`, `highestClose`, `percentRank`, `barsSinceHigh`, and `isLow`.
+string debugString = str.format(
+     "time (GMT): {0, time, yyyy-MM-dd'T'HH:mm:ss}\nhighestClose: {1, number, #.####}
+     \npercentRank: {2, number, #.##}%\nbarsSinceHigh: {3, number, integer}\nisLow: {4}",
+     time, highestClose, percentRank, barsSinceHigh, isLow
+ )
+
+if time >= chart.left_visible_bar_time and time <= chart.right_visible_bar_time
+    //@variable Draws a label showing the `debugString` in a tooltip at each visible bar's `high`.
+    label debugLabel = label.new(chart.point.now(high), tooltip = debugString)
+```
+
+__Note que:__
+
+- Se o gráfico visível contiver mais barras do que os desenhos permitidos, o script só mostrará resultados nas barras mais recentes do intervalo visível. Para melhores resultados com esta técnica, dê zoom no gráfico para manter o intervalo visível limitado ao número permitido de desenhos.
+
+### No Final do Gráfico
+
+Uma abordagem frequente para depurar as strings de um script com [labels](./05_20_text_e_shapes.md#labels) é exibi-las no _final_ do gráfico, especialmente quando as strings não mudam ou quando apenas os valores de uma barra específica precisam ser analisados.
+
+O script abaixo contém uma função definida pelo usuário `printLabel()`, que desenha uma [label](https://br.tradingview.com/pine-script-reference/v5/#type_label) no último tempo disponível no gráfico, independentemente de quando o script a chama. Nesta exemplo, a função é utilizada para exibir uma string "Hello world!", algumas informações básicas do gráfico e os valores atuais de OHLCV do feed de dados:
+
+![No final do gráfico](./imgs/Debugging-Strings-Using-labels-At-the-end-of-the-chart-1.C-6hYXkR_Z1lpCgi.webp)
+
+```c
+//@version=5
+indicator("Labels at the end of the chart demo", "Chart info", true)
+
+//@function     Draws a label to print the `txt` at the last available time on the chart.
+//              When called from the global scope, the label updates its text using the specified `txt` on every bar.
+//@param txt    The string to display on the chart.
+//@param price  The optional y-axis location of the label. If not specified, draws the label above the last chart bar.
+//@returns      The resulting label ID.
+printLabel(string txt, float price = na) =>
+    int labelTime = math.max(last_bar_time, chart.right_visible_bar_time)
+    var label result = label.new(
+         labelTime, na, txt, xloc.bar_time, na(price) ? yloc.abovebar : yloc.price, na,
+         label.style_none, chart.fg_color, size.large
+     )
+    label.set_text(result, txt)
+    label.set_y(result, price)
+    result
+
+//@variable A formatted string containing information about the current chart.
+string chartInfo = str.format(
+     "Symbol: {0}:{1}\nTimeframe: {2}\nStandard chart: {3}\nReplay active: {4}",
+     syminfo.prefix, syminfo.ticker, timeframe.period, chart.is_standard,
+     str.contains(syminfo.tickerid, "replay")
+ )
+
+//@variable A formatted string containing OHLCV values.
+string ohlcvInfo = str.format(
+     "O: {0, number, #.#####}, H: {1, number, #.#####}, L: {2, number, #.#####}, C: {3, number, #.#####}, V: {4}",
+     open, high, low, close, str.tostring(volume, format.volume)
+ )
+
+// Print "Hello world!" and the `chartInfo` at the end of the chart on the first bar.
+if barstate.isfirst
+    printLabel("Hello world!" + "\n\n\n\n\n\n\n")
+    printLabel(chartInfo + "\n\n")
+
+// Print current `ohlcvInfo` at the end of the chart, updating the displayed text as new data comes in.
+printLabel(ohlcvInfo)
+```
+
+__Note que:__
+
+- A função `printLabel()` define a coordenada x da [label](https://br.tradingview.com/pine-script-reference/v5/#type_label) desenhada usando o [max](https://br.tradingview.com/pine-script-reference/v5/#fun_math.max) de [last_bar_time](https://br.tradingview.com/pine-script-reference/v5/#var_last_bar_time) e [chart.right_visible_bar_time](https://br.tradingview.com/pine-script-reference/v5/#var_chart.right_visible_bar_time) para garantir que ela sempre mostre os resultados na última barra disponível.
+- Quando chamada do _escopo global_, a função cria uma [label](https://br.tradingview.com/pine-script-reference/v5/#type_label) com propriedades `text` e `y` que atualizam em cada barra.
+- Foram feitas três chamadas à função e adicionados caracteres de quebra de linha (`\n`) para demonstrar que é possível sobrepor os resultados de múltiplas [labels](./05_20_text_e_shapes.md#labels) no final do gráfico, se as strings tiverem espaçamento de linha adequado.
+
+### Usando Tabelas
+
+[Tabelas](./05_19_tables.md) exibem strings dentro de células organizadas em colunas e linhas em locais fixos relativos ao espaço visual do painel do gráfico. Podem servir como ferramentas versáteis de depuração baseadas no gráfico, pois, ao contrário das [labels](./05_20_text_e_shapes.md#labels), permitem que os programadores inspecionem uma ou _mais_ "series strings" em uma estrutura visual organizada, independente da escala do gráfico ou do índice da barra.
+
+Por exemplo, este script calcula um `filter` personalizado cujo resultado é a razão da [EMA](https://br.tradingview.com/pine-script-reference/v5/#fun_ta.ema) dos preços de [close](https://br.tradingview.com/pine-script-reference/v5/#var_close) ponderados pela [EMA](https://br.tradingview.com/pine-script-reference/v5/#fun_ta.ema) da série `weight`. Para inspecionar as variáveis usadas no cálculo, ele cria uma instância de [tabela](https://br.tradingview.com/pine-script-reference/v5/#type_table) na primeira barra, inicializa as células da tabela na última barra histórica e depois atualiza as células necessárias com representações em "string" dos valores de `barsBack` barras atrás na barra mais recente do gráfico:
+
+![Usando tabelas](./imgs/Debugging-Strings-Using-tables-1.Bfvract8_Z20ywVF.webp)
+
+```c
+//@version=5
+indicator("Debugging with tables demo", "History inspection", true)
+
+//@variable The number of bars back in the chart's history to inspect.
+int barsBack = input.int(10, "Bars back", 0, 4999)
+
+//@variable The percent rank of `volume` over 10 bars.
+float weight = ta.percentrank(volume, 10)
+//@variable The 10-bar EMA of `weight * close` values.
+float numerator = ta.ema(weight * close, 10)
+//@variable The 10-bar EMA of `weight` values.
+float denominator = ta.ema(weight, 10)
+//@variable The ratio of the `numerator` to the `denominator`.
+float filter = numerator / denominator
+
+// Plot the `filter`.
+plot(filter, "Custom filter")
+
+//@variable The color of the frame, border, and text in the `debugTable`.
+color tableColor = chart.fg_color
+
+//@variable A table that contains "string" representations of variable names and values on the latest chart bar.
+var table debugTable = table.new(
+     position.top_right, 2, 5, frame_color = tableColor, frame_width = 1, border_color = tableColor, border_width = 1
+ )
+
+// Initialize cells on the last confirmed historical bar.
+if barstate.islastconfirmedhistory
+    table.cell(debugTable, 0, 0, "Variable", text_color = tableColor)
+    table.cell(debugTable, 1, 0, str.format("Value {0, number, integer} bars ago", barsBack), text_color = tableColor)
+    table.cell(debugTable, 0, 1, "weight", text_color = tableColor)
+    table.cell(debugTable, 1, 1, "", text_color = tableColor)
+    table.cell(debugTable, 0, 2, "numerator", text_color = tableColor)
+    table.cell(debugTable, 1, 2, "", text_color = tableColor)
+    table.cell(debugTable, 0, 3, "denominator", text_color = tableColor)
+    table.cell(debugTable, 1, 3, "", text_color = tableColor)
+    table.cell(debugTable, 0, 4, "filter", text_color = tableColor)
+    table.cell(debugTable, 1, 4, "", text_color = tableColor)
+
+// Update value cells on the last available bar.
+if barstate.islast
+    table.cell_set_text(debugTable, 1, 1, str.tostring(weight[barsBack], format.percent))
+    table.cell_set_text(debugTable, 1, 2, str.tostring(numerator[barsBack]))
+    table.cell_set_text(debugTable, 1, 3, str.tostring(denominator[barsBack]))
+    table.cell_set_text(debugTable, 1, 4, str.tostring(filter[barsBack]))
+```
+
+__Note que:__
+
+- O script usa a palavra-chave [var](https://br.tradingview.com/pine-script-reference/v5/#kw_var) para especificar que a [tabela](https://br.tradingview.com/pine-script-reference/v5/#type_table) atribuída à variável `debugTable` na primeira barra persiste durante toda a execução do script.
+- Este script modifica a tabela dentro de duas estruturas [if](https://br.tradingview.com/pine-script-reference/v5/#kw_if). A primeira estrutura inicializa as células com [table.cell()](https://br.tradingview.com/pine-script-reference/v5/#fun_table.cell) apenas na última barra histórica confirmada ([barstate.islastconfirmedhistory](https://br.tradingview.com/pine-script-reference/v5/#var_barstate.islastconfirmedhistory)). A segunda estrutura atualiza as propriedades `text` das células relevantes com [representações em string](./06_02_debugging.md#representando-outros-tipos) dos valores das variáveis usando chamadas [table.cell_set_text()](https://br.tradingview.com/pine-script-reference/v5/#fun_table.cell_set_text) na última barra disponível ([barstate.islast](https://br.tradingview.com/pine-script-reference/v5/#var_barstate.islast)).
+
+É importante notar que, embora as tabelas possam fornecer utilidade para depuração, especialmente ao trabalhar com múltiplas séries ou criar logs no gráfico, elas têm um custo computacional mais alto do que outras técnicas discutidas nesta página e podem exigir _mais código_. Além disso, ao contrário das [labels](./06_02_debugging.md#usando-labels), só é possível visualizar o estado de uma tabela a partir da última execução do script. Portanto, recomenda-se usá-las _sabiamente_ e _com moderação_ durante a depuração, optando por abordagens _simplificadas_ quando possível. Para mais informações sobre o uso de objetos [tabela](https://br.tradingview.com/pine-script-reference/v5/#type_table), veja a página [Tabelas](./05_19_tables.md).
 
 ## Pine Logs
 
+Pine Logs são _mensagens interativas_ que scripts podem gerar em pontos específicos de sua execução. Eles fornecem uma maneira poderosa para programadores inspecionarem os dados, condições e o fluxo de execução de um script com um código mínimo.
+
+Ao contrário das outras ferramentas discutidas nesta página, os Pine Logs são projetados deliberadamente para depuração detalhada de scripts. Scripts não exibem Pine Logs no gráfico ou na Janela de Dados. Em vez disso, eles imprimem mensagens com timestamps no _Painel de Pine Logs_, que fornece recursos especializados de navegação e opções de filtragem.
+
+Para acessar o Painel de Pine Logs, selecione "Pine Logs..." no menu "Mais" "_More_" do Editor ou no menu "Mais" "_More_" de um script carregado no gráfico que utiliza funções `log.*()`:
+
+![Pine Logs](./imgs/Debugging-Pine-logs-1.D3YhPfKI_1eBx6z.webp)
+
+> __Observação!__\
+> Somente __scripts pessoais__ podem gerar Pine Logs. Um script publicado _não pode_ criar logs, mesmo que tenha chamadas de função `log.*()` em seu código. É necessário considerar abordagens alternativas, como as descritas nas seções acima, ao [publicar scripts](./06_04_publicando_scripts.md) com funcionalidade de depuração.
+
+### Criando Logs
+
+Scripts podem criar logs chamando as funções no namespace `log.*()`.
+
+Todas as funções `log.*()` têm as seguintes assinaturas:
+    
+```c
+log.*(message) → void
+
+log.*(formatString, arg0, arg1, ...) → void
+```
+
+A primeira sobrecarga registra uma `message` especificada no painel de Pine Logs. A segunda sobrecarga é semelhante a [str.format()](https://br.tradingview.com/pine-script-reference/v5/#fun_str.format), pois registra uma mensagem formatada com base no `formatString` e nos argumentos adicionais fornecidos na chamada.
+
+Cada função `log.*()` tem um _nível de depuração_ diferente, permitindo que os programadores categorizem e [filtre](./06_02_debugging.md#filtrando-logs) os resultados mostrados no painel:
+
+- A função [log.info()](https://br.tradingview.com/pine-script-reference/v5/#fun_log.info) registra uma entrada com o nível _"info"_ que aparece no painel com texto cinza.
+- A função [log.warning()](https://br.tradingview.com/pine-script-reference/v5/#fun_log.warning) registra uma entrada com o nível _"warning"_ que aparece no painel com texto laranja.
+- A função [log.error()](https://br.tradingview.com/pine-script-reference/v5/#fun_log.error) registra uma entrada com o nível _"error"_ que aparece no painel com texto vermelho.
+
+Este código demonstra a diferença entre todas as três funções `log.*()`. Ele chama [log.info()](https://br.tradingview.com/pine-script-reference/v5/#fun_log.info), [log.warning()](https://br.tradingview.com/pine-script-reference/v5/#fun_log.warning) e [log.error()](https://br.tradingview.com/pine-script-reference/v5/#fun_log.error) na primeira barra disponível:
+
+![Criando logs 01](./imgs/Debugging-Pine-logs-Creating-logs-1.B6M1BlvN_1OBeQe.webp)
+
+```c
+//@version=5
+indicator("Debug levels demo", overlay = true)
+
+if barstate.isfirst
+    log.info("This is an 'info' message.")
+    log.warning("This is a 'warning' message.")
+    log.error("This is an 'error' message.")
+```
+
+Pine Logs podem ser executados em qualquer lugar dentro da execução de um script. Eles permitem que os programadores rastreiem informações de barras históricas e monitorem como seus scripts se comportam em barras _não confirmadas_ em tempo real. Ao executar em barras históricas, os scripts geram uma nova mensagem uma vez para cada chamada `log.*()` em uma barra. Em barras em tempo real, as chamadas para as funções `log.*()` podem criar novas entradas em _cada novo tick_.
+
+Por exemplo, este script calcula a razão média entre o valor `close - open` de cada barra e seu intervalo `high - low`. Quando o `denominator` não é zero "_nonzero_", o script chama [log.info()](https://br.tradingview.com/pine-script-reference/v5/#fun_log.info) para imprimir os valores das variáveis do cálculo em barras confirmadas e [log.warning()](https://br.tradingview.com/pine-script-reference/v5/#fun_log.warning) para imprimir os valores em barras não confirmadas. Caso contrário, ele usa [log.error()](https://br.tradingview.com/pine-script-reference/v5/#fun_log.error) para indicar que ocorreu uma divisão por zero, pois tais casos podem afetar o resultado `average`:
+
+![Criando logs 02](./imgs/Debugging-Pine-logs-Creating-logs-2.DgOgH4xb_ZRjj9G.webp)
+
+```c
+//@version=5
+indicator("Logging historical and realtime data demo", "Average bar ratio")
+
+//@variable The current bar's change from the `open` to `close`.
+float numerator = close - open
+//@variable The current bar's `low` to `high` range.
+float denominator = high - low
+//@variable The ratio of the bar's open-to-close range to its full range.
+float ratio = numerator / denominator
+//@variable The average `ratio` over 10 non-na values.
+float average = ta.sma(ratio, 10)
+
+// Plot the `average`.
+plot(average, "average", color.purple, 3)
+
+if barstate.isconfirmed
+    // Log a division by zero error if the `denominator` is 0.
+    if denominator == 0.0
+        log.error("Division by 0 in confirmed results!")
+    // Otherwise, log the confirmed values.
+    else
+        log.info(
+             "Values (confirmed):\nnumerator: {1, number, #.########}\ndenominator: {2, number, #.########}
+             \nratio: {0, number, #.########}\naverage: {3, number, #.########}",
+             ratio, numerator, denominator, average
+         )
+else
+    // Log a division by zero error if the `denominator` is 0.
+    if denominator == 0.0
+        log.error("Division by 0 on unconfirmed bar.")
+    // Otherwise, log the unconfirmed values.
+    else
+        log.warning(
+             "Values (unconfirmed):\nnumerator: {1, number, #.########}\ndenominator: {2, number, #.########}
+             \nratio: {0, number, #.########}\naverage: {3, number, #.########}",
+             ratio, numerator, denominator, average
+         )
+```
+
+__Note que:__
+
+- Pine Logs _não retrocedem_ a cada tick em uma barra não confirmada, o que significa que os resultados para esses ticks aparecem no painel até que o script reinicie sua execução. Para registrar mensagens apenas em barras _confirmadas_, use [barstate.isconfirmed](https://br.tradingview.com/pine-script-reference/v5/#var_barstate.isconfirmed) nas condições que acionam uma chamada `log.*()`.
+- Ao registrar em barras não confirmadas, recomenda-se garantir que esses logs contenham _informações exclusivas_ ou usem diferentes _níveis de depuração_ para que seja possível [filtrar](./06_02_debugging.md#filtrando-logs) os resultados conforme necessário.
+- O painel de Pine Logs exibirá até as 10.000 entradas mais recentes para barras históricas. Se um script gerar mais de 10.000 logs em barras históricas e um programador precisar ver entradas anteriores, ele pode usar lógica condicional para limitar as chamadas `log.*()` a ocorrências específicas. Veja [esta](./06_02_debugging.md#usando-inputs) seção para um exemplo que limita a geração de logs a um _timeframe_ especificado pelo usuário.
+
+### Inspecionando Logs
+
+Pine Logs incluem alguns recursos úteis que simplificam o processo de inspeção. Sempre que um script gera um log, ele automaticamente prefixa a mensagem com um timestamp detalhado para indicar onde o evento de log ocorreu na série temporal. Além disso, cada entrada contém ícones __"Source code"__ e __"Scroll to bar"__, que aparecem ao passar o cursor sobre ela no painel de Pine Logs:
+
+![Inspecionando logs 01](./imgs/Debugging-Pine-logs-Inspecting-logs-1.CEw5SsHB_27329j.webp)
+
+Clicar no ícone "Source code" de uma entrada abre o script no Pine Editor e destaca a linha específica de código que acionou o log:
+
+![Inspecionando logs 02](./imgs/Debugging-Pine-logs-Inspecting-logs-2.1cfqckmg_1omSJk.webp)
+
+Clicar no ícone "Scroll to bar" de uma entrada navega o gráfico para a barra específica onde o log ocorreu e exibe temporariamente um tooltip contendo informações de tempo para essa barra:
+
+![Inspecionando logs 03](./imgs/Debugging-Pine-logs-Inspecting-logs-3.AJrWQdc2_ZHsjQK.webp)
+
+__Note que:__
+
+- As informações de tempo no tooltip dependem do período do gráfico, assim como o rótulo do eixo x vinculado ao cursor do gráfico e às ferramentas de desenho. Por exemplo, o tooltip em um gráfico EOD mostrará apenas o dia da semana e a data, enquanto o tooltip em um gráfico de 10 segundos também conterá a hora do dia, incluindo segundos.
+
+Quando um gráfico inclui mais de um script que gera logs, é importante notar que cada script mantém seu próprio histórico de mensagens _independente_. Para inspecionar as mensagens de um script específico quando vários estão no gráfico, selecione seu título no menu suspenso no topo do painel de Pine Logs:
+
+![Inspecionando logs 04](./imgs/Debugging-Pine-logs-Inspecting-logs-4.CY8OpkgY_Z10JTlu.webp)
+
+### Filtrando Logs
+
+Um único script pode gerar inúmeros logs, dependendo das condições que acionam suas chamadas `log.*()`. Embora percorrer diretamente o histórico de logs para encontrar entradas específicas possa ser suficiente quando um script gera apenas algumas, isso pode se tornar difícil ao procurar centenas ou milhares de mensagens.
+
+O painel de Pine Logs inclui várias opções para filtrar mensagens, permitindo simplificar os resultados isolando _sequências de caracteres_ específicas, _tempos de início_ e _níveis de depuração_.
+
+Clicar no ícone "Search" no topo do painel abre uma barra de pesquisa, que corresponde ao texto para filtrar mensagens registradas. O filtro de pesquisa também destaca a parte correspondente de cada mensagem em azul para referência visual. Por exemplo, aqui, foi digitado "confirmed" para corresponder a todos os resultados gerados pelo script anterior com a palavra em algum lugar do texto:
+
+![Filtrando logs 01](./imgs/Debugging-Pine-logs-Filtering-logs-1.Bo6VZioU_Cbru5.webp)
+
+Note que os resultados dessa pesquisa também consideraram mensagens com _"unconfirmed"_ como correspondências, pois a palavra contém a consulta. É possível omitir essas correspondências selecionando a caixa de seleção "Whole Word" nas opções à direita da barra de pesquisa:
+
+![Filtrando logs 02](./imgs/Debugging-Pine-logs-Filtering-logs-2.75PYAT31_Z8HPfP.webp)
+
+Esse filtro também suporta [expressões regulares (regex)](https://pt.wikipedia.org/wiki/Express%C3%A3o_regular), que permitem aos usuários realizar pesquisas avançadas que correspondem a _padrões de caracteres_ personalizados ao selecionar a caixa de seleção "Regex" nas opções de pesquisa. Por exemplo, essa regex corresponde a todas as entradas que contêm "average" seguido por uma sequência que representa um número maior que 0.5 e menor ou igual a 1:
+
+```c
+average:\s*(0\.[6-9]\d*|0\.5\d*[1-9]\d*|1\.0*)
+```
+
+![Filtrando logs 03](./imgs/Debugging-Pine-logs-Filtering-logs-3.C8CgIgDR_ZwuDXw.webp)
+
+Clicar no ícone "Start date" abre um diálogo que permite aos usuários especificar a data e hora do primeiro log mostrado nos resultados:
+
+![Filtrando logs 04](./imgs/Debugging-Pine-logs-Filtering-logs-4.ByHNqBMd_1OJ3LK.webp)
+
+Após especificar o ponto de início, uma tag contendo o tempo de início aparecerá acima do histórico de logs:
+
+![Filtrando logs 05](./imgs/Debugging-Pine-logs-Filtering-logs-5.Dv8F4vq1_1DX0la.webp)
+
+Os usuários podem filtrar os resultados por _nível de depuração_ usando as caixas de seleção disponíveis ao selecionar o ícone mais à direita nas opções de filtragem. Aqui, foram desativados os níveis "info" e "warning" para que os resultados contenham apenas mensagens de "error":
+
+![Filtrando logs 06](./imgs/Debugging-Pine-logs-Filtering-logs-6.CJM074om_Z1UkF5.webp) -->
+
 ## Depuração de Funções
 
-## Representando Outros Tipos
-
 ## Dicas
+
+## Usando Inputs

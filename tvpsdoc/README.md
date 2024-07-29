@@ -105,3 +105,5 @@ Deveria ser: [input.timeframe()](https://www.tradingview.com/pine-script-referen
 Atual: [input.timeframe()](https://www.tradingview.com/pine-script-reference/v5/#fun_input%7Bdot%7Dsession)
 
 **No link sobre a constante CURRENCY.KRW https://br.tradingview.com/pine-script-reference/v5/#var_currency.KRW (é para referir a moeda sul coreana won, e não venceu)**
+
+no link [chart.right_visible_bar_time](https://br.tradingview.com/pine-script-reference/v5/#var_chart.right_visible_bar_time) A descrição do título não foi traduzido.
