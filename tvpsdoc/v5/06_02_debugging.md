@@ -1637,7 +1637,7 @@ __Note que:__
 - A chamada de [input.int()](https://br.tradingview.com/pine-script-reference/v5/#fun_input.int) atribuída ao `debugCounterInput` inclui um argumento `group` para distingui-la nas configurações do script.
 - A chamada de [log.info()](https://br.tradingview.com/pine-script-reference/v5/#fun_log.info) inclui "(confirmed)" na mensagem formatada sempre que [barstate.isconfirmed](https://br.tradingview.com/pine-script-reference/v5/#var_barstate.isconfirmed) for `true`. Pesquisar esse texto no painel de [Pine Logs](./06_02_debugging.md#pine-logs) filtrará as entradas de barras não confirmadas. Veja a seção [Filtrando logs](./06_02_debugging.md#filtrando-logs) acima.
 
-<!-- ### Inspecionando Múltiplas Iterações
+### Inspecionando Múltiplas Iterações
 
 Ao inspecionar os valores de várias iterações do loop, muitas vezes é útil utilizar [coleções](./04_09_tipagem_do_sistema.md#coleções) ou strings para reunir os resultados para uso em funções de saída após o término do loop.
 
@@ -1737,7 +1737,7 @@ __Note que:__
 
 - Ao gerar [logs](./06_02_debugging.md#pine-logs) ou desenhos iterativamente de dentro de um loop, evite a desordem desnecessária e busque uma navegação fácil. Mais não é sempre melhor para depuração, especialmente ao trabalhar dentro de loops.
 
-## Dicas
+<!-- ## Dicas
 
 ### Organização e Legibilidade
 
