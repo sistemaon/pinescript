@@ -1737,7 +1737,7 @@ __Note que:__
 
 - Ao gerar [logs](./06_02_debugging.md#pine-logs) ou desenhos iterativamente de dentro de um loop, evite a desordem desnecessária e busque uma navegação fácil. Mais não é sempre melhor para depuração, especialmente ao trabalhar dentro de loops.
 
-<!-- ## Dicas
+## Dicas
 
 ### Organização e Legibilidade
 
@@ -1761,7 +1761,7 @@ Existem algumas técnicas úteis frequentemente utilizado ao depurar o código:
 - A chamada [label.new()](https://br.tradingview.com/pine-script-reference/v5/#fun_label.new) com um argumento `tooltip` mostra strings em tooltips [em barras sucessivas](./06_02_debugging.md#em-barras-sucessivas).
 - As funções `log.*()` apresenta rapidamente dados com [representações em string](./06_02_debugging.md#representando-outros-tipos) no painel de [Pine Logs](./06_02_debugging.md#pine-logs).
 
-Quando se estabelecem processos típicos de depuração, muitas vezes é útil criar _macros de teclado_ para acelerar tarefas repetitivas e gastar menos tempo configurando saídas de depuração em cada código.
+Quando se estabelecem processos típicos de depuração, muitas vezes é útil criar _macros de teclado_ (_atalhos do teclado_) para acelerar tarefas repetitivas e gastar menos tempo configurando saídas de depuração em cada código.
 
 O seguinte é um simples script _**A**uto**H**ot**K**ey_ (__não__ é código Pine Script) que inclui hotstrings para as cinco técnicas acima. O script gera snippets de código digitando uma sequência de caracteres especificada seguida por um espaço:
 
@@ -1812,4 +1812,4 @@ log.info(str.tostring(bar_index % 2 == 0))
 
 __Note que:__
 
-- O __AHK__ está disponível para dispositivos _Windows_. Pesquise outros softwares para empregar um processo semelhante se seu computador usar um sistema operacional diferente. -->
+- O __AHK__ está disponível para dispositivos _Windows_. Pesquise outros softwares para empregar um processo semelhante se seu computador usar um sistema operacional diferente.
