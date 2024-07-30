@@ -337,7 +337,7 @@ Nesse caso, os resultados do código local não correspondem mais a uma _única_
 > __Observação!__\
 > Quando os escopos locais de [funções definidas pelo usuário](./04_11_funcoes_definidas_pelo_usuario.md) ou [métodos](./04_13_metodos.md#métodos-definidos-pelo-usuário) de um script contêm chamadas para funções `request.*()`, a _forma traduzida_ do script extrai essas chamadas __fora__ dos escopos das funções e as avalia __separadamente__. Consequentemente, os resultados do Profiler para linhas com chamadas para essas [funções definidas pelo usuário](./04_11_funcoes_definidas_pelo_usuario.md) __não__ incluirão o tempo gasto nas chamadas `request.*()`. Veja a [seção abaixo](./06_03_perfilamento_e_otimizacao.md#solicitando-outros-contextos) para mais informações.
 
-<!-- #### Solicitando Outros Contextos
+#### Solicitando Outros Contextos
 
 Scripts Pine podem solicitar dados de outros _contextos_, ou seja, símbolos diferentes, _timeframes_ ou modificações de dados diferentes dos utilizados pelos dados do gráfico, chamando a família de funções `request.*()` ou especificando um `timeframe` alternativo na declaração [indicator()](https://br.tradingview.com/pine-script-reference/v5/#fun_indicator).
 
@@ -469,7 +469,8 @@ __Note que:__
 
 - O código `secExpr()` representa a __função separada__ usada por [request.security()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.security) para calcular a expressão necessária no contexto solicitado.
 - A chamada [request.security()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.security) ocorre no __escopo externo__, fora da função `getCompositeAvg()`.
-- A tradução reduziu substancialmente o código local de `getCompositeAvg()`. Agora, ele apenas retorna um valor passado para ele, já que todos os cálculos necessários da função ocorrem __fora__ de seu escopo. Devido a essa redução, os resultados de desempenho da chamada da função __não__ refletirão nenhum do tempo gasto nos cálculos necessários para a solicitação de dados. -->
+- A tradução reduziu substancialmente o código local de `getCompositeAvg()`. Agora, ele apenas retorna um valor passado para ele, já que todos os cálculos necessários da função ocorrem __fora__ de seu escopo. Devido a essa redução, os resultados de desempenho da chamada da função __não__ refletirão nenhum do tempo gasto nos cálculos necessários para a solicitação de dados.
+
 
 ## Otimização
 
