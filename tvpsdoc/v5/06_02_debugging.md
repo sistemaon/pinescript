@@ -45,7 +45,7 @@ bgcolor(risingPrice ? color.new(color.green, 70) : na, title= "`risingPrice` hig
 barcolor(risingPrice ? color.aqua : chart.bg_color, title = "`risingPrice` bar color")
 ```
 
-Os [tipos de desenho](./04_09_tipagem_do_sistema.md#tipos-de-desenho) do Pine ([line](./05_12_lines_e_boxes.md#lines-linhas), [box](./05_12_lines_e_boxes.md#boxes-caixas), [polyline](./05_12_lines_e_boxes.md#polylines-polilinhas), [label](./05_20_text_e_shapes.md#labels)) produzem desenhos no painel do script. Embora não retornem resultados em outros locais, como a linha de status ou a Janela de Dados, fornecem soluções alternativas e flexíveis para inspecionar valores numéricos, condições e strings diretamente no gráfico:
+Os [tipos de desenho](./04_09_tipagem_do_sistema.md#tipos-de-desenho) do Pine ([line](./05_12_lines_e_boxes.md#lines-linhas), [box](./05_12_lines_e_boxes.md#boxes-caixas), [polyline](./05_12_lines_e_boxes.md#polylines-polilinhas), [label](./05_20_text_e_shapes.md#labels)) produzem desenhos no painel do script. Embora não retornem resultados em outros locais, como a linha de status ou a "Janela de Dados" "_Data Window_", fornecem soluções alternativas e flexíveis para inspecionar valores numéricos, condições e strings diretamente no gráfico:
 
 ![A disposição do terreno 03](./imgs/Debugging-The-lay-of-the-land-3.BR7JNYrd_Z2s1rX.webp)
 
@@ -104,7 +104,7 @@ Ao criar código no Pine Script, trabalhar com números é inevitável. Portanto
 
 ## Plotando Números
 
-Uma das maneiras mais simples de inspecionar os valores numéricos de um script é usar as funções `plot*()`, que podem exibir resultados graficamente no gráfico e mostrar números formatados na linha de status do script, na escala de preços e na Janela de Dados. Os locais onde uma função `plot*()` exibe seus resultados dependem do parâmetro `display`. Por padrão, seu valor é [display.all](https://br.tradingview.com/pine-script-reference/v5/#const_display.all).
+Uma das maneiras mais simples de inspecionar os valores numéricos de um script é usar as funções `plot*()`, que podem exibir resultados graficamente no gráfico e mostrar números formatados na linha de status do script, na escala de preços e na "Janela de Dados" "_Data Window_". Os locais onde uma função `plot*()` exibe seus resultados dependem do parâmetro `display`. Por padrão, seu valor é [display.all](https://br.tradingview.com/pine-script-reference/v5/#const_display.all).
 
 > __Observação!__\
 > Apenas o _escopo global_ de um script pode conter chamadas `plot*()`, o que significa que essas funções só podem aceitar variáveis globais e literais. Elas não podem usar variáveis declaradas nos escopos locais de [loops](./04_08_loops.md), [estruturas condicionais](./04_07_estruturas_condicionais.md) ou [funções definidas pelo usuário](./04_11_funcoes_definidas_pelo_usuario.md) e [métodos](./04_13_metodos.md#métodos-definidos-pelo-usuário).
@@ -128,7 +128,7 @@ plot(timeChange, "Time difference (in chart bar units)", color.purple, 3)
 
 __Note que:__
 
-- Os números exibidos na linha de status do script e na Janela de Dados refletem os valores plotados na localização do cursor do gráfico. Essas áreas mostrarão o valor da barra mais recente quando o ponteiro do mouse não estiver no gráfico.
+- Os números exibidos na linha de status do script e na "Janela de Dados" refletem os valores plotados na localização do cursor do gráfico. Essas áreas mostrarão o valor da barra mais recente quando o ponteiro do mouse não estiver no gráfico.
 - O número na escala de preços reflete o valor mais recente disponível no gráfico visível.
 
 ### Sem Afetar a Escala
@@ -414,7 +414,7 @@ __Note que:__
 
 As funções [plotshape()](https://br.tradingview.com/pine-script-reference/v5/#fun_plotshape) e [plotchar()](https://br.tradingview.com/pine-script-reference/v5/#fun_plotchar) são úteis para depurar condições, pois podem plotar formas ou caracteres em locais absolutos ou relativos do gráfico sempre que contiverem um argumento `true` ou _não-na_/_non-na_ `series`.
 
-Essas funções também podem exibir representações _numéricas_ da `series` na linha de status do script e na Janela de Dados, sendo também úteis para depurar [números](./06_02_debugging.md#valores-numéricos). Um modo simples e prático de depurar números com essas funções está demonstrado na seção [Dicas](./06_02_debugging.md#dicas).
+Essas funções também podem exibir representações _numéricas_ da `series` na linha de status do script e na "Janela de Dados", sendo também úteis para depurar [números](./06_02_debugging.md#valores-numéricos). Um modo simples e prático de depurar números com essas funções está demonstrado na seção [Dicas](./06_02_debugging.md#dicas).
 
 Os locais dos plots no gráfico dependem do parâmetro `location`, que por padrão é [location.abovebar](https://br.tradingview.com/pine-script-reference/v5/#const_location.abovebar).
 
@@ -446,7 +446,7 @@ plotshape(crossBelow, "RSI crossed below 30", shape.circle, location.top, color.
 
 __Note que:__
 
-- A linha de status e a Janela de Dados exibem um valor de 1 quando `crossBelow` é `true` e 0 quando é `false`.
+- A linha de status e a "Janela de Dados" exibem um valor de 1 quando `crossBelow` é `true` e 0 quando é `false`.
 
 Para exibir as formas em locais _precisos_ em vez de relativos ao painel do gráfico, é possível usar [números condicionais](./06_02_debugging.md#valores-numéricos) e [location.absolute](https://br.tradingview.com/pine-script-reference/v5/#const_location.absolute) na chamada de [plotshape()](https://br.tradingview.com/pine-script-reference/v5/#fun_plotshape).
 
@@ -477,7 +477,7 @@ plotshape(debugNumber, "RSI when it crossed below 30", shape.circle, location.ab
 
 __Note que:__
 
-- Como foi passada uma série _numérica_ para a função, o plot condicional agora mostra os valores do `debugNumber` na linha de status e na Janela de Dados em vez de 1 ou 0.
+- Como foi passada uma série _numérica_ para a função, o plot condicional agora mostra os valores do `debugNumber` na linha de status e na "Janela de Dados" em vez de 1 ou 0.
 
 Outro modo prático de depurar condições é usar [plotarrow()](https://br.tradingview.com/pine-script-reference/v5/#fun_plotarrow). Essa função plota uma seta com localização relativa aos preços do _gráfico principal_ sempre que o argumento `series` não é zero e não é [na](https://br.tradingview.com/pine-script-reference/v5/#var_na). O comprimento de cada seta varia com o valor da `series` fornecida. Assim como [plotshape()](https://br.tradingview.com/pine-script-reference/v5/#fun_plotshape) e [plotchar()](https://br.tradingview.com/pine-script-reference/v5/#fun_plotchar), [plotarrow()](https://br.tradingview.com/pine-script-reference/v5/#fun_plotarrow) também pode exibir resultados numéricos na linha de status e na "Janela de Dados" "_Data Window_".
 
@@ -722,7 +722,7 @@ bgcolor(compundCondition ? color.new(color.red, 60) : na, title = "compundCondit
 
 Visualizando apenas o resultado final de `compoundCondition` não é fácil entender seu comportamento, pois cinco condições singulares subjacentes determinam o valor final. Para depurar `compoundCondition` de forma eficaz, também é necessário inspecionar as condições que a compõem.
 
-No exemplo abaixo, foram adicionadas cinco chamadas de [plotchar()](https://br.tradingview.com/pine-script-reference/v5/#fun_plotchar) para exibir [caracteres](./06_02_debugging.md#plotando-formas-condicionais) no gráfico e valores numéricos na linha de status e na Janela de Dados quando cada condição singular ocorre. Inspecionar cada um desses resultados fornece informações mais completas sobre o comportamento de `compoundCondition`:
+No exemplo abaixo, foram adicionadas cinco chamadas de [plotchar()](https://br.tradingview.com/pine-script-reference/v5/#fun_plotchar) para exibir [caracteres](./06_02_debugging.md#plotando-formas-condicionais) no gráfico e valores numéricos na linha de status e na "Janela de Dados" quando cada condição singular ocorre. Inspecionar cada um desses resultados fornece informações mais completas sobre o comportamento de `compoundCondition`:
 
 ![Condições compostas e aninhadas 02](./imgs/Debugging-Conditions-Compound-conditions-2.CqS0Ugyz_Z181FHW.webp)
 
@@ -769,7 +769,7 @@ plotchar(aboveMedian ? median : na, "aboveMedian (5)", "5", location.absolute, c
 
 __Note que:__
 
-- Cada chamada de [plotchar()](https://br.tradingview.com/pine-script-reference/v5/#fun_plotchar) usa um [número condicional](./06_02_debugging.md#como-números) como argumento `series`. As funções exibem os valores numéricos na linha de status e na Janela de Dados.
+- Cada chamada de [plotchar()](https://br.tradingview.com/pine-script-reference/v5/#fun_plotchar) usa um [número condicional](./06_02_debugging.md#como-números) como argumento `series`. As funções exibem os valores numéricos na linha de status e na "Janela de Dados" "_Data Window_".
 - Todas as chamadas de [plotchar()](https://br.tradingview.com/pine-script-reference/v5/#fun_plotchar), exceto a da condição `closeBelow`, usam [location.absolute](https://br.tradingview.com/pine-script-reference/v5/#const_location.absolute) como argumento `location` para exibir caracteres em locais precisos sempre que sua `series` não for [na](https://br.tradingview.com/pine-script-reference/v5/#var_na) (ou seja, a condição ocorre). A chamada para `closeBelow` usa [location.bottom](https://br.tradingview.com/pine-script-reference/v5/#const_location.bottom) para exibir seus caracteres próximo à parte inferior do painel.
 - Nos exemplos desta seção, foram atribuídas condições individuais a variáveis separadas com nomes e anotações diretas. Embora esse formato não seja obrigatório para criar uma condição composta, pois é possível combinar condições diretamente dentro de uma expressão lógica, ele torna o código mais legível e fácil de depurar, conforme explicado na seção [Dicas](./06_02_debugging.md#dicas).
 
@@ -1308,7 +1308,7 @@ if barstate.isconfirmed and showLog
 __Note que:__
 
 - As funções `input.*()` atribuídas às variáveis `filterLogsInput`, `logStartInput` e `logEndInput` incluem um argumento `group` para organizá-las e distingui-las nas configurações do script.
-- As chamadas [input.time()](https://br.tradingview.com/pine-script-reference/v5/#fun_input.time) incluem `confirm = true` para que seja possível definir interativamente os tempos de início e término diretamente no gráfico. Para redefinir os inputs, selecione “Reset points…” nas opções do menu "More" do script.
+- As chamadas [input.time()](https://br.tradingview.com/pine-script-reference/v5/#fun_input.time) incluem `confirm = true` para que seja possível definir interativamente os tempos de início e término diretamente no gráfico. Para redefinir os inputs, selecione "Reset points…" nas opções do menu "More" do script.
 - A condição que aciona cada chamada [log.info()](https://br.tradingview.com/pine-script-reference/v5/#fun_log.info) inclui [barstate.isconfirmed](https://br.tradingview.com/pine-script-reference/v5/#var_barstate.isconfirmed) para limitar a geração de logs às barras _confirmadas_.
 
 ## Depurando Funções
@@ -1539,4 +1539,277 @@ __Note que:__
 - Incluiu-se `max_labels_count = 500` na função [indicator()](https://br.tradingview.com/pine-script-reference/v5/#fun_indicator) para exibir [labels](./05_20_text_e_shapes.md#labels) para as 500 chamadas mais recentes de `customMA()`.
 - A função usa [barstate.isconfirmed](https://br.tradingview.com/pine-script-reference/v5/#var_barstate.isconfirmed) em uma instrução [if](https://br.tradingview.com/pine-script-reference/v5/#kw_if) para chamar [log.info()](https://br.tradingview.com/pine-script-reference/v5/#fun_log.info) apenas em barras _confirmadas_, não registrando uma nova mensagem em cada tick em tempo real.
 
+### Depurando Loops
+
+[Loops](./04_08_loops.md) são estruturas que executam repetidamente um bloco de código com base em um _contador_ ([for](https://br.tradingview.com/pine-script-reference/v5/#kw_for)), no conteúdo de uma [coleção](./04_09_tipagem_do_sistema.md#coleções) ([for...in](https://br.tradingview.com/pine-script-reference/v5/#kw_for...in)) ou em uma _condição_ ([while](https://br.tradingview.com/pine-script-reference/v5/#kw_while)). Eles permitem que scripts realizem tarefas repetitivas sem a necessidade de linhas de código redundantes.
+
+Cada instância de loop mantém um escopo local separado, ao qual todos os escopos externos não têm acesso. Todas as variáveis declaradas dentro do escopo de um loop são específicas para aquele loop, o que significa que não se pode usá-las em um escopo externo.
+
+Assim como outras estruturas no Pine, há inúmeras maneiras possíveis de depurar loops. Esta seção explora algumas técnicas úteis, incluindo a extração de valores locais para [plots](./05_15_plots.md), inspeção de valores com [desenhos](./04_09_tipagem_do_sistema.md#tipos-de-desenho) e rastreamento da execução de um loop com [Pine Logs](./06_02_debugging.md#pine-logs).
+
+Segue o script como ponto de partida para os exemplos nos segmentos a seguir. Ele agrega as taxas de variação do valor de [fechamento](https://br.tradingview.com/pine-script-reference/v5/#var_close) ao longo de 1 - `lookbackInput` barras e as acumula em um loop [for](https://br.tradingview.com/pine-script-reference/v5/#kw_for), depois divide o resultado por `lookbackInput` para calcular um valor médio final:
+
+![Depurando loops](./imgs/Debugging-Debugging-loops-1.Co481TKA_ZQmJYP.webp)
+
+```c
+//@version=5
+indicator("Debugging loops demo", "Aggregate ROC")
+
+//@variable The number of bars in the calculation.
+int lookbackInput = input.int(20, "Lookback", 1)
+
+//@variable The average ROC of `close` prices over each length from 1 to `lookbackInput` bars.
+float aroc = 0.0
+
+// Calculation loop.
+for length = 1 to lookbackInput
+    //@variable The `close` value `length` bars ago.
+    float pastClose = close[length]
+    //@variable The `close` rate of change over `length` bars.
+    float roc = (close - pastClose) / pastClose
+    // Add the `roc` to `aroc`.
+    aroc += roc
+
+// Divide `aroc` by the `lookbackInput`.
+aroc /= lookbackInput
+
+// Plot the `aroc`.
+plot(aroc, "aroc", color.blue, 3)
+```
+
+__Note que:__
+
+- O `aroc` é uma variável _global_ modificada dentro do loop, enquanto `pastClose` e `roc` são variáveis _locais_ inacessíveis ao escopo externo.
+
+<!-- ### Inspecionando uma Única Iteração
+
+Quando um programador precisa se concentrar em uma iteração específica do loop, há várias técnicas que podem ser usadas, a maioria das quais envolve o uso de uma _condição_ dentro do loop para acionar ações de depuração, como extrair valores para variáveis externas, criar [desenhos](./04_09_tipagem_do_sistema.md#tipos-de-desenho), [registrar](./06_02_debugging.md#pine-logs) mensagens, etc.
+
+Este exemplo inspeciona o valor local `roc` de uma única iteração do loop de três maneiras diferentes. Quando o valor do contador do loop é igual ao `debugCounterInput`, o script atribui o `roc` a uma variável `rocDebug` do escopo global para [plotar](./06_02_debugging.md#plotando-números), desenha uma linha vertical de 0 até o valor `roc` usando [line.new()](https://br.tradingview.com/pine-script-reference/v5/#fun_line.new) e registra uma mensagem no painel de [Pine Logs](./06_02_debugging.md#pine-logs) usando [log.info()](https://br.tradingview.com/pine-script-reference/v5/#fun_log.info):
+
+![Inspecionando uma única iteração](./imgs/Debugging-Debugging-loops-Inspecting-a-single-iteration-1.tCjAEA7s_1OlVrm.webp)
+
+```c
+//@version=5
+indicator("Inspecting a single iteration demo", "Aggregate ROC", max_lines_count = 500)
+
+//@variable The number of bars in the calculation.
+int lookbackInput = input.int(20, "Lookback", 1)
+//@variable The `length` value in the loop's execution where value extraction occurs.
+int debugCounterInput = input.int(1, "Loop counter value", 1, group = "Debugging")
+
+//@variable The `roc` value extracted from the loop.
+float rocDebug = na
+
+//@variable The average ROC of `close` over lags from 1 to `lookbackInput` bars.
+float aroc = 0.0
+
+// Calculation loop.
+for length = 1 to lookbackInput
+    //@variable The `close` value `length` bars ago.
+    float pastClose = close[length]
+    //@variable The `close` rate of change over `length` bars.
+    float roc = (close - pastClose) / pastClose
+    // Add the `roc` to `aroc`.
+    aroc += roc
+
+    // Trigger debug actions when the `length` equals the `debugCounterInput`.
+    if length == debugCounterInput
+        // Assign `roc` to `rocDebug` so the script can plot its value.
+        rocDebug := roc
+        // Draw a vertical line from 0 to the `roc` at the `bar_index`.
+        line.new(bar_index, 0.0, bar_index, roc, color = color.new(color.gray, 50), width = 4)
+        // Log an "info" message in the Pine Logs pane.
+        log.info("{0}-bar `roc`{1}: {2, number, #.########}", length, barstate.isconfirmed ? " (confirmed)" : "", roc)
+
+// Divide `aroc` by the `lookbackInput`.
+aroc /= lookbackInput
+
+// Plot the `aroc`.
+plot(aroc, "aroc", color.blue, 3)
+
+// Plot the `rocDebug`.
+plot(rocDebug, "Extracted roc", color.new(color.rgb(206, 55, 136), 40), 2)
+```
+
+__Note que:__
+
+- A chamada de [input.int()](https://br.tradingview.com/pine-script-reference/v5/#fun_input.int) atribuída ao `debugCounterInput` inclui um argumento `group` para distingui-la nas configurações do script.
+- A chamada de [log.info()](https://br.tradingview.com/pine-script-reference/v5/#fun_log.info) inclui "(confirmed)" na mensagem formatada sempre que [barstate.isconfirmed](https://br.tradingview.com/pine-script-reference/v5/#var_barstate.isconfirmed) for `true`. Pesquisar esse texto no painel de [Pine Logs](./06_02_debugging.md#pine-logs) filtrará as entradas de barras não confirmadas. Veja a seção [Filtrando logs](./06_02_debugging.md#filtrando-logs) acima.
+
+### Inspecionando Múltiplas Iterações
+
+Ao inspecionar os valores de várias iterações do loop, muitas vezes é útil utilizar [coleções](./04_09_tipagem_do_sistema.md#coleções) ou strings para reunir os resultados para uso em funções de saída após o término do loop.
+
+Esta versão demonstra algumas maneiras de coletar e exibir os valores do loop de todas as iterações. Ela declara uma string `logText` e um array `debugValues` no escopo global. Dentro do escopo local do loop [for](https://br.tradingview.com/pine-script-reference/v5/#kw_for), o script _concatena_ uma [representação em string](./06_02_debugging.md#representando-outros-tipos) do `length` e `roc` com `logText` e chama [array.push()](https://br.tradingview.com/pine-script-reference/v5/#fun_array.push) para adicionar o valor `roc` da iteração ao array `debugValues`.
+
+Após o término do loop, o script [plota](./06_02_debugging.md#plotando-números) o [primeiro](https://br.tradingview.com/pine-script-reference/v5/#fun_array.first) e o [último](https://br.tradingview.com/pine-script-reference/v5/#fun_array.last) valor do array `debugValues`, desenha uma [label](https://br.tradingview.com/pine-script-reference/v5/#type_label) com um _tooltip_ mostrando uma [representação em string](./06_02_debugging.md#representando-outros-tipos) do [array](https://br.tradingview.com/pine-script-reference/v5/#type_array) e exibe o `logText` no painel de [Pine Logs](./06_02_debugging.md#pine-logs) quando a barra é confirmada:
+
+![Inspecionando múltiplas iterações 01](./imgs/Debugging-Debugging-loops-Inspecting-multiple-iterations-1.CYLBy0Wy_ZVV2R6.webp)
+
+```c
+//@version=5
+indicator("Inspecting multiple iterations demo", "Aggregate ROC", max_labels_count = 500)
+
+//@variable The number of bars in the calculation.
+int lookbackInput = input.int(20, "Lookback", 1)
+
+//@variable An array containing the `roc` value from each loop iteration.
+array<float> debugValues = array.new<float>()
+//@variable A "string" containing information about the `roc` on each iteration.
+string logText = ""
+
+//@variable The average ROC of `close` over lags from 1 to `lookbackInput` bars.
+float aroc = 0.0
+
+// Calculation loop.
+for length = 1 to lookbackInput
+    //@variable The `close` value `length` bars ago.
+    float pastClose = close[length]
+    //@variable The `close` rate of change over `length` bars.
+    float roc = (close - pastClose) / pastClose
+    // Add the `roc` to `aroc`.
+    aroc += roc
+
+    // Concatenate a new "string" representation with the `debugText`.
+    logText += "\nlength: " + str.tostring(length) + ", roc: " + str.tostring(roc)
+    // Push the `roc` value into the `debugValues` array.
+    array.push(debugValues, roc)
+
+// Divide `aroc` by the `lookbackInput`.
+aroc /= lookbackInput
+
+// Plot the `aroc`.
+plot(aroc, "aroc", color.blue, 3)
+
+// Plot the `roc` values from the first and last iteration.
+plot(array.first(debugValues), "First iteration roc", color.new(color.rgb(166, 84, 233), 50), 2)
+plot(array.last(debugValues), "Last iteration roc", color.new(color.rgb(115, 86, 218), 50), 2)
+// Draw a label with a tooltip containing a "string" representation of the `debugValues` array.
+label.new(bar_index, aroc, color = color.new(color.rgb(206, 55, 136), 70), tooltip = str.tostring(debugValues))
+// Log the `logText` in the Pine Logs pane when the bar is confirmed.
+if barstate.isconfirmed
+    log.info(logText)
+```
+
+Outra maneira de inspecionar um loop ao longo de várias iterações é gerar logs [Pine Logs](./06_02_debugging.md#pine-logs) sequenciais ou criar/modificar [objetos de desenho](./04_09_tipagem_do_sistema.md#tipos-de-desenho) dentro do escopo do loop para rastrear seu padrão de execução com detalhes granulares.
+
+Este exemplo usa [Pine Logs](./06_02_debugging.md#pine-logs) para rastrear o fluxo de execução do loop do script. Ele gera uma nova mensagem "info" em cada iteração para rastrear os cálculos do escopo local à medida que o loop progride em cada barra confirmada:
+
+![Inspecionando múltiplas iterações 02](./imgs/Debugging-Debugging-loops-Inspecting-multiple-iterations-2.CahjoXFr_Z1z4bNL.webp)
+
+```c
+//@version=5
+indicator("Inspecting multiple iterations demo", "Aggregate ROC")
+
+//@variable The number of bars in the calculation.
+int lookbackInput = input.int(20, "Lookback", 1)
+
+//@variable The average ROC of `close` over lags from 1 to `lookbackInput` bars.
+float aroc = 0.0
+
+// Calculation loop.
+for length = 1 to lookbackInput
+    //@variable The `close` value `length` bars ago.
+    float pastClose = close[length]
+    //@variable The `close` rate of change over `length` bars.
+    float roc = (close - pastClose) / pastClose
+    // Add the `roc` to `aroc`.
+    aroc += roc
+    if barstate.isconfirmed
+        log.info(
+             "{0}\nlength (counter): {1}\npastClose: {2, number, #.#####}\n
+             distance to pastClose: {3, number, #.########}\nroc: {4, number, #.########}\n
+             aroc (before division): {5, number, #.########}\n{6}",
+             length == 1 ? "LOOP START" : "",
+             length, pastClose, close - pastClose, roc, aroc,
+             length == lookbackInput ? "LOOP END" : ""
+         )
+
+// Divide `aroc` by the `lookbackInput`.
+aroc /= lookbackInput
+
+// Plot the `aroc`.
+plot(aroc, "aroc", color.blue, 3)
+```
+
+__Note que:__
+
+- Ao gerar [logs](./06_02_debugging.md#pine-logs) ou desenhos iterativamente de dentro de um loop, evite a desordem desnecessária e busque uma navegação fácil. Mais não é sempre melhor para depuração, especialmente ao trabalhar dentro de loops.
+
 ## Dicas
+
+### Organização e Legibilidade
+
+Ao escrever scripts, é prudente priorizar códigos-fonte organizados e legíveis. Códigos organizados e fáceis de ler ajudam a agilizar o processo de depuração. Além disso, códigos bem escritos são mais fáceis de manter ao longo do tempo.
+
+Aqui estão algumas dicas rápidas baseadas no [Guia de Estilo](./06_01_guia_de_estilo.md) e nos exemplos desta página:
+
+- Procure seguir as recomendações gerais de [organização de scripts](./06_01_guia_de_estilo.md#organização-do-script). Organizar scripts usando essa estrutura facilita a localização e inspeção.
+- Escolha nomes de variáveis e funções que sejam fáceis de _identificar_ e _compreender_. Veja a seção de [convenções de nomenclatura](./06_01_guia_de_estilo.md#convenções-de-nomeação) para alguns exemplos.
+- Muitas vezes é útil atribuir temporariamente partes importantes de expressões a variáveis com nomes informativos enquanto depura. Dividir expressões em partes reutilizáveis ajuda a simplificar os processos de inspeção.
+- Use _comentários_ e _anotações_ (`//@function`, `//@variable`, etc.) para documentar seu código. As anotações são particularmente úteis, pois o autosugest do Pine Editor exibe descrições de variáveis e funções em um pop-up ao passar o cursor sobre seus identificadores em qualquer parte do código.
+- Lembre-se que, em muitos casos, _menos é mais_. Não se sobrecarregue com saídas de script excessivas ou informações desnecessárias enquanto depura. Mantenha as coisas simples e inclua apenas a quantidade de informação necessária.
+
+### Acelerando Tarefas Repetitivas
+
+Existem algumas técnicas úteis frequentemente utilizado ao depurar o código:
+
+- O [plotchar()](https://br.tradingview.com/pine-script-reference/v5/#fun_plotchar) ou [plotshape()](https://br.tradingview.com/pine-script-reference/v5/#fun_plotshape) exibe rapidamente os resultados de variáveis e expressões "int", "float" ou "bool" na linha de status do script e na "Janela de Dados" "_Data Window_".
+- Muitas vezes o [bgcolor()](https://br.tradingview.com/pine-script-reference/v5/#fun_bgcolor) funciona para visualizar o histórico de determinadas [condições](./06_02_debugging.md#condições) no gráfico.
+- A versão de uma linha da função `printLabel()` desta [seção](./06_02_debugging.md#no-final-do-gráfico) serve para imprimir strings no final do gráfico.
+- A chamada [label.new()](https://br.tradingview.com/pine-script-reference/v5/#fun_label.new) com um argumento `tooltip` mostra strings em tooltips [em barras sucessivas](./06_02_debugging.md#em-barras-sucessivas).
+- As funções `log.*()` apresenta rapidamente dados com [representações em string](./06_02_debugging.md#representando-outros-tipos) no painel de [Pine Logs](./06_02_debugging.md#pine-logs).
+
+Quando se estabelecem processos típicos de depuração, muitas vezes é útil criar _macros de teclado_ para acelerar tarefas repetitivas e gastar menos tempo configurando saídas de depuração em cada código.
+
+O seguinte é um simples script _**A**uto**H**ot**K**ey_ (__não__ é código Pine Script) que inclui hotstrings para as cinco técnicas acima. O script gera snippets de código digitando uma sequência de caracteres especificada seguida por um espaço:
+
+```text
+; ————— This is AHK code, not Pine Script™. —————
+
+; Specify that hotstrings trigger when they end with space, tab, linefeed, or carriage return.
+#Hotstring EndChars `t `n `r
+
+:X:,,show::SendInput, plotchar(%Clipboard%, "%Clipboard%", "", color = chart.fg_color, display = display.all - display.pane){Enter}
+:X:,,highlight::SendInput, bgcolor(bool(%Clipboard%) ? color.new(color.orange, 80) : na, title = "%Clipboard% highlight"){Enter}
+:X:,,print::SendInput, printLabel(string txt, float price = na) => int labelTime = math.max(last_bar_time, chart.right_visible_bar_time), var label result = label.new(labelTime, na, txt, xloc.bar_time, na(price) ? yloc.abovebar : yloc.price, na, label.style_none, chart.fg_color, size.large), label.set_text(result, txt), label.set_y(result, price), result`nprintLabel(){Left}
+:X:,,tooltip::SendInput, label.new(bar_index, high, color = color.new(chart.fg_color, 70), tooltip = str.tostring(%Clipboard%)){Enter}
+:X:,,log::SendInput, log.info(str.tostring(%Clipboard%)){Enter}
+```
+
+A macro ",,show" gera uma chamada [plotchar()](https://br.tradingview.com/pine-script-reference/v5/#fun_plotchar) que usa o conteúdo da área de transferência para os argumentos `series` e `title`. Copiar uma variável `variableName` ou a expressão `close > open` e digitar ",,show" seguido por um espaço produzirá, respectivamente:
+
+```c
+plotchar(variableName, "variableName", "", color = chart.fg_color, display = display.all - display.pane)
+plotchar(close > open, "close > open", "", color = chart.fg_color, display = display.all - display.pane)
+```
+
+A macro ",,highlight" gera uma chamada [bgcolor()](https://br.tradingview.com/pine-script-reference/v5/#fun_bgcolor) que destaca o fundo do painel do gráfico com uma [cor condicional](./06_02_debugging.md#cores-condicionais) com base na variável ou expressão copiada para a área de transferência. Por exemplo, copiar a variável [barstate.isrealtime](https://br.tradingview.com/pine-script-reference/v5/#var_barstate.isrealtime) e digitar ",,highlight" seguido por um espaço produzirá:
+
+```c
+bgcolor(bool(barstate.isrealtime) ? color.new(color.orange, 80) : na, title = "barstate.isrealtime highlight")
+```
+
+A macro ",,print" gera a função `printLabel()` de uma linha e cria uma chamada `printLabel()` vazia com o cursor posicionado dentro dela. Tudo o que você precisa fazer após digitar ",,print" seguido por um espaço é inserir o texto que deseja exibir:
+
+```c
+printLabel(string txt, float price = na) => int labelTime = math.max(last_bar_time, chart.right_visible_bar_time), var label result = label.new(labelTime, na, txt, xloc.bar_time, na(price) ? yloc.abovebar : yloc.price, na, label.style_none, chart.fg_color, size.large), label.set_text(result, txt), label.set_y(result, price), result
+printLabel()
+```
+
+A macro ",,tooltip" gera uma chamada [label.new()](https://br.tradingview.com/pine-script-reference/v5/#fun_label.new) com um argumento `tooltip` que usa [str.tostring()](https://br.tradingview.com/pine-script-reference/v5/#fun_str.tostring) no conteúdo da área de transferência. Copiar a variável `variableName` e digitar ",,tooltip" seguido por um espaço produz:
+
+```c
+label.new(bar_index, high, color = color.new(chart.fg_color, 70), tooltip = str.tostring(variableName))
+```
+
+A macro ",,log" gera uma chamada [log.info()](https://br.tradingview.com/pine-script-reference/v5/#fun_log.info) com um argumento `message` que usa [str.tostring()](https://br.tradingview.com/pine-script-reference/v5/#fun_str.tostring) no conteúdo da área de transferência para exibir representações em string de variáveis e expressões no painel de [Pine Logs](./06_02_debugging.md#pine-logs). Copiar a expressão `bar_index % 2 == 0` e digitar ",,log" seguido por um espaço produz:
+
+```c
+log.info(str.tostring(bar_index % 2 == 0))
+```
+
+__Note que:__
+
+- O __AHK__ está disponível para dispositivos _Windows_. Pesquise outros softwares para empregar um processo semelhante se seu computador usar um sistema operacional diferente. -->
