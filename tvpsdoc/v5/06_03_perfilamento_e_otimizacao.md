@@ -269,7 +269,7 @@ __Note que:__
 
 - Este mesmo processo também pode ser aplicado a [expressões ternárias](https://br.tradingview.com/pine-script-reference/v5/#op_?:). Quando os operandos de uma expressão ternária complexa contêm cálculos significativos, reorganizar a lógica em uma estrutura [if](https://br.tradingview.com/pine-script-reference/v5/#kw_if) aninhada permite resultados de Profiler mais detalhados, facilitando a identificação das partes críticas.
 
-<!-- #### Chamadas de Funções Definidas pelo Usuário
+#### Chamadas de Funções Definidas pelo Usuário
 
 [Funções definidas pelo usuário](./04_11_funcoes_definidas_pelo_usuario.md) e [métodos](./04_13_metodos.md#métodos-definidos-pelo-usuário) são funções escritas por usuários. Elas encapsulam sequências de código que um script pode executar várias vezes. Funções e métodos são frequentemente escritos para melhorar a modularidade, reutilização e manutenção do código.
 
@@ -337,7 +337,7 @@ Nesse caso, os resultados do código local não correspondem mais a uma _única_
 > __Observação!__\
 > Quando os escopos locais de [funções definidas pelo usuário](./04_11_funcoes_definidas_pelo_usuario.md) ou [métodos](./04_13_metodos.md#métodos-definidos-pelo-usuário) de um script contêm chamadas para funções `request.*()`, a _forma traduzida_ do script extrai essas chamadas __fora__ dos escopos das funções e as avalia __separadamente__. Consequentemente, os resultados do Profiler para linhas com chamadas para essas [funções definidas pelo usuário](./04_11_funcoes_definidas_pelo_usuario.md) __não__ incluirão o tempo gasto nas chamadas `request.*()`. Veja a [seção abaixo](./06_03_perfilamento_e_otimizacao.md#solicitando-outros-contextos) para mais informações.
 
-#### Solicitando Outros Contextos
+<!-- #### Solicitando Outros Contextos
 
 Scripts Pine podem solicitar dados de outros _contextos_, ou seja, símbolos diferentes, _timeframes_ ou modificações de dados diferentes dos utilizados pelos dados do gráfico, chamando a família de funções `request.*()` ou especificando um `timeframe` alternativo na declaração [indicator()](https://br.tradingview.com/pine-script-reference/v5/#fun_indicator).
 
