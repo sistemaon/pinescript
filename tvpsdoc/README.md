@@ -104,6 +104,17 @@ IN Timeframes > Comparing timeframes > we supply the timeframe selected by the s
 Deveria ser: [input.timeframe()](https://www.tradingview.com/pine-script-reference/v5/#fun_input.timeframe)
 Atual: [input.timeframe()](https://www.tradingview.com/pine-script-reference/v5/#fun_input%7Bdot%7Dsession)
 
+In Profiling and optimization > Profiling a script > Pine Profiler wraps a script and its significant code with [extra calculations]() required to collect performance data.
+Deveria ser: [extra calculations](https://www.tradingview.com/pine-script-docs/writing/profiling-and-optimization/#a-look-into-the-profilers-inner-workings)
+Atual: [extra calculations](https://www.tradingview.com/pine-script-docs/writing/profiling-and-optimization/#alook-into-the-profilers-inner-workings)
+
+In Profiling and optimization > Code block results > This format is necessary for these structures due to the Profiler’s calculation and display constraints. See [this section]() for more information.
+Deveria ser: [this section](https://www.tradingview.com/pine-script-docs/writing/profiling-and-optimization/#a-look-into-the-profilers-inner-workings)
+Atual: [this section](https://www.tradingview.com/pine-script-docs/writing/profiling-and-optimization/#alook-into-the-profilers-inner-workings)
+
+
+
+
 **No link sobre a constante CURRENCY.KRW https://br.tradingview.com/pine-script-reference/v5/#var_currency.KRW (é para referir a moeda sul coreana won, e não venceu)**
 
 no link [chart.right_visible_bar_time](https://br.tradingview.com/pine-script-reference/v5/#var_chart.right_visible_bar_time) A descrição do título não foi traduzido.
