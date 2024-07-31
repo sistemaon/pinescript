@@ -608,7 +608,7 @@ Como visto aqui, o Profiler mostra informações de desempenho para as chamadas 
 
 ![Código insignificante, inusitado e redundante 04](./imgs/Profiling-and-optimization-Pine-profiler-Interpreting-profiled-results-Insignificant-unused-and-redundant-code-4.DrYo57fh_Z1tHCEy.webp)
 
-<!-- ### Uma Visão Geral do Funcionamento Interno do Profiler
+### Uma Visão Geral do Funcionamento Interno do Profiler
 
 O Pine Profiler envolve todas as regiões de código necessárias com _funções internas especializadas_ para rastrear e coletar informações necessárias durante as execuções do script. Em seguida, ele passa as informações para cálculos adicionais que organizam e exibem os resultados de desempenho dentro do Pine Editor. Esta seção oferece aos usuários uma visão de como o Profiler aplica funções internas para envolver o código Pine e coletar dados de desempenho.
 
@@ -757,7 +757,7 @@ O cálculo _"Line time"_ para [blocos de código](./06_03_perfilamento_e_otimiza
 > __Observação!__\
 > O Profiler __não pode__ coletar dados de desempenho individuais para cálculos _internos_ necessários e exibir seus resultados no Pine Editor. Consequentemente, os valores de tempo exibidos pelo Profiler para todas as regiões de código em um script __não__ somarão 100% do tempo total de execução.
 
-### Profilando em Diferentes Configurações
+<!--### Profilando em Diferentes Configurações
 
 Quando a [complexidade temporal](https://pt.wikipedia.org/wiki/Complexidade_de_tempo) de um código não é constante ou seu padrão de execução varia com suas entradas, argumentos de função ou dados disponíveis, muitas vezes é aconselhável fazer o perfilamento do código em _diferentes configurações_ e feeds de dados para obter uma perspectiva mais abrangente sobre seu desempenho geral.
 
