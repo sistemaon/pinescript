@@ -345,7 +345,7 @@ Quando um script solicita dados de outro contexto, ele avalia todos os escopos e
 
 As informações do Profiler para qualquer [linha](./06_03_perfilamento_e_otimizacao.md#resultados-de-linha-única) ou [bloco](./06_03_perfilamento_e_otimizacao.md#resultados-de-blocos-de-código) de código representam os resultados da execução do código em __todos os contextos necessários__, que podem ou não incluir os dados do gráfico. O Pine Script determina quais contextos executar o código com base nos cálculos necessários pelas solicitações de dados e saídas do script.
 
-Vamos observar um exemplo simples. Este script inicial utiliza apenas os dados do gráfico para seus cálculos. Ele declara uma variável `pricesArray` com a palavra-chave [varip](https://br.tradingview.com/pine-script-reference/v5/#kw_varip), o que significa que o [array](https://br.tradingview.com/pine-script-reference/v5/#type_array) atribuído a ela persiste ao longo do histórico dos dados e de todos os ticks em tempo real disponíveis. Em cada execução, o script chama [array.push()](https://br.tradingview.com/pine-script-reference/v5/#fun_array.push) para adicionar um novo valor de [close](https://br.tradingview.com/pine-script-reference/v5/#var_close) ao [array](https://br.tradingview.com/pine-script-reference/v5/#type_array) e [plota](./05_15_plots.md) o [tamanho do array](https://br.tradingview.com/pine-script-reference/v5/#fun_array.size).
+Este script inicial utiliza apenas os dados do gráfico para seus cálculos. Ele declara uma variável `pricesArray` com a palavra-chave [varip](https://br.tradingview.com/pine-script-reference/v5/#kw_varip), o que significa que o [array](https://br.tradingview.com/pine-script-reference/v5/#type_array) atribuído a ela persiste ao longo do histórico dos dados e de todos os ticks em tempo real disponíveis. Em cada execução, o script chama [array.push()](https://br.tradingview.com/pine-script-reference/v5/#fun_array.push) para adicionar um novo valor de [close](https://br.tradingview.com/pine-script-reference/v5/#var_close) ao [array](https://br.tradingview.com/pine-script-reference/v5/#type_array) e [plota](./05_15_plots.md) o [tamanho do array](https://br.tradingview.com/pine-script-reference/v5/#fun_array.size).
 
 Após perfilar o script em todas as barras de um gráfico intradiário, vê-se que o número de elementos no `pricesArray` corresponde ao número de execuções que o Profiler mostra para a chamada [array.push()](https://br.tradingview.com/pine-script-reference/v5/#fun_array.push) na linha 8:
 
@@ -471,9 +471,332 @@ __Note que:__
 - A chamada [request.security()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.security) ocorre no __escopo externo__, fora da função `getCompositeAvg()`.
 - A tradução reduziu substancialmente o código local de `getCompositeAvg()`. Agora, ele apenas retorna um valor passado para ele, já que todos os cálculos necessários da função ocorrem __fora__ de seu escopo. Devido a essa redução, os resultados de desempenho da chamada da função __não__ refletirão nenhum do tempo gasto nos cálculos necessários para a solicitação de dados.
 
+#### Código Insignificante, Inusitado e Redundante
+
+Ao inspecionar os resultados de um script perfilado, é crucial entender que _nem todo_ o código de um script impacta necessariamente o desempenho de tempo de execução. Alguns códigos não têm impacto direto no desempenho, como a declaração do script e declarações de [tipo](https://br.tradingview.com/pine-script-reference/v5/#kw_type). Outras regiões de código com expressões insignificantes, como a maioria das chamadas `input.*()`, referências de variáveis ou [declarações de variáveis](./04_06_declaracoes_de_variavel.md) sem cálculos significativos, têm pouco ou _nenhum efeito_ no tempo de execução do script. Portanto, o Profiler __não__ exibirá resultados de desempenho para esses tipos de código.
+
+Além disso, scripts Pine não executam regiões de código que suas _saídas_ ([plots](./05_15_plots.md), [desenhos](./04_09_tipagem_do_sistema.md#tipos-de-desenho), [logs](./06_02_debugging.md#pine-logs), etc.) não dependem, pois o compilador as __remove__ automaticamente durante a tradução. Como regiões de código não utilizadas têm _zero_ impacto no desempenho de um script, o Profiler __não__ exibirá nenhum resultado para elas.
+
+O exemplo a seguir contém uma variável `barsInRange` e um loop [for](https://br.tradingview.com/pine-script-reference/v5/#kw_for) que adiciona 1 ao valor da variável para cada preço de [fechamento](https://br.tradingview.com/pine-script-reference/v5/#var_close) histórico entre o [máximo](https://br.tradingview.com/pine-script-reference/v5/#var_high) e o [mínimo](https://br.tradingview.com/pine-script-reference/v5/#var_low) atuais ao longo de `lengthInput` barras. No entanto, o script __não utiliza__ esses cálculos em suas saídas, pois ele apenas [plota](./05_15_plots.md) o preço de [fechamento](https://br.tradingview.com/pine-script-reference/v5/#var_close). Consequentemente, a forma compilada do script __descarta__ esse código não utilizado e considera apenas a chamada [plot(close)](https://br.tradingview.com/pine-script-reference/v5/#fun_plot).
+
+O Profiler não exibe __nenhum__ resultado para este script, pois ele não executa nenhum cálculo __significativo__:
+
+![Código insignificante, inusitado e redundante 01](./imgs/Profiling-and-optimization-Pine-profiler-Interpreting-profiled-results-Insignificant-unused-and-redundant-code-1.CVzX40Kz_HGwJR.webp)
+
+```c
+//@version=5
+indicator("Unused code demo")
+
+//@variable The number of historical bars in the calculation.
+int lengthInput = input.int(100, "Length", 1)
+
+//@variable The number of closes over `lengthInput` bars between the current bar's `high` and `low`.
+int barsInRange = 0
+
+for i = 1 to lengthInput
+    //@variable The `close` price from `i` bars ago.
+    float pastClose = close[i]
+    // Add 1 to `barsInRange` if the `pastClose` is between the current bar's `high` and `low`.
+    if pastClose > low and pastClose < high
+        barsInRange += 1
+
+// Plot the `close` price. This is the only output. 
+// Since the outputs do not require any of the above calculations, the compiled script will not execute them.
+plot(close)
+```
+
+__Note que:__
+
+- Embora este script não utilize o [input.int()](https://br.tradingview.com/pine-script-reference/v5/#fun_input.int) da linha 5 e descarte todos os cálculos associados, a entrada "Length" ainda aparecerá nas configurações do script, pois o compilador __não__ remove completamente [inputs](./05_09_inputs.md) não utilizados.
+
+Ao alterar o script para plotar o valor de `barsInRange`, as variáveis declaradas e o loop [for](https://br.tradingview.com/pine-script-reference/v5/#kw_for) não são mais não utilizados, pois a saída depende deles, e o Profiler agora exibirá informações de desempenho para esse código:
+
+![Código insignificante, inusitado e redundante 02](./imgs/Profiling-and-optimization-Pine-profiler-Interpreting-profiled-results-Insignificant-unused-and-redundant-code-2.TBOBJdXS_Z1yftUf.webp)
+
+```c
+//@version=5
+indicator("Unused code demo")
+
+//@variable The number of historical bars in the calculation.
+int lengthInput = input.int(100, "Length", 1)
+
+//@variable The number of closes over `lengthInput` bars between the current bar's `high` and `low`.
+int barsInRange = 0
+
+for i = 1 to lengthInput
+    //@variable The `close` price from `i` bars ago.
+    float pastClose = close[i]
+    // Add 1 to `barsInRange` if the `pastClose` is between the current bar's `high` and `low`.
+    if pastClose > low and pastClose < high
+        barsInRange += 1
+
+// Plot the `barsInRange` value. The above calculations will execute since the output requires them.
+plot(barsInRange, "Bars in range")
+```
+
+__Note que:__
+
+- O Profiler não mostra informações de desempenho para a declaração `lengthInput` na linha 5 ou a declaração `barsInRange` na linha 8, pois as expressões nessas linhas não impactam o desempenho do script.
+
+Quando possível, o compilador também simplifica certas instâncias de _código redundante_ em um script, como algumas formas de expressões idênticas com os mesmos valores de [tipo fundamental](./04_09_tipagem_do_sistema.md#tipos). Essa otimização permite que o script compilado execute tais cálculos apenas _uma vez_, na primeira ocorrência, e _reutilize_ o resultado calculado para cada instância repetida da qual as saídas dependem.
+
+Se um script contiver código repetitivo e o compilador o simplificar, o Profiler mostrará resultados apenas para a __primeira ocorrência__ do código, pois essa é a única vez que o script requer o cálculo.
+
+Por exemplo, este script contém uma linha de código que plota o valor de [ta.sma(close, 100)](https://br.tradingview.com/pine-script-reference/v5/#fun_ta.sma) e 12 linhas de código que plotam o valor de [ta.sma(close, 500)](https://br.tradingview.com/pine-script-reference/v5/#fun_ta.sma):
+
+```c
+//@version=5
+indicator("Redundant calculations demo", overlay = true)
+
+// Plot the 100-bar SMA of `close` values one time.
+plot(ta.sma(close, 100), "100-bar SMA", color.teal, 3)
+
+// Plot the 500-bar SMA of `close` values 12 times. After compiler optimizations, only the first `ta.sma(close, 500)`
+// call on line 9 requires calculation in this case.
+plot(ta.sma(close, 500), "500-bar SMA", #001aff, 12)
+plot(ta.sma(close, 500), "500-bar SMA", #4d0bff, 11)
+plot(ta.sma(close, 500), "500-bar SMA", #7306f7, 10)
+plot(ta.sma(close, 500), "500-bar SMA", #920be9, 9)
+plot(ta.sma(close, 500), "500-bar SMA", #ae11d5, 8)
+plot(ta.sma(close, 500), "500-bar SMA", #c618be, 7)
+plot(ta.sma(close, 500), "500-bar SMA", #db20a4, 6)
+plot(ta.sma(close, 500), "500-bar SMA", #eb2c8a, 5)
+plot(ta.sma(close, 500), "500-bar SMA", #f73d6f, 4)
+plot(ta.sma(close, 500), "500-bar SMA", #fe5053, 3)
+plot(ta.sma(close, 500), "500-bar SMA", #ff6534, 2)
+plot(ta.sma(close, 500), "500-bar SMA", #ff7a00, 1)
+```
+
+Como as últimas 12 linhas contêm chamadas idênticas a [ta.sma()](https://br.tradingview.com/pine-script-reference/v5/#fun_ta.sma), o compilador pode simplificar automaticamente o script para que precise avaliar [ta.sma(close, 500)](https://br.tradingview.com/pine-script-reference/v5/#fun_ta.sma) apenas _uma vez_ por execução, em vez de repetir o cálculo mais 11 vezes.
+
+Como visto abaixo, o Profiler só mostra resultados para as linhas 5 e 9. Estas são as únicas partes do código que requerem cálculos significativos, pois as chamadas [ta.sma()](https://br.tradingview.com/pine-script-reference/v5/#fun_ta.sma) nas linhas 10-20 são redundantes neste caso:
+
+![Código insignificante, inusitado e redundante 03](./imgs/Profiling-and-optimization-Pine-profiler-Interpreting-profiled-results-Insignificant-unused-and-redundant-code-3.B3yrx82E_2jeci8.webp)
+
+Outro tipo de otimização de código repetitivo ocorre quando um script contém duas ou mais [funções definidas pelo usuário](./04_11_funcoes_definidas_pelo_usuario.md) ou [métodos](./04_13_metodos.md#métodos-definidos-pelo-usuário) com formas compiladas idênticas. Nesse caso, o compilador simplifica o script __removendo__ as funções redundantes, e o script tratará todas as chamadas para as funções redundantes como chamadas para a versão __primeira__ definida. Portanto, o Profiler mostrará resultados de desempenho do código local apenas para a _primeira_ função, pois os "clones" descartados nunca serão executados.
+
+Por exemplo, o script abaixo contém duas [funções definidas pelo usuário](./04_11_funcoes_definidas_pelo_usuario.md), `metallicRatio()` e `calcMetallic()`, que calculam uma [média metálica](https://pt.wikipedia.org/wiki/M%C3%A9dia_met%C3%A1lica) de uma ordem dada elevada a um expoente especificado:
+
+```c
+//@version=5
+indicator("Redundant functions demo")
+
+//@variable Controls the base ratio for the `calcMetallic()` call.
+int order1Input = input.int(1, "Order 1", 1)
+//@variable Controls the base ratio for the `metallicRatio()` call.
+int order2Input = input.int(2, "Order 2", 1)
+
+//@function       Calculates the value of a metallic ratio with a given `order`, raised to a specified `exponent`.
+//@param order    Determines the base ratio used. 1 = Golden Ratio, 2 = Silver Ratio, 3 = Bronze Ratio, and so on.
+//@param exponent The exponent applied to the ratio.
+metallicRatio(int order, float exponent) =>
+    math.pow((order + math.sqrt(4.0 + order * order)) * 0.5, exponent)
+
+//@function       A function with the same signature and body as `metallicRatio()`.
+//                The script discards this function and treats `calcMetallic()` as an alias for `metallicRatio()`.
+calcMetallic(int ord, float exp) =>
+    math.pow((ord + math.sqrt(4.0 + ord * ord)) * 0.5, exp)
+
+// Plot the results from a `calcMetallic()` and `metallicRatio()` call.
+plot(calcMetallic(order1Input, bar_index % 5), "Ratio 1", color.orange, 3)
+plot(metallicRatio(order2Input, bar_index % 5), "Ratio 2", color.maroon)
+```
+
+Apesar das diferenças nos nomes das funções e parâmetros, as duas funções são idênticas, o que o compilador detecta ao traduzir o script. Nesse caso, ele __descarta__ a função redundante `calcMetallic()`, e o script compilado trata a chamada `calcMetallic()` como uma chamada `metallicRatio()`.
+
+Como visto aqui, o Profiler mostra informações de desempenho para as chamadas `calcMetallic()` e `metallicRatio()` nas linhas 21 e 22, mas __não__ mostra nenhum resultado para o código local da função `calcMetallic()` na linha 18. Em vez disso, as informações do Profiler na linha 13 dentro da função `metallicRatio()` refletem os resultados do código local de __ambas__ [chamadas de função](./06_03_perfilamento_e_otimizacao.md#chamadas-de-funções-definidas-pelo-usuário):
+
+![Código insignificante, inusitado e redundante 04](./imgs/Profiling-and-optimization-Pine-profiler-Interpreting-profiled-results-Insignificant-unused-and-redundant-code-4.DrYo57fh_Z1tHCEy.webp)
+
+<!-- ### Uma Visão Geral do Funcionamento Interno do Profiler
+
+O Pine Profiler envolve todas as regiões de código necessárias com _funções internas especializadas_ para rastrear e coletar informações necessárias durante as execuções do script. Em seguida, ele passa as informações para cálculos adicionais que organizam e exibem os resultados de desempenho dentro do Pine Editor. Esta seção oferece aos usuários uma visão de como o Profiler aplica funções internas para envolver o código Pine e coletar dados de desempenho.
+
+Existem duas funções principais internas __(não Pine)__ que o Profiler usa para envolver o código significativo e facilitar a análise em tempo de execução. A primeira função recupera a hora atual do sistema em pontos específicos da execução do script, e a segunda mapeia o tempo acumulado e os dados de execução para regiões de código específicas. Estas funções são representadas nesta explicação como `System.timeNow()` e `registerPerf()`, respectivamente.
+
+Quando o Profiler detecta código que requer análise, ele adiciona `System.timeNow()` acima do código para obter o tempo inicial antes da execução. Em seguida, ele adiciona `registerPerf()` abaixo do código para mapear e acumular o tempo decorrido e o número de execuções. O tempo decorrido adicionado em cada chamada de `registerPerf()` é o valor de `System.timeNow()` _após_ a execução menos o valor _antes_ da execução.
+
+O _pseudocódigo_ a seguir descreve esse processo para uma [linha única](./06_03_perfilamento_e_otimizacao.md#resultados-de-linha-única) de código, onde `_startX` representa o tempo de início para a `lineX`:
+
+```c
+long _startX = System.timeNow()
+<code_line_to_analyze>
+registerPerf(System.timeNow() - _startX, lineX)
+```
+
+O processo é semelhante para [blocos de código](./06_03_perfilamento_e_otimizacao.md#resultados-de-blocos-de-código). A diferença é que a chamada de `registerPerf()` mapeia os dados para um _intervalo de linhas_ em vez de uma linha única. Aqui, `lineX` representa a _primeira_ linha no bloco de código, e `lineY` representa a _última_ linha do bloco:
+
+```c
+long _startX = System.timeNow()
+<code_block_to_analyze>
+registerPerf(System.timeNow() - _startX, lineX, lineY)
+```
+
+__Note que:__
+
+- Nos trechos acima, `long`, `System.timeNow()` e `registerPerf()` representam _código interno_, __não__ código Pine Script.
+
+Agora, veja como o Profiler envolve um script completo e todas as suas regiões de código significativas. Começaremos com este script, que calcula três séries pseudorandômicas e exibe seu resultado [médio](https://br.tradingview.com/pine-script-reference/v5/#fun_math.avg). O script utiliza um [objeto](./04_12_objetos.md) de um [tipo definido pelo usuário](./04_09_tipagem_do_sistema.md#tipos-definidos-pelo-usuário) para armazenar um estado pseudorandômico, um [método](./04_13_metodos.md#métodos-definidos-pelo-usuário) para calcular novos valores e atualizar o estado, e uma estrutura [if…else if](https://br.tradingview.com/pine-script-reference/v5/#kw_if) para atualizar cada série com base nos valores gerados:
+
+```c
+//@version=5
+indicator("Profiler's inner workings demo")
+
+int seedInput = input.int(12345, "Seed")
+
+type LCG
+    float state
+
+method generate(LCG this, int generations = 1) =>
+    float result = 0.0
+    for i = 1 to generations
+        this.state := 16807 * this.state % 2147483647
+        result += this.state / 2147483647
+    result / generations
+
+var lcg = LCG.new(seedInput)
+
+var float val0 = 1.0
+var float val1 = 1.0
+var float val2 = 1.0
+
+if lcg.generate(10) < 0.5
+    val0 *= 1.0 + (2.0 * lcg.generate(50) - 1.0) * 0.1
+else if lcg.generate(10) < 0.5
+    val1 *= 1.0 + (2.0 * lcg.generate(50) - 1.0) * 0.1
+else if lcg.generate(10) < 0.5
+    val2 *= 1.0 + (2.0 * lcg.generate(50) - 1.0) * 0.1
+
+plot(math.avg(val0, val1, val2), "Average pseudorandom result", color.purple)
+```
+
+O Profiler envolverá o script inteiro e todas as regiões de código necessárias, excluindo qualquer [código insignificante, inusitado ou redundante](./06_03_perfilamento_e_otimizacao.md#código-insignificante-inusitado-e-redundante), com as mencionadas __funções internas__ para coletar dados de desempenho. O _pseudocódigo_ abaixo demonstra como esse processo se aplica ao script acima:
+
+```c
+long _startMain = System.timeNow() // Start time for the script's overall execution.
+
+// <Additional internal code executes here>
+
+//@version=5
+indicator("Profiler's inner workings demo") // Declaration statements do not require profiling.
+
+int seedInput = input.int(12345, "Seed") // Variable declaration without significant calculation.
+
+type LCG        // Type declarations do not require profiling.
+    float state
+
+method generate(LCG this, int generations = 1) => // Function signature does not affect runtime.
+    float result = 0.0 // Variable declaration without significant calculation.
+
+    long _start11 = System.timeNow() // Start time for the loop block that begins on line 11.
+    for i = 1 to generations // Loop header calculations are not independently wrapped.
+
+        long _start12 = System.timeNow() // Start time for line 12.
+        this.state := 16807 * this.state % 2147483647
+        registerPerf(System.timeNow() - _start12, line12) // Register performance info for line 12.
+
+        long _start13 = System.timeNow() // Start time for line 13.
+        result += this.state / 2147483647
+        registerPerf(System.timeNow() - _start13, line13) // Register performance info for line 13.
+
+    registerPerf(System.timeNow() - _start11, line11, line13) // Register performance info for the block (line 11 - 13).    
+
+    long _start14 = System.timeNow() // Start time for line 14.
+    result / generations
+    registerPerf(System.timeNow() - _start14, line14) // Register performance info for line 14.
+
+long _start16 = System.timeNow() // Start time for line 16.
+var lcg = LCG.new(seedInput)
+registerPerf(System.timeNow() - _start16, line16) // Register performance info for line 16.
+
+var float val0 = 1.0 // Variable declarations without significant calculations.
+var float val1 = 1.0
+var float val2 = 1.0
+
+long _start22 = System.timeNow() // Start time for the `if` block that begins on line 22.
+if lcg.generate(10) < 0.5 // `if` statement is not independently wrapped.
+
+    long _start23 = System.timeNow() // Start time for line 23.
+    val0 *= 1.0 + (2.0 * lcg.generate(50) - 1.0) * 0.1
+    registerPerf(System.timeNow() - _start23, line23) // Register performance info for line 23.
+
+else if lcg.generate(10) < 0.5 // `else if` statement is not independently wrapped.
+
+    long _start25 = System.timeNow() // Start time for line 25.
+    val1 *= 1.0 + (2.0 * lcg.generate(50) - 1.0) * 0.1
+    registerPerf(System.timeNow() - _start25, line25) // Register performance info for line 25.
+
+else if lcg.generate(10) < 0.5 // `else if` statement is not independently wrapped.
+
+    long _start27 = System.timeNow() // Start time for line 27.
+    val2 *= 1.0 + (2.0 * lcg.generate(50) - 1.0) * 0.1
+    registerPerf(System.timeNow() - _start27, line27) // Register performance info for line 27.
+
+registerPerf(System.timeNow() - _start22, line22, line28) // Register performance info for the block (line 22 - 28).
+
+long _start29 = System.timeNow() // Start time for line 29.
+plot(math.avg(val0, val1, val2), "Average pseudorandom result", color.purple)
+registerPerf(System.timeNow() - _start29, line29) // Register performance info for line 29.
+
+// <Additional internal code executes here>
+
+registerPerf(System.timeNow() - _startMain, total) // Register the script's overall performance info.
+```
+
+__Note que:__
+
+- Este exemplo é um __pseudocódigo__ que fornece um esboço básico dos __cálculos internos__ que o Profiler aplica para coletar dados de desempenho. Salvar este exemplo no Pine Editor resultará em um erro de compilação, pois `long`, `System.timeNow()` e `registerPerf()` __não__ representam código Pine Script.
+- Esses cálculos internos que o Profiler envolve em um script requerem __recursos computacionais adicionais__, o que é a razão pela qual o tempo de execução de um script __aumenta__ durante o perfilamento. Programadores devem sempre interpretar os resultados como __estimativas__ já que refletem o desempenho de um script com os cálculos extras incluídos.
+
+Após executar o script envolvido para coletar dados de desempenho, cálculos _adicionais_ internos organizam os resultados e exibem informações relevantes dentro do Pine Editor:
+
+![Uma visão geral do funcionamento interno do profiler](./imgs/Profiling-and-optimization-Pine-profiler-A-look-into-the-profilers-inner-workings-1.wt5GoYky_Z1cXiWC.webp)
+
+O cálculo _"Line time"_ para [blocos de código](./06_03_perfilamento_e_otimizacao.md#resultados-de-blocos-de-código) também ocorre nesta etapa, já que o Profiler não pode envolver individualmente cabeçalhos de [loop](./04_08_loops.md) ou as declarações condicionais em estruturas [if](https://br.tradingview.com/pine-script-reference/v5/#kw_if) ou [switch](https://br.tradingview.com/pine-script-reference/v5/#kw_switch). O valor deste campo representa a _diferença_ entre o tempo total de um bloco e a soma dos tempos de seu código local, o que explica por que o valor "Line time" para um bloco [switch](https://br.tradingview.com/pine-script-reference/v5/#kw_switch) ou um bloco [if](https://br.tradingview.com/pine-script-reference/v5/#kw_if) com expressões [else if](https://br.tradingview.com/pine-script-reference/v5/#kw_if) representa o tempo gasto em __todas__ as declarações condicionais da estrutura, não apenas na _linha inicial_ de código do bloco. Se um programador precisar de informações mais detalhadas para cada expressão condicional em um bloco, ele pode reorganizar a lógica em uma estrutura [if](https://br.tradingview.com/pine-script-reference/v5/#kw_if) _aninhada_, como explicado [aqui](./06_03_perfilamento_e_otimizacao.md#resultados-de-blocos-de-código).
+
+> __Observação!__\
+> O Profiler __não pode__ coletar dados de desempenho individuais para cálculos _internos_ necessários e exibir seus resultados no Pine Editor. Consequentemente, os valores de tempo exibidos pelo Profiler para todas as regiões de código em um script __não__ somarão 100% do tempo total de execução.
+
+### Profilando em Diferentes Configurações
+
+Quando a [complexidade temporal](https://pt.wikipedia.org/wiki/Complexidade_de_tempo) de um código não é constante ou seu padrão de execução varia com suas entradas, argumentos de função ou dados disponíveis, muitas vezes é aconselhável fazer o perfilamento do código em _diferentes configurações_ e feeds de dados para obter uma perspectiva mais abrangente sobre seu desempenho geral.
+
+Por exemplo, este script simples usa um loop [for](https://br.tradingview.com/pine-script-reference/v5/#kw_for) para calcular a soma das distâncias quadradas entre o preço de [fechamento](https://br.tradingview.com/pine-script-reference/v5/#var_close) atual e os preços de `lengthInput` barras anteriores, em seguida, plota a [raiz quadrada](https://br.tradingview.com/pine-script-reference/v5/#fun_math.sqrt) dessa soma em cada barra. Nesse caso, o valor de `lengthInput` impacta diretamente o tempo de execução do cálculo, pois determina o número de vezes que o loop executa seu código local:
+
+```c
+//@version=5
+indicator("Profiling across configurations demo")
+
+//@variable The number of previous bars in the calculation. Directly affects the number of loop iterations.
+int lengthInput = input.int(25, "Length", 1)
+
+//@variable The sum of squared distances from the current `close` to `lengthInput` past `close` values.
+float total = 0.0
+
+// Look back across `lengthInput` bars and accumulate squared distances.
+for i = 1 to lengthInput
+    float distance = close - close[i]
+    total += distance * distance
+
+// Plot the square root of the `total`.
+plot(math.sqrt(total))
+```
+
+Perfilando este script com diferentes valores de `lengthInput`. Primeiro, com o valor padrão de 25. Os resultados do Profiler para esta execução específica mostram que o script completou 20.685 execuções em cerca de 96,7 milissegundos:
+
+![Profilando em diferentes configurações 01](./imgs/Profiling-and-optimization-Pine-profiler-Profiling-across-configurations-1.DH6uvleV_15wBst.webp)
+
+Agora, aumentando o valor da entrada para 50 nas configurações do script. Os resultados desta execução mostram que o tempo total de execução do script foi de 194,3 milissegundos, quase _o dobro_ do tempo da execução anterior:
+
+![Profilando em diferentes configurações 02](./imgs/Profiling-and-optimization-Pine-profiler-Profiling-across-configurations-2.ggfGlT9L_ZW6q7G.webp)
+
+Na próxima execução, alterado o valor da entrada para 200. Desta vez, os resultados do Profiler mostram que o script terminou todas as execuções em aproximadamente 0,8 segundos, cerca de _quatro vezes_ o tempo da execução anterior:
+
+![Profilando em diferentes configurações 03](./imgs/Profiling-and-optimization-Pine-profiler-Profiling-across-configurations-3.CZLkQfeW_Z1lXDjU.webp)
+
+Com essas observações, é possível ver que o tempo de execução do script parece escalar de forma _linear_ com o valor de `lengthInput`, excluindo outros fatores que podem afetar o desempenho, como era de se esperar, já que a maior parte dos cálculos do script ocorre dentro do loop e o valor da entrada controla quantas vezes o loop deve ser executado.
+
+> __Observação!__\
+> Muitas vezes, é aconselhável fazer o perfilamento de cada configuração _mais de uma vez_ para reduzir o impacto de valores atípicos ao avaliar como o desempenho de um script varia com suas entradas ou dados. Veja a [seção abaixo](./06_03_perfilamento_e_otimizacao.md#perfilamento-repetitivo) para mais informações. -->
 
 ## Otimização
-
-## Código Insignificante, Inusitado e Redundante
-
-## Uma Visão Geral do Funcionamento Interno do Profiler

@@ -140,4 +140,4 @@ plot(pnfC, "PnF Close", color.red, 4, plot.style_linebr)
 #### __Notas de Rodapé__
 
 > ###### [1]
-> _([1](./05_13_dados_de_graficos_nao_padronizados.md#tickerrenko), [2](./05_13_dados_de_graficos_nao_padronizados.md#tickerlinebreak), [3](./05_13_dados_de_graficos_nao_padronizados.md#tickerkagi), [4](./05_13_dados_de_graficos_nao_padronizados.md#tickerpointfigure))_: No TradingView, os tipos de gráficos Renko, Line Break, Kagi e PnF são gerados a partir dos valores OHLC de um intervalo de tempo inferior. Esses tipos de gráficos representam apenas uma aproximação de como seriam se fossem gerados a partir de dados do tick.
+> _([1](./05_13_dados_de_graficos_nao_padronizados.md#tickerrenko), [2](./05_13_dados_de_graficos_nao_padronizados.md#tickerlinebreak), [3](./05_13_dados_de_graficos_nao_padronizados.md#tickerkagi), [4](./05_13_dados_de_graficos_nao_padronizados.md#tickerpointfigure))_: No TradingView, os tipos de gráficos Renko, Line Break, Kagi e PnF são gerados a partir dos valores OHLC de um _timeframe_ inferior. Esses tipos de gráficos representam apenas uma aproximação de como seriam se fossem gerados a partir de dados do tick.

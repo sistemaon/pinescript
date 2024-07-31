@@ -223,7 +223,7 @@ label.new(bar_index, high, text = labelText)
 __Note que:__
 
 - Utiliza-se a função [request.security_lower_tf()](https://br.tradingview.com/pine-script-reference/v5/#fun_request{dot}security_lower_tf), que retorna um array de preços de [close](https://br.tradingview.com/pine-script-reference/v5/#var_close) no _timeframe_ de `1 minute`.
-- Este exemplo de código gerará um erro se utilizado em um intervalo de tempo do gráfico menor que `1 minute`.
+- Este exemplo de código gerará um erro se utilizado em um _timeframe_ do gráfico menor que `1 minute`.
 - _Loops_ [for](https://br.tradingview.com/pine-script-reference/v5/#kw_for) não são executados se a expressão `to` for [na](https://br.tradingview.com/pine-script-reference/v5/#var_na). Note que o valor de `to` é avaliado apenas uma vez ao entrar.
 
 Um método alternativo para percorrer um array é usar um _loop_ [for…in](https://br.tradingview.com/pine-script-reference/v5/#kw_for...in). Essa abordagem é uma variação do _loop_ [for](https://br.tradingview.com/pine-script-reference/v5/#kw_for) padrão que pode iterar sobre as referências de valores e _indices_ em um array.
