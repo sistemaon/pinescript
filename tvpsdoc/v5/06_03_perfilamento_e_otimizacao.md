@@ -757,7 +757,7 @@ O cálculo _"Line time"_ para [blocos de código](./06_03_perfilamento_e_otimiza
 > __Observação!__\
 > O Profiler __não pode__ coletar dados de desempenho individuais para cálculos _internos_ necessários e exibir seus resultados no Pine Editor. Consequentemente, os valores de tempo exibidos pelo Profiler para todas as regiões de código em um script __não__ somarão 100% do tempo total de execução.
 
-<!--### Profilando em Diferentes Configurações
+### Profilando em Diferentes Configurações
 
 Quando a [complexidade temporal](https://pt.wikipedia.org/wiki/Complexidade_de_tempo) de um código não é constante ou seu padrão de execução varia com suas entradas, argumentos de função ou dados disponíveis, muitas vezes é aconselhável fazer o perfilamento do código em _diferentes configurações_ e feeds de dados para obter uma perspectiva mais abrangente sobre seu desempenho geral.
 
@@ -797,6 +797,6 @@ Na próxima execução, alterado o valor da entrada para 200. Desta vez, os resu
 Com essas observações, é possível ver que o tempo de execução do script parece escalar de forma _linear_ com o valor de `lengthInput`, excluindo outros fatores que podem afetar o desempenho, como era de se esperar, já que a maior parte dos cálculos do script ocorre dentro do loop e o valor da entrada controla quantas vezes o loop deve ser executado.
 
 > __Observação!__\
-> Muitas vezes, é aconselhável fazer o perfilamento de cada configuração _mais de uma vez_ para reduzir o impacto de valores atípicos ao avaliar como o desempenho de um script varia com suas entradas ou dados. Veja a [seção abaixo](./06_03_perfilamento_e_otimizacao.md#perfilamento-repetitivo) para mais informações. -->
+> Muitas vezes, é aconselhável fazer o perfilamento de cada configuração _mais de uma vez_ para reduzir o impacto de valores atípicos ao avaliar como o desempenho de um script varia com suas entradas ou dados. Veja a [seção abaixo](./06_03_perfilamento_e_otimizacao.md#perfilamento-repetitivo) para mais informações.
 
 ## Otimização
