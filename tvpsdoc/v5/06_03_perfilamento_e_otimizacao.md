@@ -846,7 +846,7 @@ Após repetir este processo várias vezes e documentar os resultados de cada exe
 > __Observação!__\
 > Seja perfilando um script em uma única execução ou várias, é crucial entender que __os resultados variarão__. Embora a média dos resultados em várias execuções perfiladas possa ajudar a obter estimativas de desempenho mais estáveis, tais estimativas __não__ são imunes a variações.
 
-<!-- ## Otimização
+## Otimização
 
 __Otimização de código__, não confundida com otimização de indicador ou estratégia, envolve modificar o código-fonte de um script para melhorar o tempo de execução, a eficiência dos recursos e a escalabilidade. Os programadores podem usar várias abordagens para otimizar um script quando precisam de um desempenho de tempo de execução aprimorado, dependendo do que os cálculos do script envolvem.
 
@@ -855,4 +855,4 @@ Fundamentalmente, a maioria das técnicas usadas para otimizar o código Pine en
 As seções seguintes explicam vários conceitos simples que os programadores podem aplicar para otimizar seu código Pine Script™.
 
 > __Observação!__\
-> Antes de procurar maneiras de otimizar um script, [perfile-o](./06_03_perfilamento_e_otimizacao.md#profilando-um-script) para avaliar seu desempenho e identificar as __regiões críticas do código__ que mais se beneficiarão da otimização. -->
+> Antes de procurar maneiras de otimizar um script, [perfile-o](./06_03_perfilamento_e_otimizacao.md#profilando-um-script) para avaliar seu desempenho e identificar as __regiões críticas do código__ que mais se beneficiarão da otimização.
