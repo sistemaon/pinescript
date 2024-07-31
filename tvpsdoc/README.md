@@ -112,8 +112,9 @@ In Profiling and optimization > Code block results > This format is necessary fo
 Deveria ser: [this section](https://www.tradingview.com/pine-script-docs/writing/profiling-and-optimization/#a-look-into-the-profilers-inner-workings)
 Atual: [this section](https://www.tradingview.com/pine-script-docs/writing/profiling-and-optimization/#alook-into-the-profilers-inner-workings)
 
-
-
+In Profiling and optimization > Repetitive profiling > For example, this script [queues]() pseudorandom values with a constant seed
+Deveria ser:[queues](https://www.tradingview.com/pine-script-docs/language/arrays/#using-an-array-as-a-queue)
+Atual: [queues](https://www.tradingview.com/pine-script-docs/language/arrays/#using-an-array-as-aqueue)
 
 **No link sobre a constante CURRENCY.KRW https://br.tradingview.com/pine-script-reference/v5/#var_currency.KRW (é para referir a moeda sul coreana won, e não venceu)**
 

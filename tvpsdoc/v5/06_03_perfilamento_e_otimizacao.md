@@ -636,7 +636,7 @@ __Note que:__
 
 - Nos trechos acima, `long`, `System.timeNow()` e `registerPerf()` representam _código interno_, __não__ código Pine Script.
 
-Agora, veja como o Profiler envolve um script completo e todas as suas regiões de código significativas. Começaremos com este script, que calcula três séries pseudorandômicas e exibe seu resultado [médio](https://br.tradingview.com/pine-script-reference/v5/#fun_math.avg). O script utiliza um [objeto](./04_12_objetos.md) de um [tipo definido pelo usuário](./04_09_tipagem_do_sistema.md#tipos-definidos-pelo-usuário) para armazenar um estado pseudorandômico, um [método](./04_13_metodos.md#métodos-definidos-pelo-usuário) para calcular novos valores e atualizar o estado, e uma estrutura [if…else if](https://br.tradingview.com/pine-script-reference/v5/#kw_if) para atualizar cada série com base nos valores gerados:
+Agora, veja como o Profiler envolve um script completo e todas as suas regiões de código significativas. Este script calcula três séries pseudorandômicas e exibe seu resultado [médio](https://br.tradingview.com/pine-script-reference/v5/#fun_math.avg). O script utiliza um [objeto](./04_12_objetos.md) de um [tipo definido pelo usuário](./04_09_tipagem_do_sistema.md#tipos-definidos-pelo-usuário) para armazenar um estado pseudorandômico, um [método](./04_13_metodos.md#métodos-definidos-pelo-usuário) para calcular novos valores e atualizar o estado, e uma estrutura [if…else if](https://br.tradingview.com/pine-script-reference/v5/#kw_if) para atualizar cada série com base nos valores gerados:
 
 ```c
 //@version=5
@@ -799,4 +799,60 @@ Com essas observações, é possível ver que o tempo de execução do script pa
 > __Observação!__\
 > Muitas vezes, é aconselhável fazer o perfilamento de cada configuração _mais de uma vez_ para reduzir o impacto de valores atípicos ao avaliar como o desempenho de um script varia com suas entradas ou dados. Veja a [seção abaixo](./06_03_perfilamento_e_otimizacao.md#perfilamento-repetitivo) para mais informações.
 
-## Otimização
+### Perfilamento Repetitivo
+
+Os recursos de tempo de execução disponíveis para um script _variam_ ao longo do tempo. Consequentemente, o tempo necessário para avaliar uma região de código, mesmo uma com [complexidade](https://pt.wikipedia.org/wiki/Complexidade_de_tempo) constante, _flutua_ entre as execuções, e os resultados de desempenho cumulativo mostrados pelo Profiler __variarão__ com cada execução independente do script.
+
+Os usuários podem aprimorar sua análise _reiniciando_ um script várias vezes e perfilando cada execução independente. A média dos resultados de cada execução perfilada e a avaliação da dispersão dos resultados de tempo de execução podem ajudar os usuários a estabelecer benchmarks de desempenho mais robustos e reduzir o impacto de _outliers_ (tempos de execução anormalmente longos ou curtos) em suas conclusões.
+
+Incorporar uma _entrada fictícia_ (ou seja, uma entrada que não faz nada) no código de um script é uma técnica simples que permite aos usuários _reiniciá-lo_ durante o perfilamento. A entrada não afetará diretamente nenhum cálculo ou saída. No entanto, ao alterar seu valor nas configurações do script, o script reinicia e o Profiler reanalisa o código executado.
+
+Por exemplo, este script [fila](./04_14_arrays.md#utilizando-um-array-como-uma-fila) valores pseudorandômicos com uma semente constante através de um [array](https://br.tradingview.com/pine-script-reference/v5/#type_array) com tamanho fixo e calcula e plota o valor [médio](https://br.tradingview.com/pine-script-reference/v5/#fun_array.avg) do array em cada barra. Para fins de perfilamento, o script inclui uma variável `dummyInput` com um valor [input.int()](https://br.tradingview.com/pine-script-reference/v5/#fun_input.int) atribuído a ela. A entrada não faz nada no código além de permitir _reiniciar_ o script cada vez que seu valor é alterado:
+
+```c
+//@version=5
+indicator("Repetitive profiling demo")
+
+//@variable An input not connected to script calculations. Changing its value in the "Inputs" tab restarts the script.
+int dummyInput = input.int(0, "Dummy input")
+
+//@variable An array of pseudorandom values.
+var array<float> randValues = array.new<float>(2500, 0.0)
+
+// Push a new `math.random()` value with a fixed `seed` into the `randValues` array and remove the oldest value.
+array.push(randValues, math.random(seed = 12345))
+array.shift(randValues)
+
+// Plot the average of all elements in the `randValues` array.
+plot(array.avg(randValues), "Pseudorandom average")
+```
+
+Após a primeira execução do script, o Profiler mostra que levou 308,6 milissegundos para executar em todos os dados do gráfico:
+
+![Perfilamento repetitivo 01](./imgs/Profiling-and-optimization-Pine-profiler-Repetitive-profiling-1.CfionGK2_pmOYe.webp)
+
+Agora, alterando o valor da entrada fictícia nas configurações do script para reiniciá-lo sem alterar os cálculos. Desta vez, completou as mesmas execuções de código em 424,6 milissegundos, 116 milissegundos a mais do que a execução anterior:
+
+![Perfilamento repetitivo 02](./imgs/Profiling-and-optimization-Pine-profiler-Repetitive-profiling-2.LouNiZpq_o9WWS.webp)
+
+Reiniciar o script novamente produz um novo resultado. Na terceira execução, o script terminou todas as execuções de código em 227,4 milissegundos, o menor tempo até agora:
+
+![Perfilamento repetitivo 03](./imgs/Profiling-and-optimization-Pine-profiler-Repetitive-profiling-3.UGJOj4nF_Z1p4czi.webp)
+
+Após repetir este processo várias vezes e documentar os resultados de cada execução, pode-se calcular manualmente a _média_ para estimar o tempo total esperado de execução do script:
+
+`AverageTime = (time1 + time2 + ... + timeN) / N`
+
+> __Observação!__\
+> Seja perfilando um script em uma única execução ou várias, é crucial entender que __os resultados variarão__. Embora a média dos resultados em várias execuções perfiladas possa ajudar a obter estimativas de desempenho mais estáveis, tais estimativas __não__ são imunes a variações.
+
+<!-- ## Otimização
+
+__Otimização de código__, não confundida com otimização de indicador ou estratégia, envolve modificar o código-fonte de um script para melhorar o tempo de execução, a eficiência dos recursos e a escalabilidade. Os programadores podem usar várias abordagens para otimizar um script quando precisam de um desempenho de tempo de execução aprimorado, dependendo do que os cálculos do script envolvem.
+
+Fundamentalmente, a maioria das técnicas usadas para otimizar o código Pine envolve __reduzir__ o número de vezes que cálculos críticos ocorrem ou __substituir__ cálculos significativos por fórmulas ou funções internas simplificadas. Ambos esses paradigmas frequentemente se sobrepõem.
+
+As seções seguintes explicam vários conceitos simples que os programadores podem aplicar para otimizar seu código Pine Script™.
+
+> __Observação!__\
+> Antes de procurar maneiras de otimizar um script, [perfile-o](./06_03_perfilamento_e_otimizacao.md#profilando-um-script) para avaliar seu desempenho e identificar as __regiões críticas do código__ que mais se beneficiarão da otimização. -->
