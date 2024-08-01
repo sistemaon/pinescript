@@ -1467,7 +1467,7 @@ Agora, comparar o desempenho com o valor _maior_ de `lengthInput` de 2000 é rel
 > __Observação!__\
 > Nem todos os cálculos iterativos terão necessariamente alternativas sem loop. No caso de um script só conseguir alcançar seus resultados por meio de iteração, os programadores podem identificar maneiras possíveis de otimizar loops para melhorar o desempenho. Veja a [próxima seção](./06_03_perfilamento_e_otimizacao.md#otimizando-loops) para mais informações.
 
-<!-- ### Otimizando Loops
+### Otimizando Loops
 
 Embora o [modelo de execução](./04_01_modelo_de_execucao.md) do Pine e as funções internas disponíveis frequentemente _eliminem_ a necessidade de [loops](./04_08_loops.md) em muitos casos, ainda há instâncias em que um script __necessitará__ de [loops](./04_08_loops.md) para alguns tipos de tarefas, incluindo:
 
@@ -1478,6 +1478,6 @@ Embora o [modelo de execução](./04_01_modelo_de_execucao.md) do Pine e as fun�
 Quando um script usa [loops](./04_08_loops.md) que um programador não pode [eliminar](./06_03_perfilamento_e_otimizacao.md#eliminando-loops), há [várias técnicas](https://en.wikipedia.org/wiki/Loop_optimization) que podem ser usadas para reduzir seu impacto no desempenho. Esta seção explica duas das técnicas mais comuns e úteis que podem ajudar a melhorar a eficiência de um loop necessário.
 
 > __Observação!__\
-> Antes de identificar maneiras de _otimizar_ um loop, recomenda-se procurar maneiras de [eliminá-lo](./06_03_perfilamento_e_otimizacao.md#eliminando-loops) primeiro. Se __não existir solução__ que torne o loop desnecessário, então prossiga tentando reduzir seu overhead. -->
+> Antes de identificar maneiras de _otimizar_ um loop, recomenda-se procurar maneiras de [eliminá-lo](./06_03_perfilamento_e_otimizacao.md#eliminando-loops) primeiro. Se __não existir solução__ que torne o loop desnecessário, então prossiga tentando reduzir seu overhead.
 
 ## Profilando Entre Configurações
