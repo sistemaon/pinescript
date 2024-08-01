@@ -1135,7 +1135,7 @@ __Note que:__
 - Outra maneira de solicitar vários valores do mesmo contexto com uma única chamada `request.*()` é passar um [objeto](./04_12_objetos.md) de um [tipo definido pelo usuário (UDT)](./04_09_tipagem_do_sistema.md#tipos-definidos-pelo-usuário) como argumento `expression`. Veja [esta seção](./05_14_outros_timeframes_e_dados.md#tipos-definidos-pelo-usuário) da página [Outros tempos e dados](./05_14_outros_timeframes_e_dados.md) para aprender mais sobre como solicitar [UDTs](./04_09_tipagem_do_sistema.md#tipos-definidos-pelo-usuário).
 - Programadores também podem reduzir o tempo total de execução de uma chamada de [request.security()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.security), [request.security_lower_tf()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.security_lower_tf) ou [request.seed()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.seed) passando um argumento para o parâmetro `calc_bars_count` da função, que _restringe_ o número de pontos de dados _históricos_ que ela pode acessar de um contexto e executar cálculos necessários. Em geral, se as chamadas para essas funções `request.*()` recuperarem _mais_ dados históricos do que um script _necessita_, limitar as solicitações com `calc_bars_count` pode ajudar a melhorar o desempenho do script.
 
-<!-- ### Evitando Redesenhos
+### Evitando Redesenhos
 
 Os [tipos de desenho](./04_09_tipagem_do_sistema.md#tipos-de-desenho) do Pine Script permitem que scripts desenhem visuais personalizados em um gráfico que não podem ser alcançados através de outras saídas, como [plots](./05_15_plots.md). Embora esses tipos forneçam maior flexibilidade visual, eles também têm um custo _maior_ de tempo de execução e memória, especialmente quando um script _recria_ desnecessariamente desenhos em vez de atualizar diretamente suas propriedades para alterar sua aparência.
 
@@ -1185,7 +1185,7 @@ __Note que:__
 - O número de execuções mostrado para o _código local_ do loop é 25 vezes o número mostrado para o código no _escopo global_ do script, já que cada execução da instrução do loop aciona 25 execuções do bloco local.
 - Este script atualiza seus desenhos em _todas as barras_ no histórico do gráfico para fins de __teste__. No entanto, ele __não__ precisa realmente executar todas essas atualizações históricas, pois os usuários só verão o __resultado final__ da _última barra histórica_ e as mudanças nas _barras em tempo real_. Veja a [próxima seção](./06_03_perfilamento_e_otimizacao.md#reduzindo-atualizações-de-desenho) para aprender mais.
 
-### Reduzindo Atualizações de Desenho
+<!-- ### Reduzindo Atualizações de Desenho
 
 Quando um script produz [objetos de desenho](./04_09_tipagem_do_sistema.md#tipos-de-desenho) que mudam em _barras históricas_, os usuários só verão seus __resultados finais__ nessas barras, pois o script completa suas execuções históricas quando é carregado pela primeira vez no gráfico. A única vez que se verá esses desenhos _evoluírem_ em execuções é durante as _barras em tempo real_, à medida que novos dados são recebidos.
 
