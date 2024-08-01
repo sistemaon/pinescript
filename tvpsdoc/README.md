@@ -124,6 +124,24 @@ In Profiling and optimization > Using built-ins > In any case, one should always
 Deveria ser: [profile their scripts](https://www.tradingview.com/pine-script-docs/writing/profiling-and-optimization/#profiling-a-script)
 Atual: [profile their scripts](https://www.tradingview.com/pine-script-docs/writing/profiling-and-optimization/#profiling-ascript)
 
+In Profiling and optimization > Minimizing request.*() calls > The results from [profiling the script]() show that it took the script 340.8 milliseconds
+Deveria ser: [profiling the script](https://www.tradingview.com/pine-script-docs/writing/profiling-and-optimization/#profiling-a-script)
+Atual: [profiling the script](https://www.tradingview.com/pine-script-docs/writing/profiling-and-optimization/#profiling-ascript)
+
+In Profiling and optimization > Avoiding redrawing > The results from [profiling this script]() show that line 24,
+Deveria ser: [profiling this script](https://www.tradingview.com/pine-script-docs/writing/profiling-and-optimization/#profiling-a-script)
+Atual: [profiling this script](https://www.tradingview.com/pine-script-docs/writing/profiling-and-optimization/#profiling-ascript)
+
+In Profiling and optimization > Reducing drawing updates > After [profiling]() the script, we see that the code
+Deveria ser: [profiling](https://www.tradingview.com/pine-script-docs/writing/profiling-and-optimization/#profiling-a-script)
+Atual: [profiling](https://www.tradingview.com/pine-script-docs/writing/profiling-and-optimization/#profiling-ascript)
+
+In Profiling and optimization > Storing calculated values > After [profiling]() the script’s performance over our chart’s data,
+Deveria ser: [profiling](https://www.tradingview.com/pine-script-docs/writing/profiling-and-optimization/#profiling-a-script)
+Atual: [profiling](https://www.tradingview.com/pine-script-docs/writing/profiling-and-optimization/#profiling-ascript)
+
+
+
 
 __No link sobre a constante CURRENCY.KRW https://br.tradingview.com/pine-script-reference/v5/#var_currency.KRW (é para referir a moeda sul coreana won, e não venceu)__
 

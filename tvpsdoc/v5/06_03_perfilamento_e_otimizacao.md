@@ -934,11 +934,11 @@ A função mais eficiente _de longe_ foi a [ta.highest()](https://br.tradingview
 
 ![Usando funções incorporadas 01](./imgs/Profiling-and-optimization-Optimization-Using-built-ins-1.CXnfIZo4_ZWjpAS.webp)
 
-Embora esses resultados demonstrem efetivamente que a função interna supera nossas [funções definidas pelo usuário](./04_11_funcoes_definidas_pelo_usuario.md) com um pequeno argumento `length` de 20, é crucial considerar que os cálculos requeridos pelas funções _variarão_ com o valor do argumento. Portanto, pode-se perfilar o código usando [diferentes argumentos](./06_03_perfilamento_e_otimizacao.md#profilando-entre-configurações) para avaliar como o tempo de execução se escala.
+Embora esses resultados demonstrem efetivamente que a função interna supera as [funções definidas pelo usuário](./04_11_funcoes_definidas_pelo_usuario.md) com um pequeno argumento `length` de 20, é crucial considerar que os cálculos requeridos pelas funções _variarão_ com o valor do argumento. Portanto, pode-se perfilar o código usando [diferentes argumentos](./06_03_perfilamento_e_otimizacao.md#profilando-entre-configurações) para avaliar como o tempo de execução se escala.
 
 Aqui, o argumento `length` em cada chamada de função foi alterado de 20 para 200 e o [script foi perfilado](./06_03_perfilamento_e_otimizacao.md#profilando-um-script) novamente para observar as mudanças no desempenho. O tempo gasto na função `pineHighest()` nesta execução aumentou para cerca de 0,6 segundos (~86% do tempo total de execução), e o tempo gasto na função `fasterPineHighest()` aumentou para cerca de 75 milissegundos. A função [ta.highest()](https://br.tradingview.com/pine-script-reference/v5/#fun_ta.highest), por outro lado, _não_ teve uma mudança substancial no tempo de execução. Levou cerca de 5,8 milissegundos desta vez, apenas alguns milissegundos a mais do que na execução anterior.
 
-Em outras palavras, enquanto nossas [funções definidas pelo usuário](./04_11_funcoes_definidas_pelo_usuario.md) experimentaram um crescimento significativo no tempo de execução com um argumento `length` maior nesta execução, a mudança no tempo de execução da função interna [ta.highest()](https://br.tradingview.com/pine-script-reference/v5/#fun_ta.highest) foi relativamente marginal neste caso, enfatizando ainda mais seus benefícios de desempenho:
+Em outras palavras, enquanto as [funções definidas pelo usuário](./04_11_funcoes_definidas_pelo_usuario.md) experimentaram um crescimento significativo no tempo de execução com um argumento `length` maior nesta execução, a mudança no tempo de execução da função interna [ta.highest()](https://br.tradingview.com/pine-script-reference/v5/#fun_ta.highest) foi relativamente marginal neste caso, enfatizando ainda mais seus benefícios de desempenho:
 
 ![Usando funções incorporadas 02](./imgs/Profiling-and-optimization-Optimization-Using-built-ins-2.wlIsvoLn_Z1yQ1xR.webp)
 
@@ -998,9 +998,9 @@ Observe que o número de execuções mostrado para o código local dentro de `va
 
 ![Reduzindo repetição 02](./imgs/Profiling-and-optimization-Optimization-Reducing-repetition-2.QnMs1Dg3_ZE1OU8.webp)
 
-Embora cada chamada para `valuesAbove()` use os _mesmos_ argumentos e retorne o _mesmo_ resultado, o compilador não pode reduzir automaticamente esse código durante a tradução. Precisamos fazer isso manualmente. Podemos otimizar este script atribuindo o valor de `data.valuesAbove(99)` a uma _variável_ e _reutilizando_ o valor em todas as outras áreas que exigem o resultado.
+Embora cada chamada para `valuesAbove()` use os _mesmos_ argumentos e retorne o _mesmo_ resultado, o compilador não pode reduzir automaticamente esse código durante a tradução. Necessário fazer manualmente. Pode-se otimizar este script atribuindo o valor de `data.valuesAbove(99)` a uma _variável_ e _reutilizando_ o valor em todas as outras áreas que exigem o resultado.
 
-Na versão abaixo, modificamos o script adicionando uma variável `count` para referenciar o valor de `data.valuesAbove(99)`. O script usa essa variável no cálculo de `plotColor` e na chamada de [plot()](https://br.tradingview.com/pine-script-reference/v5/#fun_plot):
+Na versão abaixo, o script adiciona uma variável `count` para referenciar o valor de `data.valuesAbove(99)`. O script usa essa variável no cálculo de `plotColor` e na chamada de [plot()](https://br.tradingview.com/pine-script-reference/v5/#fun_plot):
 
 ```c
 //@version=5
@@ -1048,6 +1048,315 @@ Com essa modificação, os [resultados perfilados](./06_03_perfilamento_e_otimiz
 
 __Note que:__
 
-- Como este script só chama `valuesAbove()` uma vez, o [código local do método](./04_13_metodos.md#métodos-definidos-pelo-usuário) agora refletirá os resultados dessa chamada específica. Consulte [esta seção](./06_03_perfilamento_e_otimizacao.md#chamadas-de-funções-definidas-pelo-usuário) para aprender mais sobre como interpretar resultados de chamadas de funções e métodos perfilados. -->
+- Como este script só chama `valuesAbove()` uma vez, o [código local do método](./04_13_metodos.md#métodos-definidos-pelo-usuário) agora refletirá os resultados dessa chamada específica. Consulte [esta seção](./06_03_perfilamento_e_otimizacao.md#chamadas-de-funções-definidas-pelo-usuário) para aprender mais sobre como interpretar resultados de chamadas de funções e métodos perfilados.
+
+### Minimizando Chamadas `request.*()`
+
+As funções internas no namespace `request.*()` permitem que os scripts recuperem dados de [outros contextos](./05_14_outros_timeframes_e_dados.md). Embora essas funções sejam úteis em muitas aplicações, é importante considerar que cada chamada a essas funções pode ter um impacto significativo no uso de recursos de um script.
+
+Um único script pode conter até 40 chamadas para a família de funções `request.*()`. No entanto, os usuários devem se esforçar para manter suas chamadas `request.*()` bem _abaixo_ desse limite para minimizar o impacto de desempenho de suas solicitações de dados.
+
+Quando um script solicita os valores de várias expressões do _mesmo_ contexto com múltiplas chamadas de [request.security()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.security) ou [request.security_lower_tf()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.security_lower_tf), uma maneira eficaz de otimizar essas solicitações é _condensá-las_ em uma única chamada `request.*()` que usa uma [tupla](./05_14_outros_timeframes_e_dados.md#tuples-tuplas) como seu argumento `expression`. Essa otimização não apenas melhora o tempo de execução das solicitações; ela também ajuda a reduzir o _uso de memória_ e o tamanho compilado do script.
+
+Como exemplo simples, o script a seguir solicita nove valores de [ta.percentrank()](https://br.tradingview.com/pine-script-reference/v5/#fun_ta.percentrank) com diferentes comprimentos de um símbolo especificado usando nove chamadas separadas de [request.security()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.security). Em seguida, ele [plota](./05_15_plots.md) todos os nove valores solicitados no gráfico para utilizá-los nas saídas:
+
+```c
+//@version=5
+indicator("Minimizing `request.*()` calls demo")
+
+//@variable The symbol to request data from.
+string symbolInput = input.symbol("BINANCE:BTCUSDT", "Symbol")
+
+// Request 9 `ta.percentrank()` values from the `symbolInput` context using 9 `request.security()` calls.
+float reqRank1 = request.security(symbolInput, timeframe.period, ta.percentrank(close, 10))
+float reqRank2 = request.security(symbolInput, timeframe.period, ta.percentrank(close, 20))
+float reqRank3 = request.security(symbolInput, timeframe.period, ta.percentrank(close, 30))
+float reqRank4 = request.security(symbolInput, timeframe.period, ta.percentrank(close, 40))
+float reqRank5 = request.security(symbolInput, timeframe.period, ta.percentrank(close, 50))
+float reqRank6 = request.security(symbolInput, timeframe.period, ta.percentrank(close, 60))
+float reqRank7 = request.security(symbolInput, timeframe.period, ta.percentrank(close, 70))
+float reqRank8 = request.security(symbolInput, timeframe.period, ta.percentrank(close, 80))
+float reqRank9 = request.security(symbolInput, timeframe.period, ta.percentrank(close, 90))
+
+// Plot the `reqRank*` values.
+plot(reqRank1)
+plot(reqRank2)
+plot(reqRank3)
+plot(reqRank4)
+plot(reqRank5)
+plot(reqRank6)
+plot(reqRank7)
+plot(reqRank8)
+plot(reqRank9)
+```
+
+Os resultados de [perfilamento do script](./06_03_perfilamento_e_otimizacao.md#profilando-um-script) mostram que o script levou 340,8 milissegundos para completar suas solicitações e plotar os valores nesta execução:
+
+![Minimizando chamadas request.*() 01](./imgs/Profiling-and-optimization-Optimization-Minimizing-request-calls-1.Canv49So_1Cn30c.webp)
+
+Como todas as chamadas de [request.security()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.security) solicitam dados do __mesmo contexto__, podendo otimizar o uso de recursos do código mesclando todas elas em uma única chamada de [request.security()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.security) que usa uma [tupla](./05_14_outros_timeframes_e_dados.md#tuples-tuplas) como seu argumento `expression`:
+
+```c
+//@version=5
+indicator("Minimizing `request.*()` calls demo")
+
+//@variable The symbol to request data from.
+string symbolInput = input.symbol("BINANCE:BTCUSDT", "Symbol")
+
+// Request 9 `ta.percentrank()` values from the `symbolInput` context using a single `request.security()` call.
+[reqRank1, reqRank2, reqRank3, reqRank4, reqRank5, reqRank6, reqRank7, reqRank8, reqRank9] = 
+ request.security(
+     symbolInput, timeframe.period, [
+             ta.percentrank(close, 10), ta.percentrank(close, 20), ta.percentrank(close, 30), 
+             ta.percentrank(close, 40), ta.percentrank(close, 50), ta.percentrank(close, 60), 
+             ta.percentrank(close, 70), ta.percentrank(close, 80), ta.percentrank(close, 90)
+         ]
+ )
+
+// Plot the `reqRank*` values.
+plot(reqRank1)
+plot(reqRank2)
+plot(reqRank3)
+plot(reqRank4)
+plot(reqRank5)
+plot(reqRank6)
+plot(reqRank7)
+plot(reqRank8)
+plot(reqRank9)
+```
+
+Visto abaixo, os [resultados perfilados](./06_03_perfilamento_e_otimizacao.md#interpretando-resultados-perfilados) desta versão do script mostram que ele levou 228,3 milissegundos desta vez, uma melhoria considerável em relação à execução anterior:
+
+![Minimizando chamadas request.*() 02](./imgs/Profiling-and-optimization-Optimization-Minimizing-request-calls-2.BZ75zb8R_Z21D1UV.webp)
+
+__Note que:__
+
+- Os recursos computacionais disponíveis para um script __flutuam__ ao longo do tempo. Portanto, geralmente é uma boa ideia perfilar um script [várias vezes](./06_03_perfilamento_e_otimizacao.md#perfilamento-repetitivo) para ajudar a solidificar as conclusões de desempenho.
+- Outra maneira de solicitar vários valores do mesmo contexto com uma única chamada `request.*()` é passar um [objeto](./04_12_objetos.md) de um [tipo definido pelo usuário (UDT)](./04_09_tipagem_do_sistema.md#tipos-definidos-pelo-usuário) como argumento `expression`. Veja [esta seção](./05_14_outros_timeframes_e_dados.md#tipos-definidos-pelo-usuário) da página [Outros tempos e dados](./05_14_outros_timeframes_e_dados.md) para aprender mais sobre como solicitar [UDTs](./04_09_tipagem_do_sistema.md#tipos-definidos-pelo-usuário).
+- Programadores também podem reduzir o tempo total de execução de uma chamada de [request.security()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.security), [request.security_lower_tf()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.security_lower_tf) ou [request.seed()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.seed) passando um argumento para o parâmetro `calc_bars_count` da função, que _restringe_ o número de pontos de dados _históricos_ que ela pode acessar de um contexto e executar cálculos necessários. Em geral, se as chamadas para essas funções `request.*()` recuperarem _mais_ dados históricos do que um script _necessita_, limitar as solicitações com `calc_bars_count` pode ajudar a melhorar o desempenho do script.
+
+<!-- ### Evitando Redesenhos
+
+Os [tipos de desenho](./04_09_tipagem_do_sistema.md#tipos-de-desenho) do Pine Script permitem que scripts desenhem visuais personalizados em um gráfico que não podem ser alcançados através de outras saídas, como [plots](./05_15_plots.md). Embora esses tipos forneçam maior flexibilidade visual, eles também têm um custo _maior_ de tempo de execução e memória, especialmente quando um script _recria_ desnecessariamente desenhos em vez de atualizar diretamente suas propriedades para alterar sua aparência.
+
+A maioria dos [tipos de desenho](./04_09_tipagem_do_sistema.md#tipos-de-desenho), exceto [polilinhas](./05_12_lines_e_boxes.md#polylines-polilinhas), possui _funções setter_ internas em seus namespaces que permitem que scripts modifiquem um desenho _sem_ deletar e recriar. Utilizar esses setters é tipicamente menos custoso computacionalmente do que criar um novo objeto de desenho quando apenas _propriedades específicas_ exigem modificação.
+
+Por exemplo, o script abaixo compara deletar e redesenhar [caixas](./05_12_lines_e_boxes.md#boxes-caixas) usando funções `box.set*()`. Na primeira barra, ele declara os arrays `redrawnBoxes` e `updatedBoxes` e executa um [loop](./04_08_loops.md) para adicionar 25 elementos de [box](https://br.tradingview.com/pine-script-reference/v5/#type_box) a eles.
+
+O script usa um loop [for](https://br.tradingview.com/pine-script-reference/v5/#kw_for) separado para iterar pelos [arrays](./04_14_arrays.md) e atualizar os desenhos em cada execução. Ele _recria_ as [caixas](./05_12_lines_e_boxes.md#boxes-caixas) no array `redrawnBoxes` usando [box.delete()](https://br.tradingview.com/pine-script-reference/v5/#fun_box.delete) e [box.new()](https://br.tradingview.com/pine-script-reference/v5/#fun_box.new), enquanto _modifica diretamente_ as propriedades das [caixas](./05_12_lines_e_boxes.md#boxes-caixas) no array `updatedBoxes` usando [box.set_lefttop()](https://br.tradingview.com/pine-script-reference/v5/#fun_box.set_lefttop) e [box.set_rightbottom()](https://br.tradingview.com/pine-script-reference/v5/#fun_box.set_rightbottom). Ambas as abordagens alcançam o mesmo resultado visual. No entanto, a última é mais eficiente:
+
+```c
+//@version=5
+indicator("Avoiding redrawing demo")
+
+//@variable An array of `box` IDs deleted with `box.delete()` and redrawn with `box.new()` on each execution.
+var array<box> redrawnBoxes = array.new<box>()
+//@variable An array of `box` IDs with properties that update across executions update via `box.set*()` functions.
+var array<box> updatedBoxes = array.new<box>()
+
+// Populate both arrays with 25 elements on the first bar. 
+if barstate.isfirst
+    for i = 1 to 25
+        array.push(redrawnBoxes, box(na))
+        array.push(updatedBoxes, box.new(na, na, na, na))
+
+for i = 0 to 24
+    // Calculate coordinates.
+    int x = bar_index - i
+    float y = close[i + 1] - close
+    // Get the `box` ID from each array at the `i` index.
+    box redrawnBox = redrawnBoxes.get(i)
+    box updatedBox = updatedBoxes.get(i)
+    // Delete the `redrawnBox`, create a new `box` ID, and replace that element in the `redrawnboxes` array.
+    box.delete(redrawnBox)
+    redrawnBox := box.new(x - 1, y, x, 0.0)
+    array.set(redrawnBoxes, i, redrawnBox)
+    // Update the properties of the `updatedBox` rather than redrawing it. 
+    box.set_lefttop(updatedBox, x - 1, y)
+    box.set_rightbottom(updatedBox, x, 0.0)
+```
+
+Os resultados de [perfilamento deste script](./06_03_perfilamento_e_otimizacao.md#profilando-um-script) mostram que a linha 24, que contém a chamada de [box.new()](https://br.tradingview.com/pine-script-reference/v5/#fun_box.new), é a linha mais _pesada_ no [bloco de código](./06_03_perfilamento_e_otimizacao.md#resultados-de-blocos-de-código) que executa em cada barra, com um tempo de execução quase _dobro_ do tempo combinado gasto nas chamadas [box.set_lefttop()](https://br.tradingview.com/pine-script-reference/v5/#fun_box.set_lefttop) e [box.set_rightbottom()](https://br.tradingview.com/pine-script-reference/v5/#fun_box.set_rightbottom) nas linhas 27 e 28:
+
+![Evitando redesenhos](./imgs/Profiling-and-optimization-Optimization-Avoiding-redrawing-1.CVCJc2lm_ZJcTqr.webp)
+
+__Note que:__
+
+- O número de execuções mostrado para o _código local_ do loop é 25 vezes o número mostrado para o código no _escopo global_ do script, já que cada execução da instrução do loop aciona 25 execuções do bloco local.
+- Este script atualiza seus desenhos em _todas as barras_ no histórico do gráfico para fins de __teste__. No entanto, ele __não__ precisa realmente executar todas essas atualizações históricas, pois os usuários só verão o __resultado final__ da _última barra histórica_ e as mudanças nas _barras em tempo real_. Veja a [próxima seção](./06_03_perfilamento_e_otimizacao.md#reduzindo-atualizações-de-desenho) para aprender mais.
+
+### Reduzindo Atualizações de Desenho
+
+Quando um script produz [objetos de desenho](./04_09_tipagem_do_sistema.md#tipos-de-desenho) que mudam em _barras históricas_, os usuários só verão seus __resultados finais__ nessas barras, pois o script completa suas execuções históricas quando é carregado pela primeira vez no gráfico. A única vez que se verá esses desenhos _evoluírem_ em execuções é durante as _barras em tempo real_, à medida que novos dados são recebidos.
+
+Como as saídas dinâmicas de [desenhos](./04_09_tipagem_do_sistema.md#tipos-de-desenho) em barras históricas são __nunca visíveis__ para um usuário, muitas vezes é possível melhorar o desempenho de um script _eliminando_ as atualizações históricas que não afetam os resultados finais.
+
+Por exemplo, este script cria uma [tabela](https://br.tradingview.com/pine-script-reference/v5/#type_table) com duas colunas e 21 linhas para visualizar o histórico de um [RSI](https://br.tradingview.com/pine-script-reference/v5/#fun_ta.rsi) em um formato tabular paginado. O script inicializa as células da `infoTable` na [primeira barra](https://br.tradingview.com/pine-script-reference/v5/#var_barstate.isfirst), e referencia o histórico do `rsi` calculado para atualizar o `text` e `bgcolor` das células na segunda coluna dentro de um loop [for](https://br.tradingview.com/pine-script-reference/v5/#kw_for) em cada barra:
+
+```c
+//@version=5
+indicator("Reducing drawing updates demo")
+
+//@variable The first offset shown in the paginated table.
+int offsetInput = input.int(0, "Page", 0, 249) * 20
+
+//@variable A table that shows the history of RSI values.
+var table infoTable = table.new(position.top_right, 2, 21, border_color = chart.fg_color, border_width = 1)
+// Initialize the table's cells on the first bar.
+if barstate.isfirst
+    table.cell(infoTable, 0, 0, "Offset", text_color = chart.fg_color)
+    table.cell(infoTable, 1, 0, "RSI", text_color = chart.fg_color)
+    for i = 0 to 19
+        table.cell(infoTable, 0, i + 1, str.tostring(offsetInput + i))
+        table.cell(infoTable, 1, i + 1)
+
+float rsi = ta.rsi(close, 14)
+
+// Update the history shown in the `infoTable` on each bar. 
+for i = 0 to 19
+    float historicalRSI = rsi[offsetInput + i]
+    table.cell_set_text(infoTable, 1, i + 1, str.tostring(historicalRSI))
+    table.cell_set_bgcolor(
+         infoTable, 1, i + 1, color.from_gradient(historicalRSI, 30, 70, color.red, color.green)
+     )
+
+plot(rsi, "RSI")
+```
+
+Após [perfilar](./06_03_perfilamento_e_otimizacao.md#profilando-um-script) o script, o código com maior impacto no desempenho é o loop [for](https://br.tradingview.com/pine-script-reference/v5/#kw_for) que começa na linha 20, ou seja, o [bloco de código](./06_03_perfilamento_e_otimizacao.md#resultados-de-blocos-de-código) que atualiza as células da tabela:
+
+![Reduzindo atualizações de desenho 01](./imgs/Profiling-and-optimization-Optimization-Reducing-drawing-updates-1.DGjGYc9o_Z2h4bJz.webp)
+
+Essa região crítica do código é executada excessivamente ao longo do histórico do gráfico, pois os usuários só verão o resultado final da [tabela](./05_19_tables.md) no histórico. O único momento em que os usuários verão a [tabela](https://br.tradingview.com/pine-script-reference/v5/#type_table) ser atualizada é na última barra histórica e em todas as barras em tempo real subsequentes. Portanto, otimizar o uso de recursos deste script restringindo a execução desse código apenas à [última barra disponível](https://br.tradingview.com/pine-script-reference/v5/#var_barstate.islast) é eficaz.
+
+Nesta versão do script, o loop [for](./04_08_loops.md) que atualiza as células da [tabela](https://br.tradingview.com/pine-script-reference/v5/#type_table) está dentro de uma estrutura [if](https://br.tradingview.com/pine-script-reference/v5/#kw_if) que usa [barstate.islast](https://br.tradingview.com/pine-script-reference/v5/#var_barstate.islast) como condição, restringindo efetivamente as execuções do bloco de código apenas à última barra histórica e todas as barras em tempo real. Agora, o script carrega mais eficientemente, já que todos os cálculos da tabela requerem apenas uma execução histórica:
+
+![Reduzindo atualizações de desenho 02](./imgs/Profiling-and-optimization-Optimization-Reducing-drawing-updates-2.DVDSH-lG_Z1AqBk6.webp)
+
+```c
+//@version=5
+indicator("Reducing drawing updates demo")
+
+//@variable The first offset shown in the paginated table.
+int offsetInput = input.int(0, "Page", 0, 249) * 20
+
+//@variable A table that shows the history of RSI values.
+var table infoTable = table.new(position.top_right, 2, 21, border_color = chart.fg_color, border_width = 1)
+// Initialize the table's cells on the first bar.
+if barstate.isfirst
+    table.cell(infoTable, 0, 0, "Offset", text_color = chart.fg_color)
+    table.cell(infoTable, 1, 0, "RSI", text_color = chart.fg_color)
+    for i = 0 to 19
+        table.cell(infoTable, 0, i + 1, str.tostring(offsetInput + i))
+        table.cell(infoTable, 1, i + 1)
+
+float rsi = ta.rsi(close, 14)
+
+// Update the history shown in the `infoTable` on the last available bar.
+if barstate.islast
+    for i = 0 to 19
+        float historicalRSI = rsi[offsetInput + i]
+        table.cell_set_text(infoTable, 1, i + 1, str.tostring(historicalRSI))
+        table.cell_set_bgcolor(
+             infoTable, 1, i + 1, color.from_gradient(historicalRSI, 30, 70, color.red, color.green)
+         )
+
+plot(rsi, "RSI")
+```
+
+__Note que:__
+
+- O script ainda atualizará as células quando novas atualizações em tempo real chegarem, pois os usuários podem observar essas mudanças no gráfico, ao contrário das mudanças que o script executava ao longo das barras históricas.
+
+### Armazenando Valores Calculados
+
+Quando um script realiza um cálculo crítico que muda infrequentemente ao longo das execuções, pode-se reduzir seu tempo de execução salvando o resultado em uma variável declarada com as palavras-chave [var](https://br.tradingview.com/pine-script-reference/v5/#kw_var) ou [varip](https://br.tradingview.com/pine-script-reference/v5/#kw_varip) e somente atualizando o valor se o cálculo mudar. Se o script calcular múltiplos valores excessivamente, pode-se armazená-los em [coleções](./04_09_tipagem_do_sistema.md#coleções), [_matrices_](./04_15_matrices.md), [maps](./04_16_mapas.md) ou [objetos](./04_12_objetos.md) de [tipos definidos pelo usuário](./04_09_tipagem_do_sistema.md#tipos-definidos-pelo-usuário).
+
+Este exemplo calcula uma média móvel ponderada com _weight_ personalizados baseados em uma [_window function_](https://en.wikipedia.org/wiki/Window_function) generalizada. O `numerator` é a soma dos valores de [close](https://br.tradingview.com/pine-script-reference/v5/#var_close) ponderados, e o `denominator` é a soma dos _weight_ calculados. O script usa um loop [for](https://br.tradingview.com/pine-script-reference/v5/#kw_for) que itera `lengthInput` vezes para calcular essas somas, em seguida plota sua razão, ou seja, a média resultante:
+
+```c
+//@version=5
+indicator("Storing calculated values demo", overlay = true)
+
+//@variable The number of bars in the weighted average calculation.
+int lengthInput = input.int(50, "Length", 1, 5000)
+//@variable Window coefficient. 
+float coefInput = input.float(0.5, "Window coefficient", 0.0, 1.0, 0.01)
+
+//@variable The sum of weighted `close` prices.
+float numerator = 0.0
+//@variable The sum of weights.
+float denominator = 0.0
+
+//@variable The angular step in the cosine calculation.
+float step = 2.0 * math.pi / lengthInput
+// Accumulate weighted sums.
+for i = 0 to lengthInput - 1
+    float weight = coefInput - (1 - coefInput) * math.cos(step * i)
+    numerator += close[i] * weight
+    denominator += weight
+
+// Plot the weighted average result.
+plot(numerator / denominator, "Weighted average", color.purple, 3)
+```
+
+Após [perfilar](./06_03_perfilamento_e_otimizacao.md#profilando-um-script) o desempenho do script nos dados do gráfico, levou cerca de 241,3 milissegundos para calcular a média padrão de 50 barras em 20.155 atualizações de gráfico, e o código crítico com maior impacto no desempenho do script é o [bloco](./06_03_perfilamento_e_otimizacao.md#resultados-de-blocos-de-código) de loop que começa na linha 17:
+
+![Armazenando valores calculados 01](./imgs/Profiling-and-optimization-Optimization-Storing-calculated-values-1.Db6QOvTY_1SK8Tz.webp)
+
+Como o número de iterações do loop depende do valor de `lengthInput`, testar como seu tempo de execução se escala com [outra configuração](./06_03_perfilamento_e_otimizacao.md#profilando-entre-configurações) que exige mais iterações é relevante. Aqui, o valor foi configurado para 2500. Desta vez, o script levou cerca de 12 segundos para completar todas as execuções:
+
+![Armazenando valores calculados 02](./imgs/Profiling-and-optimization-Optimization-Storing-calculated-values-2.DsxEbDvA_DT4zd.webp)
+
+Agora que o código de alto impacto do script foi identificado e um benchmark para melhorar estabelecido, inspecionar o bloco de código crítico para identificar oportunidades de otimização é fundamental. Após examinar os cálculos, é observado o seguinte:
+
+- O único valor que faz com que o cálculo de `weight` na linha 18 varie entre as iterações do loop é o índice do loop. Todos os outros valores em seu cálculo permanecem consistentes. Consequentemente, o `weight` calculado em cada iteração do loop não varia entre as barras do gráfico. Portanto, em vez de calcular os _weight_ em cada atualização, calcular uma vez, na primeira barra, e armazená-los em uma [coleção](./04_09_tipagem_do_sistema.md#coleções) para acesso futuro nas execuções subsequentes do script é adequado.
+- Como os _weight_ nunca mudam, o `denominator` resultante nunca muda. Portanto, adicionar a palavra-chave [var](https://br.tradingview.com/pine-script-reference/v5/#kw_var) à [declaração da variável](./04_06_declaracoes_de_variavel.md) e calcular seu valor uma vez reduz o número de operações de [atribuição de adição](https://br.tradingview.com/pine-script-reference/v5/#op_+=) executadas.
+- Ao contrário do `denominator`, não é possível armazenar o valor do `numerator` para simplificar seu cálculo, pois ele muda consistentemente ao longo do tempo.
+
+No script modificado abaixo, foi adicionada uma variável `weights` para referenciar um [array](https://br.tradingview.com/pine-script-reference/v5/#type_array) que armazena cada `weight` calculado. Essa variável e o `denominator` incluem a palavra-chave [var](https://br.tradingview.com/pine-script-reference/v5/#kw_var) em suas declarações, significando que os valores atribuídos a elas _permanecerão_ ao longo de todas as execuções do script até serem explicitamente reatribuídos. O script calcula seus valores usando um loop [for](https://br.tradingview.com/pine-script-reference/v5/#kw_for) que só é executado na [primeira barra do gráfico](https://br.tradingview.com/pine-script-reference/v5/#var_barstate.isfirst). Em todas as outras barras, ele calcula o `numerator` usando um loop [for…in](https://br.tradingview.com/pine-script-reference/v5/#kw_for...in) que referencia os _valores salvos_ do array `weights`:
+
+```c
+//@version=5
+indicator("Storing calculated values demo", overlay = true)
+
+//@variable The number of bars in the weighted average calculation.
+int lengthInput = input.int(50, "Length", 1, 5000)
+//@variable Window coefficient. 
+float coefInput = input.float(0.5, "Window coefficient", 0.0, 1.0, 0.01)
+
+//@variable An array that stores the `weight` values calculated on the first chart bar. 
+var array<float> weights = array.new<float>()
+
+//@variable The sum of weighted `close` prices.
+float numerator = 0.0
+//@variable The sum of weights. The script now only calculates this value on the first bar. 
+var float denominator = 0.0
+
+//@variable The angular step in the cosine calculation.
+float step = 2.0 * math.pi / lengthInput
+
+// Populate the `weights` array and calculate the `denominator` only on the first bar.
+if barstate.isfirst
+    for i = 0 to lengthInput - 1
+        float weight = coefInput - (1 - coefInput) * math.cos(step * i)
+        array.push(weights, weight)
+        denominator += weight
+// Calculate the `numerator` on each bar using the stored `weights`. 
+for [i, w] in weights
+    numerator += close[i] * w
+
+// Plot the weighted average result.
+plot(numerator / denominator, "Weighted average", color.purple, 3)
+```
+
+Com essa estrutura otimizada, os [resultados perfilados](./06_03_perfilamento_e_otimizacao.md#interpretando-resultados-perfilados) mostram que o script modificado com um valor alto de `lengthInput` de 2500 levou cerca de 5,9 segundos para calcular nos mesmos dados, cerca de _metade_ do tempo da versão anterior:
+
+![Armazenando valores calculados 03](./imgs/Profiling-and-optimization-Optimization-Storing-calculated-values-3.k6QQwb-Z_ZqmRWt.webp)
+
+__Note que:__
+
+- Embora o desempenho deste script tenha sido significativamente melhorado ao salvar seus valores invariantes de execução em variáveis, ele ainda envolve um custo computacional mais alto com valores grandes de `lengthInput` devido aos cálculos de loop restantes que são executados em cada barra.
+- Outra maneira mais _avançada_ de melhorar ainda mais o desempenho deste script é armazenar os _weight_ em uma [_matrix_](https://br.tradingview.com/pine-script-reference/v5/#type_matrix) de uma única linha na primeira barra, usar um [array](https://br.tradingview.com/pine-script-reference/v5/#type_array) como [fila](./04_14_arrays.md#utilizando-um-array-como-uma-fila) para armazenar os valores recentes de close e substituir o loop for…in por uma chamada para [matrix.mult()](https://br.tradingview.com/pine-script-reference/v5/#fun_matrix.mult). Veja a página de [_Matrices_](./04_15_matrices.md) para aprender mais sobre como trabalhar com funções `matrix.*()`. -->
 
 ## Profilando Entre Configurações
