@@ -1480,4 +1480,107 @@ Quando um script usa [loops](./04_08_loops.md) que um programador não pode [eli
 > __Observação!__\
 > Antes de identificar maneiras de _otimizar_ um loop, recomenda-se procurar maneiras de [eliminá-lo](./06_03_perfilamento_e_otimizacao.md#eliminando-loops) primeiro. Se __não existir solução__ que torne o loop desnecessário, então prossiga tentando reduzir seu overhead.
 
+### Reduzindo Cálculos em Loops
+
+O código executado dentro do escopo local de um [loop](./04_08_loops.md) pode ter um impacto __multiplicativo__ no seu tempo de execução geral, já que cada vez que uma instrução de loop é executada, ela normalmente aciona _várias_ iterações do código local. Portanto, os programadores devem se esforçar para manter os cálculos de um loop o mais simples possível, eliminando estruturas, chamadas de funções e operações desnecessárias para minimizar o impacto no desempenho, especialmente quando o script precisa avaliar seus loops _várias vezes_ ao longo de todas as suas execuções.
+
+Por exemplo, este script contém uma função `filteredMA()` que calcula uma média móvel de até `length` valores únicos de `source`, dependendo dos elementos `true` em um `mask` [array](https://br.tradingview.com/pine-script-reference/v5/#type_array) especificado. A função coloca os valores únicos de `source` em um `data` [array](https://br.tradingview.com/pine-script-reference/v5/#type_array), usa um loop [for…in](https://br.tradingview.com/pine-script-reference/v5/#kw_for...in) para iterar sobre o `data` e calcular as somas do `numerator` e `denominator`, e então retorna a razão dessas somas. Dentro do loop, ela só adiciona valores às somas quando o elemento `data` não é [na](https://br.tradingview.com/pine-script-reference/v5/#var_na) e o elemento `mask` no `index` é `true`. O script utiliza esta [função definida pelo usuário](./04_11_funcoes_definidas_pelo_usuario.md) para calcular a média de até 100 preços de [fechamento](https://br.tradingview.com/pine-script-reference/v5/#var_close) únicos filtrados por `randMask` e plota o resultado no gráfico:
+
+```c
+//@version=5
+indicator("Reducing loop calculations demo", overlay = true)
+
+//@function Calculates a moving average of up to `length` unique `source` values filtered by a `mask` array.
+filteredMA(float source, int length, array<bool> mask) =>
+    // Raise a runtime error if the size of the `mask` doesn't equal the `length`.
+    if mask.size() != length
+        runtime.error("The size of the `mask` array used in the `filteredMA()` call must match the `length`.")
+    //@variable An array containing `length` unique `source` values.
+    var array<float> data = array.new<float>(length)
+    // Queue unique `source` values into the `data` array.
+    if not data.includes(source)
+        data.push(source)
+        data.shift()
+    // The numerator and denominator of the average.
+    float numerator   = 0.0
+    float denominator = 0.0
+    // Loop to calculate sums.
+    for item in data
+        if na(item)
+            continue
+        int index = array.indexof(data, item)
+        if mask.get(index)
+            numerator   += item
+            denominator += 1.0
+    // Return the average, or the last non-`na` average value if the current value is `na`.
+    fixnan(numerator / denominator)
+
+//@variable An array of 100 pseudorandom "bool" values.
+var array<bool> randMask = array.new<bool>(100, true)
+// Push the first element from `randMask` to the end and queue a new pseudorandom value.
+randMask.push(randMask.shift())
+randMask.push(math.random(seed = 12345) < 0.5)
+randMask.shift()
+
+// Plot the `filteredMA()` of up to 100 unique `close` values filtered by the `randMask`.
+plot(filteredMA(close, 100, randMask))
+```
+
+Após [perfilar o script](./06_03_perfilamento_e_otimizacao.md#profilando-um-script), observou-se que ele levou cerca de dois segundos para executar 21.778 vezes. O código com maior impacto no desempenho é a expressão na linha 37, que chama a função `filteredMA()`. Dentro do escopo da função `filteredMA()`, o loop [for…in](https://br.tradingview.com/pine-script-reference/v5/#kw_for...in) tem o maior impacto, com o cálculo de `index` no escopo do loop (linha 22) contribuindo mais para o tempo de execução do loop:
+
+![Reduzindo cálculos em loops 01](./imgs/Profiling-and-optimization-Optimization-Optimizing-loops-Reducing-loop-calculations-1.DATOq5cw_2jUPjt.webp)
+
+O código acima demonstra o uso subótimo de um loop [for…in](https://br.tradingview.com/pine-script-reference/v5/#kw_for...in), pois __não__ é necessário chamar [array.indexof()](https://br.tradingview.com/pine-script-reference/v5/#fun_array.indexof) para recuperar o `index` neste caso. A função [array.indexof()](https://br.tradingview.com/pine-script-reference/v5/#fun_array.indexof) pode ser _custosa_ de chamar dentro de um loop, pois precisa procurar nos conteúdos do [array](./04_14_arrays.md) e localizar o índice do elemento correspondente _cada vez_ que o script a chama.
+
+Para eliminar essa chamada custosa do loop [for…in](https://br.tradingview.com/pine-script-reference/v5/#kw_for...in), pode-se usar a _segunda forma_ da estrutura, que produz uma _tupla_ contendo o __index__ e o valor do elemento em cada iteração:
+
+```c
+for [index, item] in data
+```
+
+Nesta versão do script, a chamada [array.indexof()](https://br.tradingview.com/pine-script-reference/v5/#fun_array.indexof) na linha 22 foi removida, pois __não__ é necessária para alcançar o resultado pretendido, e o loop [for…in](https://br.tradingview.com/pine-script-reference/v5/#kw_for...in) foi alterado para usar a forma alternativa:
+
+```c
+//@version=5
+indicator("Reducing loop calculations demo", overlay = true)
+
+//@function Calculates a moving average of up to `length` unique `source` values filtered by a `mask` array.
+filteredMA(float source, int length, array<bool> mask) =>
+    // Raise a runtime error if the size of the `mask` doesn't equal the `length`.
+    if mask.size() != length
+        runtime.error("The size of the `mask` array used in the `filteredMA()` call must match the `length`.")
+    //@variable An array containing `length` unique `source` values.
+    var array<float> data = array.new<float>(length)
+    // Queue unique `source` values into the `data` array.
+    if not data.includes(source)
+        data.push(source)
+        data.shift()
+    // The numerator and denominator of the average.
+    float numerator   = 0.0
+    float denominator = 0.0
+    // Loop to calculate sums.
+    for [index, item] in data
+        if na(item)
+            continue
+        if mask.get(index)
+            numerator   += item
+            denominator += 1.0
+    // Return the average, or the last non-`na` average value if the current value is `na`.
+    fixnan(numerator / denominator)
+
+//@variable An array of 100 pseudorandom "bool" values.
+var array<bool> randMask = array.new<bool>(100, true)
+// Push the first element from `randMask` to the end and queue a new pseudorandom value.
+randMask.push(randMask.shift())
+randMask.push(math.random(seed = 12345) < 0.5)
+randMask.shift()
+
+// Plot the `filteredMA()` of up to 100 unique `close` values filtered by the `randMask`. 
+plot(filteredMA(close, 100, randMask))
+```
+
+Com essa simples mudança, o loop está muito mais eficiente, pois não precisa mais procurar redundantemente no [array](https://br.tradingview.com/pine-script-reference/v5/#type_array) em cada iteração para acompanhar o índice. Os [resultados perfilados](./06_03_perfilamento_e_otimizacao.md#interpretando-resultados-perfilados) desta execução do script mostram que ele levou apenas 0,6 segundos para completar suas execuções, uma melhoria significativa em relação ao resultado da versão anterior:
+
+![Reduzindo cálculos em loops 02](./imgs/Profiling-and-optimization-Optimization-Optimizing-loops-Reducing-loop-calculations-2.ChKixPxa_1dGXff.webp)
+
 ## Profilando Entre Configurações

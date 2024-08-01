@@ -140,6 +140,11 @@ In Profiling and optimization > Storing calculated values > After [profiling]() 
 Deveria ser: [profiling](https://www.tradingview.com/pine-script-docs/writing/profiling-and-optimization/#profiling-a-script)
 Atual: [profiling](https://www.tradingview.com/pine-script-docs/writing/profiling-and-optimization/#profiling-ascript)
 
+In Profiling and optimization > Reducing loop calculations > After [profiling the script](), we see it took about two seconds to execute 21,778 times.
+Deveria ser: [profiling the script](https://www.tradingview.com/pine-script-docs/writing/profiling-and-optimization/#profiling-a-script)
+Atual: [profiling the script](https://www.tradingview.com/pine-script-docs/writing/profiling-and-optimization/#profiling-ascript)
+
+
 
 
 
