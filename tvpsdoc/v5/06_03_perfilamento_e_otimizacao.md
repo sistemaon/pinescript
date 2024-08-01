@@ -1185,7 +1185,7 @@ __Note que:__
 - O número de execuções mostrado para o _código local_ do loop é 25 vezes o número mostrado para o código no _escopo global_ do script, já que cada execução da instrução do loop aciona 25 execuções do bloco local.
 - Este script atualiza seus desenhos em _todas as barras_ no histórico do gráfico para fins de __teste__. No entanto, ele __não__ precisa realmente executar todas essas atualizações históricas, pois os usuários só verão o __resultado final__ da _última barra histórica_ e as mudanças nas _barras em tempo real_. Veja a [próxima seção](./06_03_perfilamento_e_otimizacao.md#reduzindo-atualizações-de-desenho) para aprender mais.
 
-<!-- ### Reduzindo Atualizações de Desenho
+### Reduzindo Atualizações de Desenho
 
 Quando um script produz [objetos de desenho](./04_09_tipagem_do_sistema.md#tipos-de-desenho) que mudam em _barras históricas_, os usuários só verão seus __resultados finais__ nessas barras, pois o script completa suas execuções históricas quando é carregado pela primeira vez no gráfico. A única vez que se verá esses desenhos _evoluírem_ em execuções é durante as _barras em tempo real_, à medida que novos dados são recebidos.
 
@@ -1268,7 +1268,7 @@ __Note que:__
 
 - O script ainda atualizará as células quando novas atualizações em tempo real chegarem, pois os usuários podem observar essas mudanças no gráfico, ao contrário das mudanças que o script executava ao longo das barras históricas.
 
-### Armazenando Valores Calculados
+<!-- ### Armazenando Valores Calculados
 
 Quando um script realiza um cálculo crítico que muda infrequentemente ao longo das execuções, pode-se reduzir seu tempo de execução salvando o resultado em uma variável declarada com as palavras-chave [var](https://br.tradingview.com/pine-script-reference/v5/#kw_var) ou [varip](https://br.tradingview.com/pine-script-reference/v5/#kw_varip) e somente atualizando o valor se o cálculo mudar. Se o script calcular múltiplos valores excessivamente, pode-se armazená-los em [coleções](./04_09_tipagem_do_sistema.md#coleções), [_matrices_](./04_15_matrices.md), [maps](./04_16_mapas.md) ou [objetos](./04_12_objetos.md) de [tipos definidos pelo usuário](./04_09_tipagem_do_sistema.md#tipos-definidos-pelo-usuário).
 
