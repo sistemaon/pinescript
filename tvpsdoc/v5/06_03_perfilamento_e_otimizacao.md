@@ -852,7 +852,202 @@ __Otimização de código__, não confundida com otimização de indicador ou es
 
 Fundamentalmente, a maioria das técnicas usadas para otimizar o código Pine envolve __reduzir__ o número de vezes que cálculos críticos ocorrem ou __substituir__ cálculos significativos por fórmulas ou funções internas simplificadas. Ambos esses paradigmas frequentemente se sobrepõem.
 
-As seções seguintes explicam vários conceitos simples que os programadores podem aplicar para otimizar seu código Pine Script™.
+As seções seguintes explicam vários conceitos simples que os programadores podem aplicar para otimizar seu código Pine Script.
 
 > __Observação!__\
 > Antes de procurar maneiras de otimizar um script, [perfile-o](./06_03_perfilamento_e_otimizacao.md#profilando-um-script) para avaliar seu desempenho e identificar as __regiões críticas do código__ que mais se beneficiarão da otimização.
+
+### Usando Funções Incorporadas
+
+Pine Script oferece uma variedade de funções e variáveis _internas_ que ajudam a simplificar a criação de scripts. Muitas dessas funções internas possuem otimizações internas para maximizar a eficiência e minimizar o tempo de execução. Assim, uma das maneiras mais simples de otimizar o código Pine é utilizar essas funções internas eficientes nos cálculos do script sempre que possível.
+
+Este exemplo mostra como substituir cálculos definidos pelo usuário por uma chamada interna concisa pode melhorar substancialmente o desempenho. Suponha que um programador queira calcular o valor mais alto de uma série em um número especificado de barras. Alguém não familiarizado com todas as funções internas do Pine pode abordar a tarefa usando um código como o seguinte, que usa um [loop](./04_08_loops.md) em cada barra para comparar `length` valores históricos de uma série `source`:
+
+```c
+//@variable A user-defined function to calculate the highest `source` value over `length` bars.
+pineHighest(float source, int length) =>
+    float result = na
+    if bar_index + 1 >= length
+        result := source
+        if length > 1
+            for i = 1 to length - 1
+                result := math.max(result, source[i])
+    result
+```
+
+Alternativamente, pode-se elaborar uma função Pine mais otimizada reduzindo o número de vezes que o loop é executado, já que iterar sobre o histórico do `source` para obter o resultado é necessário apenas quando ocorrem condições específicas:
+
+```c
+//@variable A faster user-defined function to calculate the highest `source` value over `length` bars.
+//          This version only requires a loop when the highest value is removed from the window, the `length` 
+//          changes, or when the number of bars first becomes sufficient to calculate the result. 
+fasterPineHighest(float source, int length) =>
+    var float result = na
+    if source[length] == result or length != length[1] or bar_index + 1 == length
+        result := source
+        if length > 1
+            for i = 1 to length - 1
+                result := math.max(result, source[i])
+    else
+        result := math.max(result, source)
+    result
+```
+
+A função interna [ta.highest()](https://br.tradingview.com/pine-script-reference/v5/#fun_ta.highest) superará __ambas__ essas implementações, pois seus cálculos internos são altamente otimizados para execução eficiente. Abaixo, um script que plota os resultados das chamadas `pineHighest()`, `fasterPineHighest()` e [ta.highest()](https://br.tradingview.com/pine-script-reference/v5/#fun_ta.highest) para comparar seu desempenho usando o [Profiler](./06_03_perfilamento_e_otimizacao.md#pine-profiler):
+
+```c
+//@version=5 
+indicator("Using built-ins demo")
+
+//@variable A user-defined function to calculate the highest `source` value over `length` bars.
+pineHighest(float source, int length) =>
+    float result = na
+    if bar_index + 1 >= length
+        result := source
+        if length > 1
+            for i = 1 to length - 1
+                result := math.max(result, source[i])
+    result
+
+//@variable A faster user-defined function to calculate the highest `source` value over `length` bars.
+//          This version only requires a loop when the highest value is removed from the window, the `length` 
+//          changes, or when the number of bars first becomes sufficient to calculate the result. 
+fasterPineHighest(float source, int length) =>
+    var float result = na
+    if source[length] == result or length != length[1] or bar_index + 1 == length
+        result := source
+        if length > 1
+            for i = 1 to length - 1
+                result := math.max(result, source[i])
+    else
+        result := math.max(result, source)
+    result
+
+plot(pineHighest(close, 20))
+plot(fasterPineHighest(close, 20))
+plot(ta.highest(close, 20))
+```
+
+Os [resultados perfilados](./06_03_perfilamento_e_otimizacao.md#interpretando-resultados-perfilados) em 20.735 execuções de script mostram que a chamada para `pineHighest()` levou mais tempo para executar, com um tempo de execução de 57,9 milissegundos, cerca de 69,3% do tempo total do script. A chamada `fasterPineHighest()` foi mais eficiente, levando apenas cerca de 16,9 milissegundos, aproximadamente 20,2% do tempo total, para calcular os mesmos valores.
+
+A função mais eficiente _de longe_ foi a [ta.highest()](https://br.tradingview.com/pine-script-reference/v5/#fun_ta.highest), que levou apenas 3,2 milissegundos (~3,8% do tempo total de execução) para executar em todos os dados do gráfico e calcular os mesmos valores nesta execução:
+
+![Usando funções incorporadas 01](./imgs/Profiling-and-optimization-Optimization-Using-built-ins-1.CXnfIZo4_ZWjpAS.webp)
+
+Embora esses resultados demonstrem efetivamente que a função interna supera nossas [funções definidas pelo usuário](./04_11_funcoes_definidas_pelo_usuario.md) com um pequeno argumento `length` de 20, é crucial considerar que os cálculos requeridos pelas funções _variarão_ com o valor do argumento. Portanto, pode-se perfilar o código usando [diferentes argumentos](./06_03_perfilamento_e_otimizacao.md#profilando-entre-configurações) para avaliar como o tempo de execução se escala.
+
+Aqui, o argumento `length` em cada chamada de função foi alterado de 20 para 200 e o [script foi perfilado](./06_03_perfilamento_e_otimizacao.md#profilando-um-script) novamente para observar as mudanças no desempenho. O tempo gasto na função `pineHighest()` nesta execução aumentou para cerca de 0,6 segundos (~86% do tempo total de execução), e o tempo gasto na função `fasterPineHighest()` aumentou para cerca de 75 milissegundos. A função [ta.highest()](https://br.tradingview.com/pine-script-reference/v5/#fun_ta.highest), por outro lado, _não_ teve uma mudança substancial no tempo de execução. Levou cerca de 5,8 milissegundos desta vez, apenas alguns milissegundos a mais do que na execução anterior.
+
+Em outras palavras, enquanto nossas [funções definidas pelo usuário](./04_11_funcoes_definidas_pelo_usuario.md) experimentaram um crescimento significativo no tempo de execução com um argumento `length` maior nesta execução, a mudança no tempo de execução da função interna [ta.highest()](https://br.tradingview.com/pine-script-reference/v5/#fun_ta.highest) foi relativamente marginal neste caso, enfatizando ainda mais seus benefícios de desempenho:
+
+![Usando funções incorporadas 02](./imgs/Profiling-and-optimization-Optimization-Using-built-ins-2.wlIsvoLn_Z1yQ1xR.webp)
+
+__Note que:__
+
+- Em muitos cenários, o tempo de execução de um script pode se beneficiar do uso de funções internas quando aplicável. No entanto, a vantagem de desempenho relativa obtida com o uso de funções internas depende do _código de alto impacto_ de um script e das funções internas específicas utilizadas. Em qualquer caso, deve-se sempre [perfilar seus scripts](./06_03_perfilamento_e_otimizacao.md#profilando-um-script), de preferência [várias vezes](./06_03_perfilamento_e_otimizacao.md#perfilamento-repetitivo), ao explorar soluções otimizadas.
+- Os cálculos realizados pelas funções neste exemplo também dependem da sequência dos dados do gráfico. Portanto, programadores podem obter mais insights sobre o desempenho geral ao perfilar o script em [diferentes conjuntos de dados](./06_03_perfilamento_e_otimizacao.md#profilando-entre-configurações).
+
+<!-- ### Reduzindo Repetição
+
+O compilador do Pine Script pode simplificar automaticamente alguns tipos de [código repetitivo](./06_03_perfilamento_e_otimizacao.md#código-insignificante-inusitado-e-redundante) sem a intervenção do programador. No entanto, esse processo automático tem suas limitações. Se um script contiver cálculos repetitivos que o compilador _não_ pode reduzir, os programadores podem reduzir a repetição _manualmente_ para melhorar o desempenho do script.
+
+Por exemplo, este script contém um [método](./04_13_metodos.md#métodos-definidos-pelo-usuário) `valuesAbove()` que conta o número de elementos em um [array](https://br.tradingview.com/pine-script-reference/v5/#type_array) acima do elemento em um índice especificado. O script plota o número de valores acima do elemento no último índice de um array `data` com uma `plotColor` calculada. Calcula a `plotColor` dentro de uma estrutura [switch](https://br.tradingview.com/pine-script-reference/v5/#kw_switch) que chama `valuesAbove()` em todas as 10 de suas expressões condicionais:
+
+```c
+//@version=5
+indicator("Reducing repetition demo")
+
+//@function Counts the number of elements in `this` array above the element at a specified `index`.
+method valuesAbove(array<float> this, int index) =>
+    int result = 0
+    float reference = this.get(index)
+    for [i, value] in this
+        if i == index
+            continue
+        if value > reference
+            result += 1
+    result
+
+//@variable An array containing the most recent 100 `close` prices.
+var array<float> data = array.new<float>(100)
+data.push(close)
+data.shift()
+
+//@variable Returns `color.purple` with a varying transparency based on the `valuesAbove()`.
+color plotColor = switch
+    data.valuesAbove(99) <= 10  => color.new(color.purple, 90)
+    data.valuesAbove(99) <= 20  => color.new(color.purple, 80)
+    data.valuesAbove(99) <= 30  => color.new(color.purple, 70)
+    data.valuesAbove(99) <= 40  => color.new(color.purple, 60)
+    data.valuesAbove(99) <= 50  => color.new(color.purple, 50)
+    data.valuesAbove(99) <= 60  => color.new(color.purple, 40)
+    data.valuesAbove(99) <= 70  => color.new(color.purple, 30)
+    data.valuesAbove(99) <= 80  => color.new(color.purple, 20)
+    data.valuesAbove(99) <= 90  => color.new(color.purple, 10)
+    data.valuesAbove(99) <= 100 => color.new(color.purple, 0)
+
+// Plot the number values in the `data` array above the value at its last index. 
+plot(data.valuesAbove(99), color = plotColor, style = plot.style_area)
+```
+
+Os [resultados perfilados](./06_03_perfilamento_e_otimizacao.md#interpretando-resultados-perfilados) para este script mostram que ele gastou cerca de 2,5 segundos executando 21.201 vezes. As regiões de código com maior impacto no tempo de execução do script são o loop [for](https://br.tradingview.com/pine-script-reference/v5/#kw_for) dentro do escopo local de `valuesAbove()` começando na linha 8 e o bloco [switch](https://br.tradingview.com/pine-script-reference/v5/#kw_switch) que começa na linha 21:
+
+![Reduzindo repetição 01](./imgs/Profiling-and-optimization-Optimization-Reducing-repetition-1.DzXiqnj9_Z1IB5Dn.webp)
+
+Observe que o número de execuções mostrado para o código local dentro de `valuesAbove()` é substancialmente _maior_ do que o número mostrado para o código no escopo global do script, pois o script chama o método até 11 vezes por execução, e os resultados para o [código local da função](./06_03_perfilamento_e_otimizacao.md#chamadas-de-funções-definidas-pelo-usuário) refletem o tempo e as execuções _combinados_ de cada chamada separada:
+
+![Reduzindo repetição 02](./imgs/Profiling-and-optimization-Optimization-Reducing-repetition-2.QnMs1Dg3_ZE1OU8.webp)
+
+Embora cada chamada para `valuesAbove()` use os _mesmos_ argumentos e retorne o _mesmo_ resultado, o compilador não pode reduzir automaticamente esse código durante a tradução. Precisamos fazer isso manualmente. Podemos otimizar este script atribuindo o valor de `data.valuesAbove(99)` a uma _variável_ e _reutilizando_ o valor em todas as outras áreas que exigem o resultado.
+
+Na versão abaixo, modificamos o script adicionando uma variável `count` para referenciar o valor de `data.valuesAbove(99)`. O script usa essa variável no cálculo de `plotColor` e na chamada de [plot()](https://br.tradingview.com/pine-script-reference/v5/#fun_plot):
+
+```c
+//@version=5
+indicator("Reducing repetition demo")
+
+//@function Counts the number of elements in `this` array above the element at a specified `index`.
+method valuesAbove(array<float> this, int index) =>
+    int result = 0
+    float reference = this.get(index)
+    for [i, value] in this
+        if i == index
+            continue
+        if value > reference
+            result += 1
+    result
+
+//@variable An array containing the most recent 100 `close` prices.
+var array<float> data = array.new<float>(100)
+data.push(close)
+data.shift()
+
+//@variable The number values in the `data` array above the value at its last index.
+int count = data.valuesAbove(99)
+
+//@variable Returns `color.purple` with a varying transparency based on the `valuesAbove()`.
+color plotColor = switch
+    count <= 10  => color.new(color.purple, 90)
+    count <= 20  => color.new(color.purple, 80)
+    count <= 30  => color.new(color.purple, 70)
+    count <= 40  => color.new(color.purple, 60)
+    count <= 50  => color.new(color.purple, 50)
+    count <= 60  => color.new(color.purple, 40)
+    count <= 70  => color.new(color.purple, 30)
+    count <= 80  => color.new(color.purple, 20)
+    count <= 90  => color.new(color.purple, 10)
+    count <= 100 => color.new(color.purple, 0)
+
+// Plot the `count`.
+plot(count, color = plotColor, style = plot.style_area)
+```
+
+Com essa modificação, os [resultados perfilados](./06_03_perfilamento_e_otimizacao.md#interpretando-resultados-perfilados) mostram uma melhoria significativa no desempenho, pois o script agora só precisa avaliar a chamada `valuesAbove()` __uma vez__ por execução, em vez de até 11 vezes separadas:
+
+![Reduzindo repetição 03](./imgs/Profiling-and-optimization-Optimization-Reducing-repetition-3.Nge1aqtk_2w60SG.webp)
+
+__Note que:__
+
+- Como este script só chama `valuesAbove()` uma vez, o [código local do método](./04_13_metodos.md#métodos-definidos-pelo-usuário) agora refletirá os resultados dessa chamada específica. Consulte [esta seção](./06_03_perfilamento_e_otimizacao.md#chamadas-de-funções-definidas-pelo-usuário) para aprender mais sobre como interpretar resultados de chamadas de funções e métodos perfilados. -->
+
+## Profilando Entre Configurações

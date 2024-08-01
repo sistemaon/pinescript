@@ -116,6 +116,15 @@ In Profiling and optimization > Repetitive profiling > For example, this script 
 Deveria ser:[queues](https://www.tradingview.com/pine-script-docs/language/arrays/#using-an-array-as-a-queue)
 Atual: [queues](https://www.tradingview.com/pine-script-docs/language/arrays/#using-an-array-as-aqueue)
 
-**No link sobre a constante CURRENCY.KRW https://br.tradingview.com/pine-script-reference/v5/#var_currency.KRW (é para referir a moeda sul coreana won, e não venceu)**
+In Profiling and optimization > Using built-ins > 20 to 200 and [profiled the script]() again to observe the changes in performance.
+Deveria ser: [profiled the script](https://www.tradingview.com/pine-script-docs/writing/profiling-and-optimization/#profiling-a-script)
+Atual: [profiled the script](https://www.tradingview.com/pine-script-docs/writing/profiling-and-optimization/#profiling-ascript)
+
+In Profiling and optimization > Using built-ins > In any case, one should always [profile their scripts](),
+Deveria ser: [profile their scripts](https://www.tradingview.com/pine-script-docs/writing/profiling-and-optimization/#profiling-a-script)
+Atual: [profile their scripts](https://www.tradingview.com/pine-script-docs/writing/profiling-and-optimization/#profiling-ascript)
+
+
+__No link sobre a constante CURRENCY.KRW https://br.tradingview.com/pine-script-reference/v5/#var_currency.KRW (é para referir a moeda sul coreana won, e não venceu)__
 
 no link [chart.right_visible_bar_time](https://br.tradingview.com/pine-script-reference/v5/#var_chart.right_visible_bar_time) A descrição do título não foi traduzido.
