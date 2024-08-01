@@ -947,7 +947,7 @@ __Note que:__
 - Em muitos cenários, o tempo de execução de um script pode se beneficiar do uso de funções internas quando aplicável. No entanto, a vantagem de desempenho relativa obtida com o uso de funções internas depende do _código de alto impacto_ de um script e das funções internas específicas utilizadas. Em qualquer caso, deve-se sempre [perfilar seus scripts](./06_03_perfilamento_e_otimizacao.md#profilando-um-script), de preferência [várias vezes](./06_03_perfilamento_e_otimizacao.md#perfilamento-repetitivo), ao explorar soluções otimizadas.
 - Os cálculos realizados pelas funções neste exemplo também dependem da sequência dos dados do gráfico. Portanto, programadores podem obter mais insights sobre o desempenho geral ao perfilar o script em [diferentes conjuntos de dados](./06_03_perfilamento_e_otimizacao.md#profilando-entre-configurações).
 
-<!-- ### Reduzindo Repetição
+### Reduzindo Repetição
 
 O compilador do Pine Script pode simplificar automaticamente alguns tipos de [código repetitivo](./06_03_perfilamento_e_otimizacao.md#código-insignificante-inusitado-e-redundante) sem a intervenção do programador. No entanto, esse processo automático tem suas limitações. Se um script contiver cálculos repetitivos que o compilador _não_ pode reduzir, os programadores podem reduzir a repetição _manualmente_ para melhorar o desempenho do script.
 
