@@ -1359,4 +1359,125 @@ __Note que:__
 - Embora o desempenho deste script tenha sido significativamente melhorado ao salvar seus valores invariantes de execução em variáveis, ele ainda envolve um custo computacional mais alto com valores grandes de `lengthInput` devido aos cálculos de loop restantes que são executados em cada barra.
 - Outra maneira mais _avançada_ de melhorar ainda mais o desempenho deste script é armazenar os _weight_ em uma [_matrix_](https://br.tradingview.com/pine-script-reference/v5/#type_matrix) de uma única linha na primeira barra, usar um [array](https://br.tradingview.com/pine-script-reference/v5/#type_array) como [fila](./04_14_arrays.md#utilizando-um-array-como-uma-fila) para armazenar os valores recentes de close e substituir o loop for…in por uma chamada para [matrix.mult()](https://br.tradingview.com/pine-script-reference/v5/#fun_matrix.mult). Veja a página de [_Matrices_](./04_15_matrices.md) para aprender mais sobre como trabalhar com funções `matrix.*()`.
 
+### Eliminando Loops
+
+[Loops](./04_08_loops.md) permitem que scripts Pine realizem cálculos _iterativos_ em cada execução. Cada vez que um loop é ativado, seu código local pode ser executado _várias vezes_, muitas vezes levando a um _aumento substancial_ no uso de recursos.
+
+Loops em Pine são necessários para _alguns_ cálculos, como manipular elementos dentro de [coleções](./04_09_tipagem_do_sistema.md#coleções) ou olhar para trás através do histórico de um conjunto de dados para calcular valores _somente_ obtidos na barra atual. No entanto, em muitos outros casos, os programadores usam loops quando __não precisam__, levando a um desempenho de tempo de execução subótimo. Nesses casos, pode-se eliminar loops desnecessários de várias maneiras, dependendo do que seus cálculos envolvem:
+
+- Identificar expressões simplificadas, __sem loops__, que alcancem o mesmo resultado sem iteração.
+- Substituir um loop por funções otimizadas [internas](./06_03_perfilamento_e_otimizacao.md#usando-funções-incorporadas) sempre que possível
+- Distribuir as iterações de um loop _através das barras_ quando viável, em vez de avaliá-las todas de uma vez.
+
+Este exemplo simples contém uma função `avgDifference()` que calcula a diferença média entre o valor `source` da barra atual e todos os valores das `length` barras anteriores. O script chama essa função para calcular a diferença média entre o preço de [fechamento](https://br.tradingview.com/pine-script-reference/v5/#var_close) atual e os preços anteriores de `lengthInput`, depois [plota](./05_15_plots.md) o resultado no gráfico:
+
+```c
+//@version=5
+indicator("Eliminating loops demo")
+
+//@variable The number of bars in the calculation.
+int lengthInput = input.int(20, "Length", 1)
+
+//@function Calculates the average difference between the current `source` and `length` previous `source` values.
+avgDifference(float source, int length) =>
+    float diffSum = 0.0
+    for i = 1 to length
+        diffSum += source - source[i]
+    diffSum / length
+
+plot(avgDifference(close, lengthInput))
+```
+
+Após inspecionar os [resultados perfilados](./06_03_perfilamento_e_otimizacao.md#interpretando-resultados-perfilados) do script com as configurações padrão, vemos que ele levou cerca de 64 milissegundos para executar 20.157 vezes:
+
+![Eliminando loops 01](./imgs/Profiling-and-optimization-Optimization-Eliminating-loops-1.CagHTlaL_Z1XidNw.webp)
+
+Como o `lengthInput` é usado como argumento `length` na chamada `avgDifference()` e esse argumento controla quantas vezes o loop dentro da função deve iterar, o tempo de execução do script __aumentará__ com o valor de `lengthInput`. Aqui, o valor de entrada foi configurado para 2000 nas configurações do script. Desta vez, o script completou suas execuções em cerca de 3,8 segundos:
+
+![Eliminando loops 02](./imgs/Profiling-and-optimization-Optimization-Eliminating-loops-2.GHOgXfCo_Z2hwC8b.webp)
+
+Como visto nesses resultados, a função `avgDifference()` pode ser custosa de chamar, dependendo do valor especificado de `lengthInput`, devido ao loop [for](https://br.tradingview.com/pine-script-reference/v5/#kw_for) que executa em cada barra. No entanto, [loops](./04_08_loops.md) __não__ são necessários para alcançar o resultado. Para entender por quê, vamos examinar mais de perto os cálculos do loop. Podemos representá-los com a seguinte expressão:
+
+```c
+(source - source[1]) + (source - source[2]) + ... + (source - source[length])
+```
+
+Note que ele adiciona o valor _atual_ de `source` `length` vezes. Essas adições iterativas não são necessárias. Podemos simplificar essa parte da expressão para `source * length`, o que a reduz para o seguinte:
+
+```c
+source * length - source[1] - source[2] - ... - source[length]
+```
+
+Ou de forma equivalente:
+
+```c
+source * length - (source[1] + source[2] + ... + source[length])
+```
+
+Após simplificar e reorganizar essa representação dos cálculos do loop, podemos ver que é possível calcular o resultado de uma maneira mais simples e __eliminar__ o loop subtraindo a [soma cumulativa](https://br.tradingview.com/pine-script-reference/v5/#fun_math.sum) dos valores `source` da barra anterior de `source * length`, ou seja:
+
+```c
+source * length - math.sum(source, length)[1]
+```
+
+A função `fastAvgDifference()` abaixo é uma alternativa __sem loop__ à função original `avgDifference()`, que usa a expressão acima para calcular a soma das diferenças `source`, depois divide a expressão pelo `length` para retornar a diferença média:
+
+```c
+//@function A faster way to calculate the `avgDifference()` result. 
+//          Eliminates the `for` loop using the relationship: 
+//          `(x - x[1]) + (x - x[2]) + ... + (x - x[n]) = x * n - math.sum(x, n)[1]`.
+fastAvgDifference(float source, int length) =>
+    (source * length - math.sum(source, length)[1]) / length
+```
+
+Agora que uma solução potencial otimizada foi identificada, é possível comparar o desempenho de `fastAvgDifference()` com a função original `avgDifference()`. O script abaixo é uma versão modificada da anterior que plota os resultados das chamadas de ambas as funções com `lengthInput` como argumento `length`:
+
+```c
+//@version=5
+indicator("Eliminating loops demo")
+
+//@variable The number of bars in the calculation.
+int lengthInput = input.int(20, "Length", 1)
+
+//@function Calculates the average difference between the current `source` and `length` previous `source` values.
+avgDifference(float source, int length) =>
+    float diffSum = 0.0
+    for i = 1 to length
+        diffSum += source - source[i]
+    diffSum / length
+
+//@function A faster way to calculate the `avgDifference()` result. 
+//          Eliminates the `for` loop using the relationship: 
+//          `(x - x[1]) + (x - x[2]) + ... + (x - x[n]) = x * n - math.sum(x, n)[1]`.
+fastAvgDifference(float source, int length) =>
+    (source * length - math.sum(source, length)[1]) / length
+
+plot(avgDifference(close, lengthInput))
+plot(fastAvgDifference(close, lengthInput))
+```
+
+Os [resultados perfilados](./06_03_perfilamento_e_otimizacao.md#interpretando-resultados-perfilados) do script com o `lengthInput` padrão de 20 mostram uma diferença substancial no tempo de execução gasto nas duas chamadas de função. A chamada para a função original levou cerca de 47,3 milissegundos para executar 20.157 vezes nesta execução, enquanto a função otimizada levou apenas 4,5 milissegundos:
+
+![Eliminando loops 03](./imgs/Profiling-and-optimization-Optimization-Eliminating-loops-3.DiuPpBDh_1dyGfx.webp)
+
+Agora, comparar o desempenho com o valor _maior_ de `lengthInput` de 2000 é relevante. Como antes, o tempo de execução gasto na função `avgDifference()` aumentou significativamente. No entanto, o tempo gasto na execução da função `fastAvgDifference()` permaneceu muito próximo ao resultado da [configuração](./06_03_perfilamento_e_otimizacao.md#profilando-entre-configurações) anterior. Em outras palavras, enquanto o tempo de execução da função original escala diretamente com seu argumento `length`, a função otimizada demonstra desempenho relativamente _consistente_ por não exigir um loop:
+
+![Eliminando loops 04](./imgs/Profiling-and-optimization-Optimization-Eliminating-loops-4.V8AwhZcD_23XFmP.webp)
+
+> __Observação!__\
+> Nem todos os cálculos iterativos terão necessariamente alternativas sem loop. No caso de um script só conseguir alcançar seus resultados por meio de iteração, os programadores podem identificar maneiras possíveis de otimizar loops para melhorar o desempenho. Veja a [próxima seção](./06_03_perfilamento_e_otimizacao.md#otimizando-loops) para mais informações.
+
+<!-- ### Otimizando Loops
+
+Embora o [modelo de execução](./04_01_modelo_de_execucao.md) do Pine e as funções internas disponíveis frequentemente _eliminem_ a necessidade de [loops](./04_08_loops.md) em muitos casos, ainda há instâncias em que um script __necessitará__ de [loops](./04_08_loops.md) para alguns tipos de tarefas, incluindo:
+
+- Manipular [coleções](./04_09_tipagem_do_sistema.md#coleções) ou executar cálculos sobre os elementos de uma coleção quando as funções internas disponíveis __não são__ suficientes.
+- Realizar cálculos em barras históricas que __não podem__ ser alcançados com expressões simplificadas sem loop ou funções internas otimizadas.
+- Calcular valores que são __somente__ obtíveis através de iteração.
+
+Quando um script usa [loops](./04_08_loops.md) que um programador não pode [eliminar](./06_03_perfilamento_e_otimizacao.md#eliminando-loops), há [várias técnicas](https://en.wikipedia.org/wiki/Loop_optimization) que podem ser usadas para reduzir seu impacto no desempenho. Esta seção explica duas das técnicas mais comuns e úteis que podem ajudar a melhorar a eficiência de um loop necessário.
+
+> __Observação!__\
+> Antes de identificar maneiras de _otimizar_ um loop, recomenda-se procurar maneiras de [eliminá-lo](./06_03_perfilamento_e_otimizacao.md#eliminando-loops) primeiro. Se __não existir solução__ que torne o loop desnecessário, então prossiga tentando reduzir seu overhead. -->
+
 ## Profilando Entre Configurações
