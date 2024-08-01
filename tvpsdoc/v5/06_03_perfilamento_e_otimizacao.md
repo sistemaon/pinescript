@@ -1268,7 +1268,7 @@ __Note que:__
 
 - O script ainda atualizará as células quando novas atualizações em tempo real chegarem, pois os usuários podem observar essas mudanças no gráfico, ao contrário das mudanças que o script executava ao longo das barras históricas.
 
-<!-- ### Armazenando Valores Calculados
+### Armazenando Valores Calculados
 
 Quando um script realiza um cálculo crítico que muda infrequentemente ao longo das execuções, pode-se reduzir seu tempo de execução salvando o resultado em uma variável declarada com as palavras-chave [var](https://br.tradingview.com/pine-script-reference/v5/#kw_var) ou [varip](https://br.tradingview.com/pine-script-reference/v5/#kw_varip) e somente atualizando o valor se o cálculo mudar. Se o script calcular múltiplos valores excessivamente, pode-se armazená-los em [coleções](./04_09_tipagem_do_sistema.md#coleções), [_matrices_](./04_15_matrices.md), [maps](./04_16_mapas.md) ou [objetos](./04_12_objetos.md) de [tipos definidos pelo usuário](./04_09_tipagem_do_sistema.md#tipos-definidos-pelo-usuário).
 
@@ -1357,6 +1357,6 @@ Com essa estrutura otimizada, os [resultados perfilados](./06_03_perfilamento_e_
 __Note que:__
 
 - Embora o desempenho deste script tenha sido significativamente melhorado ao salvar seus valores invariantes de execução em variáveis, ele ainda envolve um custo computacional mais alto com valores grandes de `lengthInput` devido aos cálculos de loop restantes que são executados em cada barra.
-- Outra maneira mais _avançada_ de melhorar ainda mais o desempenho deste script é armazenar os _weight_ em uma [_matrix_](https://br.tradingview.com/pine-script-reference/v5/#type_matrix) de uma única linha na primeira barra, usar um [array](https://br.tradingview.com/pine-script-reference/v5/#type_array) como [fila](./04_14_arrays.md#utilizando-um-array-como-uma-fila) para armazenar os valores recentes de close e substituir o loop for…in por uma chamada para [matrix.mult()](https://br.tradingview.com/pine-script-reference/v5/#fun_matrix.mult). Veja a página de [_Matrices_](./04_15_matrices.md) para aprender mais sobre como trabalhar com funções `matrix.*()`. -->
+- Outra maneira mais _avançada_ de melhorar ainda mais o desempenho deste script é armazenar os _weight_ em uma [_matrix_](https://br.tradingview.com/pine-script-reference/v5/#type_matrix) de uma única linha na primeira barra, usar um [array](https://br.tradingview.com/pine-script-reference/v5/#type_array) como [fila](./04_14_arrays.md#utilizando-um-array-como-uma-fila) para armazenar os valores recentes de close e substituir o loop for…in por uma chamada para [matrix.mult()](https://br.tradingview.com/pine-script-reference/v5/#fun_matrix.mult). Veja a página de [_Matrices_](./04_15_matrices.md) para aprender mais sobre como trabalhar com funções `matrix.*()`.
 
 ## Profilando Entre Configurações
