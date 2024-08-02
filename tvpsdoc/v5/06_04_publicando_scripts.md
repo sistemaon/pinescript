@@ -6,14 +6,14 @@ Programadores que desejam compartilhar seus scripts Pine com outros traders pode
 > __Observação!__\
 > Se você escreve scripts para uso pessoal, não há necessidade de publicá-los; você pode salvá-los no Pine Editor e usar o botão "Adicionar ao Gráfico" "_Add to Chart_" para adicionar seu script ao seu gráfico.
 
-<!-- ## Visibilidade e Acesso ao Script
+## Visibilidade e Acesso ao Script
 
 Ao publicar um script, você controla sua __visibilidade__ e __acesso__:
 
 - __Visibilidade__ é controlada ao escolher publicar __publicamente__ ou __privadamente__. Veja [Como as ideias e scripts privados diferem dos públicos?](https://br.tradingview.com/support/solutions/43000548335/) no Centro de Ajuda para mais detalhes. Publique publicamente quando você tiver escrito um script que acredita ser útil para outros usuários do TradingView. Scripts públicos estão sujeitos à moderação. Para evitar moderação, certifique-se de que sua publicação esteja em conformidade com as [Regras da Casa](https://br.tradingview.com/support/solutions/43000591638) e [Regras de Publicação de Scripts](https://br.tradingview.com/support/solutions/43000590599). Publique privadamente quando não quiser que seu script seja visível para todos os outros usuários, mas deseja compartilhá-lo com alguns amigos.
 - __Acesso__ determina se os usuários verão seu código-fonte e como poderão usar seu script. Existem três tipos de acesso: _aberto_, _protegido_ (reservado para contas pagas) ou _somente convidado_ (reservado para contas Premium). Veja [Quais são os diferentes tipos de scripts publicados?](https://br.tradingview.com/support/solutions/43000482573) no Centro de Ajuda para mais detalhes.
 
-### Ao Publicar um Script
+<!-- ### Ao Publicar um Script
 
 - O título da publicação é determinado pelo argumento usado para o parâmetro `title` na declaração do script [indicator()](https://br.tradingview.com/pine-script-reference/v5/#fun_indicator) ou [strategy()](https://br.tradingview.com/pine-script-reference/v5/#fun_strategy). Esse título também é usado quando os usuários do TradingView pesquisam nomes de scripts.
 - O nome do seu script no gráfico será o argumento usado para o parâmetro `shorttitle` na declaração do script [indicator()](https://br.tradingview.com/pine-script-reference/v5/#fun_indicator) ou [strategy()](https://br.tradingview.com/pine-script-reference/v5/#fun_strategy), ou o argumento [title] em [library()](https://br.tradingview.com/pine-script-reference/v5/#fun_library).
