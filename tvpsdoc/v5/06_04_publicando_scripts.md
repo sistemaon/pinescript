@@ -24,7 +24,7 @@ Ao publicar um script, você controla sua __visibilidade__ e __acesso__:
 - Seus scripts publicados aparecem na guia "SCRIPTS" do seu perfil de usuário.
 - Um _widget de script_ e uma _página de script_ são criados para o seu script. O widget de script é o espaço reservado do seu script que aparece nos feeds de scripts na plataforma. Ele contém o título do seu script, o gráfico e as primeiras linhas da sua descrição. Quando os usuários clicam no __widget__ do seu script, a __página__ do script é aberta. Ela contém todas as informações relacionadas ao seu script.
 
-<!-- ### Visibilidade
+### Visibilidade
 
 #### Público
 
@@ -73,7 +73,7 @@ Na página do script somente convidado, os autores verão um botão "Gerenciar A
 
 ![Somente convidado](./imgs/PublishingScripts-Access-1.DIcfqipE_Z1WwkqA.webp)
 
-## Preparando uma Publicação
+<!-- ## Preparando uma Publicação
 
 1. Mesmo que você pretenda publicar publicamente, é sempre melhor começar com uma publicação privada, pois você pode usá-la para validar como será sua publicação final. Você pode editar o título, descrição, código ou gráfico das publicações privadas, e ao contrário dos scripts públicos, você pode excluir scripts privados quando não precisar mais deles, então eles são a maneira perfeita de praticar antes de compartilhar um script publicamente. Você pode ler mais sobre como preparar descrições de scripts na publicação [Como Escrevemos e Formatamos Descrições de Scripts](https://br.tradingview.com/chart/SSP/aOYEvBxw-How-We-Write-and-Format-Script-Descriptions).
 
