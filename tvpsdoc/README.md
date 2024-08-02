@@ -152,6 +152,15 @@ In Profiling and optimization > Tips > Working around Profiler overhead > know w
 Deveria ser: [profile the code](https://www.tradingview.com/pine-script-docs/writing/profiling-and-optimization/#profiling-a-script)
 Atual: [profile the code](https://www.tradingview.com/pine-script-docs/writing/profiling-and-optimization/#profiling-ascript)
 
+In Limitations > Time > Script execution > See the [Events triggering the execution of a script]() for a list of
+Deveria ser: [Events triggering the execution of a script](https://www.tradingview.com/pine-script-docs/language/execution-model/#events-triggering-the-execution-of-a-script)
+Atual: [Events triggering the execution of a script](https://www.tradingview.com/pine-script-docs/language/execution-model/#events)
+
+In Limitations > Other limitations > Maximum bars back > References to past values using the [[]]() history-referencing
+Deveria ser: [[]](https://www.tradingview.com/pine-script-reference/v5/#op_%5B%5D)
+Atual: [[]](https://www.tradingview.com/pine-script-reference/v5/#op_op_%5B%5D)
+
+
 __No link sobre a constante CURRENCY.KRW https://br.tradingview.com/pine-script-reference/v5/#var_currency.KRW (é para referir a moeda sul coreana won, e não venceu)__
 
 no link [chart.right_visible_bar_time](https://br.tradingview.com/pine-script-reference/v5/#var_chart.right_visible_bar_time) A descrição do título não foi traduzido.
