@@ -144,9 +144,13 @@ In Profiling and optimization > Reducing loop calculations > After [profiling th
 Deveria ser: [profiling the script](https://www.tradingview.com/pine-script-docs/writing/profiling-and-optimization/#profiling-a-script)
 Atual: [profiling the script](https://www.tradingview.com/pine-script-docs/writing/profiling-and-optimization/#profiling-ascript)
 
+In Profiling and optimization > Tips > Working around Profiler overhead > as explained in [this section](), the time
+Deveria ser: [this section](https://www.tradingview.com/pine-script-docs/writing/profiling-and-optimization/#a-look-into-the-profilers-inner-workings)
+Atual: [this section](https://www.tradingview.com/pine-script-docs/writing/profiling-and-optimization/#alook-into-the-profilers-inner-workings)
 
-
-
+In Profiling and optimization > Tips > Working around Profiler overhead > know where to start without being able to profile the code.
+Deveria ser: [profile the code](https://www.tradingview.com/pine-script-docs/writing/profiling-and-optimization/#profiling-a-script)
+Atual: [profile the code](https://www.tradingview.com/pine-script-docs/writing/profiling-and-optimization/#profiling-ascript)
 
 __No link sobre a constante CURRENCY.KRW https://br.tradingview.com/pine-script-reference/v5/#var_currency.KRW (é para referir a moeda sul coreana won, e não venceu)__
 

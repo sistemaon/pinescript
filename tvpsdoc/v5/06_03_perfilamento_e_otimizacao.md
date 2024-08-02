@@ -757,7 +757,7 @@ O cálculo _"Line time"_ para [blocos de código](./06_03_perfilamento_e_otimiza
 > __Observação!__\
 > O Profiler __não pode__ coletar dados de desempenho individuais para cálculos _internos_ necessários e exibir seus resultados no Pine Editor. Consequentemente, os valores de tempo exibidos pelo Profiler para todas as regiões de código em um script __não__ somarão 100% do tempo total de execução.
 
-### Profilando em Diferentes Configurações
+### Profilando Entre Configurações
 
 Quando a [complexidade temporal](https://pt.wikipedia.org/wiki/Complexidade_de_tempo) de um código não é constante ou seu padrão de execução varia com suas entradas, argumentos de função ou dados disponíveis, muitas vezes é aconselhável fazer o perfilamento do código em _diferentes configurações_ e feeds de dados para obter uma perspectiva mais abrangente sobre seu desempenho geral.
 
@@ -1583,4 +1583,263 @@ Com essa simples mudança, o loop está muito mais eficiente, pois não precisa 
 
 ![Reduzindo cálculos em loops 02](./imgs/Profiling-and-optimization-Optimization-Optimizing-loops-Reducing-loop-calculations-2.ChKixPxa_1dGXff.webp)
 
-## Profilando Entre Configurações
+### Moção do Código Invariante ao Loop
+
+Código _invariante ao loop_ é qualquer região de código dentro do escopo de um [loop](./04_08_loops.md) que produz um resultado __imutável__ em cada iteração. Quando os [loops](./04_08_loops.md) de um script contêm código invariante, isso pode impactar substancialmente o desempenho devido a cálculos __desnecessários__ e excessivos.
+
+Programadores podem otimizar um loop com código invariante movendo os cálculos imutáveis __fora__ do escopo do loop, para que o script precise avaliá-los apenas uma vez por execução, em vez de repetidamente.
+
+O exemplo a seguir contém uma função `featureScale()` que cria uma versão reescalada de um [array](https://br.tradingview.com/pine-script-reference/v5/#type_array). Dentro do loop [for…in](https://br.tradingview.com/pine-script-reference/v5/#kw_for...in) da função, cada elemento é escalado calculando sua distância do [array.min()](https://br.tradingview.com/pine-script-reference/v5/#fun_array.min) e dividindo o valor pelo [array.range()](https://br.tradingview.com/pine-script-reference/v5/#fun_array.range). O script usa essa função para criar uma versão `rescaled` de um array de preços e [plota](./05_15_plots.md) a diferença entre os valores de [rescaled.first()](https://br.tradingview.com/pine-script-reference/v5/#fun_array.first) e [rescaled.avg()](https://br.tradingview.com/pine-script-reference/v5/#fun_array.avg) no gráfico:
+
+```c
+//@version=5
+indicator("Loop-invariant code motion demo")
+
+//@function Returns a feature scaled version of `this` array.
+featureScale(array<float> this) =>
+    array<float> result = array.new<float>()
+    for item in this
+        result.push((item - array.min(this)) / array.range(this))
+    result
+
+//@variable An array containing the most recent 100 `close` prices.
+var array<float> prices = array.new<float>(100, close)
+// Queue the `close` through the `prices` array.
+prices.unshift(close)
+prices.pop()
+
+//@variable A feature scaled version of the `prices` array.
+array<float> rescaled = featureScale(prices)
+
+// Plot the difference between the first element and the average value in the `rescaled` array.
+plot(rescaled.first() - rescaled.avg())
+```
+
+Como visto abaixo, os [resultados perfilados](./06_03_perfilamento_e_otimizacao.md#interpretando-resultados-perfilados) para este script após 20.187 execuções mostram que ele completou sua execução em cerca de 3,3 segundos. O código com maior impacto no desempenho é a linha que contém a chamada da função `featureScale()`, e o código crítico da função é o bloco do loop [for…in](https://br.tradingview.com/pine-script-reference/v5/#kw_for...in) que começa na linha 7:
+
+![Moção do código invariante ao loop 01](./imgs/Profiling-and-optimization-Optimization-Optimizing-loops-Loop-invariant-code-motion-1.BAn098-h_10uiO5.webp)
+
+Ao examinar os cálculos do loop, é possível ver que as chamadas [array.min()](https://br.tradingview.com/pine-script-reference/v5/#fun_array.min) e [array.range()](https://br.tradingview.com/pine-script-reference/v5/#fun_array.range) na linha 8 são __invariantes ao loop__, pois sempre produzem o __mesmo resultado__ em cada iteração. Pode-se tornar o loop muito mais eficiente atribuindo os resultados dessas chamadas a variáveis __fora__ do escopo do loop e referenciando-as conforme necessário.
+
+A função `featureScale()` no script abaixo atribui os valores de [array.min()](https://br.tradingview.com/pine-script-reference/v5/#fun_array.min) e [array.range()](https://br.tradingview.com/pine-script-reference/v5/#fun_array.range) às variáveis `minValue` e `rangeValue` _antes_ de executar o loop [for…in](https://br.tradingview.com/pine-script-reference/v5/#kw_for...in). Dentro do escopo local do loop, ela _referencia_ as variáveis em vez de chamar repetidamente essas funções `array.*()`:
+
+```c
+//@version=5
+indicator("Loop-invariant code motion demo")
+
+//@function Returns a feature scaled version of `this` array.
+featureScale(array<float> this) =>
+    array<float> result = array.new<float>()
+    float minValue      = array.min(this)
+    float rangeValue    = array.range(this)
+    for item in this
+        result.push((item - minValue) / rangeValue)
+    result
+
+//@variable An array containing the most recent 100 `close` prices.
+var array<float> prices = array.new<float>(100, close)
+// Queue the `close` through the `prices` array.
+prices.unshift(close)
+prices.pop()
+
+//@variable A feature scaled version of the `prices` array.
+array<float> rescaled = featureScale(prices)
+
+// Plot the difference between the first element and the average value in the `rescaled` array.
+plot(rescaled.first() - rescaled.avg())
+```
+
+Como visto nos [resultados perfilados](./06_03_perfilamento_e_otimizacao.md#interpretando-resultados-perfilados) do script, mover os cálculos _invariantes ao loop_ para fora do loop leva a uma melhoria substancial no desempenho. Desta vez, o script completou suas execuções em apenas 289,3 milissegundos:
+
+![Moção do código invariante ao loop 02](./imgs/Profiling-and-optimization-Optimization-Optimizing-loops-Loop-invariant-code-motion-2.9LhBcnjw_Zn7pRo.webp)
+
+<!-- ### Minimizando Cálculos de Buffer Histórico
+
+Scripts Pine criam _buffers históricos_ para todas as variáveis e chamadas de função das quais dependem suas saídas. Cada buffer contém informações sobre o intervalo de valores históricos que o script pode acessar com o operador de referência histórica [[]](https://br.tradingview.com/pine-script-reference/v5/#op_%5B%5D).
+
+Um script determina _automaticamente_ o tamanho necessário do buffer para todas as suas variáveis e chamadas de função analisando as referências históricas executadas durante as __primeiras 244 barras__ de um conjunto de dados. Quando um script só referencia o histórico de um valor calculado _após_ essas barras iniciais, ele __reinicia__ suas execuções repetidamente em barras anteriores com buffers históricos sucessivamente maiores até determinar o tamanho apropriado ou gerar um erro de tempo de execução. Essas execuções repetitivas podem aumentar significativamente o tempo de execução de um script em alguns casos.
+
+Quando um script _executa excessivamente_ em um conjunto de dados para calcular buffers históricos, uma maneira eficaz de melhorar seu desempenho é definir _explicitamente_ tamanhos de buffer adequados usando a função [max_bars_back()](https://br.tradingview.com/pine-script-reference/v5/#fun_max_bars_back). Com tamanhos de buffer apropriados declarados explicitamente, o script não precisa reexecutar dados passados para determinar os tamanhos.
+
+Por exemplo, o script abaixo usa uma [polilinha](./05_12_lines_e_boxes.md#polylines-polilinhas) para desenhar um histograma básico representando a distribuição dos valores calculados de `source` ao longo de 500 barras. Na [última barra disponível](https://br.tradingview.com/pine-script-reference/v5/#var_barstate.islast), o script usa um loop [for](https://br.tradingview.com/pine-script-reference/v5/#kw_for) para analisar os valores históricos da série `source` calculada e determinar os [pontos do gráfico](./04_09_tipagem_do_sistema.md#chart-points-pontos-do-gráfico) usados pelo desenho da [polilinha](https://br.tradingview.com/pine-script-reference/v5/#type_polyline). Ele também [plota](./05_15_plots.md) o valor de `bar_index + 1` para verificar o número de barras nas quais foi executado:
+
+```c
+//@version=5
+indicator("Minimizing historical buffer calculations demo", overlay = true)
+
+//@variable A polyline with points that form a histogram of `source` values.
+var polyline display = na
+//@variable The difference Q3 of `high` prices and Q1 of `low` prices over 500 bars.
+float innerRange = ta.percentile_nearest_rank(high, 500, 75) - ta.percentile_nearest_rank(low, 500, 25)
+// Calculate the highest and lowest prices, and the total price range, over 500 bars.
+float highest    = ta.highest(500)
+float lowest     = ta.lowest(500)
+float totalRange = highest - lowest
+
+//@variable The source series for histogram calculation. Its value is the midpoint between the `open` and `close`.
+float source = math.avg(open, close)
+
+if barstate.islast
+    polyline.delete(display)
+    // Calculate the number of histogram bins and their size.
+    int   bins    = int(math.round(5 * totalRange / innerRange))
+    float binSize = totalRange / bins
+    //@variable An array of chart points for the polyline.
+    array<chart.point> points = array.new<chart.point>(bins, chart.point.new(na, na, na))
+    // Loop to build the histogram.
+    for i = 0 to 499
+        //@variable The histogram bin number. Uses past values of the `source` for its calculation.
+        //          The script must execute across all previous bars AGAIN to determine the historical buffer for 
+        //          `source`, as initial references to the calculated series occur AFTER the first 244 bars. 
+        int index = int((source[i] - lowest) / binSize)
+        if na(index)
+            continue
+        chart.point currentPoint = points.get(index)
+        if na(currentPoint.index)
+            points.set(index, chart.point.from_index(bar_index + 1, (index + 0.5) * binSize + lowest))
+            continue
+        currentPoint.index += 1
+    // Add final points to the `points` array and draw the new `display` polyline.
+    points.unshift(chart.point.now(lowest))
+    points.push(chart.point.now(highest))
+    display := polyline.new(points, closed = true)
+
+plot(bar_index + 1, "Number of bars", display = display.data_window)
+```
+
+Como o script _somente_ referencia valores passados de `source` na _última barra_, ele __não__ construirá um buffer histórico adequado para a série dentro das primeiras 244 barras em um conjunto de dados maior. Consequentemente, ele __reexecutará__ em todas as barras históricas para identificar o tamanho adequado do buffer.
+
+Como visto nos [resultados perfilados](./06_03_perfilamento_e_otimizacao.md#interpretando-resultados-perfilados) após executar o script em 20.320 barras, o número de execuções de código _global_ foi 162.560, o que é __oito vezes__ o número de barras do gráfico. Em outras palavras, o script teve que _repetir_ as execuções históricas __mais sete vezes__ para determinar o buffer apropriado para a série `source` neste caso:
+
+![Minimizando cálculos de buffer histórico 01](./imgs/Profiling-and-optimization-Optimization-Minimizing-historical-buffer-calculations-1.Cyx3FoQJ_Z1xcPM1.webp)
+
+Este script só referenciará os valores mais recentes de 500 `source` na última barra histórica e em todas as barras em tempo real. Portanto, pode-se ajudar a estabelecer o buffer correto _sem_ reexecução definindo um comprimento de referência de 500 barras com [max_bars_back()](https://br.tradingview.com/pine-script-reference/v5/#fun_max_bars_back).
+
+No script abaixo, foi adicionado [max_bars_back(source, 500)](https://br.tradingview.com/pine-script-reference/v5/#fun_max_bars_back) após a declaração da variável para especificar explicitamente que o script acessará até 500 valores históricos de `source` durante suas execuções:
+
+```c
+//@version=5
+indicator("Minimizing historical buffer calculations demo", overlay = true)
+
+//@variable A polyline with points that form a histogram of `source` values.
+var polyline display = na
+//@variable The difference Q3 of `high` prices and Q1 of `low` prices over 500 bars.
+float innerRange = ta.percentile_nearest_rank(high, 500, 75) - ta.percentile_nearest_rank(low, 500, 25)
+// Calculate the highest and lowest prices, and the total price range, over 500 bars.
+float highest    = ta.highest(500)
+float lowest     = ta.lowest(500)
+float totalRange = highest - lowest
+
+//@variable The source series for histogram calculation. Its value is the midpoint between the `open` and `close`.
+float source = math.avg(open, close)
+// Explicitly define a 500-bar historical buffer for the `source` to prevent recalculation.
+max_bars_back(source, 500)
+
+if barstate.islast
+    polyline.delete(display)
+    // Calculate the number of histogram bins and their size.
+    int   bins    = int(math.round(5 * totalRange / innerRange))
+    float binSize = totalRange / bins
+    //@variable An array of chart points for the polyline.
+    array<chart.point> points = array.new<chart.point>(bins, chart.point.new(na, na, na))
+    // Loop to build the histogram.
+    for i = 0 to 499
+        //@variable The histogram bin number. Uses past values of the `source` for its calculation.
+        //          Since the `source` now has an appropriate predefined buffer, the script no longer needs 
+        //          to recalculate across previous bars to determine the referencing length. 
+        int index = int((source[i] - lowest) / binSize)
+        if na(index)
+            continue
+        chart.point currentPoint = points.get(index)
+        if na(currentPoint.index)
+            points.set(index, chart.point.from_index(bar_index + 1, (index + 0.5) * binSize + lowest))
+            continue
+        currentPoint.index += 1
+    // Add final points to the `points` array and draw the new `display` polyline.
+    points.unshift(chart.point.now(lowest))
+    points.push(chart.point.now(highest))
+    display := polyline.new(points, closed = true)
+
+plot(bar_index + 1, "Number of bars", display = display.data_window)
+```
+
+Com essa mudança, o script não precisa mais reexecutar em todos os dados históricos para determinar o tamanho do buffer. Como visto nos [resultados perfilados](./06_03_perfilamento_e_otimizacao.md#interpretando-resultados-perfilados) abaixo, o número de execuções do código global agora está alinhado com o número de barras do gráfico, e o script levou significativamente menos tempo para completar todas as suas execuções históricas:
+
+![Minimizando cálculos de buffer histórico 02](./imgs/Profiling-and-optimization-Optimization-Minimizing-historical-buffer-calculations-2.DPrfVLfJ_Z1XIu4W.webp)
+
+__Note que:__
+
+- Este script só requer até as 501 barras históricas mais recentes para calcular sua saída de desenho. Neste caso, outra maneira de otimizar o uso de recursos é incluir `calc_bars_count = 501` na função [indicator()](https://br.tradingview.com/pine-script-reference/v5/#fun_indicator), o que reduz execuções desnecessárias do script ao restringir os dados históricos que o script pode calcular para 501 barras.
+
+> __Observação!__\
+> Ao definir explicitamente um tamanho de buffer para uma referência histórica problemática com [max_bars_back()](https://br.tradingview.com/pine-script-reference/v5/#fun_max_bars_back), é imperativo garantir que o script __não__ usará mais dados do que o especificado posteriormente em suas execuções. Caso contrário, o script ainda tentará recalcular o buffer se o tamanho especificado pelo usuário for insuficiente.
+> Outra consideração ao definir tamanhos de buffer explicitamente é que, quanto maior o buffer, maior o _custo de memória_. Portanto, os programadores devem tentar manter o comprimento do buffer explícito limitado a __apenas__ o número máximo de valores históricos que o script referenciará e __não mais__. Por exemplo, definir um buffer de 5000 barras quando o script só requer 500 valores históricos resultará em um desperdício desnecessário de memória.
+
+## Dicas
+
+### Contornando a Sobrecarga do Profiler
+
+Como o [Pine Profiler](./06_03_perfilamento_e_otimizacao.md#pine-profiler) deve realizar _cálculos extras_ para coletar dados de desempenho, conforme explicado em [esta seção](./06_03_perfilamento_e_otimizacao.md#uma-visão-geral-do-funcionamento-interno-do-profiler), o tempo necessário para executar um script __aumenta__ durante o perfilamento.
+
+A maioria dos scripts funcionará conforme esperado com a sobrecarga do Profiler incluída. No entanto, quando o tempo de execução de um script complexo se aproxima do [limite do plano](https://br.tradingview.com/support/solutions/43000579793), usar o [Profiler](./06_03_perfilamento_e_otimizacao.md#pine-profiler) nele pode fazer com que seu tempo de execução __exceda__ o limite. Esse caso indica que o script provavelmente precisa de [otimização](./06_03_perfilamento_e_otimizacao.md#otimização), mas pode ser desafiador saber por onde começar sem poder [perfilar o código](./06_03_perfilamento_e_otimizacao.md#profilando-um-script). A solução mais eficaz nesse cenário é reduzir o número de barras nas quais o script deve ser executado. Os usuários podem conseguir essa redução de qualquer uma das seguintes maneiras:
+
+- Selecionar um conjunto de dados que tenha menos pontos de dados em seu histórico, por exemplo, um intervalo de tempo mais alto ou um símbolo com dados limitados.
+- Usar lógica condicional para limitar as execuções de código a um intervalo de tempo ou barras específicas.
+- Incluir um argumento `calc_bars_count` na declaração do script para especificar quantas barras históricas recentes ele pode usar.
+
+Reduzir o número de pontos de dados funciona na maioria dos casos porque diminui diretamente o número de vezes que o script deve ser executado, geralmente resultando em menos tempo de execução acumulado.
+
+Como demonstração, este script contém uma função `gcd()` que usa um algoritmo _simples_ para calcular o [max divisor comum](https://pt.wikipedia.org/wiki/M%C3%A1ximo_divisor_comum) de dois inteiros. A função inicializa seu `result` usando o menor valor absoluto dos dois números. Em seguida, ela reduz o valor de `result` em um dentro de um loop [while](https://br.tradingview.com/pine-script-reference/v5/#kw_while) até que possa dividir ambos os números sem restos. Essa estrutura implica que o loop iterará até _N_ vezes, onde _N_ é o menor dos dois argumentos.
+
+Neste exemplo, o script plota o valor de `gcd(10000, 10000 + bar_index)`. O menor dos dois argumentos é sempre 10.000 neste caso, o que significa que o loop [while](https://br.tradingview.com/pine-script-reference/v5/#kw_while) dentro da função exigirá até 10.000 iterações por execução do script, dependendo do valor de [bar_index](https://br.tradingview.com/pine-script-reference/v5/#var_bar_index):
+
+```c
+//@version=5
+indicator("Script takes too long while profiling demo")
+
+//@function Calculates the greatest common divisor of `a` and `b` using a naive algorithm.
+gcd(int a, int b) =>
+    //@variable The greatest common divisor.
+    int result = math.max(math.min(math.abs(a), math.abs(b)), 1)
+    // Reduce the `result` by 1 until it divides `a` and `b` without remainders. 
+    while result > 0
+        if a % result == 0 and b % result == 0
+            break
+        result -= 1
+    // Return the `result`.
+    result
+
+plot(gcd(10000, 10000 + bar_index), "GCD")
+```
+
+Quando o script é adicionado ao gráfico, ele leva algum tempo para executar nos dados do gráfico, mas não gera um erro. No entanto, __após__ habilitar o [Profiler](./06_03_perfilamento_e_otimizacao.md#pine-profiler), o script gera um erro de tempo de execução indicando que excedeu o [limite de tempo de execução](https://br.tradingview.com/support/solutions/43000579793) do plano Premium (40 segundos):
+
+![Contornando a sobrecarga do profiler 01](./imgs/Profiling-and-optimization-Tips-Working-around-profiler-overhead-The-script-takes-too-long-to-execute-1.ChWuvP-N_1heDWT.webp)
+
+O gráfico atual tem mais de 20.000 barras históricas, o que pode ser demais para o script lidar dentro do tempo alocado enquanto o [Profiler](./06_03_perfilamento_e_otimizacao.md#pine-profiler) está ativo. Pode-se tentar limitar o número de execuções históricas para contornar o problema neste caso.
+
+Abaixo, foi incluído `calc_bars_count = 10000` na função [indicator()](https://br.tradingview.com/pine-script-reference/v5/#fun_indicator), que limita o histórico disponível do script às 10.000 barras históricas mais recentes. Após restringir as execuções históricas do script, ele não excede mais o limite do plano Premium durante o perfilamento, permitindo agora inspecionar os resultados de desempenho:
+
+![Contornando a sobrecarga do profiler 02](./imgs/Profiling-and-optimization-Tips-Working-around-profiler-overhead-The-script-takes-too-long-to-execute-2.DN-scZLp_Z1HYEfF.webp)
+
+```c
+//@version=5
+indicator("Script takes too long while profiling demo", calc_bars_count = 10000)
+
+//@function Calculates the greatest common divisor of `a` and `b` using a naive algorithm.
+gcd(int a, int b) =>
+    //@variable The greatest common divisor.
+    int result = math.max(math.min(math.abs(a), math.abs(b)), 1)
+    // Reduce the `result` by 1 until it divides `a` and `b` without remainders.
+    while result > 0
+        if a % result == 0 and b % result == 0
+            break
+        result -= 1
+    // Return the `result`.
+    result
+
+plot(gcd(10000, 10000 + bar_index), "GCD")
+```
+
+> __Observação!__\
+> Este processo pode exigir tentativa e erro, pois determinar o número de execuções que um script computacionalmente pesado pode lidar antes de exceder o tempo limite não é necessariamente direto. Se um script demorar muito para ser executado após habilitar o [Profiler](./06_03_perfilamento_e_otimizacao.md#pine-profiler), experimente diferentes maneiras de limitar suas execuções até conseguir perfilar com sucesso. -->
