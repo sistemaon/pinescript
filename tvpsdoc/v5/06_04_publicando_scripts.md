@@ -97,13 +97,13 @@ Na página do script somente convidado, os autores verão um botão "Gerenciar A
 
 7. Clique no botão "Publicar Script Privado" "_Publish Private Script_" no canto inferior direito da janela. Quando a publicação estiver completa, a página do script publicado aparecerá. Você terminou! Você pode confirmar a publicação acessando seu Perfil de Usuário e visualizando a guia "SCRIPTS". De lá, você poderá abrir a página do seu script e editar sua publicação privada usando o botão "Editar" no canto superior direito da página do seu script. Observe que você também pode atualizar publicações privadas, assim como pode com scripts públicos. Se você quiser compartilhar sua publicação privada com um amigo, envie o URL da página do seu script para ele de forma privada. Lembre-se de que você não pode compartilhar links para publicações privadas em conteúdos públicos do TradingView.
 
-<!-- ## Publicando um Script
+## Publicando um Script
 
 Seja sua intenção publicar privadamente ou publicamente, siga primeiro os passos da seção anterior. Se você pretende publicar privadamente, você terá terminado. Se você pretende publicar publicamente e está satisfeito com o processo preparatório de validação da sua publicação privada, siga os mesmos passos acima, mas não marque a caixa "Script Privado" "_Private Script_" e clique no botão "Publicar Script Público" "_Publish Public Script_" no canto inferior direito da página "Publicar Script" "_Publish Script_".
 
 Ao publicar um novo script público, você tem uma janela de 15 minutos para fazer alterações na sua descrição ou excluir a publicação. Depois disso, você não poderá mais alterar o título, a descrição, a visibilidade ou o tipo de acesso da sua publicação. Se você cometer um erro, envie uma mensagem para a conta moderadora [PineCoders](https://br.tradingview.com/u/PineCoders); eles moderam as publicações de scripts e ajudarão.
 
-## Atualizando uma Publicação
+<!-- ## Atualizando uma Publicação
 
 Você pode atualizar publicações de scripts públicos ou privados. Ao atualizar um script, seu código deve ser diferente do código da versão publicada anteriormente. Você pode adicionar notas de lançamento com sua atualização. Elas aparecerão após a descrição original do seu script na página do script.
 
