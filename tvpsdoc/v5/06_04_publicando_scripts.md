@@ -103,7 +103,7 @@ Seja sua intenção publicar privadamente ou publicamente, siga primeiro os pass
 
 Ao publicar um novo script público, você tem uma janela de 15 minutos para fazer alterações na sua descrição ou excluir a publicação. Depois disso, você não poderá mais alterar o título, a descrição, a visibilidade ou o tipo de acesso da sua publicação. Se você cometer um erro, envie uma mensagem para a conta moderadora [PineCoders](https://br.tradingview.com/u/PineCoders); eles moderam as publicações de scripts e ajudarão.
 
-<!-- ## Atualizando uma Publicação
+## Atualizando uma Publicação
 
 Você pode atualizar publicações de scripts públicos ou privados. Ao atualizar um script, seu código deve ser diferente do código da versão publicada anteriormente. Você pode adicionar notas de lançamento com sua atualização. Elas aparecerão após a descrição original do seu script na página do script.
 
@@ -126,4 +126,3 @@ Se você pretende atualizar tanto o código quanto o gráfico do seu script publ
 ![Atualizando uma publicação 02](./imgs/PublishingScripts-UpdatingAPublication-2.BMSEQDOQ_Z12mui3.webp)
 
 5. Clique no botão "Publicar Nova Versão" "_Publish New Version_". Pronto.
- -->
