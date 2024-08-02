@@ -1653,7 +1653,7 @@ Como visto nos [resultados perfilados](./06_03_perfilamento_e_otimizacao.md#inte
 
 ![Moção do código invariante ao loop 02](./imgs/Profiling-and-optimization-Optimization-Optimizing-loops-Loop-invariant-code-motion-2.9LhBcnjw_Zn7pRo.webp)
 
-<!-- ### Minimizando Cálculos de Buffer Histórico
+### Minimizando Cálculos de Buffer Histórico
 
 Scripts Pine criam _buffers históricos_ para todas as variáveis e chamadas de função das quais dependem suas saídas. Cada buffer contém informações sobre o intervalo de valores históricos que o script pode acessar com o operador de referência histórica [[]](https://br.tradingview.com/pine-script-reference/v5/#op_%5B%5D).
 
@@ -1775,7 +1775,7 @@ __Note que:__
 > Ao definir explicitamente um tamanho de buffer para uma referência histórica problemática com [max_bars_back()](https://br.tradingview.com/pine-script-reference/v5/#fun_max_bars_back), é imperativo garantir que o script __não__ usará mais dados do que o especificado posteriormente em suas execuções. Caso contrário, o script ainda tentará recalcular o buffer se o tamanho especificado pelo usuário for insuficiente.
 > Outra consideração ao definir tamanhos de buffer explicitamente é que, quanto maior o buffer, maior o _custo de memória_. Portanto, os programadores devem tentar manter o comprimento do buffer explícito limitado a __apenas__ o número máximo de valores históricos que o script referenciará e __não mais__. Por exemplo, definir um buffer de 5000 barras quando o script só requer 500 valores históricos resultará em um desperdício desnecessário de memória.
 
-## Dicas
+<!-- ## Dicas
 
 ### Contornando a Sobrecarga do Profiler
 
