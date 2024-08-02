@@ -73,7 +73,7 @@ Na página do script somente convidado, os autores verão um botão "Gerenciar A
 
 ![Somente convidado](./imgs/PublishingScripts-Access-1.DIcfqipE_Z1WwkqA.webp)
 
-<!-- ## Preparando uma Publicação
+## Preparando uma Publicação
 
 1. Mesmo que você pretenda publicar publicamente, é sempre melhor começar com uma publicação privada, pois você pode usá-la para validar como será sua publicação final. Você pode editar o título, descrição, código ou gráfico das publicações privadas, e ao contrário dos scripts públicos, você pode excluir scripts privados quando não precisar mais deles, então eles são a maneira perfeita de praticar antes de compartilhar um script publicamente. Você pode ler mais sobre como preparar descrições de scripts na publicação [Como Escrevemos e Formatamos Descrições de Scripts](https://br.tradingview.com/chart/SSP/aOYEvBxw-How-We-Write-and-Format-Script-Descriptions).
 
@@ -97,7 +97,7 @@ Na página do script somente convidado, os autores verão um botão "Gerenciar A
 
 7. Clique no botão "Publicar Script Privado" "_Publish Private Script_" no canto inferior direito da janela. Quando a publicação estiver completa, a página do script publicado aparecerá. Você terminou! Você pode confirmar a publicação acessando seu Perfil de Usuário e visualizando a guia "SCRIPTS". De lá, você poderá abrir a página do seu script e editar sua publicação privada usando o botão "Editar" no canto superior direito da página do seu script. Observe que você também pode atualizar publicações privadas, assim como pode com scripts públicos. Se você quiser compartilhar sua publicação privada com um amigo, envie o URL da página do seu script para ele de forma privada. Lembre-se de que você não pode compartilhar links para publicações privadas em conteúdos públicos do TradingView.
 
-## Publicando um Script
+<!-- ## Publicando um Script
 
 Seja sua intenção publicar privadamente ou publicamente, siga primeiro os passos da seção anterior. Se você pretende publicar privadamente, você terá terminado. Se você pretende publicar publicamente e está satisfeito com o processo preparatório de validação da sua publicação privada, siga os mesmos passos acima, mas não marque a caixa "Script Privado" "_Private Script_" e clique no botão "Publicar Script Público" "_Publish Public Script_" no canto inferior direito da página "Publicar Script" "_Publish Script_".
 
