@@ -12,3 +12,5 @@
 ### [Linguagem](./04_linguagem.md)
 
 ### [Conceitos](./05_conceitos.md)
+
+### [Escrevendo Scripts](./06_escrevendo_scripts.md)
