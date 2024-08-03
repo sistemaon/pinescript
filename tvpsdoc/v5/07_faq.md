@@ -26,7 +26,7 @@ plot(realC)
 
 De maneira semelhante, é possível obter outros preços de OHLC: _open_, _high_ e _low_.
 
-<!-- ## Obter Valores OHLC não Padrão em um Gráfico Padrão
+## Obter Valores OHLC não Padrão em um Gráfico Padrão
 
 Backtesting em tipos de gráfico não padrão (por exemplo, Heikin Ashi ou Renko) não é recomendado porque as barras nesses tipos de gráficos não representam movimentos reais de preço que seriam encontrados durante a negociação. Se deseja que sua estratégia entre e saia com preços reais, mas ainda use sinais baseados em Heikin Ashi, pode-se usar o mesmo método para obter valores de Heikin Ashi em um gráfico de velas regular:
 
@@ -43,7 +43,7 @@ if trade == -1
     strategy.entry("BarDn", strategy.short)
 ```
 
-## Plotar Setas no Gráfico
+<!-- ## Plotar Setas no Gráfico
 
 Pode-se usar `plotshape` com os estilos `shape.arrowup` e `shape.arrowdown`:
 
