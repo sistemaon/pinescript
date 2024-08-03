@@ -82,7 +82,7 @@ plot(close[10], trackprice = true, offset = -9999)
 plot(close, color = #FFFFFFFF)  // forces display
 ```
 
-<!-- ## Plotar uma Linha Vertical sob Condição
+## Plotar uma Linha Vertical sob Condição
 
 ```c
 //@version=5
@@ -196,4 +196,4 @@ series = close >= open ? close : na
 vw = fixnan(series)
 plot(series, style = plot.style_linebr, color = color.red)  // series has na values
 plot(vw)  // all na values are replaced with the last non-empty value
-``` -->
+```
