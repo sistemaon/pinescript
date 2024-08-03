@@ -14,3 +14,5 @@
 ### [Conceitos](./05_conceitos.md)
 
 ### [Escrevendo Scripts](./06_escrevendo_scripts.md)
+
+### [FAQ](./07_faq.md)
