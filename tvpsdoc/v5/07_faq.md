@@ -43,7 +43,7 @@ if trade == -1
     strategy.entry("BarDn", strategy.short)
 ```
 
-<!-- ## Plotar Setas no Gráfico
+## Plotar Setas no Gráfico
 
 Pode-se usar `plotshape` com os estilos `shape.arrowup` e `shape.arrowdown`:
 
@@ -69,7 +69,7 @@ plotchar(condition, char='↑', location = location.belowbar, color = color.red,
 
 ![Plotar setas no gráfico 02](./imgs/Buy_sell_chart2.bwHf9rIu_dfdYz.webp)
 
-## Plotar uma Linha Horizontal Dinâmica
+<!-- ## Plotar uma Linha Horizontal Dinâmica
 
 Existe a função `hline` no Pine Script™, mas ela é limitada a plotar apenas um valor constante. Aqui está um script simples com uma solução alternativa para plotar uma `hline` variável:
 
