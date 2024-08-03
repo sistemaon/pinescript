@@ -14,7 +14,7 @@ plot(c)
 
 Pode-se notar que a variável `c` é um preço de fechamento (_close_) Heikin Ashi, que não é o mesmo que o preço real de OHLC. Isso ocorre porque a variável embutida `close` é sempre um valor que corresponde a uma barra visível (ou vela) no gráfico.
 
-Então, como obter os preços reais de OHLC no código Pine Script™, se o tipo de gráfico atual for não padrão? Deve-se usar a função `request.security` em combinação com a função `ticker.new`. Aqui está um exemplo:
+Então, como obter os preços reais de OHLC no código Pine Script, se o tipo de gráfico atual for não padrão? Deve-se usar a função `request.security` em combinação com a função `ticker.new`. Aqui está um exemplo:
 
 ```c
 //@version=5
@@ -69,9 +69,9 @@ plotchar(condition, char='↑', location = location.belowbar, color = color.red,
 
 ![Plotar setas no gráfico 02](./imgs/Buy_sell_chart2.bwHf9rIu_dfdYz.webp)
 
-<!-- ## Plotar uma Linha Horizontal Dinâmica
+## Plotar uma Linha Horizontal Dinâmica
 
-Existe a função `hline` no Pine Script™, mas ela é limitada a plotar apenas um valor constante. Aqui está um script simples com uma solução alternativa para plotar uma `hline` variável:
+Existe a função `hline` no Pine Script, mas ela é limitada a plotar apenas um valor constante. Aqui está um script simples com uma solução alternativa para plotar uma `hline` variável:
 
 ```c
 //@version=5
@@ -82,7 +82,7 @@ plot(close[10], trackprice = true, offset = -9999)
 plot(close, color = #FFFFFFFF)  // forces display
 ```
 
-## Plotar uma Linha Vertical sob Condição
+<!-- ## Plotar uma Linha Vertical sob Condição
 
 ```c
 //@version=5
