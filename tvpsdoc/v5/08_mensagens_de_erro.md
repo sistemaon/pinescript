@@ -41,7 +41,7 @@ if barstate.islast
 plot(e)
 ```
 
-<!-- ## Script Solicitando muitos Ativos
+## Script Solicitando muitos Ativos
 
 O número máximo de ativos em um script é limitado a 40. Se uma variável for declarada como uma chamada de função `request.security` e depois for usada como entrada para outras variáveis e cálculos, isso não resultará em várias chamadas de `request.security`. No entanto, se uma função que chama `request.security` for declarada, cada chamada a essa função contará como uma chamada de `request.security`.
 
@@ -65,7 +65,7 @@ plot(sym('W'))  // (3) another indirect call to security
 request.security(syminfo.tickerid, timeframe.period, open)  // result of this line is never used, and will be optimized out
 ```
 
-## Script não pôde ser Traduzido de: null
+<!-- ## Script não pôde ser Traduzido de: null
 
 ```c
 study($)
