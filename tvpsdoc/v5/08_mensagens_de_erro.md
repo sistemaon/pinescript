@@ -170,7 +170,7 @@ Pode ser convertido em:
 var3 = expr1 + expr2
 ```
 
-<!-- ## Pine Script não Consegue Determinar o Comprimento de Referência de uma Série. Tente Usar max_bars_back na Função Indicator ou Strategy
+## Pine Script não Consegue Determinar o Comprimento de Referência de uma Série. Tente Usar max_bars_back na Função Indicator ou Strategy
 
 O erro aparece em casos onde o Pine Script detecta incorretamente o comprimento máximo necessário das séries usadas em um script. Isso acontece quando o fluxo de execução de um script não permite que o Pine Script inspecione o uso de séries em ramificações de declarações condicionais (`if`, `iff` ou `?`), e o Pine Script não consegue detectar automaticamente quão longe no passado a série é referenciada. Aqui está um exemplo de um script que causa esse problema:
 
@@ -235,4 +235,4 @@ f(off) =>
 plot(f(301))
 ```
 
-Ao usar desenhos que se referem a barras anteriores através de `bar_index[n]` e `xloc = xloc.bar_index`, a série temporal recebida dessa barra será usada para posicionar os desenhos no eixo do tempo. Portanto, se for impossível determinar o tamanho correto do buffer, esse erro pode ocorrer. Para evitar isso, é necessário usar `max_bars_back(time, n)`. Esse comportamento é descrito com mais detalhes na seção sobre [desenhos](./05_12_lines_e_boxes.md#buffer-histórico-e-max_bars_back). -->
+Ao usar desenhos que se referem a barras anteriores através de `bar_index[n]` e `xloc = xloc.bar_index`, a série temporal recebida dessa barra será usada para posicionar os desenhos no eixo do tempo. Portanto, se for impossível determinar o tamanho correto do buffer, esse erro pode ocorrer. Para evitar isso, é necessário usar `max_bars_back(time, n)`. Esse comportamento é descrito com mais detalhes na seção sobre [desenhos](./05_12_lines_e_boxes.md#buffer-histórico-e-max_bars_back).
