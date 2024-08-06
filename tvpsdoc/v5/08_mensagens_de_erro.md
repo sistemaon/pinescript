@@ -65,7 +65,7 @@ plot(sym('W'))  // (3) another indirect call to security
 request.security(syminfo.tickerid, timeframe.period, open)  // result of this line is never used, and will be optimized out
 ```
 
-<!-- ## Script não pôde ser Traduzido de: null
+## Script não pôde ser Traduzido de: null
 
 ```c
 study($)
@@ -107,7 +107,7 @@ indicator("My Script")
 plot(1)
 ```
 
-## Loop é muito Longo (> 500 ms)
+<!-- ## Loop é muito Longo (> 500 ms)
 
 O tempo de computação de loop em cada barra histórica e tick em tempo real é limitado para proteger os servidores de loops infinitos ou muito longos. Esse limite também faz com que indicadores que demoram muito para computar falhem rapidamente. Por exemplo, se houver 5000 barras, e o indicador levar 500 milissegundos para computar em cada uma das barras, resultaria em mais de 16 minutos de carregamento:
 
