@@ -107,7 +107,7 @@ indicator("My Script")
 plot(1)
 ```
 
-<!-- ## Loop é muito Longo (> 500 ms)
+## Loop é muito Longo (> 500 ms)
 
 O tempo de computação de loop em cada barra histórica e tick em tempo real é limitado para proteger os servidores de loops infinitos ou muito longos. Esse limite também faz com que indicadores que demoram muito para computar falhem rapidamente. Por exemplo, se houver 5000 barras, e o indicador levar 500 milissegundos para computar em cada uma das barras, resultaria em mais de 16 minutos de carregamento:
 
@@ -170,7 +170,7 @@ Pode ser convertido em:
 var3 = expr1 + expr2
 ```
 
-## Pine Script não Consegue Determinar o Comprimento de Referência de uma Série. Tente Usar max_bars_back na Função Indicator ou Strategy
+<!-- ## Pine Script não Consegue Determinar o Comprimento de Referência de uma Série. Tente Usar max_bars_back na Função Indicator ou Strategy
 
 O erro aparece em casos onde o Pine Script detecta incorretamente o comprimento máximo necessário das séries usadas em um script. Isso acontece quando o fluxo de execução de um script não permite que o Pine Script inspecione o uso de séries em ramificações de declarações condicionais (`if`, `iff` ou `?`), e o Pine Script não consegue detectar automaticamente quão longe no passado a série é referenciada. Aqui está um exemplo de um script que causa esse problema:
 
