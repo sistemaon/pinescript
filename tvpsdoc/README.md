@@ -161,6 +161,11 @@ Deveria ser: [[]](https://www.tradingview.com/pine-script-reference/v5/#op_%5B%5
 Atual: [[]](https://www.tradingview.com/pine-script-reference/v5/#op_op_%5B%5D)
 
 
+In > Pine Script™ cannot determine the referencing length of a series. Try using max_bars_back in the indicator or strategy function > This behavior is described in more detail in the section about [drawings]().
+Deveria ser: [drawings](https://www.tradingview.com/pine-script-docs/concepts/lines-and-boxes/#historical-buffer-and-max_bars_back)
+Atual: [drawings](https://www.tradingview.com/pine-script-docs/concepts/lines-and-boxes/#historical-buffer-and-max-bars-back)
+
+
 __No link sobre a constante CURRENCY.KRW https://br.tradingview.com/pine-script-reference/v5/#var_currency.KRW (é para referir a moeda sul coreana won, e não venceu)__
 
 no link [chart.right_visible_bar_time](https://br.tradingview.com/pine-script-reference/v5/#var_chart.right_visible_bar_time) A descrição do título não foi traduzido.

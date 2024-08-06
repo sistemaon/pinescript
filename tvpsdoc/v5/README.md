@@ -16,3 +16,5 @@
 ### [Escrevendo Scripts](./06_escrevendo_scripts.md)
 
 ### [FAQ](./07_faq.md)
+
+### [Mensagens de Erro](./08_mensagens_de_erro.md)

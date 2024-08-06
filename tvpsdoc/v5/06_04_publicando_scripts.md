@@ -121,7 +121,7 @@ Se você pretende atualizar tanto o código quanto o gráfico do seu script publ
 
 3. Insira suas notas de lançamento no campo de texto. As diferenças no seu código serão destacadas abaixo de suas notas de lançamento.
 
-4. Caso não queira atualizar o gráfico da publicação, então marca a caixa de seleção "Não atualizar o gráfico" "_Don’t update the chart_":
+4. Caso não queira atualizar o gráfico da publicação, então marca a caixa de seleção "Não atualizar o gráfico" "_Don't update the chart_":
 
 ![Atualizando uma publicação 02](./imgs/PublishingScripts-UpdatingAPublication-2.BMSEQDOQ_Z12mui3.webp)
 
