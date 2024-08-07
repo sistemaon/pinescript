@@ -265,7 +265,7 @@ export enum State
     neutral = "Neutral"  
 ```
 
-Um script que importa esta biblioteca pode usar os membros (valores) do enum `State` como estados nomeados em sua lógica. Aqui, mostramos um script simples e hipotético que importa a biblioteca "Signal" publicada pelo usuário `userName` e usa o enum `Signal.State` para atribuir um dos três valores possíveis a uma variável `mySignal`:
+Um script que importa esta biblioteca pode usar os membros (valores) do enum `State` como estados nomeados em sua lógica. É mostrado um script simples e hipotético que importa a biblioteca "Signal" publicada pelo usuário `userName` e usa o enum `Signal.State` para atribuir um dos três valores possíveis a uma variável `mySignal`:
 
 ```c
 //@version=5

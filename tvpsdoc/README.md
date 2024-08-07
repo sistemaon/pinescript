@@ -168,4 +168,15 @@ Atual: [drawings](https://www.tradingview.com/pine-script-docs/concepts/lines-an
 
 __No link sobre a constante CURRENCY.KRW https://br.tradingview.com/pine-script-reference/v5/#var_currency.KRW (é para referir a moeda sul coreana won, e não venceu)__
 
-no link [chart.right_visible_bar_time](https://br.tradingview.com/pine-script-reference/v5/#var_chart.right_visible_bar_time) A descrição do título não foi traduzido.
+
+
+
+__FALTA TRADUZIR DO SITE:__
+
+- no link [chart.right_visible_bar_time](https://br.tradingview.com/pine-script-reference/v5/#var_chart.right_visible_bar_time) A descrição do título não foi traduzido.
+- no link [backadjustment.on](https://br.tradingview.com/pine-script-reference/v5/#const_backadjustment.on)
+- no link [backadjustment.off](https://br.tradingview.com/pine-script-reference/v5/#const_backadjustment.off)
+- no link [backadjustment.inherit](https://br.tradingview.com/pine-script-reference/v5/#const_backadjustment.inherit)
+- no link [settlement_as_close.inherit](https://br.tradingview.com/pine-script-reference/v5/#const_settlement_as_close.inherit)
+- no link [settlement_as_close.off](https://br.tradingview.com/pine-script-reference/v5/#const_settlement_as_close.off)
+- no link [settlement_as_close.on](https://br.tradingview.com/pine-script-reference/v5/#const_settlement_as_close.on)
