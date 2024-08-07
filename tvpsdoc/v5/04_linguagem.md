@@ -25,10 +25,12 @@
 
 ## 12 [Objetos](./04_12_objetos.md)
 
-## 13 [Métodos](./04_13_metodos.md)
+## 13 [Enums](./04_17_enums.md)
 
-## 14 [Arrays](./04_14_arrays.md)
+## 14 [Métodos](./04_13_metodos.md)
 
-## 15 [Matrices (_Matrix_)](./04_15_matrices.md)
+## 15 [Arrays](./04_14_arrays.md)
 
-## 16 [Mapas](./04_16_mapas.md)
+## 16 [Matrices (_Matrix_)](./04_15_matrices.md)
+
+## 17 [Mapas](./04_16_mapas.md)
