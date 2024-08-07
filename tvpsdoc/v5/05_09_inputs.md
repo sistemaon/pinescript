@@ -24,7 +24,7 @@ plot(ta.sma(sourceInput, lengthInput))
 Entradas só podem ser acessadas quando um script está sendo executado no gráfico. Os usuários do script acessam as entradas através da caixa de diálogo "_Settings_" ("_Configurações_") do script, que pode ser alcançada de uma das seguintes maneiras:
 
 - Com um clique duplo no nome de um indicador no gráfico.
-- Clicando com o botão direito do mouse no nome do script e escolhendo o item "_Settings_" ("_Configurações_") no menu suspenso.
+- Clicando com o botão direito do mouse no nome do script e escolhendo o item "_Settings_" ("_Configurações_") no menu suspenso (_dropdown_).
 - Escolhendo o item "_Settings_" ("_Configurações_") no ícone do menu "_More_" ("_Mais_") (três pontos) que aparece ao passar o cursor sobre o nome do indicador no gráfico.
 - Com um clique duplo no nome do indicador na "_Data Window_" ("_Janela de Dados_") (quarto ícone abaixo à direita do gráfico).
 
@@ -151,7 +151,7 @@ ma = ta.sma(close, maLengthInput)
 plot(ma)
 ```
 
-A versão com a lista `options` usa um menu suspenso para seu widget. Quando o parâmetro `options` não é usado, um widget de entrada simples é usado para inserir o valor.
+A versão com a lista `options` usa um menu suspenso (_dropdown_) para seu widget. Quando o parâmetro `options` não é usado, um widget de entrada simples é usado para inserir o valor.
 
 ![Input integer](./imgs/Inputs-InputTypes-02.png)
 
@@ -275,7 +275,7 @@ plot(maHTF, "MA", color.aqua)
 __Note que:__
 
 - A função [input.timeframe()](https://br.tradingview.com/pine-script-reference/v5/#fun_input{dot}timeframe) é usada para receber a entrada de timeframe.
-- A função cria um widget do menu suspenso onde alguns timeframes padrão são propostos. A lista de timeframes também inclui qualquer timeframe que tenha sido favoritado na interface do usuário do gráfico.
+- A função cria um widget do menu suspenso (_dropdown_) onde alguns timeframes padrão são propostos. A lista de timeframes também inclui qualquer timeframe que tenha sido favoritado na interface do usuário do gráfico.
 - `tfInput` é usado na chamada [request.security()](https://br.tradingview.com/pine-script-reference/v5/#fun_request{dot}security). Também é usado `gaps = barmerge.gaps_on` na chamada, para que a função só retorne dados quando o timeframe superior for completado.
 
 ![Input timeframe](./imgs/Inputs-InputTypes-06.png)
@@ -305,7 +305,7 @@ __Note que:__
 
 ## Input Session
 
-Entradas de sessão são úteis para coletar valores de início e término para períodos de tempo. A função incorporada [input.session()](https://br.tradingview.com/pine-script-reference/v5/#fun_input{dot}session) cria um widget de entrada permitindo que os usuários especifiquem o início e o fim de uma sessão. As seleções podem ser feitas usando um menu suspenso ou inserindo valores de tempo no formato "hh:mm".
+Entradas de sessão são úteis para coletar valores de início e término para períodos de tempo. A função incorporada [input.session()](https://br.tradingview.com/pine-script-reference/v5/#fun_input{dot}session) cria um widget de entrada permitindo que os usuários especifiquem o início e o fim de uma sessão. As seleções podem ser feitas usando um menu suspenso (_dropdown_) ou inserindo valores de tempo no formato "hh:mm".
 
 O valor retornado por [input.session()](https://br.tradingview.com/pine-script-reference/v5/#fun_input{dot}session) é uma string válida no formato de sessão. Veja a página do manual sobre [sessões](./05_17_sessoes.md) para maiores informações.
 
@@ -366,6 +366,65 @@ plotchar(barIsLater, "barIsLater", "🠆", location.top, size = size.tiny)
 ```
 
 Observe que o valor `defval` usado é uma chamada para a função [timestamp()](https://br.tradingview.com/pine-script-reference/v5/#fun_timestamp).
+
+## Input Enum
+
+A função [input.enum()](https://br.tradingview.com/pine-script-reference/v5/#fun_input.enum) cria uma entrada de menu suspenso (_dropdown_) que exibe _títulos de campo_ correspondentes a distintos _membros_ (valores possíveis) de um [tipo enum](./04_09_tipagem_do_sistema.md#tipos-enum). A função retorna um dos valores nomeados únicos de um [enum](./04_17_enums.md) declarado, que scripts podem usar em cálculos e lógica que exigem controle mais rigoroso sobre valores e operações permitidas. Forneça uma lista de membros enum para o parâmetro `options` para especificar os membros que os usuários podem selecionar no menu suspenso (_dropdown_). Se não for especificado um título para um campo enum, seu título será a representação "string" de seu _nome_.
+
+Este exemplo declara um enum `SignalType` com quatro campos representando modos de exibição de sinal nomeados: `long`, `short`, `both`, e `none`. O script usa um membro deste [tipo enum](./04_09_tipagem_do_sistema.md#tipos-enum) como o argumento `defval` na chamada [input.enum()](https://br.tradingview.com/pine-script-reference/v5/#fun_input.enum) para gerar um menu suspenso (_dropdown_) na aba de "Entradas" "_Inputs_", permitindo que os usuários selecionem um dos títulos do enum para controlar quais sinais são exibidos no gráfico:
+
+![Input enum 01](./imgs/Inputs-Input-types-Enum-input-1.D56ry8Yz_4z6vc.webp)
+
+```c
+//@version=5
+indicator("Enum input demo", overlay = true)
+
+//@enum         An enumeration of named values representing signal display modes.
+//@field long   Named value to specify that only long signals are allowed.
+//@field short  Named value to specify that only short signals are allowed.
+//@field both   Named value to specify that either signal type is allowed.
+//@field none   Named value to specify that no signals are allowed. 
+enum SignalType
+    long  = "Only long signals"
+    short = "Only short signals"
+    both  = "Long and short signals"
+    none 
+
+//@variable An enumerator (member) of the `SignalType` enum. Controls the script's signals. 
+SignalType sigInput = input.enum(SignalType.long, "Signal type")
+
+// Calculate moving averages.
+float ma1 = ta.sma(ohlc4, 10)
+float ma2 = ta.sma(ohlc4, 200)
+// Calculate cross signals. 
+bool longCross  = ta.crossover(close, math.max(ma1, ma2))
+bool shortCross = ta.crossunder(close, math.min(ma1, ma2))
+// Calculate long and short signals based on the selected `sigInput` value.
+bool longSignal = (sigInput == SignalType.long or sigInput == SignalType.both) and longCross
+bool shortSignal = (sigInput == SignalType.short or sigInput == SignalType.both) and shortCross
+
+// Plot shapes for the `longSignal` and `shortSignal`.
+plotshape(longSignal, "Long signal", shape.triangleup, location.belowbar, color.teal, size = size.normal)
+plotshape(shortSignal, "Short signal", shape.triangledown, location.abovebar, color.maroon, size = size.normal)
+// Plot the moving averages.
+plot(ma1, "Fast MA")
+plot(ma2, "Slow MA")
+```
+
+__Note que:__
+
+- O valor `sigInput` é o membro `SignalType` cujo campo contém o título selecionado.
+- Como não foi especificado um título para o campo `none` do enum, seu título é a representação "string" de seu nome ("none"), como visto na imagem acima do menu suspenso (_dropdown_) de entrada do enum.
+
+Por padrão, uma entrada enum exibe os títulos de todos os membros de um enum em seu menu suspenso (_dropdown_). Se for fornecido um argumento `options` na chamada [input.enum()](https://br.tradingview.com/pine-script-reference/v5/#fun_input.enum), apenas permitirá que os usuários selecionem os membros incluídos nessa lista, por exemplo:
+
+```c
+SignalType sigInput = input.enum(SignalType.long, "Signal type", options = [SignalType.long, SignalType.short])
+```
+
+O argumento `options` acima especifica que os usuários só podem visualizar e selecionar os títulos dos campos `long` e `short` do enum `SignalType`. Nenhuma outra opção é permitida:
+
+![Input enum 02](./imgs/Inputs-Input-types-Enum-input-2.DoT-LWc3_nngA2.webp)
 
 
 # Outros Recursos que Afetam Inputs
