@@ -478,7 +478,7 @@ A sintaxe para definir um tipo definido pelo usuário é:
 
 Onde:
 
-- `export` é a palavra-chave que um script de [biblioteca](https://br.tradingview.com/pine-script-reference/v5/#fun_library) usa para exportar o tipo definido pelo usuário. Para saber mais sobre a exportação de _UDTs_, veja [Bibliotecas](./05_11_libraries.md#tipos-e-objetos-definidos-pelo-usuário).
+- [export](https://br.tradingview.com/pine-script-reference/v5/#kw_export) é a palavra-chave que um script de [biblioteca](https://br.tradingview.com/pine-script-reference/v5/#fun_library) usa para exportar o tipo definido pelo usuário. Para saber mais sobre a exportação de _UDTs_, veja [Bibliotecas](./05_11_libraries.md#tipos-e-objetos-definidos-pelo-usuário).
 - `<UDT_identifier>` é o nome do tipo definido pelo usuário.
 - `<field_type>` é o tipo do campo.
 - `<field_name>` é o nome do campo.
@@ -487,30 +487,109 @@ Onde:
 O exemplo seguinte, declara um _UDT (User-Defined Type)_ chamado `pivotPoint` com um campo `pivotTime` do tipo "int" e um campo `priceLevel` do tipo "float", que irão armazenar, respectivamente, informações de tempo e preço sobre um pivot calculado:
 
 ```c
-//@type             A user-defined type containing pivot information.
-//@field pivotTime  Contains time information about the pivot.
-//@field priceLevel Contains price information about the pivot.
-type pivotPoint
-    int   pivotTime
-    float priceLevel
+    //@type             A user-defined type containing pivot information.
+    //@field pivotTime  Contains time information about the pivot.
+    //@field priceLevel Contains price information about the pivot.
+    type pivotPoint
+        int   pivotTime
+        float priceLevel
 ```
 
 Os tipos definidos pelo usuário suportam `recursão de tipo`, ou seja, os campos de um _UDT_ podem referenciar objetos do mesmo tipo de _UDT_.
 
-No exemplo abaixo, foi adicionado um campo `nextPivot` ao nosso tipo `pivotPoint` anterior que faz referência a outra instância de `pivotPoint`:
+No exemplo abaixo, foi adicionado um campo `nextPivot` ao tipo `pivotPoint` anterior que faz referência a outra instância de `pivotPoint`:
 
 ```c
-//@type             A user-defined type containing pivot information.
-//@field pivotTime  Contains time information about the pivot.
-//@field priceLevel Contains price information about the pivot.
-//@field nextPivot  A `pivotPoint` instance containing additional pivot information.
-type pivotPoint
-    int        pivotTime
-    float      priceLevel
-    pivotPoint nextPivot
+    //@type             A user-defined type containing pivot information.
+    //@field pivotTime  Contains time information about the pivot.
+    //@field priceLevel Contains price information about the pivot.
+    //@field nextPivot  A `pivotPoint` instance containing additional pivot information.
+    type pivotPoint
+        int        pivotTime
+        float      priceLevel
+        pivotPoint nextPivot
 ```
 
 Os scripts podem usar dois métodos integrados para criar e copiar _UDTs_: `new()` e `copy()`. Veja [Objetos](./04_12_objetos.md) para saber mais sobre _UDTs_.
+
+## Tipos Enum
+
+A palavra-chave [enum](https://br.tradingview.com/pine-script-reference/v5/#kw_enum) permite a criação de um _enum_, também conhecido como _enumeração_, _tipo enumerado_ ou _tipo enum_. Um enum é uma construção de tipo única contendo campos nomeados distintos que representam _membros_ (ou seja, valores possíveis) do tipo. Enums permitem que programadores controlem os valores aceitos por variáveis, expressões condicionais e [coleções](./04_09_tipagem_do_sistema.md#coleções), e facilitam a criação conveniente de [entradas](./05_09_inputs.md#input-enum) de menu suspenso com a função [input.enum()](https://br.tradingview.com/pine-script-reference/v5/#fun_input.enum).
+
+A sintaxe para declarar um enum é a seguinte:
+
+```c
+[export ]enum <enumName>
+    <field_1>[ = <title_1>]
+    <field_2>[ = <title_2>]
+    ...
+    <field_N>[ = <title_N>]
+```
+
+Onde:
+
+- [export](https://br.tradingview.com/pine-script-reference/v5/#kw_export) é a palavra-chave opcional que permite que uma [biblioteca](https://br.tradingview.com/pine-script-reference/v5/#fun_library) exporte o enum para uso em outros scripts. Veja [esta seção](./05_11_libraries.md#tipos-enum) para saber mais sobre a exportação de tipos enum.
+- `<enumName>` é o nome do tipo enum. Scripts podem usar o nome do enum como a palavra-chave do tipo em [declarações de variáveis](./04_06_declaracoes_de_variavel.md) e [templates de tipo](./04_09_tipagem_do_sistema.md#templates-de-tipo).
+- `<field_*>` é o nome de um campo enum, representando um membro nomeado (valor) do tipo `enumName`. Cada campo deve ter um nome único que não corresponda ao nome ou título de qualquer outro campo no enum. Para recuperar um membro enum, referencie seu nome de campo usando a sintaxe de notação de ponto (ou seja, `enumName.fieldName`).
+- `<title_*>` é um título "const string" atribuído a um campo. Se não for especificado um título, o título do campo será a representação "string" de seu nome. A função [input.enum()](https://br.tradingview.com/pine-script-reference/v5/#fun_input.enum) exibe os títulos dos campos em seu menu suspenso na aba "Settings/Inputs" do script. Usuários também podem recuperar o título de um campo com a função [str.tostring()](https://br.tradingview.com/pine-script-reference/v5/#fun_str.tostring). Assim como os nomes dos campos, o título de cada campo não deve corresponder ao nome ou título de qualquer outro campo no enum.
+
+Este exemplo declara um enum `maChoice`. Cada campo dentro desta declaração representa um membro distinto do tipo enum `maChoice`:
+
+[Pine Script™](https://br.tradingview.com/pine-script-docs/en/v5/Introduction.html)
+
+Copiado
+
+```c
+//@enum       An enumeration of named values for moving average selection.
+//@field sma  Selects a Simple Moving Average.
+//@field ema  Selects an Exponential Moving Average.
+//@field wma  Selects a Weighted Moving Average.
+//@field hma  Selects a Hull Moving Average.
+enum maChoice
+    sma  = "Simple Moving Average"
+    ema  = "Exponential Moving Average"
+    wma  = "Weighted Moving Average"
+    hma  = "Hull Moving Average" 
+```
+
+__Note que:__
+
+- Todos os valores possíveis do enum estão disponíveis na _primeira_ execução do script e não mudam nas execuções subsequentes. Portanto, eles adotam automaticamente o qualificador [simples](./04_09_tipagem_do_sistema.md#simple).
+
+O script abaixo usa o enum `maChoice` dentro de uma chamada [input.enum()](https://br.tradingview.com/pine-script-reference/v5/#fun_input.enum) para criar uma entrada de _menu suspenso_ na aba "Settings/Inputs" que exibe todos os títulos dos campos. O valor `maInput` representa o membro do enum que corresponde ao título selecionado pelo usuário. O script usa o membro selecionado dentro de uma estrutura [switch](https://br.tradingview.com/pine-script-reference/v5/#kw_switch) para determinar a média móvel embutida que será calculada:
+
+```c
+//@version=5
+indicator("Enum types demo", overlay = true)
+
+//@enum       An enumeration of named values for moving average selection.
+//@field sma  Selects a Simple Moving Average.
+//@field ema  Selects an Exponential Moving Average.
+//@field wma  Selects a Weighted Moving Average.
+//@field hma  Selects a Hull Moving Average.
+enum maChoice
+    sma  = "Simple Moving Average"
+    ema  = "Exponential Moving Average"
+    wma  = "Weighted Moving Average"
+    hma  = "Hull Moving Average"
+
+//@variable The `maChoice` member representing a selected moving average name.
+maChoice maInput = input.enum(maChoice.sma, "Moving average type")
+//@variable The length of the moving average.
+int lengthInput = input.int(20, "Length", 1, 4999)
+
+//@variable The moving average selected by the `maInput`. 
+float selectedMA = switch maInput
+    maChoice.sma => ta.sma(close, lengthInput)
+    maChoice.ema => ta.ema(close, lengthInput)
+    maChoice.wma => ta.wma(close, lengthInput)
+    maChoice.hma => ta.hma(close, lengthInput)
+
+// Plot the `selectedMA`.
+plot(selectedMA, "Selected moving average", color.teal, 3)
+```
+
+Veja a página [Enums](./04_17_enums.md) e a seção [input enum](./05_09_inputs.md#input-enum) da página [Inputs](./05_09_inputs.md) para saber mais sobre como usar enums e entradas enum.
 
 ## void
 
@@ -533,7 +612,7 @@ myVar = na
 
 A linha de código acima causa um erro de compilação porque o compilador não pode determinar a natureza da variável `myVar`, ou seja, se a variável fará referência a valores numéricos para plotagem, valores de string para definição de texto em uma label ou outros valores para algum outro propósito posterior na execução do script.
 
-Para resolver tais erros, devemos declarar explicitamente o tipo associado à variável. Suponha que a variável `myVar` fará referência a valores "float" em iterações de script subsequentes. Podemos resolver o erro declarando a variável com a palavra-chave [float](https://br.tradingview.com/pine-script-reference/v5/#type_float):
+Para resolver tais erros, deve declarar explicitamente o tipo associado à variável. Suponha que a variável `myVar` fará referência a valores "float" em iterações de script subsequentes. Pode resolver o erro declarando a variável com a palavra-chave [float](https://br.tradingview.com/pine-script-reference/v5/#type_float):
 
 ```c
 float myVar = na
