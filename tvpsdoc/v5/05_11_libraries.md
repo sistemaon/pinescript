@@ -245,6 +245,52 @@ import TradingView/PivotLabels/1 as dpl
 dpl.drawPivots(20, 10, 10)
 ```
 
+## Tipos Enum
+
+Bibliotecas também podem exportar [tipos enum](./04_09_tipagem_do_sistema.md#tipos-enum), permitindo que outros scripts importem conjuntos de valores nomeados predefinidos que ajudam a controlar os valores aceitos por variáveis, expressões condicionais e [coleções](./04_09_tipagem_do_sistema.md#coleções).
+
+Por exemplo, esta biblioteca exporta um enum `State` com três campos representando estados de sinal distintos: `long`, `short` e `neutral`. Esses campos representam os _valores possíveis_ que uma variável, expressão ou coleção do [tipo enum](./04_09_tipagem_do_sistema.md#tipos-enum) pode assumir:
+
+```c
+//@version=5
+library("Signal")
+
+//@enum           An enumeration of named signal states.
+//@field long     Represents a "Long" signal.
+//@field short    Represents a "Short" signal.
+//@field neutral  Represents a "Neutral" signal. 
+export enum State
+    long    = "Long"
+    short   = "Short"
+    neutral = "Neutral"  
+```
+
+Um script que importa esta biblioteca pode usar os membros (valores) do enum `State` como estados nomeados em sua lógica. Aqui, mostramos um script simples e hipotético que importa a biblioteca "Signal" publicada pelo usuário `userName` e usa o enum `Signal.State` para atribuir um dos três valores possíveis a uma variável `mySignal`:
+
+```c
+//@version=5
+indicator("")
+
+import userName/Signal/1 as Signal
+
+// Calculate the median and quarter range values. 
+float medianValue = ta.median(close, 100)
+float rangeValue  = ta.range(close, 100) * 0.25
+// Calculate upper and lower channel values.
+float upper = medianValue + rangeValue
+float lower = medianValue - rangeValue
+
+//@variable Returns `Signal.State.long`, `Signal.State.short`, or `Signal.State.neutral` based on the price action.
+Signal.State mySignal = switch
+    close > upper => Signal.State.long
+    close < lower => Signal.State.short
+    =>               Signal.State.neutral
+
+plot(close, color = mySignal == Signal.State.long ? color.green : mySignal == Signal.State.short ? color.red : na)
+```
+
+Similar à exportação de [UDTs](./05_11_libraries.md#tipos-e-objetos-definidos-pelo-usuário), uma biblioteca __deve__ exportar um enum quando suas funções ou métodos exportados aceitam ou retornam os membros do [enum](./04_17_enums.md), ou quando os campos de um [UDT](./04_09_tipagem_do_sistema.md#tipos-definidos-pelo-usuário) exportado aceitam valores desse [tipo enum](./04_09_tipagem_do_sistema.md#tipos-enum).
+
 
 # Publicando uma Biblioteca
 
