@@ -110,7 +110,7 @@ Preço alvo:
 Recomendações:
 
 - [syminfo.recommendations_buy](https://br.tradingview.com/pine-script-reference/v5/#var_syminfo.recommendations_buy) O número de analistas que deram ao símbolo atual uma classificação de "Compra".
-- [syminfo.recommendations_buy_strong](https://br.tradingview.com/pine-script-reference/v5/#var_syminfo.recommendations_buy_strong) O número de analistas que deram ao símbolo atual uma classificação de "Compra Forte".
+- [syminfo.recommendations_buy_strong](https://br.tradingview.com/pine-script-reference/v5/#var_syminfo.recommendations_buy_strong) O número de analistas que deram ao símbolo atual uma classificação de "Compra Forte" "_Strong Buy_".
 - [syminfo.recommendations_date](https://br.tradingview.com/pine-script-reference/v5/#var_syminfo.recommendations_date) A data de início do último conjunto de recomendações para o símbolo atual.
 - [syminfo.recommendations_hold](https://br.tradingview.com/pine-script-reference/v5/#var_syminfo.recommendations_hold) O número de analistas que deram ao símbolo atual uma classificação de "Manter".
 - [syminfo.recommendations_total](https://br.tradingview.com/pine-script-reference/v5/#var_syminfo.recommendations_total) O número total de recomendações para o símbolo atual.

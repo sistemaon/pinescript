@@ -18,3 +18,6 @@
 ### [FAQ](./07_faq.md)
 
 ### [Mensagens de Erro](./08_mensagens_de_erro.md)
+
+### [Notas de Versão](./09_notas_de_versao.md)
+
