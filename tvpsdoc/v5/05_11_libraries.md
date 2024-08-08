@@ -315,7 +315,7 @@ Como os usuários pretendidos de bibliotecas públicas são outros programadores
 
 ## Regras da Casa
 
-As bibliotecas Pine são consideradas código de "_public domain_" ("_domínio público_") nas nossas [Regras da Casa sobre Publicação de Scripts](https://br.tradingview.com/support/solutions/43000590599), o que significa que não é necessário permissão do autor se chamar suas funções ou reutilizar seu código em seus scripts de código aberto. No entanto, se for pretendido reutilizar o código das funções de uma biblioteca Pine Script em uma publicação pública protegida ou somente com convite, é necessária permissão explícita do autor para reutilização dessa forma.
+As bibliotecas Pine são consideradas código de "_public domain_" ("_domínio público_") nas [Regras da Casa sobre Publicação de Scripts](https://br.tradingview.com/support/solutions/43000590599), o que significa que não é necessário permissão do autor se chamar suas funções ou reutilizar seu código em seus scripts de código aberto. No entanto, se for pretendido reutilizar o código das funções de uma biblioteca Pine Script em uma publicação pública protegida ou somente com convite, é necessária permissão explícita do autor para reutilização dessa forma.
 
 Quer esteja usando funções de uma biblioteca ou reutilizando seu código, é necessário creditar o autor na descrição da sua publicação. Também é uma boa prática creditar em comentários de código aberto.
 
@@ -334,7 +334,7 @@ Onde:
 - O `<libraryVersion>` deve ser especificado explicitamente. Para garantir a confiabilidade dos scripts que utilizam bibliotecas, não há como usar automaticamente a versão mais recente de uma biblioteca. Toda vez que uma atualização de biblioteca é publicada por seu autor, o número da versão da biblioteca aumenta. Se for pretendido usar a versão mais recente da biblioteca, o valor `<libraryVersion>` precisará ser atualizado na declaração [import](https://br.tradingview.com/pine-script-reference/v5/#kw_import).
 - A parte `as <alias>` é opcional. Quando usada, define o namespace que se referirá às funções da biblioteca. Por exemplo, se uma biblioteca for importada usando o alias `allTime`, como no exemplo abaixo, será necessário referir-se às funções da biblioteca como `allTime.<function_name>()`. Quando nenhum alias é definido, o nome da biblioteca se torna seu namespace.
 
-Para usar a biblioteca publicada na seção anterior, nosso próximo script exigirá uma declaração [import](https://br.tradingview.com/pine-script-reference/v5/#kw_import):
+Para usar a biblioteca publicada na seção anterior, o próximo script exigirá uma declaração [import](https://br.tradingview.com/pine-script-reference/v5/#kw_import):
 
 ```c
 import PineCoders/AllTimeHighLow/1 as allTime
@@ -344,7 +344,7 @@ Ao digitar o nome de usuário do autor da biblioteca, é possível usar o comand
 
 ![Usando uma biblioteca](./imgs/Libraries-UsingALibrary-1.png)
 
-Este é um indicador que reutiliza a nossa biblioteca:
+Este é um indicador que reutiliza a biblioteca:
 
 ```c
 //@version=5
