@@ -117,111 +117,68 @@ Recomendações:
 - [syminfo.recommendations_sell](https://br.tradingview.com/pine-script-reference/v5/#var_syminfo.recommendations_sell) O número de analistas que deram ao símbolo atual uma classificação de "Venda".
 - [syminfo.recommendations_sell_strong](https://br.tradingview.com/pine-script-reference/v5/#var_syminfo.recommendations_sell_strong) O número de analistas que deram ao símbolo atual uma classificação de "Venda Forte" "_Strong Sell_".
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<!-- ## 2023
+## 2023
 
 ### Dezembro 2023
 
-Adicionados parâmetros `format` e `precision` a todas as funções `plot*()`, permitindo que indicadores e estratégias apliquem seletivamente configurações de formatação e precisão decimal aos resultados plotados no eixo y do painel do gráfico, na linha de status do script e na Janela de Dados. Os argumentos passados para esses parâmetros substituem os valores nas funções [indicator()](https://br.tradingview.com/pine-script-reference/v5/#fun_indicator) e [strategy()](https://br.tradingview.com/pine-script-reference/v5/#fun_strategy). Ambos são opcionais. Os padrões para esses parâmetros são os mesmos dos valores especificados na declaração do script.
+Adicionados parâmetros `format` e `precision` a todas as funções `plot*()`, permitindo que indicadores e estratégias apliquem seletivamente configurações de formatação e precisão decimal aos resultados plotados no eixo y do painel do gráfico, na linha de status do script e na Janela de Dados. Os argumentos passados para esses parâmetros substituem os valores nas funções [indicator()](https://br.tradingview.com/pine-script-reference/v5/#fun_indicator) e [strategy()](https://br.tradingview.com/pine-script-reference/v5/#fun_strategy). Ambos opcionais. Os padrões para esses parâmetros são os mesmos dos valores especificados na declaração do script.
 
 Por exemplo:
 
-```pinescript
+```c
 //@version=5
 indicator("My script", format = format.percent, precision = 4)
 
-plot(close, format = format.price) // Formato de preço com precisão de 4 dígitos.
-plot(100 * bar_index / close, precision = 2) // Formato percentual com precisão de 2 dígitos.
+plot(close, format = format.price)           // Price format with 4-digit precision.
+plot(100 * bar_index / close, precision = 2) // Percent format with 2-digit precision.
 ```
 
 ### Novembro 2023
 
 Adicionadas as seguintes variáveis e funções ao namespace `strategy.*`:
 
-  * [strategy.grossloss_percent](https://br.tradingview.com/pine-script-reference/v5/#var_strategy.grossloss_percent) O valor total da perda bruta de todas as negociações perdedoras concluídas, expresso como uma porcentagem do capital inicial.
-  * [strategy.grossprofit_percent](https://br.tradingview.com/pine-script-reference/v5/#var_strategy.grossprofit_percent) O valor total do lucro bruto de todas as negociações vencedoras concluídas, expresso como uma porcentagem do capital inicial.
-  * [strategy.max_runup_percent](https://br.tradingview.com/pine-script-reference/v5/#var_strategy.max_runup_percent) O aumento máximo de um vale na curva de capital, expresso como uma porcentagem do valor do vale.
-  * [strategy.max_drawdown_percent](https://br.tradingview.com/pine-script-reference/v5/#var_strategy.max_drawdown_percent) A queda máxima de um pico na curva de capital, expressa como uma porcentagem do valor do pico.
-  * [strategy.netprofit_percent](https://br.tradingview.com/pine-script-reference/v5/#var_strategy.netprofit_percent) O valor total de todas as negociações concluídas, expresso como uma porcentagem do capital inicial.
-  * [strategy.openprofit_percent](https://br.tradingview.com/pine-script-reference/v5/#var_strategy.openprofit_percent) O lucro ou prejuízo não realizado atual para todas as posições abertas, expresso como uma porcentagem do patrimônio realizado.
-  * [strategy.closedtrades.max_drawdown_percent()](https://br.tradingview.com/pine-script-reference/v5/#fun_strategy.closedtrades.max_drawdown_percent) Retorna o rebaixamento máximo da negociação fechada, ou seja, a perda máxima possível durante a negociação, expressa como uma porcentagem.
-  * [strategy.closedtrades.max_runup_percent()](https://br.tradingview.com/pine-script-reference/v5/#fun_strategy.closedtrades.max_runup_percent) Retorna o aumento máximo da negociação fechada, ou seja, o lucro máximo possível durante a negociação, expresso como uma porcentagem.
-  * [strategy.closedtrades.profit_percent()](https://br.tradingview.com/pine-script-reference/v5/#fun_strategy.closedtrades.profit_percent) Retorna o valor do lucro/prejuízo da negociação fechada, expresso como uma porcentagem. As perdas são expressas como valores negativos.
-  * [strategy.opentrades.max_drawdown_percent()](https://br.tradingview.com/pine-script-reference/v5/#fun_strategy.opentrades.max_drawdown_percent) Retorna o rebaixamento máximo da negociação aberta, ou seja, a perda máxima possível durante a negociação, expressa como uma porcentagem.
-  * [strategy.opentrades.max_runup_percent()](https://br.tradingview.com/pine-script-reference/v5/#fun_strategy.opentrades.max_runup_percent) Retorna o aumento máximo da negociação aberta, ou seja, o lucro máximo possível durante a negociação, expresso como uma porcentagem.
-  * [strategy.opentrades.profit_percent()](https://br.tradingview.com/pine-script-reference/v5/#fun_strategy.opentrades.profit_percent) Retorna o lucro/prejuízo da negociação aberta, expresso como uma porcentagem. As perdas são expressas como valores negativos.
+- [strategy.grossloss_percent](https://br.tradingview.com/pine-script-reference/v5/#var_strategy.grossloss_percent) O valor total da perda bruta de todas as negociações perdedoras concluídas, expresso como uma porcentagem do capital inicial.
+- [strategy.grossprofit_percent](https://br.tradingview.com/pine-script-reference/v5/#var_strategy.grossprofit_percent) O valor total do lucro bruto de todas as negociações vencedoras concluídas, expresso como uma porcentagem do capital inicial.
+- [strategy.max_runup_percent](https://br.tradingview.com/pine-script-reference/v5/#var_strategy.max_runup_percent) O aumento máximo de um vale na curva de capital, expresso como uma porcentagem do valor do vale.
+- [strategy.max_drawdown_percent](https://br.tradingview.com/pine-script-reference/v5/#var_strategy.max_drawdown_percent) A queda máxima de um pico na curva de capital, expressa como uma porcentagem do valor do pico.
+- [strategy.netprofit_percent](https://br.tradingview.com/pine-script-reference/v5/#var_strategy.netprofit_percent) O valor total de todas as negociações concluídas, expresso como uma porcentagem do capital inicial.
+- [strategy.openprofit_percent](https://br.tradingview.com/pine-script-reference/v5/#var_strategy.openprofit_percent) O lucro ou prejuízo não realizado atual para todas as posições abertas, expresso como uma porcentagem do patrimônio realizado.
+- [strategy.closedtrades.max_drawdown_percent()](https://br.tradingview.com/pine-script-reference/v5/#fun_strategy.closedtrades.max_drawdown_percent) Retorna o rebaixamento máximo da negociação fechada, ou seja, a perda máxima possível durante a negociação, expressa como uma porcentagem.
+- [strategy.closedtrades.max_runup_percent()](https://br.tradingview.com/pine-script-reference/v5/#fun_strategy.closedtrades.max_runup_percent) Retorna o aumento máximo da negociação fechada, ou seja, o lucro máximo possível durante a negociação, expresso como uma porcentagem.
+- [strategy.closedtrades.profit_percent()](https://br.tradingview.com/pine-script-reference/v5/#fun_strategy.closedtrades.profit_percent) Retorna o valor do lucro/prejuízo da negociação fechada, expresso como uma porcentagem. As perdas são expressas como valores negativos.
+- [strategy.opentrades.max_drawdown_percent()](https://br.tradingview.com/pine-script-reference/v5/#fun_strategy.opentrades.max_drawdown_percent) Retorna o rebaixamento máximo da negociação aberta, ou seja, a perda máxima possível durante a negociação, expressa como uma porcentagem.
+- [strategy.opentrades.max_runup_percent()](https://br.tradingview.com/pine-script-reference/v5/#fun_strategy.opentrades.max_runup_percent) Retorna o aumento máximo da negociação aberta, ou seja, o lucro máximo possível durante a negociação, expresso como uma porcentagem.
+- [strategy.opentrades.profit_percent()](https://br.tradingview.com/pine-script-reference/v5/#fun_strategy.opentrades.profit_percent) Retorna o lucro/prejuízo da negociação aberta, expresso como uma porcentagem. As perdas são expressas como valores negativos.
 
 ### Outubro 2023
 
-#### Polilinhas no Pine Script™
+#### Polilinhas no Pine Script
 
-Polilinhas são desenhos que conectam sequencialmente as coordenadas de um [array](https://br.tradingview.com/pine-script-reference/v5/#type_array) de até 10.000 [pontos do gráfico](https://br.tradingview.com/pine-script-docs/language/type-system/#chart-points) usando segmentos de linha retos ou _curvos_, permitindo que scripts desenhem formações personalizadas que são difíceis ou impossíveis de alcançar usando objetos [linha](https://br.tradingview.com/pine-script-reference/v5/#type_line) ou [caixa](https://br.tradingview.com/pine-script-reference/v5/#type_box). Para saber mais sobre esse novo tipo de desenho, consulte a seção [Polilinhas](https://br.tradingview.com/pine-script-docs/concepts/lines-and-boxes/#polylines) da página de nosso Manual do Usuário sobre [Linhas e Caixas](https://br.tradingview.com/pine-script-docs/concepts/lines-and-boxes/).
+Polilinhas são desenhos que conectam sequencialmente as coordenadas de um [array](https://br.tradingview.com/pine-script-reference/v5/#type_array) de até 10.000 [pontos do gráfico](./04_09_tipagem_do_sistema.md#chart-points-pontos-do-gráfico) usando segmentos de linha retos ou _curvos_, permitindo que scripts desenhem formações personalizadas que são difíceis ou impossíveis de alcançar usando objetos [linha](https://br.tradingview.com/pine-script-reference/v5/#type_line) ou [box](https://br.tradingview.com/pine-script-reference/v5/#type_box). Para saber mais sobre esse novo tipo de desenho, consulte a seção [Polilinhas](./05_12_lines_e_boxes.md#polylines-polilinhas) da página do Manual do Usuário sobre [Linhas e Caixas](./05_12_lines_e_boxes.md).
 
 ### Setembro 2023
 
 Novas funções foram adicionadas:
 
-  * [strategy.default_entry_qty()](https://br.tradingview.com/pine-script-reference/v5/#fun_strategy.default_entry_qty) Calcula a quantidade padrão, em unidades, de uma ordem de entrada de [strategy.entry()](https://br.tradingview.com/pine-script-reference/v5/#fun_strategy.entry) ou [strategy.order()](https://br.tradingview.com/pine-script-reference/v5/#fun_strategy.order) se fosse preenchida ao valor especificado `fill_price`.
-  * [chart.point.new()](https://br.tradingview.com/pine-script-reference/v5/#fun_chart.point.new) Cria um novo objeto [chart.point](https://br.tradingview.com/pine-script-reference/v5/#type_chart.point) com o `time`, `index` e `price` especificados.
-  * [request.seed()](https://br.tradingview.com/pine-script-reference/v5/#fun_request%7Bdot%7Dseed) Solicita dados de um repositório GitHub mantido pelo usuário e os retorna como uma série. Um tutorial detalhado sobre como adicionar novos dados pode ser encontrado [aqui](https://github.com/tradingview-pine-seeds/docs).
-  * [ticker.inherit()](https://br.tradingview.com/pine-script-reference/v5/#fun_ticker%7Bdot%7Dinherit) Constrói um ID de ticker para o `symbol` especificado com parâmetros adicionais herdados do ID de ticker passado na chamada da função, permitindo que o script solicite dados de um símbolo usando os mesmos modificadores que o `from_tickerid` possui, incluindo sessão estendida, ajuste de dividendos, conversão de moeda, tipos de gráfico não padrão, ajuste retroativo, settlement-as-close, etc.
-  * [timeframe.from_seconds()](https://br.tradingview.com/pine-script-reference/v5/#fun_timeframe.from_seconds) Converte um número especificado de `seconds` em uma string de intervalo de tempo válida com base no nosso [formato de especificação de intervalo de tempo](https://br.tradingview.com/pine-script-docs/concepts/timeframes/#timeframe-string-specifications).
+- [strategy.default_entry_qty()](https://br.tradingview.com/pine-script-reference/v5/#fun_strategy.default_entry_qty) Calcula a quantidade padrão, em unidades, de uma ordem de entrada de [strategy.entry()](https://br.tradingview.com/pine-script-reference/v5/#fun_strategy.entry) ou [strategy.order()](https://br.tradingview.com/pine-script-reference/v5/#fun_strategy.order) se fosse preenchida ao valor especificado `fill_price`.
+- [chart.point.new()](https://br.tradingview.com/pine-script-reference/v5/#fun_chart.point.new) Cria um novo objeto [chart.point](https://br.tradingview.com/pine-script-reference/v5/#type_chart.point) com o `time`, `index` e `price` especificados.
+- [request.seed()](https://br.tradingview.com/pine-script-reference/v5/#fun_request%7Bdot%7Dseed) Solicita dados de um repositório GitHub mantido pelo usuário e os retorna como uma série. Um tutorial detalhado sobre como adicionar novos dados pode ser encontrado [aqui](https://github.com/tradingview-pine-seeds/docs).
+- [ticker.inherit()](https://br.tradingview.com/pine-script-reference/v5/#fun_ticker%7Bdot%7Dinherit) Constrói um ID de ticker para o `symbol` especificado com parâmetros adicionais herdados do ID de ticker passado na chamada da função, permitindo que o script solicite dados de um símbolo usando os mesmos modificadores que o `from_tickerid` possui, incluindo sessão estendida, ajuste de dividendos, conversão de moeda, tipos de gráfico não padrão, ajuste retroativo, settlement-as-close, etc.
+- [timeframe.from_seconds()](https://br.tradingview.com/pine-script-reference/v5/#fun_timeframe.from_seconds) Converte um número especificado de `seconds` em uma string de _timeframe_ válida com base no [formato de especificação de _timeframe_](./05_22_timeframes.md#especificações-de-string-do-timeframe).
 
 O namespace `dividends.*` agora inclui variáveis para recuperar informações sobre dividendos futuros:
 
-  * [dividends.future_amount](https://br.tradingview.com/pine-script-reference/v5/#var_dividends.future_amount) Retorna o valor do pagamento do próximo dividendo na moeda do instrumento atual, ou `na` se esses dados não estiverem disponíveis.
-  * [dividends.future_ex_date](https://br.tradingview.com/pine-script-reference/v5/#var_dividends.future_ex_date) Retorna a data Ex-dividendo (Ex-date) do próximo pagamento de dividendo do instrumento atual, ou `na` se esses dados não estiverem disponíveis.
-  * [dividends.future_pay_date](https://br.tradingview.com/pine-script-reference/v5/#var_dividends.future_pay_date) Retorna a data de pagamento (Pay date) do próximo pagamento de dividendo do instrumento atual, ou `na` se esses dados não estiverem disponíveis.
+- [dividends.future_amount](https://br.tradingview.com/pine-script-reference/v5/#var_dividends.future_amount) Retorna o valor do pagamento do próximo dividendo na moeda do instrumento atual, ou `na` se esses dados não estiverem disponíveis.
+- [dividends.future_ex_date](https://br.tradingview.com/pine-script-reference/v5/#var_dividends.future_ex_date) Retorna a data Ex-dividendo (Ex-date) do próximo pagamento de dividendo do instrumento atual, ou `na` se esses dados não estiverem disponíveis.
+- [dividends.future_pay_date](https://br.tradingview.com/pine-script-reference/v5/#var_dividends.future_pay_date) Retorna a data de pagamento (Pay date) do próximo pagamento de dividendo do instrumento atual, ou `na` se esses dados não estiverem disponíveis.
 
 A função [request.security_lower_tf()](https://br.tradingview.com/pine-script-reference/v5/#fun_request.security_lower_tf) tem um novo parâmetro:
 
-  * `ignore_invalid_timeframe` Determina como a função se comporta quando o intervalo de tempo do gráfico é menor que o valor `timeframe` na chamada da função. Se `false`, a função gerará um erro de tempo de execução e interromperá a execução do script. Se `true`, a função retornará `na` sem gerar um erro.
+- `ignore_invalid_timeframe` Determina como a função se comporta quando o _timeframe_ do gráfico é menor que o valor `timeframe` na chamada da função. Se `false`, a função gerará um erro de tempo de execução e interromperá a execução do script. Se `true`, a função retornará `na` sem gerar um erro.
 
-Agora, os usuários podem declarar explicitamente variáveis com os qualificadores de tipo `const`, `simple
+Agora, os usuários podem declarar explicitamente variáveis com os qualificadores de tipo `const`, `simple` e `series`, permitindo um controle mais preciso sobre os tipos de variáveis em seus scripts. Por exemplo:
 
-` e `series`, permitindo um controle mais preciso sobre os tipos de variáveis em seus scripts. Por exemplo:
-
-```pinescript
+```c
 //@version=5
 indicator("My script")
 
@@ -239,12 +196,12 @@ plot(b % a, title = plotTitle)
 
 Adicionados os seguintes [placeholders](https://br.tradingview.com/support/solutions/43000531021) de alerta:
 
-  * `{{syminfo.currency}}` Retorna o código da moeda do símbolo atual ("EUR", "USD", etc.).
-  * `{{syminfo.basecurrency}}` Retorna o código da moeda base do símbolo atual se o símbolo se referir a um par de moedas. Caso contrário, retorna `na`. Por exemplo, retorna "EUR" quando o símbolo é "EURUSD".
+- `{{syminfo.currency}}` Retorna o código da moeda do símbolo atual ("EUR", "USD", etc.).
+- `{{syminfo.basecurrency}}` Retorna o código da moeda base do símbolo atual se o símbolo se referir a um par de moedas. Caso contrário, retorna `na`. Por exemplo, retorna "EUR" quando o símbolo é "EURUSD".
 
-#### Mapas no Pine Script™
+#### Mapas no Pine Script
 
-Mapas são coleções que mantêm elementos na forma de _pares chave-valor_. Eles associam chaves únicas de um _tipo fundamental_ com valores de um tipo _embutido_ ou [definido pelo usuário](https://br.tradingview.com/pine-script-docs/language/type-system/#user-defined-types). Diferente de [arrays](https://br.tradingview.com/pine-script-docs/language/arrays/), essas coleções são _não ordenadas_ e não utilizam um índice de busca interno. Em vez disso, os scripts acessam os valores dos mapas referenciando as _chaves_ dos pares chave-valor inseridos neles. Para mais informações sobre essas novas coleções, consulte a [página de Mapas do Manual do Usuário](https://br.tradingview.com/pine-script-docs/language/maps/).
+Mapas são coleções que mantêm elementos na forma de _pares chave-valor_. Eles associam chaves únicas de um _tipo fundamental_ com valores de um tipo _embutido_ ou [definido pelo usuário](./04_09_tipagem_do_sistema.md#tipos-definidos-pelo-usuário). Diferente de [arrays](./04_14_arrays.md), essas coleções são _não ordenadas_ e não utilizam um índice de busca interno. Em vez disso, os scripts acessam os valores dos mapas referenciando as _chaves_ dos pares chave-valor inseridos neles. Para mais informações sobre essas novas coleções, consulte a [página de Mapas do Manual do Usuário](./04_16_mapas.md).
 
 ### Julho 2023
 
@@ -252,29 +209,29 @@ Corrigido um problema que ocasionalmente fazia com que estratégias calculassem 
 
 Adicionada uma nova variável embutida ao namespace `strategy.*`:
 
-  * [strategy.margin_liquidation_price](https://br.tradingview.com/pine-script-reference/v5/#var_strategy%7Bdot%7Dmargin_liquidation_price) Quando uma estratégia usa margem, retorna o valor do preço após o qual ocorrerá uma chamada de margem.
+- [strategy.margin_liquidation_price](https://br.tradingview.com/pine-script-reference/v5/#var_strategy%7Bdot%7Dmargin_liquidation_price) Quando uma estratégia usa margem, retorna o valor do preço após o qual ocorrerá uma chamada de margem.
 
 ### Junho 2023
 
 Novas variáveis embutidas `syminfo.*` foram adicionadas:
 
-  * [syminfo.sector](https://br.tradingview.com/pine-script-reference/v5/#var_syminfo%7Bdot%7Dsector) Retorna o setor do símbolo.
-  * [syminfo.industry](https://br.tradingview.com/pine-script-reference/v5/#var_syminfo%7Bdot%7Dindustry) Retorna a indústria do símbolo.
-  * [syminfo.country](https://br.tradingview.com/pine-script-reference/v5/#var_syminfo%7Bdot%7Dcountry) Retorna o código de duas letras do país onde o símbolo é negociado.
+- [syminfo.sector](https://br.tradingview.com/pine-script-reference/v5/#var_syminfo%7Bdot%7Dsector) Retorna o setor do símbolo.
+- [syminfo.industry](https://br.tradingview.com/pine-script-reference/v5/#var_syminfo%7Bdot%7Dindustry) Retorna a indústria do símbolo.
+- [syminfo.country](https://br.tradingview.com/pine-script-reference/v5/#var_syminfo%7Bdot%7Dcountry) Retorna o código de duas letras do país onde o símbolo é negociado.
 
 ### Maio 2023
 
 Novo parâmetro adicionado às funções [strategy.entry()](https://br.tradingview.com/pine-script-reference/v5/#fun_strategy%7Bdot%7Dentry), [strategy.order()](https://br.tradingview.com/pine-script-reference/v5/#fun_strategy%7Bdot%7Dorder), [strategy.close()](https://br.tradingview.com/pine-script-reference/v5/#fun_strategy%7Bdot%7Dclose), [strategy.close_all()](https://br.tradingview.com/pine-script-reference/v5/#fun_strategy%7Bdot%7Dclose_all) e [strategy.exit()](https://br.tradingview.com/pine-script-reference/v5/#fun_strategy%7Bdot%7Dexit):
 
-  * `disable_alert` Desativa alertas de preenchimento de ordens para quaisquer ordens colocadas pela função.
+- `disable_alert` Desativa alertas de preenchimento de ordens para quaisquer ordens colocadas pela função.
 
 O recurso "Indicador em indicador", que permite que um script passe a plotagem de outro indicador como um valor de fonte por meio da função [input.source()](https://br.tradingview.com/pine-script-reference/v5/#fun_input%7Bdot%7Dsource), agora suporta várias entradas externas. Scripts podem usar uma multitude de entradas externas originadas de até 10 indicadores diferentes.
 
 Adicionadas as seguintes funções de array:
 
-  * [array.every()](https://br.tradingview.com/pine-script-reference/v5/#fun_array%7Bdot%7Devery) Retorna `true` se todos os elementos do array `id` forem `true`, caso contrário, retorna `false`.
+- [array.every()](https://br.tradingview.com/pine-script-reference/v5/#fun_array%7Bdot%7Devery) Retorna `true` se todos os elementos do array `id` forem `true`, caso contrário, retorna `false`.
 
-  * [array.some()](https://br.tradingview.com/pine-script-reference/v5/#fun_array%7Bdot%7Dsome) Retorna `true` se pelo menos um elemento do array `id` for `true`, caso contrário, retorna `false`. Essas funções também funcionam com arrays dos tipos [int](https://br.tradingview.com/pine-script-reference/v5/#type_int) e [float](https://br.tradingview.com/pine-script-reference/v5/#type_float), em que valores zero são considerados `false` e todos os outros `true`.
+- [array.some()](https://br.tradingview.com/pine-script-reference/v5/#fun_array%7Bdot%7Dsome) Retorna `true` se pelo menos um elemento do array `id` for `true`, caso contrário, retorna `false`. Essas funções também funcionam com arrays dos tipos [int](https://br.tradingview.com/pine-script-reference/v5/#type_int) e [float](https://br.tradingview.com/pine-script-reference/v5/#type_float), em que valores zero são considerados `false` e todos os outros `true`.
 
 ### Abril 2023
 
@@ -284,21 +241,26 @@ Corrigido o comportamento de [array.mode()](https://br.tradingview.com/pine-scri
 
 ### Março 2023
 
-Agora é possível usar strings de intervalo de tempo baseadas em segundos para o parâmetro `timeframe` em [request.security()](https://br.tradingview.com/pine-script-reference/v5/#fun_request%7Bdot%7Dsecurity) e [request.security_lower_tf()](https://br.tradingview.com/pine-script-reference/v5/#fun_request%7Bdot%7Dsecurity_lower_tf).
+Agora é possível usar strings de _timeframe_ baseadas em segundos para o parâmetro `timeframe` em [request.security()](https://br.tradingview.com/pine-script-reference/v5/#fun_request%7Bdot%7Dsecurity) e [request.security_lower_tf()](https://br.tradingview.com/pine-script-reference/v5/#fun_request%7Bdot%7Dsecurity_lower_tf).
 
 Uma nova função foi adicionada:
 
-  * [request.currency_rate()](https://br.tradingview.com/pine-script-reference/v5/#fun_request%7Bdot%7Dcurrency_rate) fornece uma taxa diária para converter um valor expresso na moeda `from` para outro na moeda `to`.
+- [request.currency_rate()](https://br.tradingview.com/pine-script-reference/v5/#fun_request%7Bdot%7Dcurrency_rate) fornece uma taxa diária para converter um valor expresso na moeda `from` para outro na moeda `to`.
 
 ### Fevereiro 2023
 
-#### Métodos no Pine Script™
+#### Métodos no Pine Script
 
-Métodos no Pine Script™ são funções especializadas associadas a instâncias específicas de tipos embutidos ou definidos pelo usuário. Eles oferecem uma sintaxe mais conveniente do que as funções padrão, pois os usuários podem acessar métodos da mesma forma que campos de objeto usando a prática sintaxe de notação de ponto. O Pine Script™ inclui métodos embutidos para os tipos [array](https://br.tradingview.com/pine-script-reference/v5/#type_array), [matrix](https://br.tradingview.com/pine-script-reference/v5/#type_matrix), [line](https://br.tradingview.com/pine-script-reference/v5/#type_line), [linefill](https://br.tradingview.com/pine-script-reference/v5/#type_linefill), [label](https://br.tradingview.com/pine-script-reference/v5/#type_label), [box](https://br.tradingview.com/pine-script-reference/v5/#type_box) e [table](https://br.tradingview.com/pine-script-reference/v5/#type_table) e facilita métodos definidos pelo usuário com a nova palavra-chave [method](https://br.tradingview.com/pine-script-reference/v5/#kw_method). Para mais detalhes sobre esse novo recurso, consulte a [página de métodos do Manual do Usuário](https://br.tradingview.com/pine-script-docs/language/methods/).
+Métodos no Pine Script são funções especializadas associadas a instâncias específicas de tipos embutidos ou definidos pelo usuário. Eles oferecem uma sintaxe mais conveniente do que as funções padrão, pois os usuários podem acessar métodos da mesma forma que campos de objeto usando a prática sintaxe de notação de ponto. O Pine Script inclui métodos embutidos para os tipos [array](https://br.tradingview.com/pine-script-reference/v5/#type_array), [matrix](https://br.tradingview.com/pine-script-reference/v5/#type_matrix), [line](https://br.tradingview.com/pine-script-reference/v5/#type_line), [linefill](https://br.tradingview.com/pine-script-reference/v5/#type_linefill), [label](https://br.tradingview.com/pine-script-reference/v5/#type_label), [box](https://br.tradingview.com/pine-script-reference/v5/#type_box) e [table](https://br.tradingview.com/pine-script-reference/v5/#type_table) e facilita métodos definidos pelo usuário com a nova palavra-chave [method](https://br.tradingview.com/pine-script-reference/v5/#kw_method). Para mais detalhes sobre esse novo recurso, consulte a [página de métodos do Manual do Usuário](./04_13_metodos.md).
 
 ### Janeiro 2023
 
 Novas funções de array foram adicionadas:
 
-  * [array.first()](https://br.tradingview.com/pine-script-reference/v5/#fun_array%7Bdot%7Dfirst) Retorna o primeiro elemento do array.
-  * [array.last()](https://br.tradingview.com/pine-script-reference/v5/#fun_array%7Bdot%7Dlast) Retorna o último elemento do array. -->
+- [array.first()](https://br.tradingview.com/pine-script-reference/v5/#fun_array%7Bdot%7Dfirst) Retorna o primeiro elemento do array.
+- [array.last()](https://br.tradingview.com/pine-script-reference/v5/#fun_array%7Bdot%7Dlast) Retorna o último elemento do array.
+
+
+## 2022
+
+- [2022](https://www.tradingview.com/pine-script-docs/release-notes/#2022)
