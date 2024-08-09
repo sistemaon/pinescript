@@ -124,7 +124,7 @@ bgcolor(isUp ? color.yellow : color.white)
 fill(p1, p2, color = isUpColor)
 ```
 
-Este exemplo gera uma contagem de plotagem de 56. Ao adicionar duas instâncias adicionais da última chamada para [plotcandle()](https://www.tradingview.com/pine-script-reference/v5/#fun_plotcandle), o script lançará um erro afirmando que o script agora usa 70 contagens de plotagem, pois cada chamada adicional para [plotcandle()](https://www.tradingview.com/pine-script-reference/v5/#fun_plotcandle) gera sete contagens de plotagem, e 56 + (7 * 2) é 70.
+Este exemplo gera uma contagem de plotagem de 56. Ao adicionar duas instâncias adicionais da última chamada para [plotcandle()](https://br.tradingview.com/pine-script-reference/v5/#fun_plotcandle), o script lançará um erro afirmando que o script agora usa 70 contagens de plotagem, pois cada chamada adicional para [plotcandle()](https://br.tradingview.com/pine-script-reference/v5/#fun_plotcandle) gera sete contagens de plotagem, e 56 + (7 * 2) é 70.
 
 ### Limites de Linhas, Caixas, Polilinhas e _Labels_
 

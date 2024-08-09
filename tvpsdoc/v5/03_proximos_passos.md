@@ -43,7 +43,7 @@ Se deseja usar scripts em Pine para uso próprio, simplesmente escreva-os no Edi
 
 Enquanto ao ler o código de scripts publicados é, sem dúvida, útil, passar tempo em nossa documentação é preciso para obter qualquer grau de proficiência no Pine Script. Nossas duas principais fontes de documentação sobre o Pine Script são:
 - Este [Manual do Usuário](https://www.tradingview.com/pine-script-docs/en/v5/index.html) do Pine Script v5.
-- Nosso [Manual de Referência](https://www.tradingview.com/pine-script-reference/v5) do Pine Script v5 em __inglês__.
+- Nosso [Manual de Referência](https://br.tradingview.com/pine-script-reference/v5) do Pine Script v5 em __inglês__.
 - Nosso [Manual de Referência](https://br.tradingview.com/pine-script-reference/v5) do Pine Script v5 em __português do Brasil__.
 
 O [Manual do Usuário](https://www.tradingview.com/pine-script-docs/en/v5/index.html) do Pine Script v5 está no formato HTML e apenas em __inglês__.

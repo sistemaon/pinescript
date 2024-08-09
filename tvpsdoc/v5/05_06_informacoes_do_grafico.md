@@ -31,7 +31,7 @@ Em barras históricas, os valores das variáveis acima não variam durante a bar
 
 Barras em tempo real são outra história. Quando indicadores (ou estratégias usando `calc_on_every_tick = true`) são executados em tempo real, os valores das variáveis acima (exceto [open](https://br.tradingview.com/pine-script-reference/v5/#var_open)) variarão entre iterações sucessivas do script na barra em tempo real, porque representam seu valor __atual__ em um determinado momento durante o progresso da barra em tempo real. Isso pode levar a uma forma de [repintura](./05_16_repintura.md). Veja a página sobre o [modelo de execução](./04_01_modelo_de_execucao.md) do Pine Script para mais detalhes.
 
-O [operador de referência histórica](./04_05_operadores.md#operador-de-referência-histórica-) [[]](https://br.tradingview.com/pine-script-reference/v5/#op_[]) pode ser usado para se referir a valores passados das variáveis incorporadas, por exemplo, `close[1]` refere-se ao valor de [close](https://www.tradingview.com/pine-script-reference/v5/#var_close) na barra anterior, em relação à barra específica em que o script está sendo executado.
+O [operador de referência histórica](./04_05_operadores.md#operador-de-referência-histórica-) [[]](https://br.tradingview.com/pine-script-reference/v5/#op_[]) pode ser usado para se referir a valores passados das variáveis incorporadas, por exemplo, `close[1]` refere-se ao valor de [close](https://br.tradingview.com/pine-script-reference/v5/#var_close) na barra anterior, em relação à barra específica em que o script está sendo executado.
 
 
 # Informações do Símbolo

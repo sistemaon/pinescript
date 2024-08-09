@@ -21,3 +21,4 @@
 
 ### [Notas de Versão](./09_notas_de_versao.md)
 
+### [Guia de migração](./10_guia_de_migracao.md)
