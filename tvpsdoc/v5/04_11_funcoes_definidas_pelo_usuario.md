@@ -10,7 +10,7 @@ Pode-se escrever as funções em uma das duas maneiras:
 
 As funções podem ser localizadas em dois lugares:
 
-- Se uma função é usada apenas em um script, pode incluí-la no script onde é usada. Consulte o [Guia de Estilo](./000_style_guide.md) para recomendações sobre onde colocar funções no script.
+- Se uma função é usada apenas em um script, pode incluí-la no script onde é usada. Consulte o [Guia de Estilo](./06_01_guia_de_estilo.md) para recomendações sobre onde colocar funções no script.
 - Pode criar uma [biblioteca](./05_11_libraries.md) Pine Script para incluir suas funções, o que as torna reutilizáveis em outros scripts sem precisar copiar o código. Existem requisitos distintos para funções de biblioteca. Eles são explicados em [Bibliotecas](./05_11_libraries.md).
 
 Sejam de uma linha ou várias, as funções definidas pelo usuário possui as seguintes características:

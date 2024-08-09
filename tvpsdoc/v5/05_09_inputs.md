@@ -56,7 +56,7 @@ As seguintes funções de _input_ (_entrada_) estão disponíveis:
 
 Um _widget_ de _entrada_ específico é criado na aba "_Inputs_" ("_Entradas_") para aceitar cada tipo de entrada. A menos que especificado de outra forma na chamada `input.*()`, cada entrada aparece em uma nova linha da aba "_Inputs_" ("_Entradas_"), na ordem em que as chamadas `input.*()` aparecem no script.
 
-É recomendado pelo [Guia de Estilo](./000_style_guide.md) colocar as chamadas `input.*()` no início do script.
+É recomendado pelo [Guia de Estilo](./06_01_guia_de_estilo.md) colocar as chamadas `input.*()` no início do script.
 
 As definições das funções de entrada normalmente contêm muitos parâmetros, permitindo controlar o valor padrão das entradas, seus limites e sua organização na aba "_Inputs_" ("_Entradas_").
 

@@ -20,7 +20,7 @@ maxLen
 3barsDown  // NOT VALID!
 ```
 
-O [Guia de Estilo](./000_style_guide.md) do Pine Script recomenda o uso de __SNAKE_CASE__ em maiúsculas para _constantes_ e __camelCase__ para _outros identificadores_:
+O [Guia de Estilo](./06_01_guia_de_estilo.md) do Pine Script recomenda o uso de __SNAKE_CASE__ em maiúsculas para _constantes_ e __camelCase__ para _outros identificadores_:
 
 ```c
 GREEN_COLOR = #4CAF50

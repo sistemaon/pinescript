@@ -9,7 +9,7 @@ Quando um script Pine é carregado em um gráfico, o mesmo é executado uma vez 
 
 Todos os pares de __símbolos/períodos de tempo__ têm um conjunto de dados composto por um número limitado de barras.
 Ao explorar um gráfico para a esquerda para ver as barras anteriores do conjunto de dados, as barras correspondentes são carregadas no gráfico.
-O processo de carregamento é interrompido quando não há mais barras para aquele par específico do __símbolo/período de tempo__ ou quando o [número máximo de barras](./000_chart_bars.md) permitido pelo tipo de conta foi carregado. Consegue-se navegar pelo gráfico para a esquerda até a primeira barra do conjunto de dados, que tem um valor de índice (_index_) de 0 (veja [bar_index](https://br.tradingview.com/pine-script-reference/v5/#var_bar_index)).
+O processo de carregamento é interrompido quando não há mais barras para aquele par específico do __símbolo/período de tempo__ ou quando o [número máximo de barras](./06_05_limitacoes.md#barras-do-gráfico) permitido pelo tipo de conta foi carregado. Consegue-se navegar pelo gráfico para a esquerda até a primeira barra do conjunto de dados, que tem um valor de índice (_index_) de 0 (veja [bar_index](https://br.tradingview.com/pine-script-reference/v5/#var_bar_index)).
 
 Quando o script é executado pela primeira vez num gráfico, todas as barras num conjunto de dados são _barras históricas_, exceto a mais à direita, ou seja, a barra atual se uma sessão de negociação estiver ativa. Quando a negociação está ativa na barra mais recente, essa é chamada de _barra em tempo real_. A barra em tempo real é atualizada quando uma mudança de preço ou volume é detectada. Quando a barra em tempo real se fecha, ela se torna uma barra em tempo real decorrida, ou seja, uma barra concluída e uma nova barra em tempo real se abre.
 
@@ -94,7 +94,7 @@ Quando um evento gatilha a execução do script no gráfico e faz com que ele se
 # Mais Informação
 
 - As variáveis integradas `barstate.*` fornecem informações sobre o [tipo de barra ou o evento](./05_05_estados_da_barra.md) onde o script está executando. A página onde são documentadas também contém um script que permite visualizar a diferença entre barras em tempo real decorridas e barras históricas, por exemplo.
-- A página de [Estratégias](./000_strategies.md) explica detalhadamente os cálculos das estratégias, que não são idênticos aos dos indicadores.
+- A página de [Estratégias](./05_18_estrategias.md) explica detalhadamente os cálculos das estratégias, que não são idênticos aos dos indicadores.
 
 
 # Valores Históricos das Funções

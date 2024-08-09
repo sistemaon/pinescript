@@ -42,7 +42,7 @@ Exemplos de valores literais:
 
 Os usuários podem definir explicitamente variáveis e parâmetros que aceitam apenas valores "const" incluindo a palavra-chave `const` na declaração.
 
-O [guia de estilo](./000_style_guide.md) recomenda usar __SNAKE_CASE__ em maiúsculas para nomear variáveis "const" para melhor legibilidade. Embora não seja um requisito, também é possível usar a palavra-chave [var](https://br.tradingview.com/pine-script-reference/v5/#kw_var) ao declarar variáveis "const" para que o script as inicialize apenas no _primeiro candle_ do conjunto de dados. Consulte [esta seção](./04_06_declaracoes_de_variavel.md#var-var) do _Manual do Usuário_ para obter mais informações.
+O [guia de estilo](./06_01_guia_de_estilo.md) recomenda usar __SNAKE_CASE__ em maiúsculas para nomear variáveis "const" para melhor legibilidade. Embora não seja um requisito, também é possível usar a palavra-chave [var](https://br.tradingview.com/pine-script-reference/v5/#kw_var) ao declarar variáveis "const" para que o script as inicialize apenas no _primeiro candle_ do conjunto de dados. Consulte [esta seção](./04_06_declaracoes_de_variavel.md#var-var) do _Manual do Usuário_ para obter mais informações.
 
 Abaixo está um exemplo que utiliza valores "const" dentro das funções [indicator()](https://br.tradingview.com/pine-script-reference/v5/#fun_indicator) e [plot()](https://br.tradingview.com/pine-script-reference/v5/#fun_plot), que ambas requerem um valor do tipo qualificado "const string" como seu argumento `title`:
 

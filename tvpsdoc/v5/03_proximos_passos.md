@@ -68,6 +68,6 @@ Assim é como o [Manual do Usuário](https://www.tradingview.com/pine-script-doc
 - A página de [Mensagens de Erro](./08_mensagens_de_erro.md) documenta as causas e soluções para os erros mais comuns de tempo de execução e compilador.
 - A página de [Notas de Lançamento](./09_notas_de_versao.md) é onde pode acompanhar as atualizações frequentes do Pine Script.
 - A seção da [Guia de Migração](./10_guia_de_migracao.md) explica como fazer a portabilidade entre versões diferentes do Pine Script.
-- A página [Onde Obter Mais Informações](./000_where_can_i_get_more_information.md) lista outros conteúdos úteis relacionados ao Pine Script, incluindo onde fazer perguntas quando estiver com dúvidas.
+- A página [Onde Obter Mais Informações](./11_onde_obter_mais_informacoes.md) lista outros conteúdos úteis relacionados ao Pine Script, incluindo onde fazer perguntas quando estiver com dúvidas.
 
 Desejamos uma jornada muito bem-sucedida com o Pine Script... e com suas operações!
