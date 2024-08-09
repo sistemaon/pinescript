@@ -115,7 +115,7 @@ __Linha 2: `indicator("MACD #2")`__
 
 __Linha 3: `fastInput = input(12, "Fast length")`__
 - Em vez de declarar um valor constante a uma variável, está sendo usado a função [input()](https://br.tradingview.com/pine-script-reference/v5/#fun_input) para que possa alterar o valor na aba "Configurações/Entradas" (_Settings/Inputs_) do script.
-`12` será o valor padrão e o nome do campo será "Comprimento rápido" (_`Fast length`_). Se o valor for mudado na aba de "Entradas" (_Inputs_), o conteúdo da variável `fastInput` conterá um novo valor e o script será re-executado no gráfico com esse novo valor. Note que, conforme recomendado no [Guia de Estilo](000_style_guide.md) do Pine Script, foi adicionado o `Input` para ter em mente, mais adiante no script, de que seu valor provém de uma entrada do usuário.
+`12` será o valor padrão e o nome do campo será "Comprimento rápido" (_`Fast length`_). Se o valor for mudado na aba de "Entradas" (_Inputs_), o conteúdo da variável `fastInput` conterá um novo valor e o script será re-executado no gráfico com esse novo valor. Note que, conforme recomendado no [Guia de Estilo](./06_01_guia_de_estilo.md) do Pine Script, foi adicionado o `Input` para ter em mente, mais adiante no script, de que seu valor provém de uma entrada do usuário.
 
 __Linha 4: `slowInput = input(26, "Slow length")`__
 - Feito o mesmo para o "Comprimento lento" (_`Slow length`_), usando um nome de variável, valor padrão e texto diferentes para o nome do campo.

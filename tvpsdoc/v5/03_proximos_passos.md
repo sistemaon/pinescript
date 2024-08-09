@@ -6,11 +6,11 @@ Após seus [primeiros passos](./01_primeiros_passos.md) e seu [primeiro indicado
 
 # "Indicadores" e "Estratégias"
 
-[Estratégias](./000_strategies.md) do Pine Script são usadas para realizar backtest em dados históricos e teste avançado em mercados abertos (_open markets_). Além dos cálculos de indicadores, contêm funções `strategy.*()` para enviar ordens de negociação para o emulador de corretora do Pine Script, que simula a execução. As estratégias exibem os resultados do backtest na aba "Teste de Estratégias" (_"Strategy Tester"_) na parte inferior do gráfico, ao lado da aba "Editor Pine" (_"Pine Editor"_).
+[Estratégias](./05_18_estrategias.md) do Pine Script são usadas para realizar backtest em dados históricos e teste avançado em mercados abertos (_open markets_). Além dos cálculos de indicadores, contêm funções `strategy.*()` para enviar ordens de negociação para o emulador de corretora do Pine Script, que simula a execução. As estratégias exibem os resultados do backtest na aba "Teste de Estratégias" (_"Strategy Tester"_) na parte inferior do gráfico, ao lado da aba "Editor Pine" (_"Pine Editor"_).
 
 Os indicadores do Pine Script também realizam cálculos, mas não podem ser usados em backtesting. Pois não exigem o emulador de corretora, consomem menos recursos e executam de maneira mais célere. Portanto, é vantajoso usar indicadores sempre que possível.
 
-Tanto indicadores quanto estratégias podem ser executados em modo de sobreposição (_overlay mode_) (sobre as barras do gráfico (no gráfico)) ou em modo de painel (_pane mode_) (em uma seção separada abaixo ou acima do gráfico). Ambos também podem plotar informações em seu respectivo espaço, e ambos podem gerar [eventos de alerta](./000_alert_events.md).
+Tanto indicadores quanto estratégias podem ser executados em modo de sobreposição (_overlay mode_) (sobre as barras do gráfico (no gráfico)) ou em modo de painel (_pane mode_) (em uma seção separada abaixo ou acima do gráfico). Ambos também podem plotar informações em seu respectivo espaço, e ambos podem gerar [eventos de alerta](./05_01_alertas.md).
 
 
 # Como os Scripts são Executados
@@ -19,7 +19,7 @@ Um script em Pine __não__ é como programas em muitas das linguagens de program
 
 Quando o script é executado em uma barra histórica, a variável [close](https://br.tradingview.com/pine-script-reference/v5/#var_close), embutida, contém o valor do _fechamento_ daquela barra. Quando o script é executado na barra em tempo real, o [close](https://br.tradingview.com/pine-script-reference/v5/#var_close) retorna o preço __corrente__/__atual__ do símbolo até que a barra se fecha.
 
-Diferente dos indicadores, normalmente as estratégias são executadas apenas uma vez nas barras em tempo real, ao fecharem-se. Também podem ser configurados para executar em cada atualização de preço/volume, se for necessário. Para mais informações e para entender como as estratégias calculam diferentemente dos indicadores veja a página sobre [Estratégias](./000_strategies.md).
+Diferente dos indicadores, normalmente as estratégias são executadas apenas uma vez nas barras em tempo real, ao fecharem-se. Também podem ser configurados para executar em cada atualização de preço/volume, se for necessário. Para mais informações e para entender como as estratégias calculam diferentemente dos indicadores veja a página sobre [Estratégias](./05_18_estrategias.md).
 
 
 # Série Temporal
@@ -63,11 +63,11 @@ Assim é como o [Manual do Usuário](https://www.tradingview.com/pine-script-doc
 
 - A seção da [Linguagem](./04_linguagem.md) explica os principais componentes do Pine Script e como os scripts são executados.
 - A seção de [Conceitos](./05_conceitos.md) é mais direcionada para tarefas. Explica como efetuar coisas no Pine Script.
-- A seção da [Criação de Scripts](./000_writing.md) explora ferramentas e truques que ajudarão a programar e publicar scripts.
-- A seção de [Perguntas Frequentes](./000_faq.md) tira dúvidas das perguntas comuns dos desenvolvedores do Pine Script.
-- A página de [Mensagens de Erro](./000_error_messages.md) documenta as causas e soluções para os erros mais comuns de tempo de execução e compilador.
-- A página de [Notas de Lançamento](https://www.tradingview.com/pine-script-docs/en/v5/Release_notes.html#pagereleasenotes) é onde pode acompanhar as atualizações frequentes do Pine Script.
-- A seção da [Guia de Migração](https://www.tradingview.com/pine-script-docs/en/v5/migration_guides/index.html#indexmigrationguides) explica como fazer a portabilidade entre versões diferentes do Pine Script.
+- A seção da [Criação de Scripts](./06_escrevendo_scripts.md) explora ferramentas e truques que ajudarão a programar e publicar scripts.
+- A seção de [Perguntas Frequentes](./07_faq.md) tira dúvidas das perguntas comuns dos desenvolvedores do Pine Script.
+- A página de [Mensagens de Erro](./08_mensagens_de_erro.md) documenta as causas e soluções para os erros mais comuns de tempo de execução e compilador.
+- A página de [Notas de Lançamento](./09_notas_de_versao.md) é onde pode acompanhar as atualizações frequentes do Pine Script.
+- A seção da [Guia de Migração](./10_guia_de_migracao.md) explica como fazer a portabilidade entre versões diferentes do Pine Script.
 - A página [Onde Obter Mais Informações](./000_where_can_i_get_more_information.md) lista outros conteúdos úteis relacionados ao Pine Script, incluindo onde fazer perguntas quando estiver com dúvidas.
 
 Desejamos uma jornada muito bem-sucedida com o Pine Script... e com suas operações!
