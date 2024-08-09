@@ -1,2 +1,0 @@
-
-# Barras do Gráfico

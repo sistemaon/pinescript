@@ -1,2 +1,0 @@
-
-# Onde Obter Mais Informações
